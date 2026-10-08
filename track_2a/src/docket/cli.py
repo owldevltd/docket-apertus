@@ -4,6 +4,7 @@
     python -m docket read     --out <dir> <file.pdf> ...
     python -m docket document --out <dir> [--model] <file.pdf> ...
     python -m docket affairs  --out <dir> [--model] <file.pdf> ...
+    python -m docket serve    [--port <n>]
 
 analyze writes per page <dir>/<name>-s<n>.json (the geometry and, from a PDF, the text of its text layer in the
 elements), <name>-s<n>.png (the page) and <name>-s<n>-page.png (the control image). read does the same and then
@@ -14,7 +15,9 @@ asks the fields: <dir>/<name>-fields.json holds per field what became of it, the
 <dir>/<name>-s<n>-check.png shows the blocks of a first page with the ones holding a value (green: found by
 code, red: a person has to look), <dir>/values.json the values that stood on the pages, per field with their
 count. affairs does the same for every PDF and then folds the documents with the same key into one affair:
-<dir>/affairs/<key>.json per affair and <dir>/affairs.ndjson with all of them.
+<dir>/affairs/<key>.json per affair and <dir>/affairs.ndjson with all of them; the affairs also go into the
+store (files under the storage folder, or Postgres with DATABASE_URL), where a run over a document that is
+already there keeps every decision a person took. serve starts the web server over the store.
 """
 
 from __future__ import annotations
@@ -44,6 +47,9 @@ from docket.pipeline import (
     build_document, fill_fields, first_pages, identify, load_contract, load_field_file, load_knowledge, process_pages,
 )
 from docket.read.reader import read_page
+from docket.server import App, serve
+from docket.store import open_store
+from docket.store.review import carry_reviews
 from docket.text.layer import fill_text_layer
 
 
@@ -69,7 +75,7 @@ def main(argv: list[str] | None = None) -> int:
         ("analyze", "the geometry and the text layer of every page, without a model"),
         ("read", "analyze, then read pages without a text layer with the model"),
         ("document", "the whole document: pages, blocks, the affair record; --model reads scans and asks the fields"),
-        ("affairs", "document for every PDF, then one affair per key with its documents"),
+        ("affairs", "document for every PDF, then one affair per key with its documents, into the store"),
     )
     for name, help_text in helps:
         command = commands.add_parser(name, help=help_text)
@@ -77,10 +83,26 @@ def main(argv: list[str] | None = None) -> int:
         if name in ("document", "affairs"):
             command.add_argument("--model", action="store_true", help="use the model for scans, the rest, the fields")
         command.add_argument("files", nargs="+", help="PDF files, or page images as PPM/PGM")
+    web = commands.add_parser("serve", help="the web server over the store")
+    web.add_argument("--port", type=int, default=None, help="port, default PORT or 8080")
     args = parser.parse_args(argv)
+    if args.command == "serve":
+        return run_server(args.port)
     if args.command in ("document", "affairs"):
         return run_documents(Path(args.out), [Path(f) for f in args.files], args.model, args.command == "affairs")
     return run(args.command, Path(args.out), [Path(f) for f in args.files])
+
+
+def run_server(port: int | None) -> int:
+    config = load_config()
+    store = open_store(config)
+    server = serve(App(store, load_contract(config)), port or config.port)
+    print(f"docket serves on http://localhost:{server.server_address[1]} over the {store.kind} store")
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    return 0
 
 
 def run_documents(out: Path, files: list[Path], with_model: bool, affairs: bool) -> int:
@@ -120,7 +142,7 @@ def run_documents(out: Path, files: list[Path], with_model: bool, affairs: bool)
         (out / "values.json").write_text(values, encoding="utf-8")
     if not affairs:
         return 0
-    return _write_affairs(out, documents, fields, contract, knowledge)
+    return _write_affairs(out, documents, fields, contract, knowledge, config)
 
 
 def _process(pdf: Path, out: Path, client: Client | None, contract: Contract, knowledge: Knowledge,
@@ -172,24 +194,41 @@ def _states(filled: dict) -> str:
 
 
 def _write_affairs(out: Path, documents: list[Document], fields: Fields, contract: Contract,
-                   knowledge: Knowledge) -> int:
-    """One affair per key, as a file each and all in one NDJSON."""
+                   knowledge: Knowledge, config) -> int:
+    """One affair per key, as a file each, all in one NDJSON, and into the store with earlier reviews kept."""
     folder = out / "affairs"
     folder.mkdir(parents=True, exist_ok=True)
+    store = open_store(config)
+    by_id = {d.id: d for d in documents}
     failed = 0
     lines = []
     for affair in merge(documents, fields, contract, knowledge.types):
         safe = re.sub(r"[^\w.-]+", "_", affair.key)
-        text = json.dumps(affair.record, ensure_ascii=False, indent=2) + "\n"
+        record = affair.record
+        earlier = store.get_affair(affair.key)
+        carried = 0
+        if earlier is not None:
+            record, carried = carry_reviews(earlier["record"], record)
+        text = json.dumps(record, ensure_ascii=False, indent=2) + "\n"
         (folder / f"{safe}.json").write_text(text, encoding="utf-8")
-        lines.append(json.dumps(affair.record, ensure_ascii=False))
+        lines.append(json.dumps(record, ensure_ascii=False))
+        members = [{"name": by_id[i].name, "id": i, "pages": by_id[i].pages} for i in affair.documents]
+        store.put_affair(affair.key, record, members)
+        for i in affair.documents:
+            name = by_id[i].name
+            report_file = out / f"{name}-fields.json"
+            if report_file.is_file():
+                store.put_fields(name, json.loads(report_file.read_text(encoding="utf-8")))
+            store.put_pages(name, out / name)
         state = "valid" if not affair.errors else f"{len(affair.errors)} violations, first: {affair.errors[0]}"
         failed += 1 if affair.errors else 0
         count = len(affair.documents)
-        kind = (affair.record.get("type_harmonized") or {}).get("de") or "-"
+        kind = (record.get("type_harmonized") or {}).get("de") or "-"
         plural = "s" if count > 1 else ""
-        print(f"affair {affair.key:<36} {count} document{plural}  type {kind}  {state}  -> {safe}.json")
+        kept = f"  {carried} reviews kept" if carried else ""
+        print(f"affair {affair.key:<36} {count} document{plural}  type {kind}  {state}{kept}  -> {safe}.json")
     (out / "affairs.ndjson").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    print(f"{len(lines)} affairs in the {store.kind} store")
     return 1 if failed else 0
 
 

@@ -4,8 +4,9 @@ version = "0.1.0"
 description = "Parliamentary affairs from PDFs into one structure, with the place every value came from"
 requires-python = ">=3.11"
 license = { text = "Apache-2.0" }
-# numpy holds the pixel fields and does the arithmetic over them; every rule of the geometry is in this package
-dependencies = ["numpy>=1.26"]
+# numpy holds the pixel fields and does the arithmetic over them; every rule of the geometry is in this package.
+# psycopg is the Postgres driver for the store; without DATABASE_URL the store lives in files and needs none.
+dependencies = ["numpy>=1.26", "psycopg[binary]>=3.1"]
 
 [project.scripts]
 docket = "docket.cli:main"
@@ -16,3 +17,6 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+docket = ["app/*"]

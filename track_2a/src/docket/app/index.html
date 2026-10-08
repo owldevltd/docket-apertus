@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Docket</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='2' y='2' width='12' height='12' rx='3' fill='%23c8102e'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="app.css">
+<script type="module" src="app.js"></script>
+</head>
+<body>
+<header class="top">
+    <a class="wordmark" href="#/"><i></i>Docket</a>
+    <nav class="tabs">
+        <a href="#/" data-tab="list">Geschäfte</a>
+        <a href="#/decisions" data-tab="decisions">Entscheidungen</a>
+    </nav>
+    <span class="who" id="who" title="Kürzel für Entscheidungen"></span>
+</header>
+
+<main id="main">
+    <section id="list" class="screen"></section>
+    <section id="affair" class="screen"></section>
+    <section id="decisions" class="screen"></section>
+</main>
+
+<template id="t-list">
+    <div class="bar">
+        <h1>Geschäfte</h1>
+        <label class="check"><input type="checkbox" id="only-open"> nur mit offenen Vermerken</label>
+        <span class="muted" id="list-count"></span>
+    </div>
+    <table class="affairs">
+        <thead><tr><th>Schlüssel</th><th>Nummer</th><th>Titel</th><th>Typ</th><th>Dokumente</th><th class="num">Offen</th><th class="num">Erledigt</th></tr></thead>
+        <tbody></tbody>
+    </table>
+</template>
+
+<template id="t-affair">
+    <div class="bar">
+        <a class="back" href="#/">← Geschäfte</a>
+        <h1 class="title"></h1>
+        <span class="chip key"></span>
+        <span class="chip open"></span>
+    </div>
+    <div class="split">
+        <div class="left">
+            <div class="bar small">
+                <select class="doc"></select>
+                <span class="pager"><button class="prev">‹</button> <span class="page-no"></span> <button class="next">›</button></span>
+                <span class="legend">
+                    <i class="sec"></i>sec <i class="p"></i>p <i class="table-wrap"></i>table <i class="list"></i>list
+                    <i class="def-list"></i>def-list <i class="graphic"></i>graphic <i class="sig-block"></i>sig
+                </span>
+            </div>
+            <div class="sheet"><img alt="Seite"><svg></svg></div>
+            <div class="block-info muted"></div>
+        </div>
+        <div class="right">
+            <div class="values"></div>
+        </div>
+    </div>
+</template>
+
+<template id="t-decisions">
+    <div class="bar"><h1>Entscheidungen</h1><span class="muted" id="decisions-count"></span></div>
+    <table class="decisions">
+        <thead><tr><th>Wann</th><th>Wer</th><th>Geschäft</th><th>Feld</th><th>Entscheid</th><th>Vorher</th><th>Nachher</th></tr></thead>
+        <tbody></tbody>
+    </table>
+</template>
+</body>
+</html>

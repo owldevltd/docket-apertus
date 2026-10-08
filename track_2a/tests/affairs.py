@@ -6,12 +6,16 @@ is missing or does not fit), and whether that gives the same key; the printed ty
 table against the harmonised type the API holds. Then the documents are keyed and merged into affairs, Nidau
 twice under the same key, and every affair must validate against the contract.
 
-    python3 tests/affairs.py --pages=<analyzed dir> --documents=<records dir> [--out=<file.md>] <document dir> ...
+    python3 tests/affairs.py --pages=<analyzed dir> --documents=<records dir> [--out=<file.md>] [--store=<dir>]
+        <document dir> ...
+
+With --store the merged affairs go into a file store there, for the server test.
 """
 
 from __future__ import annotations
 
 import json
+import shutil
 import sys
 import time
 from pathlib import Path
@@ -24,6 +28,7 @@ from docket.affair.types import harmonized  # noqa: E402
 from docket.config import load_config  # noqa: E402
 from docket.fields.placer import locate  # noqa: E402
 from docket.pipeline import first_pages, load_contract, load_field_file, load_knowledge  # noqa: E402
+from docket.store.files import FileStore  # noqa: E402
 
 # the affair's values in document.json and the role of the field that asks for them
 ROLES = {"number": "number", "title": "title", "type": None, "begin_date": "date"}
@@ -34,8 +39,10 @@ def main(argv: list[str]) -> int:
     pages_dir = next((Path(a[8:]) for a in argv if a.startswith("--pages=")), None)
     records_dir = next((Path(a[12:]) for a in argv if a.startswith("--documents=")), None)
     out_file = next((Path(a[6:]) for a in argv if a.startswith("--out=")), None)
+    store_dir = next((Path(a[8:]) for a in argv if a.startswith("--store=")), None)
     if not dirs or pages_dir is None or records_dir is None:
-        print("usage: python3 tests/affairs.py --pages=<dir> --documents=<dir> [--out=<file.md>] <document dir> ...")
+        print("usage: python3 tests/affairs.py --pages=<dir> --documents=<dir> [--out=<file.md>] [--store=<dir>]"
+              " <document dir> ...")
         return 1
     config = load_config()
     contract = load_contract(config)
@@ -127,6 +134,18 @@ def main(argv: list[str]) -> int:
     if twin is not None and pair is None:
         print("FAIL the two Nidau documents did not land in one affair")
         failed = True
+    if store_dir is not None:
+        # a fresh store every run, so the server test counts only what it did itself
+        if store_dir.is_dir():
+            shutil.rmtree(store_dir)
+        store = FileStore(store_dir)
+        by_id = {d.id: d for d in documents}
+        for a in affairs:
+            members = [{"name": by_id[i].name, "id": i, "pages": by_id[i].pages} for i in a.documents]
+            store.put_affair(a.key, a.record, members)
+            for i in a.documents:
+                store.put_pages(by_id[i].name, pages_dir)
+        print(f"ok   {len(affairs)} affairs in the file store {store_dir}")
     print(f"{same_key} of {known_key} keys from the page as from the API's number; "
           f"{same_type} of {known_type} type labels onto the API's harmonised type; "
           f"{len(affairs)} affairs from {len(documents)} documents")
