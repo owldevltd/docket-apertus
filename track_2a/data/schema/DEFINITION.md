@@ -1,0 +1,232 @@
+# Affair schema 0.8: definition
+
+Contract: `docket.json` (JSON Schema 2020-12). Beside it the example `example-nidau-m185.json`, what the pipeline produced for the kickoff document, and the fields file `fields.json`, built like the data: wherever a value from the document belongs, it holds the question for that value.
+
+## In one sentence
+
+The JSON is the OpenParlData API's answer for an affair, unchanged, plus keys from JATS for everything OpenParlData does not carry: further header entries and the build-up of the document.
+
+No XML, no XSD. The aim is a clear, traceable, reusable, extensible schema.
+
+## The two rules of the mix
+
+1. **If OpenParlData already has a place for it, it stays there.** A further date goes into `events`, a further person into `contributors`, each as an additional entry with `source`.
+2. **Otherwise a key is added, and it is named like the element in JATS.** So every new key can be looked up in JATS.
+
+## Fixed and dynamic
+
+- **Fixed (14):** what the first documents demanded. On the affair `schema`, `custom-meta`, `related-article`; on the document `page-count`, `body`, `response`; `source` on an added event; the seven blocks `sec`, `p`, `list`, `def-list`, `table-wrap`, `graphic`, `sig-block`.
+- **Dynamic (22):** what was added later because it may be needed. In the contract it carries `dynamic: true`. It is foreseen and named, but used only once a document demands it.
+
+The rule behind it stays: a new key or block is added only when a document demands it.
+
+## The contract
+
+`docket.json` is this definition as a **JSON Schema** (draft 2020-12). Described is only what is added; the fields of OpenParlData stay free. Blocks are strict: a field that is not in the schema fails. What was added later carries `dynamic: true` there as well; for JSON Schema that is a mere annotation and changes nothing in the check.
+
+Enumerations are English in this repository: `how` is `literal`, `derived`, `cited` or `composed`; `decision` is `confirmed`, `changed` or `rejected`. Content, the text of the documents and the values taken from them, stays in the language of the document.
+
+## Why this way
+
+| Reason | What supports it | What is not shown |
+| --- | --- | --- |
+| It covers everything in our sample. | 72 first pages looked through: whatever occurred has a block or key below. One document (Nidau M 185, two pages) is written out in full. | The other documents are looked through, not written out. There is nothing for stamps and redactions. |
+| It extends without a new model. | Three fields have no fixed list of values. Further keys and blocks come from JATS and are marked dynamic. | – |
+| It respects the client's wish. | The client wants an existing standard as guide and no new model to learn; the missing layer is, in the client's own words, "like JATS"; XML is not asked for. The API's answer stays as it is. | Whether JATS as the template is approved by the client is still to be confirmed. |
+| With Akoma Ntoso the small model does not get through the door; the performance drops too far. | The more structure in the task, the worse the 8B: full element JSON 34 of 72 right, lean JSON 39; five excerpts instead of one 52 instead of 67 %. Akoma Ntoso demands 17 identification elements per document and marks values in the middle of the text. | Apertus with Akoma Ntoso against JATS directly is not measured. |
+
+## The header
+
+Everything from OpenParlData stays with its name and form: the affair with `docs`, `contributors`, `events`, `texts`. These keys are added. All but `schema` are optional: they are there only when the document yields something for them.
+
+**On the affair**
+
+| Key | Content |
+| --- | --- |
+| `schema` | version of this definition, here `"0.8"` |
+| `sources` | places for values whose own place carries no `source` (`number`, `title.de`, `type_name.de`, `begin_date`, `article-version`, `abstract.de`, `kwd-group.<n>`): per entry `path` (the way to the value, with dots), `doc`, `block`, `how`, `approve` |
+| `custom-meta` | printed header entries without a place of their own (file reference, department): `meta-name`, `meta-value` |
+| `related-article` | related affairs: `affair_id` or `number` |
+| `related-object` (dynamic) | a reference to something that is not an affair (an act, a plan, a report): `text`, `uri` when there is one |
+| `kwd-group` (dynamic) | keywords, a list |
+
+**On the document** (per entry in `docs`)
+
+| Key | Content |
+| --- | --- |
+| `page-count` | number of pages |
+| `article-version` (dynamic) | the version as printed ("Fassung nach 2. Lesung") |
+| `abstract` (dynamic) | a summary, per language as OpenParlData has it (`{ "de": …, "fr": … }`); this covers `trans-abstract` too |
+| `conference` (dynamic) | the session or meeting the document names: `conf-name`, `conf-date`, `conf-loc`. Only when the document is not already attached to an OpenParlData meeting (`meeting_id`) |
+| `journal-meta` (dynamic) | press and periodicals only: `journal-title`, `publisher-name`, `issn` |
+| `volume`, `issue`, `fpage`, `lpage` (dynamic) | periodicals only: volume, issue, first and last page |
+| `body` | the build-up of the document as a list of blocks |
+| `back` (dynamic) | what follows the text: appendices, footnotes, references |
+| `response` | an answer within the same document: `response-type`, `title`, `body` |
+
+**On a contributor** (per entry in `contributors`, in addition to the fields of OpenParlData)
+
+| Key | Content |
+| --- | --- |
+| `degrees` (dynamic) | title ("Dr.") |
+| `aff` (dynamic) | affiliation other than the party: function, place, committee |
+| `on-behalf-of` (dynamic) | on behalf of (parliamentary group, committee) |
+| `address`, `email` (dynamic) | as printed |
+| `author-comment` (dynamic) | an addition about the person |
+| `etal` (dynamic) | `true` when further persons are named without names ("und Mitunterzeichnende") |
+
+When the person is known to OpenParlData (`person_id`), title, address and email are already in `persons` there.
+
+## The blocks
+
+In `body`, `back` and in the `body` of a `response`. Names as in JATS (Archiving 1.3).
+
+| `type` | For | Own fields | Where it comes from today |
+| --- | --- | --- | --- |
+| `sec` | a section with a heading | `sec-type`, `title`, `content` (blocks) | the bridge: text from 1.3 times the base font size, or a section name from the project's prior knowledge (begründung, antrag, ausgangslage, …) → `sec-type` |
+| `p` | a paragraph | `text` | the bridge: a text element of the geometry step, taller than one line |
+| `list` | a list, numbered questions | `items` (texts) | the bridge: a counter or a mark on the left, text on the right; else the classification of the rest by the model |
+| `def-list` | label and value, as on a cover sheet | `items` with `term` and `def` | the bridge: a label with a colon on the left, the value on the right; else the model |
+| `table-wrap` | a table | `rows` (rows of cells) | the bridge: lines of the geometry step with enough text in enough columns |
+| `graphic` | an image, a coat of arms, a plan | – | the bridge: elements without text |
+| `sig-block` | a signature | `text`, when legible | the classification of the rest by the model |
+| `app` (dynamic) | an appendix (only in `back`) | `title`, `content` (blocks) | not built |
+| `fn` (dynamic) | a footnote (only in `back`) | `label`, `text` | not built |
+| `ref-list` (dynamic) | a list of references (only in `back`) | `items` (texts) | not built |
+| `notes` (dynamic) | a note outside the text flow (only in `back`) | `text` | not built |
+
+Every block also carries:
+
+- `id`: id within the document, in reading order (`b1`, `b2`, …)
+- `page`, `x`, `y`, `width`, `height`: page and box in the page image at 300 dpi, as the geometry step delivers them
+- `approve`: only when the text was read by the model and a person should look; a block carries it as soon as one of its elements does
+- `font`, `font-size`, `color`: the font as the PDF names it (with "fett" or "kursiv"), size in points, colour as `#rrggbb`; the font only with a text layer, size and colour estimated otherwise
+- `isOCR`: `true` when the text of the block comes from text recognition (read by the model from the image, or from the OCR layer of a scan), `false` when it was taken from the PDF's text layer. The geometry step sets it; without it the field is absent.
+
+## Filling from the document
+
+The input is always the PDF alone; the affair arises from the document, in the form of the OpenParlData answer. Which values go where is in `fields.json`, built like this JSON: wherever a value belongs, it holds the question (`name`, `question`, `form`, `min-words`, `max-words`, `choice`, `dynamic`, `pages`, `when`, `free`, `block-text`). The pipeline asks the model with the text image of the first pages (page 1, with a cover sheet page 2 as well) and for some fields with the whole document, six fields per call, and builds the answers in like this:
+
+- A field at a place that already has a value (from an earlier document of the same affair): if the value is the same, it stays; if it differs, the printed value goes beside it as `custom-meta` (`meta-name` = the field's name), with its place. Several documents belong to one affair when they carry the same affair number.
+- A list (`contributors.data`, `custom-meta`, `related-article`, `related-object`): one entry per value with the fixed parts of the template (role, `meta-name`) and its place. A person already among the contributors is not created again.
+- Entries about the document (`conference`, `article-version`, `abstract`) go into its existing entry; the place wherever the contract provides a `source`.
+- A value counts when it stands literally on the page; otherwise with the block the model names (in the text image every block is preceded by its id). What has neither is dropped.
+
+## Provenance
+
+Every value that comes from the document points at its block with `source`: `{ "doc": <document id>, "block": "<id>", "how": …, "approve": … }`. Through the block it leads back to page and box. Where the value's place carries no `source`, it stands in `sources` at the root with the path to the value.
+
+`how` says how the value got its place: `literal` (found in the block), `derived` (every word of the value stands in the block, put together differently; not a case for a person), `cited` (named as a block by the model, not literal), `composed` (phrased by the model, such as the summary). `approve: true` means a person should look: set when the value was found neither literally nor derived, or when the block itself carries `approve` (read pages, the image check). Values without any place do not come from the document.
+
+## The person's update
+
+What a person does with a value stands at its place as `review`: `{ "at": <time>, "decision": "confirmed" | "changed" | "rejected", "before": <the value before>, "by": <who>, "rule": <rule> }`. The value itself is changed in place; `before` keeps the old one. `rule` names the general rule when the change came from one ("Kanton X" → "X") or founded one.
+
+The review view shows, for a flagged value, how many further documents carry the same value with the same flag (same field, same `how`, same pattern), counted over the collected affairs. A change a person makes the same way several times (from the third on) becomes a general rule: the same replacement on every value with the same pattern, with `rule` at every place; the project's prior knowledge keeps the rules. The decisions are at the same time the teaching material for a small model that later learns which values a person has to see.
+
+## Fields without a fixed list of values
+
+- `sec-type`: what a section is (in the example: `deckblatt`, `antrag`, `begruendung`, `beschlussentwurf`)
+- `response-type`: what kind of answer (in the example: `antwort`)
+- `meta-name` in `custom-meta`: header entries as printed (in the example: `Aktenzeichen`, `Ressort`)
+
+How the prior knowledge attaches here is not part of the contract. German first.
+
+## Rules
+
+1. Nothing on the fields of OpenParlData is changed, renamed or removed.
+2. New things are only appended.
+3. What comes from the document carries `source`.
+4. Text stays unabridged and verbatim.
+5. A new key or block is added only when a document demands it, and then with the name from JATS. What is added that way carries `dynamic: true` in the contract.
+
+## What of JATS is in and what is not
+
+Counted on the schema of JATS 1.3 Archiving.
+
+| Part of JATS | Possible elements | OpenParlData already carries | Taken over as keys | Not taken over |
+| --- | ---: | --- | --- | --- |
+| Document header (`article-meta`) | 47 | 12: id, type, title, contributors with affiliation, date, course, addresses, further documents | 13: `custom-meta`, `related-article`, `related-object`, `kwd-group`, `page-count` (from `counts`), `article-version`, `abstract`, `trans-abstract` (in `abstract`), `conference`, `volume`, `issue`, `fpage`, `lpage` | 22: `permissions`, `author-notes`, `email`, `funding-group`, `support-group`, `product`, `isbn`, `supplement`, `page-range`, `elocation-id`, `pub-date-not-available`, `x`, and the variants and subdivisions of version, affiliation, volume and issue |
+| Journal block (`journal-meta`) | 12 | for news items: `news` (title, date, place, address) | 3: `journal-title`, `publisher-name`, `issn` | 9 |
+| A person (`contrib`) | 22 | 5: name, role, affiliation (party), id, person or group | 6: `degrees`, `on-behalf-of`, `address`, `email`, `author-comment`, `etal`; plus `aff` wider than the party alone | 11: name variants, biography, references, `anonymous` |
+| Body (`body`) | 38 | – | 7 blocks | 31, among them formulas, code, verse, media |
+| What follows the text (`back`) | 10 | – | 5: `app`, `fn`, `ref-list`, `notes`, plus `sec` | glossary, acknowledgements, biography |
+| Answer (`response`) | – | – | yes | – |
+| `sub-article`, `floats-group`, `processing-meta` | – | – | – | all three |
+
+Why the journal block is in: the corpus also holds press and periodicals. The first sample had a saved newspaper page, a municipal magazine of 56 pages and two press releases; OpenParlData keeps its own table `news` with 338 667 entries that documents can be attached to.
+
+## Deliberately not in
+
+- Values in the middle of a sentence as a mark of their own ("ANFRAGE von … betreffend …"). The value stands in the header and points at the paragraph with `source`.
+- Rights and licence (`permissions`), funding, product details.
+
+## Other contracts
+
+The validator has no schema built in; it takes the contract as input. A different kind of document can have its own contract beside this one.
+
+## Example (excerpt)
+
+```json
+{
+  "schema": "0.8",
+  "number": "nid 0.1.6.2",
+  "title": {
+    "de": "Aufnahme von Bootsflüchtlingen"
+  },
+  "type_name": {
+    "de": "Motion"
+  },
+  "begin_date": "2018-11-22",
+  "sources": [
+    { "path": "number", "doc": 1, "block": "b12", "how": "literal" },
+    { "path": "title.de", "doc": 1, "block": "b13", "how": "literal" },
+    "… (5 entries)"
+  ],
+  "custom-meta": [
+    { "meta-name": "adressat", "meta-value": "Gemeinderat", "source": { "doc": 1, "block": "b11", "how": "literal" } },
+    { "meta-name": "ort", "meta-value": "Nidau", "source": { "doc": 1, "block": "b15", "how": "literal" } },
+    "… (5 entries)"
+  ],
+  "contributors": {
+    "data": [
+      {
+        "role": { "de": "Urheber/in" },
+        "fullname": "Lüthold Katrin, SP Kern",
+        "source": { "doc": 1, "block": "b9", "how": "literal" },
+        "party": { "de": "SP Kern" }
+      }
+    ]
+  },
+  "docs": {
+    "data": [
+      {
+        "id": 1,
+        "name": "nidau-m185",
+        "page-count": 2,
+        "body": [
+          { "id": "b1", "type": "def-list", "items": [ { "term": "STADTRAT", "def": "" } ], "page": 1, "x": 136, "y": 124, "width": 188, "height": 24, "font": "Verdana fett", "font-size": 6.7, "color": "#000000", "isOCR": false },
+          { "id": "b2", "type": "graphic", "page": 1, "x": 880, "y": 130, "width": 102, "height": 110, "font-size": 36.3, "color": "#000000" },
+          "… (21 more blocks)"
+        ]
+      }
+    ]
+  }
+}
+```
+
+The full example is what the pipeline delivered for the Nidau PDF on 6 October 2026, contract 0.8: two pages, 23 blocks (14 `p`, 5 `sec`, 2 `def-list`, 2 `graphic`). It holds the model's errors as they came; the affair identifier there was taken from the file reference "nid 0.1.6.2", not from "M 185". The example shows the form, not correctness.
+
+## Changes
+
+- **Repository edition** (8 October 2026): descriptions and enumerations in English; the contract itself unchanged.
+- **0.8** (6 October 2026): `how` knows `derived`. For the title the text of the named block counts when every word of the answer stands in it and the block is not much longer (fields file `block-text`).
+- **0.7** (6 October 2026): `review` at every place (`source` and `sources`): `at`, `decision`, `before`, `by`, `rule`. Reason: the person's decision belongs in the data model, so that the review view shows it, the general repair uses it and the learning gets it.
+- **0.6** (6 October 2026): `source` with `how` and `approve`; `sources` at the root for values without a place of their own; blocks with `font`, `font-size`, `color`. Reason: the front end must show where a person should look, and digital documents carry their font.
+- **0.5, text added** (6 October 2026): section "Filling from the document" (fields file, rules for building in), column "Where it comes from today" at the state of the bridge, the example is now the pipeline's result for a real affair. Contract unchanged.
+- **0.5, corrected** (5 October 2026): `docs`, `contributors` and `events` may also be `null` in the contract. The API delivers that when an affair has no contributors (7 of 72 affairs checked); the contract demanded an object and so rejected an unchanged API answer.
+- **0.5** (5 October 2026): every block may carry `isOCR`. The column "Where it comes from today" names the rules of the bridge.
+- **0.4** (5 October 2026): the contract is now a JSON Schema. The marker for the prior knowledge is removed. Checked with a validator.
+- **0.3** (5 October 2026): contract as JSON beside the definition. Everything that came with 0.2 is `dynamic: true` there (22 parts); 14 are fixed. The rule "only when a document demands it" applies again.
+- **0.2** (5 October 2026): keys are now named exactly as in JATS (`custom` → `custom-meta` with `meta-name` and `meta-value`, `related` → `related-article`, `pages` → `page-count`). New in the header: version, summary, keywords, related object, session or meeting, periodical details, further details about a person. New: `back` with appendix, footnote, reference list, note.
+- **0.1** (5 October 2026): first version with six new keys and seven blocks.

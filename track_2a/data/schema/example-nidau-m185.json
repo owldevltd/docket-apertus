@@ -1,0 +1,606 @@
+{
+  "schema": "0.8",
+  "docs": {
+    "data": [
+      {
+        "id": 1,
+        "name": "nidau-m185",
+        "format": "application/pdf",
+        "page-count": 2,
+        "body": [
+          {
+            "id": "b1",
+            "page": 1,
+            "type": "def-list",
+            "x": 136,
+            "y": 124,
+            "width": 188,
+            "height": 24,
+            "isOCR": false,
+            "font": "Verdana fett",
+            "font-size": 6.7,
+            "color": "#000000",
+            "items": [
+              {
+                "term": "STADTRAT",
+                "def": ""
+              }
+            ]
+          },
+          {
+            "id": "b2",
+            "type": "graphic",
+            "page": 1,
+            "x": 880,
+            "y": 130,
+            "width": 102,
+            "height": 110,
+            "font-size": 36.3,
+            "color": "#000000"
+          },
+          {
+            "id": "b3",
+            "type": "graphic",
+            "page": 1,
+            "x": 1042,
+            "y": 130,
+            "width": 390,
+            "height": 40,
+            "font-size": 13,
+            "color": "#000000"
+          },
+          {
+            "id": "b4",
+            "type": "sec",
+            "page": 1,
+            "x": 2090,
+            "y": 272,
+            "width": 84,
+            "height": 80,
+            "isOCR": false,
+            "font": "Verdana fett",
+            "font-size": 26,
+            "color": "#000000",
+            "title": "M",
+            "content": []
+          },
+          {
+            "id": "b5",
+            "type": "sec",
+            "page": 1,
+            "x": 410,
+            "y": 504,
+            "width": 808,
+            "height": 38,
+            "isOCR": false,
+            "font": "Verdana fett kursiv",
+            "font-size": 11.3,
+            "color": "#000000",
+            "title": "16. Parlamentarischer Vorstoss",
+            "content": [
+              {
+                "id": "b6",
+                "page": 1,
+                "type": "p",
+                "x": 940,
+                "y": 698,
+                "width": 192,
+                "height": 152,
+                "isOCR": false,
+                "font": "Verdana",
+                "font-size": 8,
+                "color": "#000000",
+                "text": "Motion M 185 ☒ 21.03.2019"
+              },
+              {
+                "id": "b7",
+                "page": 1,
+                "type": "p",
+                "x": 408,
+                "y": 700,
+                "width": 446,
+                "height": 156,
+                "isOCR": false,
+                "font": "Verdana",
+                "font-size": 8,
+                "color": "#000000",
+                "text": "Vorstossart: Vorstoss-Nr.: Richtlinienmotion: Beantwortung im Stadtrat:"
+              },
+              {
+                "id": "b8",
+                "page": 1,
+                "type": "p",
+                "x": 410,
+                "y": 902,
+                "width": 268,
+                "height": 76,
+                "isOCR": false,
+                "font": "Verdana",
+                "font-size": 8,
+                "color": "#000000",
+                "text": "Eingereicht am: Eingereicht von:"
+              },
+              {
+                "id": "b9",
+                "page": 1,
+                "type": "p",
+                "x": 940,
+                "y": 904,
+                "width": 448,
+                "height": 112,
+                "isOCR": false,
+                "font": "Verdana",
+                "font-size": 8,
+                "color": "#000000",
+                "text": "22.11.2018 Lüthold Katrin, SP Kern Edith, Grüne"
+              },
+              {
+                "id": "b10",
+                "page": 1,
+                "type": "def-list",
+                "x": 410,
+                "y": 1064,
+                "width": 1762,
+                "height": 114,
+                "isOCR": false,
+                "font": "Verdana",
+                "font-size": 8,
+                "color": "#000000",
+                "items": [
+                  {
+                    "term": "Mitunterzeichnende",
+                    "def": "Brunner Beatrice, Dörig Manuel, Eicher Thomas, Kägi Noah, Kägi Nora, Kunz Véronique, Meier-Nussbaum Ursina, Rochat Sophie, Roth Marcel, Suter-Sommer Carla"
+                  }
+                ]
+              },
+              {
+                "id": "b11",
+                "page": 1,
+                "type": "p",
+                "x": 408,
+                "y": 1228,
+                "width": 414,
+                "height": 154,
+                "isOCR": false,
+                "font": "Verdana",
+                "font-size": 8,
+                "color": "#000000",
+                "text": "Beschluss. Gemeinderat: Aktenzeichen: Ressort: Antrag Gemeinderat:"
+              },
+              {
+                "id": "b12",
+                "page": 1,
+                "type": "p",
+                "x": 938,
+                "y": 1228,
+                "width": 244,
+                "height": 154,
+                "isOCR": false,
+                "font": "Verdana",
+                "font-size": 8,
+                "color": "#000000",
+                "text": "18.02.2019 nid 0.1.6.2 / 2 Präsidiales Ablehnung"
+              },
+              {
+                "id": "b13",
+                "page": 1,
+                "type": "p",
+                "x": 408,
+                "y": 1530,
+                "width": 760,
+                "height": 42,
+                "isOCR": false,
+                "font": "Verdana fett",
+                "font-size": 10,
+                "color": "#000000",
+                "text": "Aufnahme von Bootsflüchtlingen"
+              }
+            ]
+          },
+          {
+            "id": "b14",
+            "type": "sec",
+            "page": 1,
+            "x": 408,
+            "y": 1650,
+            "width": 154,
+            "height": 40,
+            "isOCR": false,
+            "font": "Verdana fett",
+            "font-size": 10,
+            "color": "#000000",
+            "title": "Antrag",
+            "sec-type": "antrag",
+            "content": [
+              {
+                "id": "b15",
+                "page": 1,
+                "type": "p",
+                "x": 408,
+                "y": 1726,
+                "width": 1756,
+                "height": 352,
+                "isOCR": false,
+                "font": "Verdana",
+                "font-size": 9.3,
+                "color": "#000000",
+                "text": "Der Gemeinderat wird gebeten, sich beim Bund dafür einzusetzen, dass vermehrt Bootsflüchtlinge aus dem Mittelmeer in der Schweiz Aufnahme finden. Dabei soll eine klare Haltung kommuniziert werden, dass Seenotrettung nicht wie bis anhin kriminalisiert wird. Im Jahr 2018 haben bereits 1500 Menschen im Mittelmeer den Tod gefunden (Stand 4.8.2018) Nidau soll sich dabei in die Reihe von Städten wie Palermo, Berlin, Barcelona, Kiel, Amsterdam, Stockholm und Neapel stellen um den Bootsflüchtigen Schutz zu bieten."
+              }
+            ]
+          },
+          {
+            "id": "b16",
+            "type": "sec",
+            "page": 1,
+            "x": 410,
+            "y": 2150,
+            "width": 280,
+            "height": 42,
+            "isOCR": false,
+            "font": "Verdana fett",
+            "font-size": 10,
+            "color": "#000000",
+            "title": "Begründung",
+            "sec-type": "begründung",
+            "content": [
+              {
+                "id": "b17",
+                "page": 1,
+                "type": "p",
+                "x": 408,
+                "y": 2228,
+                "width": 1766,
+                "height": 912,
+                "isOCR": false,
+                "font": "Verdana",
+                "font-size": 9.3,
+                "color": "#000000",
+                "text": "Das Versprechen Europas die Menschenrechte einzuhalten, wird täglich gebrochen. Die aktuelle europäische Asylpolitik dient nicht mehr primär dem Schutz von Flüchtlingen als vielmehr dem Schutz der Grenzen. Trotz anhaltender Konflikte in Ländern wie Syrien, Afghanistan, dem Südsudan, Jemen, Myanmar oder Somalia und weltweit steigender Flüchtlingszahlen finden schon jetzt immer weniger Flüchtlinge in Europa Schutz. Schutzsuchende müssen aber Zugang haben zu einem fairen und rechtsstaatlichen Verfahren in Europa. Statt nationaler Alleingänge an den Grenzen und in den Häfen bedarf es einer solidarischen Aufnahme, bei der den Staaten an den südlichen Aussengrenzen nicht die alleinige Verantwortung für die Asylsuchenden zugeschoben wird. Die dramatisch zugespitzte Situation am Mittelmeer erfordert unsere Solidarität und endlich wirksame Schritte, um Menschen aus Seenot zu retten und ihre Ausschiffung in den nächsten europäischen Hafen zu ermöglichen. Danach sollen sie in verschiedenen Staaten Aufnahme finden. Wenn selbst wohlhabende Nationen ihre Grenzen für Flüchtlinge verschliessen, werden andere Staaten diesem Beispiel folgen. Es soll eine verantwortungsvolle Politik der sicheren Fluchtrouten und offenen Häfen in Europa angestrebt und aktiv unterstützt werden."
+              },
+              {
+                "id": "b18",
+                "page": 2,
+                "type": "p",
+                "x": 2162,
+                "y": 138,
+                "width": 20,
+                "height": 30,
+                "isOCR": false,
+                "font": "Verdana",
+                "font-size": 9.3,
+                "color": "#000000",
+                "text": "2"
+              }
+            ]
+          },
+          {
+            "id": "b19",
+            "type": "sec",
+            "page": 2,
+            "x": 408,
+            "y": 260,
+            "width": 652,
+            "height": 34,
+            "isOCR": false,
+            "font": "Verdana fett",
+            "font-size": 10,
+            "color": "#000000",
+            "title": "Antwort des Gemeinderates",
+            "sec-type": "antwort",
+            "content": [
+              {
+                "id": "b20",
+                "page": 2,
+                "type": "p",
+                "x": 408,
+                "y": 338,
+                "width": 1772,
+                "height": 414,
+                "isOCR": false,
+                "font": "Verdana",
+                "font-size": 9.3,
+                "color": "#000000",
+                "text": "Die Zusammenarbeit mit den Exekutiven anderer Gemeinden, des Kantons und des Bundes ist eine Aufgabe des Gemeinderats. Der Inhalt der vorliegenden Motion betrifft somit einen Bereich, der in der Zuständigkeit des Gemeinderats liegt. Der Motion kommt deshalb der Charakter einer Richtlinie zu. Sollte die Motion erheblich erklärt werden, ist sie für den Gemeinderat nicht bindend. Er hat bei Richtlinienmotionen einen relativ grossen Spielraum hinsichtlich des Grads der Zielerreichung, der einzusetzenden Mittel und der weiteren Modalitäten bei der Erfüllung des Auftrags. Zudem bleibt die Entscheidverantwortung bei ihm."
+              },
+              {
+                "id": "b21",
+                "page": 2,
+                "type": "p",
+                "x": 408,
+                "y": 838,
+                "width": 1768,
+                "height": 664,
+                "isOCR": false,
+                "font": "Verdana",
+                "font-size": 9.3,
+                "color": "#000000",
+                "text": "Das Anliegen der Motionärinnen und Motionäre, dass die Menschenrechte in der Asylpolitik eingehalten werden, ist ein berechtigtes. Die Schweiz hat sich immer wieder an internationalen Resettlement - Programmen beteiligt. Der Bundesrat hat im September 2013 beschlossen, im Rahmen eines Resettlement-Programms des UNO-Hochkommissariats für Flüchtlinge (UNHCR) besonders verletzliche Flüchtlinge in Gruppen aufzunehmen. Im März 2015 und Dezember 2016 hat der Bundesrat beschlossen, dieses Engagement in enger Zusammenarbeit mit dem UNHCR fortzusetzen. Der Kanton Bern hat sich seinerseits an den Bemühungen des Bundes anteilmässig beteiligt. Eine stetige Resettlement-Politik des Bundes im internationalen Kontext bringt der Schweiz aussenpolitische Vorteile in der Zusammenarbeit mit den europäischen Staaten, stärkt das Dublin-System und ist gleichzeitig ein wichtiger Ausdruck von Solidarität mit den Zufluchtsstaaten der Flüchtlinge."
+              },
+              {
+                "id": "b22",
+                "page": 2,
+                "type": "p",
+                "x": 408,
+                "y": 1576,
+                "width": 1774,
+                "height": 280,
+                "isOCR": false,
+                "font": "Verdana",
+                "font-size": 9.3,
+                "color": "#000000",
+                "text": "Die Kompetenzen für die Aussenpolitik und die Zusammenarbeit mit Drittstaaten liegen vollumfänglich beim Bund. Die Kompetenzen für die Asyl- und Flüchtlingspolitik liegen bei Bund und Kantonen. Die Gemeinden leisten ihren Beitrag im Rahmen der kantonalen Vorgaben. Der Gemeinderat sieht sich aus kommunaler Sicht nicht legitimiert, darüber hinaus besondere Interessen vertreten zu können."
+              },
+              {
+                "id": "b23",
+                "page": 2,
+                "type": "p",
+                "x": 408,
+                "y": 1934,
+                "width": 416,
+                "height": 116,
+                "isOCR": false,
+                "font": "Verdana fett",
+                "font-size": 10,
+                "color": "#000000",
+                "text": "Beschlussentwurf Ablehnung"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "number": "nid 0.1.6.2",
+  "sources": [
+    {
+      "path": "number",
+      "doc": 1,
+      "block": "b12",
+      "how": "literal"
+    },
+    {
+      "path": "title.de",
+      "doc": 1,
+      "block": "b13",
+      "how": "literal"
+    },
+    {
+      "path": "type_name.de",
+      "doc": 1,
+      "block": "b6",
+      "how": "literal"
+    },
+    {
+      "path": "begin_date",
+      "doc": 1,
+      "block": "b9",
+      "how": "literal"
+    },
+    {
+      "path": "kwd-group.0",
+      "doc": 1,
+      "block": "b13",
+      "how": "literal"
+    }
+  ],
+  "title": {
+    "de": "Aufnahme von Bootsflüchtlingen"
+  },
+  "type_name": {
+    "de": "Motion"
+  },
+  "begin_date": "2018-11-22",
+  "contributors": {
+    "data": [
+      {
+        "role": {
+          "de": "Urheber/in"
+        },
+        "fullname": "Lüthold Katrin, SP Kern",
+        "source": {
+          "doc": 1,
+          "block": "b9",
+          "how": "literal"
+        },
+        "party": {
+          "de": "SP Kern"
+        }
+      },
+      {
+        "role": {
+          "de": "Urheber/in"
+        },
+        "fullname": "Edith, Grüne",
+        "source": {
+          "doc": 1,
+          "block": "b9",
+          "how": "literal"
+        },
+        "party": {
+          "de": "Grüne"
+        }
+      },
+      {
+        "role": {
+          "de": "Mitunterzeichner/in"
+        },
+        "fullname": "Brunner Beatrice",
+        "source": {
+          "doc": 1,
+          "block": "b10",
+          "how": "literal"
+        }
+      },
+      {
+        "role": {
+          "de": "Mitunterzeichner/in"
+        },
+        "fullname": "Dörig Manuel",
+        "source": {
+          "doc": 1,
+          "block": "b10",
+          "how": "literal"
+        }
+      },
+      {
+        "role": {
+          "de": "Mitunterzeichner/in"
+        },
+        "fullname": "Eicher Thomas",
+        "source": {
+          "doc": 1,
+          "block": "b10",
+          "how": "literal"
+        }
+      },
+      {
+        "role": {
+          "de": "Mitunterzeichner/in"
+        },
+        "fullname": "Kägi Noah",
+        "source": {
+          "doc": 1,
+          "block": "b10",
+          "how": "literal"
+        }
+      },
+      {
+        "role": {
+          "de": "Mitunterzeichner/in"
+        },
+        "fullname": "Kägi Nora",
+        "source": {
+          "doc": 1,
+          "block": "b10",
+          "how": "literal"
+        }
+      },
+      {
+        "role": {
+          "de": "Mitunterzeichner/in"
+        },
+        "fullname": "Kunz Véronique",
+        "source": {
+          "doc": 1,
+          "block": "b10",
+          "how": "literal"
+        }
+      },
+      {
+        "role": {
+          "de": "Mitunterzeichner/in"
+        },
+        "fullname": "Meier-Nussbaum Ursina",
+        "source": {
+          "doc": 1,
+          "block": "b10",
+          "how": "literal"
+        }
+      },
+      {
+        "role": {
+          "de": "Mitunterzeichner/in"
+        },
+        "fullname": "Rochat Sophie",
+        "source": {
+          "doc": 1,
+          "block": "b10",
+          "how": "literal"
+        }
+      },
+      {
+        "role": {
+          "de": "Mitunterzeichner/in"
+        },
+        "fullname": "Roth Marcel",
+        "source": {
+          "doc": 1,
+          "block": "b10",
+          "how": "literal"
+        }
+      },
+      {
+        "role": {
+          "de": "Mitunterzeichner/in"
+        },
+        "fullname": "Suter-Sommer Carla",
+        "source": {
+          "doc": 1,
+          "block": "b10",
+          "how": "literal"
+        }
+      }
+    ]
+  },
+  "custom-meta": [
+    {
+      "meta-name": "adressat",
+      "meta-value": "Gemeinderat",
+      "source": {
+        "doc": 1,
+        "block": "b11",
+        "how": "literal"
+      }
+    },
+    {
+      "meta-name": "ort",
+      "meta-value": "Nidau",
+      "source": {
+        "doc": 1,
+        "block": "b15",
+        "how": "literal"
+      }
+    },
+    {
+      "meta-name": "parlament",
+      "meta-value": "Stadtrat",
+      "source": {
+        "doc": 1,
+        "block": "b1",
+        "how": "literal"
+      }
+    },
+    {
+      "meta-name": "gemeinwesen",
+      "meta-value": "Nidau",
+      "source": {
+        "doc": 1,
+        "block": "b15",
+        "how": "literal"
+      }
+    },
+    {
+      "meta-name": "departement",
+      "meta-value": "Präsidiales",
+      "source": {
+        "doc": 1,
+        "block": "b12",
+        "how": "literal"
+      }
+    }
+  ],
+  "kwd-group": [
+    "Aufnahme von Bootsflüchtlingen"
+  ],
+  "events": {
+    "data": [
+      {
+        "title": {
+          "de": "Beantwortung im Stadtrat"
+        },
+        "source": {
+          "doc": 1,
+          "block": "b7",
+          "how": "literal"
+        },
+        "date": "2018-11-22"
+      }
+    ]
+  },
+  "type_harmonized": {
+    "de": "Motion",
+    "fr": "Motion",
+    "it": "Mozione",
+    "en": "Motion"
+  }
+}

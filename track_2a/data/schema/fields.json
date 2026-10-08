@@ -1,0 +1,232 @@
+{
+  "schema": "0.8",
+  "$task": {
+    "intro": "Unten steht eine Seite eines Dokuments aus einem Schweizer Parlament als Text, ungefähr so angeordnet wie auf dem Papier. [Bild] steht für ein Bild, einen Stempel oder eine Unterschrift. Es ist Seite {seite} von {seiten}.",
+    "whole": "Unten steht ein Dokument aus einem Schweizer Parlament als Text, {von} von {seiten} Seiten, jede beginnt mit einer Zeile \"===== Seite n =====\", ungefähr so angeordnet wie auf dem Papier. [Bild] steht für ein Bild, einen Stempel oder eine Unterschrift.",
+    "blocks": "Jeder Textblock beginnt mit seiner Kennung in eckigen Klammern, zum Beispiel [b12].",
+    "task": "Lies daraus ab:",
+    "missing": "Steht etwas nicht auf der Seite, schreibe dafür einen Strich (-). Erfinde nichts.",
+    "form": "Antworte mit genau einer Zeile je Angabe, in der Form \"name: wert [Kennung des Blocks, aus dem der Wert stammt]\", ohne weiteren Text."
+  },
+  "number": {
+    "name": "nummer",
+    "question": "Geschäftsnummer oder Aktenzeichen des Geschäfts"
+  },
+  "title": {
+    "de": {
+      "name": "titel",
+      "question": "Titel des Geschäfts",
+      "min-words": 3,
+      "block-text": true
+    }
+  },
+  "type_name": {
+    "de": {
+      "name": "art",
+      "question": "Art des Geschäfts, so wie das Dokument sie nennt (zum Beispiel Motion, Postulat, Interpellation, Anfrage)",
+      "max-words": 4
+    }
+  },
+  "begin_date": {
+    "name": "datum",
+    "question": "Datum, an dem das Geschäft eingereicht wurde, als TT.MM.JJJJ",
+    "form": "date"
+  },
+  "contributors": {
+    "data": [
+      {
+        "role": {
+          "de": "Urheber/in"
+        },
+        "fullname": {
+          "name": "einreichende",
+          "question": "wer das Geschäft eingereicht hat (bei mehreren durch Strichpunkt getrennt)",
+          "form": "list"
+        },
+        "party": {
+          "de": {
+            "name": "partei",
+            "question": "Partei oder Fraktion der Einreichenden",
+            "form": "list"
+          }
+        },
+        "on-behalf-of": {
+          "name": "im-namen-von",
+          "question": "in wessen Namen eingereicht wurde (Fraktion, Kommission), falls angegeben",
+          "dynamic": true
+        }
+      },
+      {
+        "role": {
+          "de": "Mitunterzeichner/in"
+        },
+        "fullname": {
+          "name": "mitunterzeichnende",
+          "question": "wer mitunterzeichnet hat (bei mehreren durch Strichpunkt getrennt)",
+          "form": "list",
+          "pages": "all"
+        }
+      }
+    ]
+  },
+  "custom-meta": [
+    {
+      "meta-name": "adressat",
+      "meta-value": {
+        "name": "adressat",
+        "question": "an wen es gerichtet ist"
+      }
+    },
+    {
+      "meta-name": "ort",
+      "meta-value": {
+        "name": "ort",
+        "question": "Ort, an dem es eingereicht wurde"
+      }
+    },
+    {
+      "meta-name": "parlament",
+      "meta-value": {
+        "name": "parlament",
+        "question": "Name des Parlaments oder Rats, so wie er auf der Seite steht",
+        "choice": true
+      }
+    },
+    {
+      "meta-name": "gemeinwesen",
+      "meta-value": {
+        "name": "gemeinwesen",
+        "question": "Gemeinde, Stadt oder Kanton, so wie es auf der Seite steht",
+        "choice": true
+      }
+    },
+    {
+      "meta-name": "departement",
+      "meta-value": {
+        "name": "departement",
+        "question": "zuständiges Departement, zuständige Direktion oder zuständiges Ressort",
+        "when": [
+          "Departement",
+          "Direktion",
+          "Ressort",
+          "Amt für",
+          "Staatskanzlei"
+        ]
+      }
+    }
+  ],
+  "related-article": [
+    {
+      "number": {
+        "name": "verwandt",
+        "question": "Nummern anderer Geschäfte, auf die verwiesen wird (durch Strichpunkt getrennt)",
+        "form": "list",
+        "pages": "all"
+      }
+    }
+  ],
+  "related-object": [
+    {
+      "text": {
+        "name": "verweis",
+        "question": "Erlasse, Pläne oder Berichte, auf die verwiesen wird (durch Strichpunkt getrennt)",
+        "form": "list",
+        "dynamic": true,
+        "pages": "all"
+      }
+    }
+  ],
+  "kwd-group": {
+    "name": "schlagwoerter",
+    "question": "gedruckte Schlagwörter, falls welche angegeben sind (durch Strichpunkt getrennt)",
+    "form": "list",
+    "dynamic": true,
+    "pages": "all"
+  },
+  "events": {
+    "data": [
+      {
+        "title": {
+          "de": {
+            "name": "ereignis",
+            "question": "im Dokument genannte Ereignisse mit Datum, was geschah (zum Beispiel \"Beantwortung im Stadtrat\"; bei mehreren durch Strichpunkt getrennt, in derselben Reihenfolge wie ereignisdatum)",
+            "form": "list",
+            "pages": "all"
+          }
+        },
+        "date": {
+          "name": "ereignisdatum",
+          "question": "die Daten dieser Ereignisse, als TT.MM.JJJJ, durch Strichpunkt getrennt",
+          "form": "date",
+          "pages": "all"
+        }
+      }
+    ]
+  },
+  "docs": {
+    "data": [
+      {
+        "article-version": {
+          "name": "fassung",
+          "question": "Fassung des Dokuments, wie gedruckt (zum Beispiel \"Fassung nach 2. Lesung\")",
+          "dynamic": true,
+          "when": [
+            "Fassung",
+            "Entwurf",
+            "Lesung",
+            "Version",
+            "Stand vom"
+          ]
+        },
+        "abstract": {
+          "de": {
+            "name": "zusammenfassung",
+            "question": "eine Zusammenfassung des ganzen Dokuments in höchstens drei Sätzen",
+            "dynamic": true,
+            "pages": "all",
+            "free": true
+          }
+        },
+        "conference": {
+          "conf-name": {
+            "name": "sitzung",
+            "question": "Sitzung oder Tagung, die das Dokument nennt",
+            "dynamic": true,
+            "pages": "all",
+            "when": [
+              "Sitzung",
+              "Session",
+              "Tagung",
+              "Versammlung"
+            ]
+          },
+          "conf-date": {
+            "name": "sitzungsdatum",
+            "question": "Datum dieser Sitzung, als TT.MM.JJJJ",
+            "form": "date",
+            "dynamic": true,
+            "pages": "all",
+            "when": [
+              "Sitzung",
+              "Session",
+              "Tagung",
+              "Versammlung"
+            ]
+          },
+          "conf-loc": {
+            "name": "sitzungsort",
+            "question": "Ort dieser Sitzung",
+            "dynamic": true,
+            "pages": "all",
+            "when": [
+              "Sitzung",
+              "Session",
+              "Tagung",
+              "Versammlung"
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

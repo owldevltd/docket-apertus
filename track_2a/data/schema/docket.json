@@ -1,0 +1,1122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parliamentary affair: OpenParlData with the document's build-up after JATS",
+  "description": "Version 0.8. The OpenParlData API's answer for an affair stays unchanged and unchecked; described is only what is added. New keys are named like the element in JATS 1.3 Archiving. dynamic: true marks everything that was added later.",
+  "type": "object",
+  "required": [
+    "schema"
+  ],
+  "properties": {
+    "schema": {
+      "const": "0.8"
+    },
+    "custom-meta": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "a printed header entry without a place of its own at OpenParlData",
+        "required": [
+          "meta-name",
+          "meta-value"
+        ],
+        "properties": {
+          "meta-name": {
+            "type": "string"
+          },
+          "meta-value": {
+            "type": "string"
+          },
+          "source": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "related-article": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "a related affair",
+        "properties": {
+          "affair_id": {
+            "type": "integer"
+          },
+          "number": {
+            "type": "string"
+          },
+          "source": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "related-object": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "a reference to something that is not an affair",
+        "required": [
+          "text"
+        ],
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "uri": {
+            "type": "string"
+          },
+          "source": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "additionalProperties": false
+      },
+      "dynamic": true
+    },
+    "kwd-group": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "dynamic": true
+    },
+    "docs": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/doc"
+          }
+        }
+      }
+    },
+    "contributors": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/contributor"
+          }
+        }
+      }
+    },
+    "events": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/event"
+          }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "description": "places in the document for values whose own place carries no source (number, title, type_name, begin_date, article-version, abstract, kwd-group); path is the way to the value, with dots",
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "doc",
+          "block"
+        ],
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "doc": {
+            "type": "integer"
+          },
+          "block": {
+            "type": "string"
+          },
+          "how": {
+            "type": "string",
+            "enum": [
+              "literal",
+              "derived",
+              "cited",
+              "composed"
+            ]
+          },
+          "approve": {
+            "type": "boolean"
+          },
+          "review": {
+            "$ref": "#/$defs/review"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "description": "where a value came from in the document",
+      "required": [
+        "doc",
+        "block"
+      ],
+      "properties": {
+        "doc": {
+          "type": "integer",
+          "description": "the document (docs.id)"
+        },
+        "block": {
+          "type": "string",
+          "description": "id of a block in that document"
+        },
+        "how": {
+          "type": "string",
+          "enum": [
+            "literal",
+            "derived",
+            "cited",
+            "composed"
+          ],
+          "description": "how the value got its place: literal (found in the block as is), derived (every word of the value stands in the block, put together differently), cited (the model named the block), composed (the model phrased it)"
+        },
+        "approve": {
+          "type": "boolean",
+          "description": "a person should look: not found literally, or the block itself carries approve"
+        },
+        "review": {
+          "$ref": "#/$defs/review"
+        }
+      },
+      "additionalProperties": false
+    },
+    "languages": {
+      "type": "object",
+      "description": "text per language, as OpenParlData has it",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "doc": {
+      "type": "object",
+      "properties": {
+        "page-count": {
+          "type": "integer"
+        },
+        "body": {
+          "$ref": "#/$defs/body"
+        },
+        "response": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "an answer within the same document",
+            "required": [
+              "body"
+            ],
+            "properties": {
+              "response-type": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "body": {
+                "$ref": "#/$defs/body"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "back": {
+          "$ref": "#/$defs/back",
+          "dynamic": true
+        },
+        "article-version": {
+          "type": "string",
+          "description": "the version, as printed",
+          "dynamic": true
+        },
+        "abstract": {
+          "$ref": "#/$defs/languages",
+          "dynamic": true
+        },
+        "conference": {
+          "type": "object",
+          "description": "the session or meeting the document names",
+          "properties": {
+            "conf-name": {
+              "type": "string"
+            },
+            "conf-date": {
+              "type": "string"
+            },
+            "conf-loc": {
+              "type": "string"
+            },
+            "source": {
+              "$ref": "#/$defs/source"
+            }
+          },
+          "additionalProperties": false,
+          "dynamic": true
+        },
+        "journal-meta": {
+          "type": "object",
+          "description": "press and periodicals only",
+          "properties": {
+            "journal-title": {
+              "type": "string"
+            },
+            "publisher-name": {
+              "type": "string"
+            },
+            "issn": {
+              "type": "string"
+            },
+            "source": {
+              "$ref": "#/$defs/source"
+            }
+          },
+          "additionalProperties": false,
+          "dynamic": true
+        },
+        "volume": {
+          "type": "string",
+          "dynamic": true
+        },
+        "issue": {
+          "type": "string",
+          "dynamic": true
+        },
+        "fpage": {
+          "type": "string",
+          "dynamic": true
+        },
+        "lpage": {
+          "type": "string",
+          "dynamic": true
+        }
+      }
+    },
+    "contributor": {
+      "type": "object",
+      "properties": {
+        "degrees": {
+          "type": "string",
+          "dynamic": true
+        },
+        "aff": {
+          "type": "string",
+          "dynamic": true
+        },
+        "on-behalf-of": {
+          "type": "string",
+          "dynamic": true
+        },
+        "address": {
+          "type": "string",
+          "dynamic": true
+        },
+        "email": {
+          "type": "string",
+          "dynamic": true
+        },
+        "author-comment": {
+          "type": "string",
+          "dynamic": true
+        },
+        "etal": {
+          "type": "boolean",
+          "dynamic": true
+        }
+      }
+    },
+    "event": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "$ref": "#/$defs/source"
+        }
+      }
+    },
+    "body": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/sec"
+          },
+          {
+            "$ref": "#/$defs/p"
+          },
+          {
+            "$ref": "#/$defs/list"
+          },
+          {
+            "$ref": "#/$defs/def-list"
+          },
+          {
+            "$ref": "#/$defs/table-wrap"
+          },
+          {
+            "$ref": "#/$defs/graphic"
+          },
+          {
+            "$ref": "#/$defs/sig-block"
+          }
+        ]
+      }
+    },
+    "back": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/sec"
+          },
+          {
+            "$ref": "#/$defs/p"
+          },
+          {
+            "$ref": "#/$defs/list"
+          },
+          {
+            "$ref": "#/$defs/def-list"
+          },
+          {
+            "$ref": "#/$defs/table-wrap"
+          },
+          {
+            "$ref": "#/$defs/graphic"
+          },
+          {
+            "$ref": "#/$defs/app"
+          },
+          {
+            "$ref": "#/$defs/fn"
+          },
+          {
+            "$ref": "#/$defs/ref-list"
+          },
+          {
+            "$ref": "#/$defs/notes"
+          }
+        ]
+      }
+    },
+    "sec": {
+      "type": "object",
+      "description": "a section with a heading",
+      "required": [
+        "id",
+        "type"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "id within the document, in reading order"
+        },
+        "type": {
+          "const": "sec"
+        },
+        "page": {
+          "type": "integer"
+        },
+        "x": {
+          "type": "integer"
+        },
+        "y": {
+          "type": "integer"
+        },
+        "width": {
+          "type": "integer"
+        },
+        "height": {
+          "type": "integer"
+        },
+        "approve": {
+          "type": "boolean",
+          "description": "a person should look"
+        },
+        "isOCR": {
+          "type": "boolean",
+          "description": "the text comes from text recognition, not from the PDF itself"
+        },
+        "sec-type": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "content": {
+          "$ref": "#/$defs/body"
+        },
+        "font": {
+          "type": "string",
+          "description": "the font as the PDF names it; only with a text layer"
+        },
+        "font-size": {
+          "type": "number",
+          "description": "font size in points"
+        },
+        "color": {
+          "type": "string",
+          "description": "text colour as #rrggbb"
+        }
+      },
+      "additionalProperties": false
+    },
+    "p": {
+      "type": "object",
+      "description": "a paragraph",
+      "required": [
+        "id",
+        "type",
+        "text"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "id within the document, in reading order"
+        },
+        "type": {
+          "const": "p"
+        },
+        "page": {
+          "type": "integer"
+        },
+        "x": {
+          "type": "integer"
+        },
+        "y": {
+          "type": "integer"
+        },
+        "width": {
+          "type": "integer"
+        },
+        "height": {
+          "type": "integer"
+        },
+        "approve": {
+          "type": "boolean",
+          "description": "a person should look"
+        },
+        "isOCR": {
+          "type": "boolean",
+          "description": "the text comes from text recognition, not from the PDF itself"
+        },
+        "text": {
+          "type": "string"
+        },
+        "font": {
+          "type": "string",
+          "description": "the font as the PDF names it; only with a text layer"
+        },
+        "font-size": {
+          "type": "number",
+          "description": "font size in points"
+        },
+        "color": {
+          "type": "string",
+          "description": "text colour as #rrggbb"
+        }
+      },
+      "additionalProperties": false
+    },
+    "list": {
+      "type": "object",
+      "description": "a list",
+      "required": [
+        "id",
+        "type",
+        "items"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "id within the document, in reading order"
+        },
+        "type": {
+          "const": "list"
+        },
+        "page": {
+          "type": "integer"
+        },
+        "x": {
+          "type": "integer"
+        },
+        "y": {
+          "type": "integer"
+        },
+        "width": {
+          "type": "integer"
+        },
+        "height": {
+          "type": "integer"
+        },
+        "approve": {
+          "type": "boolean",
+          "description": "a person should look"
+        },
+        "isOCR": {
+          "type": "boolean",
+          "description": "the text comes from text recognition, not from the PDF itself"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "font": {
+          "type": "string",
+          "description": "the font as the PDF names it; only with a text layer"
+        },
+        "font-size": {
+          "type": "number",
+          "description": "font size in points"
+        },
+        "color": {
+          "type": "string",
+          "description": "text colour as #rrggbb"
+        }
+      },
+      "additionalProperties": false
+    },
+    "def-list": {
+      "type": "object",
+      "description": "label and value",
+      "required": [
+        "id",
+        "type",
+        "items"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "id within the document, in reading order"
+        },
+        "type": {
+          "const": "def-list"
+        },
+        "page": {
+          "type": "integer"
+        },
+        "x": {
+          "type": "integer"
+        },
+        "y": {
+          "type": "integer"
+        },
+        "width": {
+          "type": "integer"
+        },
+        "height": {
+          "type": "integer"
+        },
+        "approve": {
+          "type": "boolean",
+          "description": "a person should look"
+        },
+        "isOCR": {
+          "type": "boolean",
+          "description": "the text comes from text recognition, not from the PDF itself"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "term",
+              "def"
+            ],
+            "properties": {
+              "term": {
+                "type": "string"
+              },
+              "def": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "font": {
+          "type": "string",
+          "description": "the font as the PDF names it; only with a text layer"
+        },
+        "font-size": {
+          "type": "number",
+          "description": "font size in points"
+        },
+        "color": {
+          "type": "string",
+          "description": "text colour as #rrggbb"
+        }
+      },
+      "additionalProperties": false
+    },
+    "table-wrap": {
+      "type": "object",
+      "description": "a table",
+      "required": [
+        "id",
+        "type",
+        "rows"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "id within the document, in reading order"
+        },
+        "type": {
+          "const": "table-wrap"
+        },
+        "page": {
+          "type": "integer"
+        },
+        "x": {
+          "type": "integer"
+        },
+        "y": {
+          "type": "integer"
+        },
+        "width": {
+          "type": "integer"
+        },
+        "height": {
+          "type": "integer"
+        },
+        "approve": {
+          "type": "boolean",
+          "description": "a person should look"
+        },
+        "isOCR": {
+          "type": "boolean",
+          "description": "the text comes from text recognition, not from the PDF itself"
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "font": {
+          "type": "string",
+          "description": "the font as the PDF names it; only with a text layer"
+        },
+        "font-size": {
+          "type": "number",
+          "description": "font size in points"
+        },
+        "color": {
+          "type": "string",
+          "description": "text colour as #rrggbb"
+        }
+      },
+      "additionalProperties": false
+    },
+    "graphic": {
+      "type": "object",
+      "description": "an image, a coat of arms, a plan",
+      "required": [
+        "id",
+        "type"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "id within the document, in reading order"
+        },
+        "type": {
+          "const": "graphic"
+        },
+        "page": {
+          "type": "integer"
+        },
+        "x": {
+          "type": "integer"
+        },
+        "y": {
+          "type": "integer"
+        },
+        "width": {
+          "type": "integer"
+        },
+        "height": {
+          "type": "integer"
+        },
+        "approve": {
+          "type": "boolean",
+          "description": "a person should look"
+        },
+        "isOCR": {
+          "type": "boolean",
+          "description": "the text comes from text recognition, not from the PDF itself"
+        },
+        "text": {
+          "type": "string"
+        },
+        "font": {
+          "type": "string",
+          "description": "the font as the PDF names it; only with a text layer"
+        },
+        "font-size": {
+          "type": "number",
+          "description": "font size in points"
+        },
+        "color": {
+          "type": "string",
+          "description": "text colour as #rrggbb"
+        }
+      },
+      "additionalProperties": false
+    },
+    "sig-block": {
+      "type": "object",
+      "description": "a signature",
+      "required": [
+        "id",
+        "type"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "id within the document, in reading order"
+        },
+        "type": {
+          "const": "sig-block"
+        },
+        "page": {
+          "type": "integer"
+        },
+        "x": {
+          "type": "integer"
+        },
+        "y": {
+          "type": "integer"
+        },
+        "width": {
+          "type": "integer"
+        },
+        "height": {
+          "type": "integer"
+        },
+        "approve": {
+          "type": "boolean",
+          "description": "a person should look"
+        },
+        "isOCR": {
+          "type": "boolean",
+          "description": "the text comes from text recognition, not from the PDF itself"
+        },
+        "text": {
+          "type": "string"
+        },
+        "font": {
+          "type": "string",
+          "description": "the font as the PDF names it; only with a text layer"
+        },
+        "font-size": {
+          "type": "number",
+          "description": "font size in points"
+        },
+        "color": {
+          "type": "string",
+          "description": "text colour as #rrggbb"
+        }
+      },
+      "additionalProperties": false
+    },
+    "app": {
+      "type": "object",
+      "description": "an appendix",
+      "required": [
+        "id",
+        "type"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "id within the document, in reading order"
+        },
+        "type": {
+          "const": "app"
+        },
+        "page": {
+          "type": "integer"
+        },
+        "x": {
+          "type": "integer"
+        },
+        "y": {
+          "type": "integer"
+        },
+        "width": {
+          "type": "integer"
+        },
+        "height": {
+          "type": "integer"
+        },
+        "approve": {
+          "type": "boolean",
+          "description": "a person should look"
+        },
+        "isOCR": {
+          "type": "boolean",
+          "description": "the text comes from text recognition, not from the PDF itself"
+        },
+        "title": {
+          "type": "string"
+        },
+        "content": {
+          "$ref": "#/$defs/body"
+        },
+        "font": {
+          "type": "string",
+          "description": "the font as the PDF names it; only with a text layer"
+        },
+        "font-size": {
+          "type": "number",
+          "description": "font size in points"
+        },
+        "color": {
+          "type": "string",
+          "description": "text colour as #rrggbb"
+        }
+      },
+      "additionalProperties": false,
+      "dynamic": true
+    },
+    "fn": {
+      "type": "object",
+      "description": "a footnote",
+      "required": [
+        "id",
+        "type",
+        "text"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "id within the document, in reading order"
+        },
+        "type": {
+          "const": "fn"
+        },
+        "page": {
+          "type": "integer"
+        },
+        "x": {
+          "type": "integer"
+        },
+        "y": {
+          "type": "integer"
+        },
+        "width": {
+          "type": "integer"
+        },
+        "height": {
+          "type": "integer"
+        },
+        "approve": {
+          "type": "boolean",
+          "description": "a person should look"
+        },
+        "isOCR": {
+          "type": "boolean",
+          "description": "the text comes from text recognition, not from the PDF itself"
+        },
+        "label": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "font": {
+          "type": "string",
+          "description": "the font as the PDF names it; only with a text layer"
+        },
+        "font-size": {
+          "type": "number",
+          "description": "font size in points"
+        },
+        "color": {
+          "type": "string",
+          "description": "text colour as #rrggbb"
+        }
+      },
+      "additionalProperties": false,
+      "dynamic": true
+    },
+    "ref-list": {
+      "type": "object",
+      "description": "a list of references",
+      "required": [
+        "id",
+        "type",
+        "items"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "id within the document, in reading order"
+        },
+        "type": {
+          "const": "ref-list"
+        },
+        "page": {
+          "type": "integer"
+        },
+        "x": {
+          "type": "integer"
+        },
+        "y": {
+          "type": "integer"
+        },
+        "width": {
+          "type": "integer"
+        },
+        "height": {
+          "type": "integer"
+        },
+        "approve": {
+          "type": "boolean",
+          "description": "a person should look"
+        },
+        "isOCR": {
+          "type": "boolean",
+          "description": "the text comes from text recognition, not from the PDF itself"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "font": {
+          "type": "string",
+          "description": "the font as the PDF names it; only with a text layer"
+        },
+        "font-size": {
+          "type": "number",
+          "description": "font size in points"
+        },
+        "color": {
+          "type": "string",
+          "description": "text colour as #rrggbb"
+        }
+      },
+      "additionalProperties": false,
+      "dynamic": true
+    },
+    "notes": {
+      "type": "object",
+      "description": "a note outside the text flow",
+      "required": [
+        "id",
+        "type",
+        "text"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "id within the document, in reading order"
+        },
+        "type": {
+          "const": "notes"
+        },
+        "page": {
+          "type": "integer"
+        },
+        "x": {
+          "type": "integer"
+        },
+        "y": {
+          "type": "integer"
+        },
+        "width": {
+          "type": "integer"
+        },
+        "height": {
+          "type": "integer"
+        },
+        "approve": {
+          "type": "boolean",
+          "description": "a person should look"
+        },
+        "isOCR": {
+          "type": "boolean",
+          "description": "the text comes from text recognition, not from the PDF itself"
+        },
+        "text": {
+          "type": "string"
+        },
+        "font": {
+          "type": "string",
+          "description": "the font as the PDF names it; only with a text layer"
+        },
+        "font-size": {
+          "type": "number",
+          "description": "font size in points"
+        },
+        "color": {
+          "type": "string",
+          "description": "text colour as #rrggbb"
+        }
+      },
+      "additionalProperties": false,
+      "dynamic": true
+    },
+    "review": {
+      "type": "object",
+      "description": "what a person did with the value",
+      "required": [
+        "at",
+        "decision"
+      ],
+      "properties": {
+        "at": {
+          "type": "string",
+          "description": "time, ISO 8601"
+        },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "confirmed",
+            "changed",
+            "rejected"
+          ]
+        },
+        "before": {
+          "type": "string",
+          "description": "the value before the change"
+        },
+        "by": {
+          "type": "string",
+          "description": "who, free text"
+        },
+        "rule": {
+          "type": "string",
+          "description": "id of the general rule when the change came from one or founded one"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
