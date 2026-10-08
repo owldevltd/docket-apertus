@@ -34,12 +34,18 @@ class Field:
     when: list[str] = field(default_factory=list)
     free: bool = False
     block_text: bool = False
+    # what the value serves for beyond its place: the affair's identity (number, place, parliament, date, title)
+    role: str = ""
 
 
 @dataclass
 class Fields:
     task: dict
     fields: dict[str, Field]
+
+    def by_role(self) -> dict[str, str]:
+        """The field name per role."""
+        return {f.role: name for name, f in self.fields.items() if f.role}
 
 
 def load_fields(path: str | Path, contract: Contract) -> Fields:
@@ -89,6 +95,7 @@ def _walk(node, path: list[str], fixed: dict, template: str, fields: dict[str, F
             when=list(node.get("when", [])),
             free=bool(node.get("free", False)),
             block_text=bool(node.get("block-text", False)),
+            role=str(node.get("role", "")),
         )
         return
     if isinstance(node, list):

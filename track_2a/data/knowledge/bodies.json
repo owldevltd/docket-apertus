@@ -1,0 +1,587 @@
+{
+  "source": "API of OpenParlData, bodies with affairs or documents, built 2026-10-08",
+  "bodies": {
+    "1024": {
+      "name": "Emmen",
+      "parliament": "Einwohnerrat",
+      "canton": "LU",
+      "level": "city"
+    },
+    "1058": {
+      "name": "Horw",
+      "parliament": "Einwohnerrat",
+      "canton": "LU",
+      "level": "city"
+    },
+    "1059": {
+      "name": "Kriens",
+      "parliament": "Einwohnerrat",
+      "canton": "LU",
+      "level": "city"
+    },
+    "1061": {
+      "name": "Luzern",
+      "parliament": "Grosser Stadtrat",
+      "canton": "LU",
+      "level": "city"
+    },
+    "121": {
+      "name": "Wetzikon (ZH)",
+      "parliament": "Parlament",
+      "canton": "ZH",
+      "level": "city"
+    },
+    "131": {
+      "name": "Adliswil",
+      "parliament": "Grosse Gemeinderat",
+      "canton": "ZH",
+      "level": "city"
+    },
+    "1711": {
+      "name": "Zug",
+      "parliament": "Grosse Gemeinderat",
+      "canton": "ZG",
+      "level": "city"
+    },
+    "191": {
+      "name": "Dübendorf",
+      "parliament": "Gemeinderat",
+      "canton": "ZH",
+      "level": "city"
+    },
+    "198": {
+      "name": "Uster",
+      "parliament": "Gemeinderat",
+      "canton": "ZH",
+      "level": "city"
+    },
+    "2125": {
+      "name": "Bulle",
+      "parliament": "",
+      "canton": "FR",
+      "level": "city"
+    },
+    "2196": {
+      "name": "Fribourg",
+      "parliament": "Generalrat",
+      "canton": "FR",
+      "level": "city"
+    },
+    "230": {
+      "name": "Winterthur",
+      "parliament": "Stadtparlament",
+      "canton": "ZH",
+      "level": "city"
+    },
+    "243": {
+      "name": "Dietikon",
+      "parliament": "Gemeinderat",
+      "canton": "ZH",
+      "level": "city"
+    },
+    "247": {
+      "name": "Schlieren",
+      "parliament": "Gemeindeparlament",
+      "canton": "ZH",
+      "level": "city"
+    },
+    "2581": {
+      "name": "Olten",
+      "parliament": "Gemeindeparlament",
+      "canton": "SO",
+      "level": "city"
+    },
+    "261": {
+      "name": "Zürich",
+      "parliament": "Gemeinderat",
+      "canton": "ZH",
+      "level": "city"
+    },
+    "2703": {
+      "name": "Riehen",
+      "parliament": "Einwohnerrat",
+      "canton": "BS",
+      "level": "city"
+    },
+    "2829": {
+      "name": "Liestal",
+      "parliament": "Einwohnerrat",
+      "canton": "BL",
+      "level": "city"
+    },
+    "2831": {
+      "name": "Pratteln",
+      "parliament": "Einwohnerrat",
+      "canton": "BL",
+      "level": "city"
+    },
+    "293": {
+      "name": "Wädenswil",
+      "parliament": "Gemeinderat",
+      "canton": "ZH",
+      "level": "city"
+    },
+    "2937": {
+      "name": "Neuhausen am Rheinfall",
+      "parliament": "Einwohnerrat",
+      "canton": "SH",
+      "level": "city"
+    },
+    "2939": {
+      "name": "Schaffhausen",
+      "parliament": "Grosser Stadtrat",
+      "canton": "SH",
+      "level": "city"
+    },
+    "296": {
+      "name": "Illnau-Effretikon",
+      "parliament": "Stadtparlament",
+      "canton": "ZH",
+      "level": "city"
+    },
+    "3001": {
+      "name": "Herisau",
+      "parliament": "Einwohnerrat",
+      "canton": "AR",
+      "level": "city"
+    },
+    "306": {
+      "name": "Lyss",
+      "parliament": "",
+      "canton": "BE",
+      "level": "city"
+    },
+    "3203": {
+      "name": "St. Gallen",
+      "parliament": "Stadtparlament",
+      "canton": "SG",
+      "level": "city"
+    },
+    "329": {
+      "name": "Langenthal",
+      "parliament": "Stadtrat",
+      "canton": "BE",
+      "level": "city"
+    },
+    "3427": {
+      "name": "Wil (SG)",
+      "parliament": "Stadtparlament",
+      "canton": "SG",
+      "level": "city"
+    },
+    "3443": {
+      "name": "Gossau (SG)",
+      "parliament": "Stadtparlament",
+      "canton": "SG",
+      "level": "city"
+    },
+    "351": {
+      "name": "Bern",
+      "parliament": "Stadtrat",
+      "canton": "BE",
+      "level": "city"
+    },
+    "361": {
+      "name": "Zollikofen",
+      "parliament": "",
+      "canton": "BE",
+      "level": "city"
+    },
+    "3901": {
+      "name": "Chur",
+      "parliament": "Gemeinderat",
+      "canton": "GR",
+      "level": "city"
+    },
+    "4001": {
+      "name": "Aarau",
+      "parliament": "Einwohnerrat",
+      "canton": "AG",
+      "level": "city"
+    },
+    "404": {
+      "name": "Burgdorf",
+      "parliament": "",
+      "canton": "BE",
+      "level": "city"
+    },
+    "4045": {
+      "name": "Wettingen",
+      "parliament": "Einwohnerrat",
+      "canton": "AG",
+      "level": "city"
+    },
+    "4082": {
+      "name": "Wohlen (AG)",
+      "parliament": "",
+      "canton": "AG",
+      "level": "city"
+    },
+    "4201": {
+      "name": "Lenzburg",
+      "parliament": "",
+      "canton": "AG",
+      "level": "city"
+    },
+    "4289": {
+      "name": "Zofingen",
+      "parliament": "Einwohnerrat",
+      "canton": "AG",
+      "level": "city"
+    },
+    "4401": {
+      "name": "Arbon",
+      "parliament": "Stadtparlament",
+      "canton": "TG",
+      "level": "city"
+    },
+    "4566": {
+      "name": "Frauenfeld",
+      "parliament": "Gemeinderat",
+      "canton": "TG",
+      "level": "city"
+    },
+    "4671": {
+      "name": "Kreuzlingen",
+      "parliament": "Gemeinderat",
+      "canton": "TG",
+      "level": "city"
+    },
+    "5002": {
+      "name": "Bellinzona",
+      "parliament": "Gemeinderat",
+      "canton": "TI",
+      "level": "city"
+    },
+    "5113": {
+      "name": "Locarno",
+      "parliament": "Gemeinderat",
+      "canton": "TI",
+      "level": "city"
+    },
+    "5192": {
+      "name": "Lugano",
+      "parliament": "Gemeinderat",
+      "canton": "TI",
+      "level": "city"
+    },
+    "5254": {
+      "name": "Mendrisio",
+      "parliament": "Gemeinderat",
+      "canton": "TI",
+      "level": "city"
+    },
+    "53": {
+      "name": "Bülach",
+      "parliament": "Stadtparlament",
+      "canton": "ZH",
+      "level": "city"
+    },
+    "5586": {
+      "name": "Lausanne",
+      "parliament": "Gemeinderat",
+      "canton": "VD",
+      "level": "city"
+    },
+    "581": {
+      "name": "Interlaken",
+      "parliament": "",
+      "canton": "BE",
+      "level": "city"
+    },
+    "5938": {
+      "name": "Yverdon-les-Bains",
+      "parliament": "",
+      "canton": "VD",
+      "level": "city"
+    },
+    "6023": {
+      "name": "Conthey",
+      "parliament": "",
+      "canton": "VS",
+      "level": "municipality"
+    },
+    "6025": {
+      "name": "Vétroz",
+      "parliament": "",
+      "canton": "VS",
+      "level": "municipality"
+    },
+    "6037": {
+      "name": "Val de Bagnes",
+      "parliament": "",
+      "canton": "VS",
+      "level": "municipality"
+    },
+    "6082": {
+      "name": "Ayent",
+      "parliament": "",
+      "canton": "VS",
+      "level": "municipality"
+    },
+    "6133": {
+      "name": "Fully",
+      "parliament": "",
+      "canton": "VS",
+      "level": "municipality"
+    },
+    "6136": {
+      "name": "Martigny",
+      "parliament": "",
+      "canton": "VS",
+      "level": "city"
+    },
+    "6152": {
+      "name": "Collombey-Muraz",
+      "parliament": "",
+      "canton": "VS",
+      "level": "municipality"
+    },
+    "6153": {
+      "name": "Monthey",
+      "parliament": "",
+      "canton": "VS",
+      "level": "city"
+    },
+    "616": {
+      "name": "Münsingen",
+      "parliament": "Parlament",
+      "canton": "BE",
+      "level": "city"
+    },
+    "62": {
+      "name": "Kloten",
+      "parliament": "Gemeinderat",
+      "canton": "ZH",
+      "level": "city"
+    },
+    "6217": {
+      "name": "Saint-Maurice",
+      "parliament": "",
+      "canton": "VS",
+      "level": "municipality"
+    },
+    "6248": {
+      "name": "Sierre",
+      "parliament": "Conseil général",
+      "canton": "VS",
+      "level": "city"
+    },
+    "6266": {
+      "name": "Sion",
+      "parliament": "",
+      "canton": "VS",
+      "level": "city"
+    },
+    "6421": {
+      "name": "La Chaux-de-Fonds",
+      "parliament": "",
+      "canton": "NE",
+      "level": "city"
+    },
+    "6458": {
+      "name": "Neuchâtel",
+      "parliament": "Generalrat",
+      "canton": "NE",
+      "level": "city"
+    },
+    "66": {
+      "name": "Opfikon",
+      "parliament": "Gemeinderat",
+      "canton": "ZH",
+      "level": "city"
+    },
+    "6621": {
+      "name": "Genève",
+      "parliament": "Stadtrat",
+      "canton": "GE",
+      "level": "city"
+    },
+    "6643": {
+      "name": "Vernier",
+      "parliament": "",
+      "canton": "GE",
+      "level": "city"
+    },
+    "743": {
+      "name": "Nidau",
+      "parliament": "",
+      "canton": "BE",
+      "level": "municipality"
+    },
+    "942": {
+      "name": "Thun",
+      "parliament": "Stadtrat",
+      "canton": "BE",
+      "level": "city"
+    },
+    "AG": {
+      "name": "Aargau",
+      "parliament": "Grosser Rat",
+      "canton": "AG",
+      "level": "canton"
+    },
+    "AI": {
+      "name": "Appenzell Innerrhoden",
+      "parliament": "Grosser Rat",
+      "canton": "AI",
+      "level": "canton"
+    },
+    "AR": {
+      "name": "Appenzell Ausserrhoden",
+      "parliament": "Kantonsrat",
+      "canton": "AR",
+      "level": "canton"
+    },
+    "BE": {
+      "name": "Bern",
+      "parliament": "Grosser Rat",
+      "canton": "BE",
+      "level": "canton"
+    },
+    "BL": {
+      "name": "Basel-Landschaft",
+      "parliament": "Landrat",
+      "canton": "BL",
+      "level": "canton"
+    },
+    "BS": {
+      "name": "Basel-Stadt",
+      "parliament": "Grosser Rat",
+      "canton": "BS",
+      "level": "canton"
+    },
+    "CHE": {
+      "name": "Schweiz",
+      "parliament": "",
+      "canton": null,
+      "level": "country"
+    },
+    "FR": {
+      "name": "Freiburg",
+      "parliament": "Grosser Rat",
+      "canton": "FR",
+      "level": "canton"
+    },
+    "GE": {
+      "name": "Genf",
+      "parliament": "Grosser Rat",
+      "canton": "GE",
+      "level": "canton"
+    },
+    "GL": {
+      "name": "Glarus",
+      "parliament": "Landrat",
+      "canton": "GL",
+      "level": "canton"
+    },
+    "GR": {
+      "name": "Graubünden",
+      "parliament": "Grosser Rat",
+      "canton": "GR",
+      "level": "canton"
+    },
+    "JU": {
+      "name": "Jura",
+      "parliament": "Kantonsparlament",
+      "canton": "JU",
+      "level": "canton"
+    },
+    "LIE": {
+      "name": "Liechtenstein",
+      "parliament": "",
+      "canton": null,
+      "level": "country"
+    },
+    "LU": {
+      "name": "Luzern",
+      "parliament": "Kantonsrat",
+      "canton": "LU",
+      "level": "canton"
+    },
+    "NE": {
+      "name": "Neuenburg",
+      "parliament": "Grosser Rat",
+      "canton": "NE",
+      "level": "canton"
+    },
+    "NW": {
+      "name": "Nidwalden",
+      "parliament": "Landrat",
+      "canton": "NW",
+      "level": "canton"
+    },
+    "OW": {
+      "name": "Obwalden",
+      "parliament": "Kantonsrat",
+      "canton": "OW",
+      "level": "canton"
+    },
+    "SG": {
+      "name": "St. Gallen",
+      "parliament": "Kantonsrat",
+      "canton": "SG",
+      "level": "canton"
+    },
+    "SH": {
+      "name": "Schaffhausen",
+      "parliament": "Kantonsrat",
+      "canton": "SH",
+      "level": "canton"
+    },
+    "SO": {
+      "name": "Solothurn",
+      "parliament": "Kantonsrat",
+      "canton": "SO",
+      "level": "canton"
+    },
+    "SZ": {
+      "name": "Schwyz",
+      "parliament": "Kantonsrat",
+      "canton": "SZ",
+      "level": "canton"
+    },
+    "TG": {
+      "name": "Thurgau",
+      "parliament": "Grosser Rat",
+      "canton": "TG",
+      "level": "canton"
+    },
+    "TI": {
+      "name": "Tessin",
+      "parliament": "Grosser Rat",
+      "canton": "TI",
+      "level": "canton"
+    },
+    "UR": {
+      "name": "Uri",
+      "parliament": "Landrat",
+      "canton": "UR",
+      "level": "canton"
+    },
+    "VD": {
+      "name": "Waadt",
+      "parliament": "Grosser Rat",
+      "canton": "VD",
+      "level": "canton"
+    },
+    "VS": {
+      "name": "Wallis",
+      "parliament": "Grosser Rat",
+      "canton": "VS",
+      "level": "canton"
+    },
+    "ZG": {
+      "name": "Zug",
+      "parliament": "Kantonsrat",
+      "canton": "ZG",
+      "level": "canton"
+    },
+    "ZH": {
+      "name": "Zürich",
+      "parliament": "Kantonsrat",
+      "canton": "ZH",
+      "level": "canton"
+    }
+  }
+}

@@ -1,0 +1,3815 @@
+{
+  "source": "affairs export of OpenParlData (affairs.ndjson.gz), 325600 affairs, built 2026-10-08",
+  "types": {
+    "01 - sr antrag ohne diskussion": {
+      "type": {
+        "de": "Informationsdokument",
+        "fr": "document d'information",
+        "it": "documento informativo",
+        "en": "information document"
+      },
+      "share": 1.0,
+      "count": 373
+    },
+    "02 - sr antrag mit diskussion": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 108
+    },
+    "03 - sr ggr vorlage": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 92
+    },
+    "07 - ggr antrag 2. lesung": {
+      "type": {
+        "de": "Ergänzungsantrag",
+        "fr": "Amendement",
+        "it": "Emendamento",
+        "en": "Amendment"
+      },
+      "share": 1.0,
+      "count": 17
+    },
+    "08 - ggr wortprotokoll": {
+      "type": {
+        "de": "Informationsdokument",
+        "fr": "document d'information",
+        "it": "documento informativo",
+        "en": "information document"
+      },
+      "share": 1.0,
+      "count": 43
+    },
+    "10 - ggr bericht und antrag stadtrat": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 127
+    },
+    "11 - ggr bericht und antrag bau- und planungskommission (bpk)": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 1.0,
+      "count": 37
+    },
+    "12 - ggr bericht und antrag geschäftsprüfungskommission (gpk)": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 1.0,
+      "count": 80
+    },
+    "13 - ggr bericht und antrag spezialkommission (spk)": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 1.0,
+      "count": 4
+    },
+    "14 - ggr bericht und antrag rechnungsprüfungskommission (rpk)": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 1.0,
+      "count": 4
+    },
+    "15 - ggr bericht und antrag büro ggr": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 1.0,
+      "count": 2
+    },
+    "16 - ggr zwischenbericht": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 1.0,
+      "count": 1
+    },
+    "abbitte": {
+      "type": {
+        "de": "Informationsdokument",
+        "fr": "document d'information",
+        "it": "documento informativo",
+        "en": "information document"
+      },
+      "share": 1.0,
+      "count": 19
+    },
+    "affaire de crédit ce": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 112
+    },
+    "affaire de crédit gc": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 703
+    },
+    "affare generale del gran consiglio": {
+      "type": {
+        "de": "Informationsdokument",
+        "fr": "document d'information",
+        "it": "documento informativo",
+        "en": "information document"
+      },
+      "share": 1.0,
+      "count": 79
+    },
+    "akk bericht": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 1.0,
+      "count": 1
+    },
+    "allgemeines ratsgeschäft": {
+      "type": {
+        "de": "Informationsdokument",
+        "fr": "document d'information",
+        "it": "documento informativo",
+        "en": "information document"
+      },
+      "share": 1.0,
+      "count": 79
+    },
+    "amtsbericht": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 1.0,
+      "count": 4
+    },
+    "anfrage": {
+      "type": {
+        "de": "Anfrage",
+        "fr": "Question",
+        "it": "Interrogazione",
+        "en": "Question"
+      },
+      "share": 0.988,
+      "count": 14897
+    },
+    "anlass": {
+      "type": {
+        "de": "Informationsdokument",
+        "fr": "document d'information",
+        "it": "documento informativo",
+        "en": "information document"
+      },
+      "share": 1.0,
+      "count": 2
+    },
+    "antrag": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 0.882,
+      "count": 1420
+    },
+    "antrag auf direktbeschluss": {
+      "type": {
+        "de": "Ergänzungsantrag",
+        "fr": "Amendement",
+        "it": "Emendamento",
+        "en": "Amendment"
+      },
+      "share": 1.0,
+      "count": 74
+    },
+    "antrag büro": {
+      "type": {
+        "de": "Parlamentarischer Genehmigungsbeschluss",
+        "fr": "Décision d'approbation parlementaire",
+        "it": "Delibera di approvazione parlamentare",
+        "en": "Parliamentary approval decision"
+      },
+      "share": 1.0,
+      "count": 17
+    },
+    "antrag des stadtrates": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 481
+    },
+    "antrag geschäftsleitung": {
+      "type": {
+        "de": "Parlamentarischer Genehmigungsbeschluss",
+        "fr": "Décision d'approbation parlementaire",
+        "it": "Delibera di approvazione parlamentare",
+        "en": "Parliamentary approval decision"
+      },
+      "share": 1.0,
+      "count": 6
+    },
+    "antrag nach § 52 bzw. § 46 der geschäftsordnung": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 29
+    },
+    "antrag und weisung": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 37
+    },
+    "anzug": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 2555
+    },
+    "arrêté gc": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 37
+    },
+    "aufgaben und finanzplan mit budget": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 12
+    },
+    "aufgaben- und finanzplan": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 10
+    },
+    "aufsichtsbeschwerde": {
+      "type": {
+        "de": "Diverses",
+        "fr": "Divers",
+        "it": "Variatori",
+        "en": "Miscellaneous"
+      },
+      "share": 1.0,
+      "count": 3
+    },
+    "auftrag": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 0.998,
+      "count": 1018
+    },
+    "auftrag dringlich": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 1.0,
+      "count": 1
+    },
+    "aus der amtsperiode 2026/29 \n          <br> postulat": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 1
+    },
+    "ausgabenbericht": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 225
+    },
+    "ausgabenbewilligung": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 65
+    },
+    "autre affaire": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 146
+    },
+    "begnadigung": {
+      "type": {
+        "de": "Parlamentarischer Genehmigungsbeschluss",
+        "fr": "Décision d'approbation parlementaire",
+        "it": "Delibera di approvazione parlamentare",
+        "en": "Parliamentary approval decision"
+      },
+      "share": 0.943,
+      "count": 35
+    },
+    "begnadigung / straferlass": {
+      "type": {
+        "de": "Parlamentarischer Genehmigungsbeschluss",
+        "fr": "Décision d'approbation parlementaire",
+        "it": "Delibera di approvazione parlamentare",
+        "en": "Parliamentary approval decision"
+      },
+      "share": 1.0,
+      "count": 21
+    },
+    "behördeninitiative": {
+      "type": {
+        "de": "Parlamentarische Initiative",
+        "fr": "Initiative parlementaire",
+        "it": "Iniziativa parlamentare",
+        "en": "Parliamentary initiative"
+      },
+      "share": 0.94,
+      "count": 134
+    },
+    "bericht": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 0.76,
+      "count": 2104
+    },
+    "bericht & antrag": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 226
+    },
+    "bericht des gemeinderats": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 1.0,
+      "count": 1
+    },
+    "bericht des regierungsrates": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 2
+    },
+    "bericht dir/amt": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 0.75,
+      "count": 4
+    },
+    "bericht dritte": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 0.934,
+      "count": 121
+    },
+    "bericht gr": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 0.698,
+      "count": 189
+    },
+    "bericht rr": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 174
+    },
+    "bericht und antrag": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 0.962,
+      "count": 6540
+    },
+    "bericht und antrag stadtrat": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 198
+    },
+    "bericht und rechnung": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 0.894,
+      "count": 85
+    },
+    "bericht zur kenntnisnahme": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 46
+    },
+    "berichte": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 1.0,
+      "count": 131
+    },
+    "berichterstattung": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 1.0,
+      "count": 230
+    },
+    "beschluss": {
+      "type": {
+        "de": "Parlamentarischer Genehmigungsbeschluss",
+        "fr": "Décision d'approbation parlementaire",
+        "it": "Delibera di approvazione parlamentare",
+        "en": "Parliamentary approval decision"
+      },
+      "share": 0.481,
+      "count": 1036
+    },
+    "beschlussantrag": {
+      "type": {
+        "de": "Parlamentarischer Genehmigungsbeschluss",
+        "fr": "Décision d'approbation parlementaire",
+        "it": "Delibera di approvazione parlamentare",
+        "en": "Parliamentary approval decision"
+      },
+      "share": 0.984,
+      "count": 127
+    },
+    "beschwerde": {
+      "type": {
+        "de": "Diverses",
+        "fr": "Divers",
+        "it": "Variatori",
+        "en": "Miscellaneous"
+      },
+      "share": 1.0,
+      "count": 3
+    },
+    "bevölkerungsantrag": {
+      "type": {
+        "de": "Volksinitiative",
+        "fr": "initiative populaire",
+        "it": "iniziativa popolare",
+        "en": "Popular initiative "
+      },
+      "share": 1.0,
+      "count": 9
+    },
+    "botschaft": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 0.99,
+      "count": 784
+    },
+    "botschaften": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 999
+    },
+    "brief": {
+      "type": {
+        "de": "Informationsdokument",
+        "fr": "document d'information",
+        "it": "documento informativo",
+        "en": "information document"
+      },
+      "share": 1.0,
+      "count": 3
+    },
+    "budget": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 62
+    },
+    "budget - comptes": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 25
+    },
+    "budget de l'etat": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 14
+    },
+    "budget et plan intégré mission-financement": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 14
+    },
+    "budget, rechnung, finanzplan": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 23
+    },
+    "budget-motion": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 1.0,
+      "count": 8
+    },
+    "budget-postulat": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 11
+    },
+    "budget/jahresrechnung": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 14
+    },
+    "budgetpostulat": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 115
+    },
+    "bürgermotion": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 1.0,
+      "count": 11
+    },
+    "bürgerrecht": {
+      "type": {
+        "de": "Einbürgerung",
+        "fr": "Naturalisation",
+        "it": "Naturalizzazione",
+        "en": "Naturalisation"
+      },
+      "share": 1.0,
+      "count": 13
+    },
+    "communications": {
+      "type": {
+        "de": "Diverses",
+        "fr": "Divers",
+        "it": "Variatori",
+        "en": "Miscellaneous"
+      },
+      "share": 1.0,
+      "count": 40
+    },
+    "comptes de l'etat": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 13
+    },
+    "concession": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 19
+    },
+    "constitution": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 22
+    },
+    "consultation": {
+      "type": {
+        "de": "Vernehmlassung",
+        "fr": "Consultation",
+        "it": "Consultazione",
+        "en": "Consultation"
+      },
+      "share": 1.0,
+      "count": 39
+    },
+    "consultations cantonales": {
+      "type": {
+        "de": "Vernehmlassung",
+        "fr": "Consultation",
+        "it": "Consultazione",
+        "en": "Consultation"
+      },
+      "share": 1.0,
+      "count": 10
+    },
+    "dekret": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 0.91,
+      "count": 398
+    },
+    "divers": {
+      "type": {
+        "de": "Diverses",
+        "fr": "Divers",
+        "it": "Variatori",
+        "en": "Miscellaneous"
+      },
+      "share": 0.997,
+      "count": 860
+    },
+    "diverse geschäfte": {
+      "type": {
+        "de": "Informationsdokument",
+        "fr": "document d'information",
+        "it": "documento informativo",
+        "en": "information document"
+      },
+      "share": 0.843,
+      "count": 134
+    },
+    "diverses": {
+      "type": {
+        "de": "Parlamentarischer Genehmigungsbeschluss",
+        "fr": "Décision d'approbation parlementaire",
+        "it": "Delibera di approvazione parlamentare",
+        "en": "Parliamentary approval decision"
+      },
+      "share": 0.874,
+      "count": 437
+    },
+    "dringliche": {
+      "type": {
+        "de": "Interpellation",
+        "fr": "Interpellation",
+        "it": "interpellanza",
+        "en": "Interpellation"
+      },
+      "share": 1.0,
+      "count": 3
+    },
+    "dringliche anfrage": {
+      "type": {
+        "de": "Anfrage",
+        "fr": "Question",
+        "it": "Interrogazione",
+        "en": "Question"
+      },
+      "share": 1.0,
+      "count": 496
+    },
+    "dringliche einfache anfrage": {
+      "type": {
+        "de": "Anfrage",
+        "fr": "Question",
+        "it": "Interrogazione",
+        "en": "Question"
+      },
+      "share": 1.0,
+      "count": 202
+    },
+    "dringliche interpellation": {
+      "type": {
+        "de": "Interpellation",
+        "fr": "Interpellation",
+        "it": "interpellanza",
+        "en": "Interpellation"
+      },
+      "share": 1.0,
+      "count": 1408
+    },
+    "dringliche motion": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 1.0,
+      "count": 161
+    },
+    "dringliches": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 2
+    },
+    "dringliches postulat": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 861
+    },
+    "décret": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 0.887,
+      "count": 320
+    },
+    "délibération administrative (da)": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 158
+    },
+    "délibération municipale (dm)": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 20
+    },
+    "einbürgerung": {
+      "type": {
+        "de": "Einbürgerung",
+        "fr": "Naturalisation",
+        "it": "Naturalizzazione",
+        "en": "Naturalisation"
+      },
+      "share": 1.0,
+      "count": 99
+    },
+    "einbürgerungen": {
+      "type": {
+        "de": "Einbürgerung",
+        "fr": "Naturalisation",
+        "it": "Naturalizzazione",
+        "en": "Naturalisation"
+      },
+      "share": 1.0,
+      "count": 82
+    },
+    "einbürgerungsgesuch": {
+      "type": {
+        "de": "Einbürgerung",
+        "fr": "Naturalisation",
+        "it": "Naturalizzazione",
+        "en": "Naturalisation"
+      },
+      "share": 1.0,
+      "count": 40
+    },
+    "einfache anfrage": {
+      "type": {
+        "de": "Anfrage",
+        "fr": "Question",
+        "it": "Interrogazione",
+        "en": "Question"
+      },
+      "share": 1.0,
+      "count": 4339
+    },
+    "einfache anfragen": {
+      "type": {
+        "de": "Anfrage",
+        "fr": "Question",
+        "it": "Interrogazione",
+        "en": "Question"
+      },
+      "share": 1.0,
+      "count": 16
+    },
+    "einfaches auskunftsbegehren": {
+      "type": {
+        "de": "Anfrage",
+        "fr": "Question",
+        "it": "Interrogazione",
+        "en": "Question"
+      },
+      "share": 1.0,
+      "count": 200
+    },
+    "eingereichte, im stadtrat noch nicht behandelte motion": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 1.0,
+      "count": 7
+    },
+    "einladung": {
+      "type": {
+        "de": "Informationsdokument",
+        "fr": "document d'information",
+        "it": "documento informativo",
+        "en": "information document"
+      },
+      "share": 1.0,
+      "count": 15
+    },
+    "eintritt kr": {
+      "type": {
+        "de": "Informationsdokument",
+        "fr": "document d'information",
+        "it": "documento informativo",
+        "en": "information document"
+      },
+      "share": 1.0,
+      "count": 77
+    },
+    "einzelinitiative": {
+      "type": {
+        "de": "Volksinitiative",
+        "fr": "initiative populaire",
+        "it": "iniziativa popolare",
+        "en": "Popular initiative "
+      },
+      "share": 0.979,
+      "count": 903
+    },
+    "election": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 1014
+    },
+    "election (autre)": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 266
+    },
+    "election judiciaire": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 491
+    },
+    "election populaire": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 5
+    },
+    "election protocolaire": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 66
+    },
+    "elezioni": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 82
+    },
+    "empfehlung": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 139
+    },
+    "erklärung": {
+      "type": {
+        "de": "Informationsdokument",
+        "fr": "document d'information",
+        "it": "documento informativo",
+        "en": "information document"
+      },
+      "share": 0.999,
+      "count": 962
+    },
+    "erklärung des rr": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 1
+    },
+    "erlass": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 41
+    },
+    "erlass grsr": {
+      "type": {
+        "de": "Parlamentarischer Genehmigungsbeschluss",
+        "fr": "Décision d'approbation parlementaire",
+        "it": "Delibera di approvazione parlamentare",
+        "en": "Parliamentary approval decision"
+      },
+      "share": 1.0,
+      "count": 45
+    },
+    "erlasse (gesetze / verordnungen)": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 82
+    },
+    "ernennung / wahl": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 1164
+    },
+    "finances": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 19
+    },
+    "finanz / kredite": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 107
+    },
+    "finanzbeschluss": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 54
+    },
+    "finanzen": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 9
+    },
+    "finanzhaushalt": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 19
+    },
+    "finanzmotion": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 1.0,
+      "count": 28
+    },
+    "frage": {
+      "type": {
+        "de": "Fragestunde",
+        "fr": "Heure des questions",
+        "it": "Ora delle domande",
+        "en": "Question time"
+      },
+      "share": 1.0,
+      "count": 326
+    },
+    "fragestunde": {
+      "type": {
+        "de": "Fragestunde",
+        "fr": "Heure des questions",
+        "it": "Ora delle domande",
+        "en": "Question time"
+      },
+      "share": 0.831,
+      "count": 1256
+    },
+    "fragestunde. frage": {
+      "type": {
+        "de": "Fragestunde",
+        "fr": "Heure des questions",
+        "it": "Ora delle domande",
+        "en": "Question time"
+      },
+      "share": 1.0,
+      "count": 17494
+    },
+    "fraktionsauftrag": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 1.0,
+      "count": 1
+    },
+    "fristverlängerung vollzug": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 19
+    },
+    "gemeindeordnung": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 0.5,
+      "count": 2
+    },
+    "geschäft des bundesrates": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 2767
+    },
+    "geschäft des parlaments": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 911
+    },
+    "geschäft stadtrat": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 323
+    },
+    "geschäftsbericht": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 0.997,
+      "count": 303
+    },
+    "gesetz": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 940
+    },
+    "gesetzgebung": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 92
+    },
+    "gesetzgebungsgeschäft": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 637
+    },
+    "gesetzgebungsgeschäft ohne referendum": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 14
+    },
+    "gesetzgebungsprogramm": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 5
+    },
+    "gesetzgebungsvorlage": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 224
+    },
+    "gesuch": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 4
+    },
+    "globalbudgetantrag": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 14
+    },
+    "gr-antrag": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 8
+    },
+    "gr-beschluss": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 41
+    },
+    "grb": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 160
+    },
+    "grb postulat": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 27
+    },
+    "grb wahl": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 49
+    },
+    "grâce / remise de peine": {
+      "type": {
+        "de": "Parlamentarischer Genehmigungsbeschluss",
+        "fr": "Décision d'approbation parlementaire",
+        "it": "Delibera di approvazione parlamentare",
+        "en": "Parliamentary approval decision"
+      },
+      "share": 1.0,
+      "count": 21
+    },
+    "heure des questions. question": {
+      "type": {
+        "de": "Fragestunde",
+        "fr": "Heure des questions",
+        "it": "Ora delle domande",
+        "en": "Question time"
+      },
+      "share": 1.0,
+      "count": 34370
+    },
+    "informationen": {
+      "type": {
+        "de": "Informationsdokument",
+        "fr": "document d'information",
+        "it": "documento informativo",
+        "en": "information document"
+      },
+      "share": 1.0,
+      "count": 73
+    },
+    "initiative": {
+      "type": {
+        "de": "Volksinitiative",
+        "fr": "initiative populaire",
+        "it": "iniziativa popolare",
+        "en": "Popular initiative "
+      },
+      "share": 1.0,
+      "count": 111
+    },
+    "initiative (parl.)": {
+      "type": {
+        "de": "Parlamentarische Initiative",
+        "fr": "Initiative parlementaire",
+        "it": "Iniziativa parlamentare",
+        "en": "Parliamentary initiative"
+      },
+      "share": 1.0,
+      "count": 2
+    },
+    "initiative parlementaire": {
+      "type": {
+        "de": "Parlamentarische Initiative",
+        "fr": "Initiative parlementaire",
+        "it": "Iniziativa parlamentare",
+        "en": "Parliamentary initiative"
+      },
+      "share": 1.0,
+      "count": 3820
+    },
+    "initiative populaire (initiative populaire fédérale (projet rédigé))": {
+      "type": {
+        "de": "Volksinitiative",
+        "fr": "initiative populaire",
+        "it": "iniziativa popolare",
+        "en": "Popular initiative "
+      },
+      "share": 1.0,
+      "count": 529
+    },
+    "initiative populaire (initiative populaire fédérale (proposition conçue en termes généraux))": {
+      "type": {
+        "de": "Volksinitiative",
+        "fr": "initiative populaire",
+        "it": "iniziativa popolare",
+        "en": "Popular initiative "
+      },
+      "share": 1.0,
+      "count": 23
+    },
+    "initiative: gesetzesinitiative": {
+      "type": {
+        "de": "Volksinitiative",
+        "fr": "initiative populaire",
+        "it": "iniziativa popolare",
+        "en": "Popular initiative "
+      },
+      "share": 1.0,
+      "count": 5
+    },
+    "initiative: verfassungsinitiative": {
+      "type": {
+        "de": "Volksinitiative",
+        "fr": "initiative populaire",
+        "it": "iniziativa popolare",
+        "en": "Popular initiative "
+      },
+      "share": 1.0,
+      "count": 2
+    },
+    "initiativen": {
+      "type": {
+        "de": "Parlamentarische Initiative",
+        "fr": "Initiative parlementaire",
+        "it": "Iniziativa parlamentare",
+        "en": "Parliamentary initiative"
+      },
+      "share": 1.0,
+      "count": 59
+    },
+    "iniziativa parlamentare": {
+      "type": {
+        "de": "Parlamentarische Initiative",
+        "fr": "Initiative parlementaire",
+        "it": "Iniziativa parlamentare",
+        "en": "Parliamentary initiative"
+      },
+      "share": 1.0,
+      "count": 2422
+    },
+    "iniziativa parlamentare elaborata": {
+      "type": {
+        "de": "Parlamentarische Initiative",
+        "fr": "Initiative parlementaire",
+        "it": "Iniziativa parlamentare",
+        "en": "Parliamentary initiative"
+      },
+      "share": 1.0,
+      "count": 859
+    },
+    "iniziativa parlamentare generica": {
+      "type": {
+        "de": "Parlamentarische Initiative",
+        "fr": "Initiative parlementaire",
+        "it": "Iniziativa parlamentare",
+        "en": "Parliamentary initiative"
+      },
+      "share": 1.0,
+      "count": 751
+    },
+    "iniziativa popolare": {
+      "type": {
+        "de": "Volksinitiative",
+        "fr": "initiative populaire",
+        "it": "iniziativa popolare",
+        "en": "Popular initiative "
+      },
+      "share": 1.0,
+      "count": 42
+    },
+    "iniziativa popolare (iniziativa popolare federale (progetto elaborato))": {
+      "type": {
+        "de": "Volksinitiative",
+        "fr": "initiative populaire",
+        "it": "iniziativa popolare",
+        "en": "Popular initiative "
+      },
+      "share": 1.0,
+      "count": 529
+    },
+    "iniziativa popolare (iniziativa popolare federale (proposta generica))": {
+      "type": {
+        "de": "Volksinitiative",
+        "fr": "initiative populaire",
+        "it": "iniziativa popolare",
+        "en": "Popular initiative "
+      },
+      "share": 1.0,
+      "count": 23
+    },
+    "inpflichtnahmen": {
+      "type": {
+        "de": "Informationsdokument",
+        "fr": "document d'information",
+        "it": "documento informativo",
+        "en": "information document"
+      },
+      "share": 1.0,
+      "count": 243
+    },
+    "interkantonale vereinbarung": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 16
+    },
+    "interkantonale vereinbarungen": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 11
+    },
+    "interpellanza": {
+      "type": {
+        "de": "Interpellation",
+        "fr": "Interpellation",
+        "it": "interpellanza",
+        "en": "Interpellation"
+      },
+      "share": 1.0,
+      "count": 18739
+    },
+    "interpellanza urgente": {
+      "type": {
+        "de": "Interpellation",
+        "fr": "Interpellation",
+        "it": "interpellanza",
+        "en": "Interpellation"
+      },
+      "share": 1.0,
+      "count": 277
+    },
+    "interpellanze": {
+      "type": {
+        "de": "Interpellation",
+        "fr": "Interpellation",
+        "it": "interpellanza",
+        "en": "Interpellation"
+      },
+      "share": 1.0,
+      "count": 111
+    },
+    "interpellation": {
+      "type": {
+        "de": "Interpellation",
+        "fr": "Interpellation",
+        "it": "interpellanza",
+        "en": "Interpellation"
+      },
+      "share": 1.0,
+      "count": 69595
+    },
+    "interpellation orale": {
+      "type": {
+        "de": "Interpellation",
+        "fr": "Interpellation",
+        "it": "interpellanza",
+        "en": "Interpellation"
+      },
+      "share": 1.0,
+      "count": 127
+    },
+    "interpellation urgente": {
+      "type": {
+        "de": "Interpellation",
+        "fr": "Interpellation",
+        "it": "interpellanza",
+        "en": "Interpellation"
+      },
+      "share": 1.0,
+      "count": 641
+    },
+    "interpellation écrite": {
+      "type": {
+        "de": "Interpellation",
+        "fr": "Interpellation",
+        "it": "interpellanza",
+        "en": "Interpellation"
+      },
+      "share": 1.0,
+      "count": 173
+    },
+    "interpellationen": {
+      "type": {
+        "de": "Interpellation",
+        "fr": "Interpellation",
+        "it": "interpellanza",
+        "en": "Interpellation"
+      },
+      "share": 1.0,
+      "count": 359
+    },
+    "interrogazione": {
+      "type": {
+        "de": "Anfrage",
+        "fr": "Question",
+        "it": "Interrogazione",
+        "en": "Question"
+      },
+      "share": 1.0,
+      "count": 11266
+    },
+    "interrogazione ordinaria": {
+      "type": {
+        "de": "Anfrage",
+        "fr": "Question",
+        "it": "Interrogazione",
+        "en": "Question"
+      },
+      "share": 1.0,
+      "count": 3
+    },
+    "interrogazione ordinaria urgente": {
+      "type": {
+        "de": "Anfrage",
+        "fr": "Question",
+        "it": "Interrogazione",
+        "en": "Question"
+      },
+      "share": 1.0,
+      "count": 6
+    },
+    "interrogazione urgente": {
+      "type": {
+        "de": "Anfrage",
+        "fr": "Question",
+        "it": "Interrogazione",
+        "en": "Question"
+      },
+      "share": 1.0,
+      "count": 111
+    },
+    "interrogazioni": {
+      "type": {
+        "de": "Anfrage",
+        "fr": "Question",
+        "it": "Interrogazione",
+        "en": "Question"
+      },
+      "share": 1.0,
+      "count": 540
+    },
+    "intervento": {
+      "type": {
+        "de": "Fragestunde",
+        "fr": "Heure des questions",
+        "it": "Ora delle domande",
+        "en": "Question time"
+      },
+      "share": 0.412,
+      "count": 1489
+    },
+    "jahresbericht": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 21
+    },
+    "jahresrechnung": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 32
+    },
+    "jugendantrag": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 1.0,
+      "count": 1
+    },
+    "jugendvorstoss": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 0.85,
+      "count": 20
+    },
+    "jura bernois": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 1
+    },
+    "jurassische angelegenheit": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 1
+    },
+    "kantonsratsbeschluss": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 154
+    },
+    "kantonsratsbeschluss (nicht referendumsfähig)": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 84
+    },
+    "kantonsratsbeschluss (referendumsfähig)": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 73
+    },
+    "kantonsratssitzung": {
+      "type": {
+        "de": "Informationsdokument",
+        "fr": "document d'information",
+        "it": "documento informativo",
+        "en": "information document"
+      },
+      "share": 1.0,
+      "count": 3
+    },
+    "kantonsverfassung": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 2
+    },
+    "kleine anfrage": {
+      "type": {
+        "de": "Anfrage",
+        "fr": "Question",
+        "it": "Interrogazione",
+        "en": "Question"
+      },
+      "share": 1.0,
+      "count": 5467
+    },
+    "kleine anfragen": {
+      "type": {
+        "de": "Anfrage",
+        "fr": "Question",
+        "it": "Interrogazione",
+        "en": "Question"
+      },
+      "share": 1.0,
+      "count": 3389
+    },
+    "kommissionsbericht": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 0.667,
+      "count": 87
+    },
+    "konkordat": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 13
+    },
+    "konzession": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 34
+    },
+    "kredit": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 449
+    },
+    "kreditabrechnung": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 30
+    },
+    "kreditantrag": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 421
+    },
+    "kreditgeschäft gr": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 703
+    },
+    "kreditgeschäft rr": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 112
+    },
+    "kreditvorlagen": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 20
+    },
+    "landratsbeschluss": {
+      "type": {
+        "de": "Parlamentarischer Genehmigungsbeschluss",
+        "fr": "Décision d'approbation parlementaire",
+        "it": "Delibera di approvazione parlamentare",
+        "en": "Parliamentary approval decision"
+      },
+      "share": 1.0,
+      "count": 25
+    },
+    "leistungsmotion": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 1.0,
+      "count": 43
+    },
+    "loi": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 467
+    },
+    "memorialsantrag": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 1.0,
+      "count": 9
+    },
+    "memorialsanträge": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 1.0,
+      "count": 37
+    },
+    "message du conseil municipal": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 34
+    },
+    "mitteilung": {
+      "type": {
+        "de": "Informationsdokument",
+        "fr": "document d'information",
+        "it": "documento informativo",
+        "en": "information document"
+      },
+      "share": 0.667,
+      "count": 3
+    },
+    "motion": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 1.0,
+      "count": 52477
+    },
+    "motion / transformation en postulat": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 1
+    },
+    "motion als richtlinie": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 1.0,
+      "count": 212
+    },
+    "motion financière": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 1.0,
+      "count": 22
+    },
+    "motion interne": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 1.0,
+      "count": 158
+    },
+    "motion mit richtliniencharakter": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 1.0,
+      "count": 62
+    },
+    "motion mit weisungscharakter": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 1.0,
+      "count": 73
+    },
+    "motion populaire": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 1.0,
+      "count": 45
+    },
+    "motionen": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 1.0,
+      "count": 169
+    },
+    "mozione": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 1.0,
+      "count": 13454
+    },
+    "mutation": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 1
+    },
+    "mutation validierung": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 76
+    },
+    "mutation wahl": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 439
+    },
+    "mündliche anfrage": {
+      "type": {
+        "de": "Anfrage",
+        "fr": "Question",
+        "it": "Interrogazione",
+        "en": "Question"
+      },
+      "share": 1.0,
+      "count": 3
+    },
+    "nomination / élection": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 1164
+    },
+    "oberaufsicht": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 1.0,
+      "count": 198
+    },
+    "objet du conseil fédéral": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 3532
+    },
+    "objet du parlement": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 1141
+    },
+    "oggetto": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 169
+    },
+    "oggetto del consiglio federale": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 2002
+    },
+    "oggetto del parlamento": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 681
+    },
+    "ora delle domande. domanda": {
+      "type": {
+        "de": "Fragestunde",
+        "fr": "Heure des questions",
+        "it": "Ora delle domande",
+        "en": "Question time"
+      },
+      "share": 1.0,
+      "count": 630
+    },
+    "ordonnance": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 0.625,
+      "count": 16
+    },
+    "organisationsgeschäft": {
+      "type": {
+        "de": "Informationsdokument",
+        "fr": "document d'information",
+        "it": "documento informativo",
+        "en": "information document"
+      },
+      "share": 1.0,
+      "count": 2
+    },
+    "parlament. initative": {
+      "type": {
+        "de": "Parlamentarische Initiative",
+        "fr": "Initiative parlementaire",
+        "it": "Iniziativa parlamentare",
+        "en": "Parliamentary initiative"
+      },
+      "share": 1.0,
+      "count": 2
+    },
+    "parlamentarische empfehlung": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 94
+    },
+    "parlamentarische erklärung": {
+      "type": {
+        "de": "Informationsdokument",
+        "fr": "document d'information",
+        "it": "documento informativo",
+        "en": "information document"
+      },
+      "share": 0.8,
+      "count": 5
+    },
+    "parlamentarische initiative": {
+      "type": {
+        "de": "Parlamentarische Initiative",
+        "fr": "Initiative parlementaire",
+        "it": "Iniziativa parlamentare",
+        "en": "Parliamentary initiative"
+      },
+      "share": 1.0,
+      "count": 3937
+    },
+    "parlamentarische vorstösse": {
+      "type": {
+        "de": "Anfrage",
+        "fr": "Question",
+        "it": "Interrogazione",
+        "en": "Question"
+      },
+      "share": 1.0,
+      "count": 10
+    },
+    "parlamentarischer vorstoss": {
+      "type": {
+        "de": "Anfrage",
+        "fr": "Question",
+        "it": "Interrogazione",
+        "en": "Question"
+      },
+      "share": 0.995,
+      "count": 1488
+    },
+    "parlamentseigene vorlage": {
+      "type": {
+        "de": "Parlamentarischer Genehmigungsbeschluss",
+        "fr": "Décision d'approbation parlementaire",
+        "it": "Delibera di approvazione parlamentare",
+        "en": "Parliamentary approval decision"
+      },
+      "share": 1.0,
+      "count": 1
+    },
+    "partizipationsmotion": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 1.0,
+      "count": 5
+    },
+    "partizipationspostulat": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 2
+    },
+    "partnerschaftlich": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 16
+    },
+    "personal": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 1
+    },
+    "petition": {
+      "type": {
+        "de": "Petition",
+        "fr": "Pétition",
+        "it": "Petizione",
+        "en": "Petition"
+      },
+      "share": 0.999,
+      "count": 1704
+    },
+    "petition an den grossen stadtrat": {
+      "type": {
+        "de": "Petition",
+        "fr": "Pétition",
+        "it": "Petizione",
+        "en": "Petition"
+      },
+      "share": 1.0,
+      "count": 23
+    },
+    "petition an den stadtrat": {
+      "type": {
+        "de": "Petition",
+        "fr": "Pétition",
+        "it": "Petizione",
+        "en": "Petition"
+      },
+      "share": 1.0,
+      "count": 34
+    },
+    "petitionen": {
+      "type": {
+        "de": "Petition",
+        "fr": "Pétition",
+        "it": "Petizione",
+        "en": "Petition"
+      },
+      "share": 1.0,
+      "count": 72
+    },
+    "petizione": {
+      "type": {
+        "de": "Petition",
+        "fr": "Pétition",
+        "it": "Petizione",
+        "en": "Petition"
+      },
+      "share": 1.0,
+      "count": 912
+    },
+    "plako-antrag": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 5
+    },
+    "planungsanzug": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 30
+    },
+    "planungsauftrag": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 0.889,
+      "count": 9
+    },
+    "planungsbericht": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 35
+    },
+    "planungserklärung": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 1.0,
+      "count": 19
+    },
+    "politisches geschäft": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 0.69,
+      "count": 1493
+    },
+    "postulat": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 37642
+    },
+    "postulat (abgeändert)": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 1
+    },
+    "postulat (umgewandelt aus motion)": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 4
+    },
+    "postulat aus kinderparlament": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 15
+    },
+    "postulat dringlich": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 2
+    },
+    "postulat urgent": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 3
+    },
+    "postulate": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 230
+    },
+    "postulato": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 4695
+    },
+    "postulats": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 434
+    },
+    "procedure di consultazione": {
+      "type": {
+        "de": "Vernehmlassung",
+        "fr": "Consultation",
+        "it": "Consultazione",
+        "en": "Consultation"
+      },
+      "share": 1.0,
+      "count": 631
+    },
+    "procédure de consultation": {
+      "type": {
+        "de": "Vernehmlassung",
+        "fr": "Consultation",
+        "it": "Consultazione",
+        "en": "Consultation"
+      },
+      "share": 1.0,
+      "count": 631
+    },
+    "projekt": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 1
+    },
+    "projet": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 3
+    },
+    "projets en consultation": {
+      "type": {
+        "de": "Vernehmlassung",
+        "fr": "Consultation",
+        "it": "Consultazione",
+        "en": "Consultation"
+      },
+      "share": 1.0,
+      "count": 3
+    },
+    "prolongation du délai d`exécution": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 19
+    },
+    "proposition du conseil administratif pr": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 1
+    },
+    "protokoll": {
+      "type": {
+        "de": "Informationsdokument",
+        "fr": "document d'information",
+        "it": "documento informativo",
+        "en": "information document"
+      },
+      "share": 1.0,
+      "count": 98
+    },
+    "protokollarische wahl": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 66
+    },
+    "puk (parlamentarische untersuchungskommission)": {
+      "type": {
+        "de": "Diverses",
+        "fr": "Divers",
+        "it": "Variatori",
+        "en": "Miscellaneous"
+      },
+      "share": 1.0,
+      "count": 1
+    },
+    "pétition": {
+      "type": {
+        "de": "Petition",
+        "fr": "Pétition",
+        "it": "Petizione",
+        "en": "Petition"
+      },
+      "share": 1.0,
+      "count": 1669
+    },
+    "question": {
+      "type": {
+        "de": "Anfrage",
+        "fr": "Question",
+        "it": "Interrogazione",
+        "en": "Question"
+      },
+      "share": 1.0,
+      "count": 6611
+    },
+    "question orale": {
+      "type": {
+        "de": "Anfrage",
+        "fr": "Question",
+        "it": "Interrogazione",
+        "en": "Question"
+      },
+      "share": 0.996,
+      "count": 1702
+    },
+    "question ordinaire": {
+      "type": {
+        "de": "Anfrage",
+        "fr": "Question",
+        "it": "Interrogazione",
+        "en": "Question"
+      },
+      "share": 1.0,
+      "count": 2505
+    },
+    "question ordinaire urgente": {
+      "type": {
+        "de": "Anfrage",
+        "fr": "Question",
+        "it": "Interrogazione",
+        "en": "Question"
+      },
+      "share": 1.0,
+      "count": 398
+    },
+    "question urgente": {
+      "type": {
+        "de": "Anfrage",
+        "fr": "Question",
+        "it": "Interrogazione",
+        "en": "Question"
+      },
+      "share": 1.0,
+      "count": 135
+    },
+    "question urgente écrite": {
+      "type": {
+        "de": "Anfrage",
+        "fr": "Question",
+        "it": "Interrogazione",
+        "en": "Question"
+      },
+      "share": 1.0,
+      "count": 90
+    },
+    "question écrite": {
+      "type": {
+        "de": "Anfrage",
+        "fr": "Question",
+        "it": "Interrogazione",
+        "en": "Question"
+      },
+      "share": 1.0,
+      "count": 4990
+    },
+    "questions du conseil général": {
+      "type": {
+        "de": "Anfrage",
+        "fr": "Question",
+        "it": "Interrogazione",
+        "en": "Question"
+      },
+      "share": 1.0,
+      "count": 467
+    },
+    "raccomandazione": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 4
+    },
+    "rapport": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 278
+    },
+    "rapport ce": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 174
+    },
+    "rapport d'activité": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 1.0,
+      "count": 170
+    },
+    "rapport de tiers": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 0.934,
+      "count": 121
+    },
+    "rapport dir/office": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 0.75,
+      "count": 4
+    },
+    "rapport et comptes": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 1.0,
+      "count": 75
+    },
+    "rapport gc": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 0.698,
+      "count": 189
+    },
+    "ratschlag": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 847
+    },
+    "ratsmitglied": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 214
+    },
+    "raumplan": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 5
+    },
+    "rechenschaftsbericht": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 1.0,
+      "count": 23
+    },
+    "rechtsetzungsgeschäft": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 253
+    },
+    "rechtsetzungsgeschäfte": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 104
+    },
+    "rechtsmittel": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 5
+    },
+    "recommandation": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 274
+    },
+    "recours en grâce": {
+      "type": {
+        "de": "Parlamentarischer Genehmigungsbeschluss",
+        "fr": "Décision d'approbation parlementaire",
+        "it": "Delibera di approvazione parlamentare",
+        "en": "Parliamentary approval decision"
+      },
+      "share": 1.0,
+      "count": 24
+    },
+    "referendum": {
+      "type": {
+        "de": "Volksinitiative",
+        "fr": "initiative populaire",
+        "it": "iniziativa popolare",
+        "en": "Popular initiative "
+      },
+      "share": 0.667,
+      "count": 3
+    },
+    "regierungsprogramm": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 3
+    },
+    "regierungsratsbeschluss": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 208
+    },
+    "reglement": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 0.968,
+      "count": 95
+    },
+    "reglemente": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 20
+    },
+    "resolution": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 0.889,
+      "count": 27
+    },
+    "richterliche wahl": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 491
+    },
+    "richtlinienmotion": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 1.0,
+      "count": 18
+    },
+    "ris archiv": {
+      "type": {
+        "de": "Informationsdokument",
+        "fr": "document d'information",
+        "it": "documento informativo",
+        "en": "information document"
+      },
+      "share": 1.0,
+      "count": 4
+    },
+    "rr-verordnung mit vetofrist": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 22
+    },
+    "rücktritt": {
+      "type": {
+        "de": "Informationsdokument",
+        "fr": "document d'information",
+        "it": "documento informativo",
+        "en": "information document"
+      },
+      "share": 1.0,
+      "count": 264
+    },
+    "s postulat": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 2
+    },
+    "sachgeschäft": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 0.998,
+      "count": 2432
+    },
+    "sachgeschäft, einfacher beschluss": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 668
+    },
+    "sachgeschäfte und beschlüsse": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 311
+    },
+    "schreiben": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 1.0,
+      "count": 60
+    },
+    "schriftliche anfrage": {
+      "type": {
+        "de": "Anfrage",
+        "fr": "Question",
+        "it": "Interrogazione",
+        "en": "Question"
+      },
+      "share": 1.0,
+      "count": 5747
+    },
+    "simple question": {
+      "type": {
+        "de": "Anfrage",
+        "fr": "Question",
+        "it": "Interrogazione",
+        "en": "Question"
+      },
+      "share": 1.0,
+      "count": 470
+    },
+    "staatsrechnung": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 15
+    },
+    "staatsvoranschlag": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 14
+    },
+    "stellungnahme": {
+      "type": {
+        "de": "Informationsdokument",
+        "fr": "document d'information",
+        "it": "documento informativo",
+        "en": "information document"
+      },
+      "share": 1.0,
+      "count": 46
+    },
+    "strategie des regierungsrates": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 4
+    },
+    "traktandenliste": {
+      "type": {
+        "de": "Informationsdokument",
+        "fr": "document d'information",
+        "it": "documento informativo",
+        "en": "information document"
+      },
+      "share": 1.0,
+      "count": 1
+    },
+    "tätigkeitsbericht": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 1.0,
+      "count": 217
+    },
+    "unformulierte initiative": {
+      "type": {
+        "de": "Volksinitiative",
+        "fr": "initiative populaire",
+        "it": "iniziativa popolare",
+        "en": "Popular initiative "
+      },
+      "share": 1.0,
+      "count": 1
+    },
+    "vereidigung": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 36
+    },
+    "vereinbarung": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 8
+    },
+    "verfahrenspostulat": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 22
+    },
+    "verfassung": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 0.966,
+      "count": 29
+    },
+    "vernehmlassung": {
+      "type": {
+        "de": "Vernehmlassung",
+        "fr": "Consultation",
+        "it": "Consultazione",
+        "en": "Consultation"
+      },
+      "share": 1.0,
+      "count": 3683
+    },
+    "verordnung": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 0.531,
+      "count": 130
+    },
+    "verordnung / rechtserlass": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 157
+    },
+    "verordnungsveto": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 5
+    },
+    "verschiedenes": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 0.543,
+      "count": 175
+    },
+    "vertrag / vereinbarung": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 32
+    },
+    "verwaltungsgeschäft": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 0.545,
+      "count": 912
+    },
+    "verwaltungsgeschäft mit referendum": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 22
+    },
+    "veto": {
+      "type": {
+        "de": "Diverses",
+        "fr": "Divers",
+        "it": "Variatori",
+        "en": "Miscellaneous"
+      },
+      "share": 1.0,
+      "count": 27
+    },
+    "volksanregung": {
+      "type": {
+        "de": "Volksinitiative",
+        "fr": "initiative populaire",
+        "it": "iniziativa popolare",
+        "en": "Popular initiative "
+      },
+      "share": 1.0,
+      "count": 5
+    },
+    "volksauftrag": {
+      "type": {
+        "de": "Volksinitiative",
+        "fr": "initiative populaire",
+        "it": "iniziativa popolare",
+        "en": "Popular initiative "
+      },
+      "share": 1.0,
+      "count": 69
+    },
+    "volksinitiative": {
+      "type": {
+        "de": "Volksinitiative",
+        "fr": "initiative populaire",
+        "it": "iniziativa popolare",
+        "en": "Popular initiative "
+      },
+      "share": 1.0,
+      "count": 174
+    },
+    "volksinitiative (eidg. volksinitiative (allgemeine anregung))": {
+      "type": {
+        "de": "Volksinitiative",
+        "fr": "initiative populaire",
+        "it": "iniziativa popolare",
+        "en": "Popular initiative "
+      },
+      "share": 1.0,
+      "count": 23
+    },
+    "volksinitiative (eidg. volksinitiative (ausgearbeiteter entwurf))": {
+      "type": {
+        "de": "Volksinitiative",
+        "fr": "initiative populaire",
+        "it": "iniziativa popolare",
+        "en": "Popular initiative "
+      },
+      "share": 1.0,
+      "count": 529
+    },
+    "volksmotion": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 1.0,
+      "count": 100
+    },
+    "volksmotion mit\rrichtliniencharakter": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 1.0,
+      "count": 2
+    },
+    "volkspostulat": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 1
+    },
+    "volksrechte": {
+      "type": {
+        "de": "Volksinitiative",
+        "fr": "initiative populaire",
+        "it": "iniziativa popolare",
+        "en": "Popular initiative "
+      },
+      "share": 1.0,
+      "count": 7
+    },
+    "volkswahl": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 5
+    },
+    "voranschlag / aufgaben-/finanzplan": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 14
+    },
+    "vorgezogenes budgetpostulat": {
+      "type": {
+        "de": "Postulat",
+        "fr": "Postulat",
+        "it": "Postulato",
+        "en": "Postulate"
+      },
+      "share": 1.0,
+      "count": 68
+    },
+    "vorlage": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 0.999,
+      "count": 7179
+    },
+    "vorlage des gemeinderats": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 108
+    },
+    "vorlage des grossen stadtrats": {
+      "type": {
+        "de": "Parlamentarischer Genehmigungsbeschluss",
+        "fr": "Décision d'approbation parlementaire",
+        "it": "Delibera di approvazione parlamentare",
+        "en": "Parliamentary approval decision"
+      },
+      "share": 1.0,
+      "count": 8
+    },
+    "vorlage des stadtrats": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 437
+    },
+    "vorlage regierung": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 456
+    },
+    "vorstoss": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 0.667,
+      "count": 12
+    },
+    "wahl": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 2552
+    },
+    "wahl (andere)": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 266
+    },
+    "wahl gerichte": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 20
+    },
+    "wahl krp": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 1
+    },
+    "wahl staatsschreiber": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 1
+    },
+    "wahl stimmenzähler": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 2
+    },
+    "wahl vizepräsident": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 1
+    },
+    "wahlen": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 1458
+    },
+    "wahlen kommissionen": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 76
+    },
+    "wahlen und abstimmungen": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 72
+    },
+    "wahlgeschäft": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 744
+    },
+    "wahlgeschäfte": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 127
+    },
+    "weisung": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 2362
+    },
+    "weitere geschäfte": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 25
+    },
+    "weitere parlamentarische mittel": {
+      "type": {
+        "de": "Diverses",
+        "fr": "Divers",
+        "it": "Variatori",
+        "en": "Miscellaneous"
+      },
+      "share": 1.0,
+      "count": 8
+    },
+    "wosa-motion": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 1.0,
+      "count": 2
+    },
+    "élections": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 4
+    },
+    "überparteiliche": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 1.0,
+      "count": 6
+    },
+    "überparteilicher": {
+      "type": {
+        "de": "Motion",
+        "fr": "Motion",
+        "it": "Mozione",
+        "en": "Motion"
+      },
+      "share": 1.0,
+      "count": 4
+    },
+    "übrige berichte": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 1.0,
+      "count": 78
+    },
+    "übrige finanzgeschäfte": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 1.0,
+      "count": 18
+    },
+    "übrige geschäfte": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 0.989,
+      "count": 174
+    },
+    "übrige rechtsetzung/erlasse": {
+      "type": {
+        "de": "Regierungsgeschäft",
+        "fr": "Affaires gouvernementales",
+        "it": "Affari governativi",
+        "en": "Government affairs"
+      },
+      "share": 1.0,
+      "count": 20
+    },
+    "übrige wahlen": {
+      "type": {
+        "de": "Wahl",
+        "fr": "Élection",
+        "it": "Elezioni",
+        "en": "Votaziun"
+      },
+      "share": 1.0,
+      "count": 64
+    },
+    "übriges": {
+      "type": {
+        "de": "Bericht",
+        "fr": "Rapport",
+        "it": "Relazione",
+        "en": "Report"
+      },
+      "share": 1.0,
+      "count": 2
+    }
+  }
+}

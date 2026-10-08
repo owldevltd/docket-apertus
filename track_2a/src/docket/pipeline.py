@@ -6,6 +6,8 @@ import json
 import tempfile
 from pathlib import Path
 
+from docket.affair.identity import Identity, make_key
+from docket.affair.merge import SCHEMA
 from docket.affair.validator import Contract
 from docket.config import Config
 from docket.document.bridge import Knowledge, add_blocks, build_blocks
@@ -20,15 +22,35 @@ from docket.page.render import render_pdf
 from docket.read.reader import read_page
 from docket.text.layer import fill_text_layer
 
-SCHEMA = "0.8"
-
 # the first pages: page 1, or 1 and 2 when page 1 has less than this share of the text of page 2 (a cover sheet)
 COVER = 0.1
 
 
 def load_knowledge(config: Config) -> Knowledge:
-    data = json.loads((config.data_dir / "knowledge" / "sections.json").read_text(encoding="utf-8"))
-    return Knowledge(data["sections"])
+    """The section names, and what tools/knowledge.py built from the export where it lies."""
+    folder = config.data_dir / "knowledge"
+    sections = json.loads((folder / "sections.json").read_text(encoding="utf-8"))["sections"]
+
+    def part(name: str, key: str) -> dict:
+        path = folder / name
+        return json.loads(path.read_text(encoding="utf-8"))[key] if path.is_file() else {}
+
+    types = part("types.json", "types")
+    forms = part("number-forms.json", "forms")
+    bodies = part("bodies.json", "bodies")
+    return Knowledge(sections, types=types, forms=forms, bodies=bodies)
+
+
+def identify(report: dict[str, dict], fields: Fields, pages: list[dict], name: str, knowledge: Knowledge) -> Identity:
+    """The key of a document from its placed values: per role (number, place, parliament, date, title) the
+    first value with a place; the text of the first page for the search by form."""
+    values: dict[str, str] = {}
+    for role, field_name in fields.by_role().items():
+        items = [i for i in report.get(field_name, {}).get("items", []) if i.get("block") is not None]
+        if items:
+            values[role] = items[0]["value"]
+    text = " ".join(e.get("content") or "" for e in pages[0]["elements"]) if pages else ""
+    return make_key(values, name, text, knowledge.forms, knowledge.bodies)
 
 
 def load_contract(config: Config) -> Contract:

@@ -60,9 +60,16 @@ class Knowledge:
     each with its count. Both grow with every find; the values are kept for a person to look at, not offered
     to the model (measured 6 October 2026: offered values bring more values that are not on the page)."""
 
-    def __init__(self, sections: dict[str, int], values: dict[str, dict[str, int]] | None = None):
+    def __init__(self, sections: dict[str, int], values: dict[str, dict[str, int]] | None = None,
+                 types: dict[str, dict] | None = None, forms: dict[str, dict[str, int]] | None = None,
+                 bodies: dict[str, dict] | None = None):
         self.sections = dict(sections)
         self.values = {name: dict(seen) for name, seen in (values or {}).items()}
+        # from the export of OpenParlData: the harmonised type per label, the number forms per parliament, and
+        # the names of the parliaments (tools/knowledge.py)
+        self.types = dict(types or {})
+        self.forms = dict(forms or {})
+        self.bodies = dict(bodies or {})
 
     def learn(self, values: dict[str, list[dict]]) -> None:
         """Counts the values that stood on the page, per field."""

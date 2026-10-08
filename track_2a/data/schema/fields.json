@@ -10,11 +10,13 @@
   },
   "number": {
     "name": "nummer",
+    "role": "number",
     "question": "Geschäftsnummer oder Aktenzeichen des Geschäfts"
   },
   "title": {
     "de": {
       "name": "titel",
+      "role": "title",
       "question": "Titel des Geschäfts",
       "min-words": 3,
       "block-text": true
@@ -29,6 +31,7 @@
   },
   "begin_date": {
     "name": "datum",
+      "role": "date",
     "question": "Datum, an dem das Geschäft eingereicht wurde, als TT.MM.JJJJ",
     "form": "date"
   },
@@ -88,6 +91,7 @@
       "meta-name": "parlament",
       "meta-value": {
         "name": "parlament",
+      "role": "parliament",
         "question": "Name des Parlaments oder Rats, so wie er auf der Seite steht",
         "choice": true
       }
@@ -96,6 +100,7 @@
       "meta-name": "gemeinwesen",
       "meta-value": {
         "name": "gemeinwesen",
+      "role": "place",
         "question": "Gemeinde, Stadt oder Kanton, so wie es auf der Seite steht",
         "choice": true
       }
