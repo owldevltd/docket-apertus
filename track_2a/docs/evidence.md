@@ -1,0 +1,114 @@
+# Evidence
+
+Every number behind a decision in this project, with the date, the setup, what came out and what was decided.
+The measurements were run on a working set of 72 documents (first pages; 64 documents with all 482 pages for the
+geometry) drawn from OpenParlData's corpus, plus the kickoff example. Thresholds and the conclusions drawn from
+the numbers are the project lead's; where a value was set by the assistant it says so and is open.
+
+Reading guide: "8B" is Apertus v1.5 8B at the CSCS endpoint, temperature 0; "70B" the 70B model. Calls go one
+after the other with a pause; no run exceeded the status 200. "Reference" is always something that existed
+before the run and does not come from the model under test: the text layer of the PDF, the affair record of
+the OpenParlData API, or the frozen implementation the port is held against.
+
+## 1 The corpus
+
+| Date | Question | Setup | Finding | Decided |
+|---|---|---|---|---|
+| 04.10. | What is on the file server and in the API? | catalogue of files.openparldata.ch, 50 folders sampled, API endpoints and the daily export | 855 767 files, about 553 GB, 97 bodies with documents; 325 599 affairs, 907 472 documents in the API; 22 073 empty files; 8 bodies hold documents but no affair (their documents hang on meetings only) | the API tells which file belongs to which affair; mass counts come from the export, not from crawling the API |
+| 04.10. | What kind of documents? | 48 PDFs from 48 bodies, one each | 33 born digital, 8 scans with a text layer, 7 scans without; German 27, French 11, Italian 2; only 14 of 48 are a motion or its answer, the rest minutes, bills, attachments, reports | one input path for all; the pipeline must tell a scan from a digital page by itself |
+| 04.10. | How far is the harmonisation? | `type_name` and `type_harmonized`, `state_name_harmonized` in the export | 464 source labels (439 after merging language forms) onto 18 harmonised types with Wikidata IDs; the harmonised state is empty for 325 321 of 325 599 affairs, the 278 set ones sit in four bodies; 44 labels carry more than one harmonised type ("Bericht und Antrag": 6 290 government business, 1 087 none, 199 report, …) | the type mapping is not a function of the label alone; the state is where a common schema is still open |
+| 05.10. | How fast do new labels run dry? | the export in three orders (by time, shuffled with seed 20261004, body by body) | shuffled: after 1 000 affairs 122 labels seen and 92.1 % of the rest carry a seen label, after 5 000 239 and 98.8 %; by time 14 and 32.8 % after 1 000; body by body 307 and 81.9 % after 200 000; label per body 1 159 distinct, 95.9 % after 5 000; states 463 distinct, 94.8 % after 1 000 | the vocabulary of labels is small enough for a table; the vocabulary of states is not the same across bodies |
+
+## 2 Geometry: the page without a model
+
+The geometry is the same module as in the form project and was measured there on 61 pages of forms and here
+on parliamentary documents; the rules are in `src/docket/page/` with their constants.
+
+| Date | Question | Setup | Finding | Decided |
+|---|---|---|---|---|
+| 04.10. | Does the page split into the blocks of the text layer? | 40 first pages of parliamentary documents with a text layer; words of the text layer against objects | 7 243 of 7 272 words in an object (99.6 %); 536 of 883 text blocks exactly one object (60.7 %): born digital 68.1 %, scans with an OCR layer 45.7 % | words are safe, blocks are the measure to improve; a block is poppler's paragraph, itself an interpretation |
+| 05.10. | Which smearing for text documents? | nine settings of the vertical smearing, the baseline step and the re-run of big objects over three sets (forms 123 pages, documents 41 and 57 pages) | forms want c9 (vertical 0.3, baseline 1.85): 77.8 %; documents want c7 (vertical 0.7, baseline 2.05, big objects again with half the gap): 63.3 % and 60.0 %; the best per kind over all 3 212 of 4 313 blocks (74.5 %) against 69.2 % with one setting | one setting per document kind; this package carries the document setting |
+| 06.10. | Tick marks and writing lines on documents | the same sets with the form rules switched on | on documents: 2 ticked boxes found on 20 pages, 52 instead of 13 input fields invented | the form rules are not in this package |
+| 08.10. | Does the Python port compute the same? | 482 pages of 64 documents, the frozen implementation re-run on them, every list compared | lines 2 095, areas 101, text lines 26 793, marks 54, cells 563, objects 14 918, elements 17 590 with font size and colour: all identical; one empty page differs in the character height the frozen code carried over from the previous page | the port is the reference from here on; the grey conversion and the rounding of the shrunk mask had to be matched to the image library bit for bit |
+| 08.10. | The shipped documents | `make test`: 8 documents, 15 pages, 14 with a text layer | 175 of 204 blocks exactly one object (85.8 %), 378 of 481 lines (78.6 %), 4 286 of 4 287 words in an object; worst document Lugano with 17 of 35 blocks (numbers cut off, wide gaps) | the shipped set is at the easy end; the working set is the number to quote |
+
+## 3 Reading pages without a text layer
+
+| Date | Question | Setup | Finding | Decided |
+|---|---|---|---|---|
+| 06.10. | How well does 8B read an element? | 180 text elements on ten digital first pages (ten parliaments), one element per call, the text layer as reference | identical 101 (56 %), near 66 (37 %, distance ≤ 10 %), other 5, empty 8; character errors 2.3 %; up to 30 characters 58 of 77 identical and 7.2 % errors, over 120 characters 2 identical, 34 near, 1.4 %; digits go wrong ("1040.200" → "1010.200") | running text reads nearly right, short entries (numbers) are the weak spot |
+| 06.10. | Several blocks per call, marked in the page image? | the same 180 elements, three per call with red frames and ids | identical 78, other 37, empty 21, **22.7 % character errors**; 14 of the 37 are the text of a neighbouring block (ids swapped) | not again: the model reads what it sees and orders the ids its own way |
+| 06.10. | A strip of blocks cut out of the page, text only? | three blocks per call, each cut out and stacked on white with its id | identical 111, near 45, other 22, empty 2, 5.8 % errors with 60 calls; 0 swapped ids, 7 long blocks cut after the first line | the strip beats single reading (101) with a third of the calls |
+| 06.10. | One block with its surroundings? | 180 calls, one framed block with context | identical 111, near 54, other 15, empty 0, 1.5 % errors | the most exact form, at the full price |
+| 06.10. | Combine them? | strip first, then the multi-line blocks (height over 1.6 font sizes) singly; counted from the stored readings | **116 identical, 52 near, 11 other, 1 empty, 1.9 % errors with 126 calls** | this is the reading order for scans: strip, then multi-line blocks singly; the 1.6 is the assistant's value, open |
+| 06.10. | Where is the image-check threshold for documents? | 172 read elements with reference, the rendered text against the image by glyph shapes | 0.005 flags 62 of 71 wrong and 31 of 101 right readings; **0.01: 61 / 30**; 0.02: 53 / 26; 0.05: 22 / 14; median deviation right 0, wrong 0.036 | 0.01 for documents (nearly every wrong reading, a third of the right ones), set by the assistant, open |
+| 06.10. | Spell-check the readings? | a vocabulary from the text layers of 90 digital pages (5 022 words), the nearest known word within distance 1 (2 from 8 characters) | of 38 flagged readings changed 6 closer to the reference, 28 further away; 101 of 127 wrong words are non-words, 26 are plausible real words | not again: too small a vocabulary corrects names and terms away |
+| 06.10. | A page without a text layer through the whole pipeline | the Aargau request rendered and saved as an image-only PDF (shipped as `aargau-scan`) | 16 elements read, 8 with approve, 19 calls, 67 s; number, type, date and submitters found literally, the title through the cited block | the scan path works end to end; measured on one page |
+
+## 4 The affair type and its vocabulary
+
+| Date | Question | Setup | Finding | Decided |
+|---|---|---|---|---|
+| 05.10. | Can 8B map a label to the harmonised type? | 375 labels with a reference (the type most of their affairs carry), 17 categories, confidence demanded | right 168 of 375 (44.8 %); weighted by affairs 68.1 %; "Diverses" answered 98 times for 7 labels; government business 6 of 115; the heavy errors: "Interrogazione" → Interpellation (9 781 affairs), "Regierungsratsbeschluss" → approval decree (8 904) | the small model must not decide the type from the label; the ten heaviest errors corrected would make 87.2 % of affairs right |
+| 05.10. | Does the demanded confidence separate? | the same run | confidence 1 at 164 right and 130 wrong answers; threshold 1 removes 77 of 207 wrong and 4 of 168 right | a demanded number is not a signal |
+| 05.10. | Does a growing list of own decisions help? | 200 labels, the list of all decisions so far in the prompt, once from own answers, once corrected against the reference | without the list 86 of 200 (43.0 %); own decisions 79 (39.5 %, 115 of 194 entries wrong, "Anfrage" → question hour five times after one early entry); corrected decisions **116 (58.0 %)**, no rise beyond the third quarter | unchecked own answers must never go into the prior knowledge; a corrected table does help |
+| 05.10. | Does context help? | 72 documents, 17 types, first page as full element JSON, as lean JSON, as text, and the bare label | bare label 48 of 72 (66.7 %); full JSON 34 (47.2 %, 2 296 tokens); lean JSON 39 (54.2 %, 1 196); text only 35 (48.6 %, 749); motion, initiative, interpellation always right, supplementary request, information document, popular initiative, government business never | the more structure in the prompt the worse; the type printed on the document is often the document's type, not the affair's |
+| 06.10. | Map the printed type through the export instead? | a table label → most frequent harmonised type from 325 600 affairs (383 labels, entry from 3 affairs and 60 %) | of 67 read labels 33 same as the API, 13 other, 21 unknown ("Standesinitiative", "Einbürgerungsgesuche"); the 13 are mostly documents whose printed type is not the affair's ("Bericht" to a government business) | the type comes from the table, not from the model; the table is prior knowledge shipped with the pipeline |
+
+## 5 From elements to blocks
+
+| Date | Question | Setup | Finding | Decided |
+|---|---|---|---|---|
+| 05.10. | What does code alone make of the elements? | 72 first pages, text from the text layer: images, tables over lines, headings over font size, paragraphs over height | 72 of 72 valid against the contract; 62 sections, 387 paragraphs, 9 "tables", 126 images, 726 elements left; 87.8 % of all characters in paragraphs, headings or cells; 7 of the 9 tables were stamps, a coat of arms, a plan | a table needs a rule, not lines |
+| 06.10. | The table rule | the project lead's criteria: at least 6 lines, 4 texts, 2 columns in the same region; plus text in half the cells and at most half as many inkless elements as texts | 26 tables in 102 pages, 17 of them in one report (a 10 × 3 table with horizontal lines only, 28 of 30 cells with text, checked on the image), none of the stamps and crests | kept; the first three values are the project lead's, the other three the assistant's, open |
+| 06.10. | Lines of a paragraph that the geometry left apart | 315 flush lines of the same font on the 72 first pages, the distance of their top edges | 121 of 315 at 2.0 to 2.5 font sizes, paragraphs start from 3.25, a valley at 2.75 to 3.0 | join flush lines within 2.75 font sizes and 15 % font size, except a known section name, a short line before a long one, a line ending in a colon, a line with a counter: 87 paragraphs joined, rest 560 → 467 |
+| 06.10. | What is the rest, and can the model sort it? | 593 one-line elements the code could not place, six per call, eight kinds offered; the same 150 asked one per call | six per call: list item 179, label 91, entry 91, heading 73, paragraph 73, signature 33; single: list item 116 of 150, the same answer in both runs 64 of 150; of 120 elements that are only a counter, 55 list item; on two pages checked by eye the paragraph is a list item and "Begründung:" a paragraph | the model's sorting of the rest is in the pipeline but is mostly wrong; PDF tags are no reference either (42 of 70 documents have them, nearly everything is P) |
+| 06.10. | Section types from a word list | short lines (up to 5 words) over all 455 pages of the 72 PDFs | "Begründung" opens a section in 13 documents, "Antrag" 8, "Ausgangslage" 6, "Beschluss" 4; "Antwort" or "Stellungnahme" 0 times, answers are separate documents at OpenParlData | `sec-type` from a list that grows with every find; no `response` block built |
+| 06.10. | Five display rules for blocks | 5 134 blocks of 61 affairs, counted without a call | 54 blocks would change kind, no field value changes | rejected by the project lead: no gain now |
+
+## 6 Values from the document into the affair
+
+| Date | Question | Setup | Finding | Decided |
+|---|---|---|---|---|
+| 05.10. | How many fields per call? | 72 first pages as a text image, the four reference fields (number, title, type, date) in bundles of 1, 4, 8, 16, 32 | identical or more against the API: 117 / 103 / 106 / 104 / 99 of 148; complete answers 72 of 72 up to 8 fields, 44 of 72 at 16, 26 of 72 at 32, the last lines drop | bundles of six (the project lead's value); the text image, not JSON, is the input |
+| 06.10. | Give the model the contract excerpt per field? | 36 documents, the first two bundles | missing answer lines 35 → 2, follow-up calls 77 → 5, 80 tokens more per call; hits against the API unchanged | contract excerpt per field, always |
+| 06.10. | Tell it to write "-" when nothing is there? | the same 36 documents | nothing measurable: hits equal, missing lines equal, "not on the page" 63 instead of 50 | dropped |
+| 06.10. | Offer the values seen so far (prior knowledge) in the prompt? | parliament and polity, 36 documents | parliament on the page 16 instead of 19, not on the page 17 instead of 12; polity 16 instead of 20 and 18 instead of 11 | not again: with a list the model names what is not there |
+| 06.10. | Let the model propose further fields? | 72 documents, up to eight proposals each with a certainty | 651 proposals, 114 names; the model returns the words of the pattern as names ("typ" 72 times, "wert" 60) and fields that exist (date 44); new names with literal values: thema 15 of 25, mitglied 9 of 11 | not pursued |
+| 06.10. | Where did a value come from? | every block carries an id in the text image, the model names the id behind each value | of 204 values not found literally, **142 cited blocks hold not one word of the value**, 17 less than half, 32 half or more, 13 all; department 32 of 34 without a word, session 50 of 53 | a cited block counts only when a word of the value stands in it; otherwise the value has no place and is dropped |
+| 06.10. | Fields only when their keyword is on the page? | session, department, version with a keyword list | the three fields were the ones with invented values ("Fassung nach Annahme" 24 times) | `when` in the fields file: without the word the field is empty, without a call |
+| 06.10. | Literal or derived? | 59 values the model cited without a literal match | "every word of the value stands in the block" holds for 4 (two right, two doubtful: an absatz 24 times as long); with word stems 17, two of them wrong | derived = every word, strictly, no stems; a title from the cited block only when the block is at most twice as long |
+| 06.10. | Is a second run a signal? | two runs over the same 72 documents, 891 cells with a value in both | the same value in 550 (62 %): 11 % wrong against the API; different values in 341: 33 % wrong; stable: type, place, date; unstable: session, summary, keywords | disagreement is a usable "please look" signal without model internals |
+| 06.10. | The whole pipeline on digital documents | 60 PDFs with all pages (440), contract 0.6 | 60 of 60 valid; 380 calls, 34 s per document; 1 426 cells: on the page 751, cited block 57, not on the page 89, empty 506, missing 20 (18 of them one 37-page document whose first bundle timed out); 969 values with a place, **80 with approve (8.3 %)**: 36 cited, 44 composed (the summary, one per document); 1.3 values per affair to look at | the review screen is worth building; a timed-out bundle is retried once |
+| 06.10. | Right, not only placed? | the 315 cells where OpenParlData holds a value that stands on the page | identical 151, more 96, part 5, other 48, empty 15; "more" at the number is the document's number instead of the affair's ("15.5098.01" against "15.5098"); "other" at the type is the document's label against the affair's; literal is not right: "Partei: Suhr" (the place) and a committee speaker as co-signatory | the open limit of the origin check: a literal word in the wrong field |
+
+## 7 The affair's identity
+
+| Date | Question | Setup | Finding | Decided |
+|---|---|---|---|---|
+| 06.10. | Can the read number key the affair? | 72 documents, the read number against the API's number, both normalised (lower case, OCR digit fixes, version letters off, document suffix off) | 57 documents with a read number, 43 same key, 14 not, 15 without; the 14: other number systems (decree number instead of affair number in SZ, BL, AG), partial numbers (TG), misreadings; the 136 numbers of the draw give 136 distinct keys | the normalised number is the key; where the document prints none the document stays its own affair |
+| 06.10. | Number forms per parliament from the export? | 88 parliaments, forms from 5 % share (ZH 999/9999, BS 99.9999, SG 99.99.99, TG 99/aa99/999); the page searched for a number of the parliament's form when the read one does not fit | **44 of 72** (29 read, 12 found on the page by form, 14 read but wrong form, 17 none); the ceiling is where the number is not printed: Graubünden prints no "2023-110", Basel-Stadt nothing on petitions, Zürich "5953" is internal | prior knowledge from the export; the weak key `dok-…` for the rest and the honest count |
+
+## 8 Not again
+
+- The small model deciding the affair type from the label (44.8 %) or from the page (47 to 54 %).
+- Demanded confidence as a signal (1 at 164 right and 130 wrong answers).
+- Own unchecked answers as prior knowledge (39.5 % against 43.0 % without).
+- Offering seen values in the prompt (more values that are not on the page).
+- Several marked blocks in one page image (22.7 % character errors, ids swapped).
+- Spell-checking with a vocabulary from our own pages (6 closer, 28 further away).
+- A cited block as a source without checking the words (142 of 204 without a word).
+- Token probabilities as a signal: there is no API for them in the deployment.
+- Display rules for block kinds (54 of 5 134 blocks, no value changes).
+
+## 9 What ships in this repository
+
+The working set of 72 documents (64 with all pages, 482 pages) is not redistributed; the documents belong to the
+parliaments and were drawn through OpenParlData. `data/documents/` holds eight of them, chosen for breadth:
+three levels, three languages, one page without a text layer, one from a body without affairs. `make test`
+runs the geometry over them and holds it against their text layer; the numbers above refer to the working set
+and are reproduced by the same scripts on it.
+
+On the shipped pages (run of 8 October 2026, no model call): 175 of 204 reference blocks map to exactly one
+object (85.8 %), 378 of 481 lines, 4 286 of 4 287 words lie in an object. The page without a text layer is
+analysed but not measured; the reading step is what handles it.

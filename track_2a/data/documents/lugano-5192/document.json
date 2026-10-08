@@ -1,0 +1,14 @@
+{
+    "file": "lugano-5192.pdf",
+    "name": "Document of the Consiglio comunale of Lugano",
+    "body": {
+        "key": "5192",
+        "name": "Lugano",
+        "canton": "TI",
+        "level": "city"
+    },
+    "language": "it",
+    "pages": 3,
+    "text_layer": true,
+    "origin": "files.openparldata.ch/doc/5192/80d9295b8bdc3ba517bb7aaf67cc6672b8b035ae52603c5622d9fedde614f6be"
+}

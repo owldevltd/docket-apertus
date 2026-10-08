@@ -1,0 +1,21 @@
+{
+    "file": "aargau-scan.pdf",
+    "name": "Antrag auf Direktbeschluss, Aufnahme eines neuen Paragrafen 20b (image-only copy)",
+    "body": {
+        "key": "AG",
+        "name": "Aargau",
+        "canton": "AG",
+        "level": "canton"
+    },
+    "language": "de",
+    "pages": 1,
+    "text_layer": false,
+    "origin": "affair 217693 of the OpenParlData API; the page rendered and saved as a PDF without a text layer, so that the path for scans can be tested on a page whose text layer is known",
+    "affair": {
+        "id": 217693,
+        "number": "19.196",
+        "type": "Antrag auf Direktbeschluss",
+        "title": "Aufnahme eines neuen Paragrafen 20b zur Zuständigkeit der Subkommission Oberaufsicht Nachrichtendienst in die Geschäftsordnung (GO)",
+        "begin_date": "2019-06-25"
+    }
+}

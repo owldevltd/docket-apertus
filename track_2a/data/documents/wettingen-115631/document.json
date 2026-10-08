@@ -1,0 +1,21 @@
+{
+    "file": "wettingen-115631.pdf",
+    "name": "Motion betreffend eMobilität Wettingen",
+    "body": {
+        "key": "4045",
+        "name": "Wettingen",
+        "canton": "AG",
+        "level": "city"
+    },
+    "language": "de",
+    "pages": 2,
+    "text_layer": true,
+    "origin": "affair 115631 of the OpenParlData API, the document linked there",
+    "affair": {
+        "id": 115631,
+        "number": "2017-0683",
+        "type": "Motion",
+        "title": "Betreffend eMobilität Wettingen",
+        "begin_date": "2017-06-22"
+    }
+}

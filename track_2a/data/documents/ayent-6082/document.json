@@ -1,0 +1,14 @@
+{
+    "file": "ayent-6082.pdf",
+    "name": "Document of the commune of Ayent",
+    "body": {
+        "key": "6082",
+        "name": "Ayent",
+        "canton": "VS",
+        "level": "municipality"
+    },
+    "language": "fr",
+    "pages": 4,
+    "text_layer": true,
+    "origin": "files.openparldata.ch/doc/6082/bad53e67713716281e379824943888427be9a5e7a05621ebc6e83873e681cc43; one of the eight bodies that hold documents but no affairs"
+}

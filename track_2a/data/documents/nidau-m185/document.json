@@ -1,0 +1,21 @@
+{
+    "file": "nidau-m185.pdf",
+    "name": "Motion M 185, Aufnahme von Bootsflüchtlingen",
+    "body": {
+        "key": "743",
+        "name": "Nidau",
+        "canton": "BE",
+        "level": "municipality"
+    },
+    "language": "de",
+    "pages": 2,
+    "text_layer": true,
+    "origin": "the kickoff example of the challenge; affair 330555 of the OpenParlData API",
+    "affair": {
+        "id": 330555,
+        "number": "M 185",
+        "type": "Richtlinienmotion",
+        "title": "Aufnahme von Bootsflüchtlingen",
+        "begin_date": "2018-11-22"
+    }
+}

@@ -1,0 +1,21 @@
+{
+    "file": "zuerich-219587.pdf",
+    "name": "Parlamentarische Initiative, Standesinitiative zur Kompetenzübertragung an Kantone",
+    "body": {
+        "key": "ZH",
+        "name": "Zürich",
+        "canton": "ZH",
+        "level": "canton"
+    },
+    "language": "de",
+    "pages": 1,
+    "text_layer": true,
+    "origin": "affair 219587 of the OpenParlData API, the document linked there",
+    "affair": {
+        "id": 219587,
+        "number": "357/2018",
+        "type": "Parlamentarische Initiative",
+        "title": "Standesinitiative zur Kompetenzübertragung an Kantone für Arbeitsbewilligungsverlängerung von Asylsuchenden mit Negativentscheid",
+        "begin_date": "2018-11-27"
+    }
+}
