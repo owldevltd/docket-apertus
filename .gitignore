@@ -23,3 +23,9 @@ venv/
 
 # Runtime data
 track_2a/storage/
+
+# the browser app: built by Node into src/docket/app/ (make app, or the Docker build stage)
+track_2a/app/node_modules/
+track_2a/app/dist/
+track_2a/app/.angular/
+track_2a/src/docket/app/
