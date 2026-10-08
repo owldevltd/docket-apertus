@@ -1,0 +1,25 @@
+# Secrets and local config
+.env
+.env.*
+!.env.example
+
+# Model weights and checkpoints — do not commit these
+*.bin
+*.safetensors
+*.gguf
+*.ckpt
+*.pt
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# OS and editor
+.DS_Store
+.idea/
+.vscode/
+
+# Runtime data
+track_2a/storage/
