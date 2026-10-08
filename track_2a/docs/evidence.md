@@ -126,8 +126,9 @@ the model (13 calls), and `make bench-read` measures the reading on two digital 
 type, begin date), 14 stand literally on the first pages of the built blocks (`tests/fields.py`, no model); the
 six that do not are the four of the scan, which has no text without the reading, and two dates the page does
 not print as the API holds them. With the model, `make bench` asks the 23 fields over every document and places
-the answers by code: 131 values with a place over the eight, 121 of them literal, 23 for a person to look at;
-every document is keyed and the documents of one key become one affair, 4 of the 5 known affairs under the key
-of the API's number (`results/documents.md`). `data/knowledge/` holds what `tools/knowledge.py` derived from the
+the answers by code: 132 values with a place over the eight, 115 of them literal, 29 for a person to look at;
+seven of the eight documents get their kind from the first page; every document is keyed and the documents of
+one key become one affair, 4 of the 5 known affairs under the key of the API's number
+(`results/documents.md`). The run took 60 calls and 4.5 minutes, with a peak of 0.6 GB of memory. `data/knowledge/` holds what `tools/knowledge.py` derived from the
 affairs export of OpenParlData and its API on 8 October 2026: 381 type labels with their harmonised type, the
 number forms of 88 parliaments, the names of 97 parliaments with affairs or documents.
