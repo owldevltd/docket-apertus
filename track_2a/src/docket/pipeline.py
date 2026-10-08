@@ -10,6 +10,8 @@ from docket.affair.validator import Contract
 from docket.config import Config
 from docket.document.bridge import Knowledge, add_blocks, build_blocks
 from docket.document.sorter import sort_rest
+from docket.fields.fields import Fields, load_fields
+from docket.fields.filler import fill_document
 from docket.model.client import Client
 from docket.page.analyze import analyze_page
 from docket.page.painter import draw_elements
@@ -33,9 +35,14 @@ def load_contract(config: Config) -> Contract:
     return Contract.load(config.data_dir / "schema" / "docket.json")
 
 
-def process_pages(pdf: Path, out: Path, client: Client | None) -> list[dict]:
+def load_field_file(config: Config, contract: Contract) -> Fields:
+    return load_fields(config.data_dir / "schema" / "fields.json", contract)
+
+
+def process_pages(pdf: Path, out: Path, client: Client | None, keep: dict | None = None) -> list[dict]:
     """Every page of the PDF: geometry, text layer, reading with the model where there is none. Writes the page
-    files into `out` and returns the pages in order."""
+    files into `out` and returns the pages in order; `keep` receives the images of the first two pages by
+    page number, for the control image of the fields."""
     pages = []
     with tempfile.TemporaryDirectory() as tmp:
         for n, image in render_pdf(pdf, tmp, pdf.stem):
@@ -47,8 +54,16 @@ def process_pages(pdf: Path, out: Path, client: Client | None) -> list[dict]:
             (out / f"{name}.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
             draw_elements(page.rgb, out / f"{name}-elements.png", result["elements"])
             write_png(out / f"{name}.png", page.rgb)
+            if keep is not None and n <= 2:
+                keep[n] = page.rgb
             pages.append(result)
     return pages
+
+
+def fill_fields(record: dict, pages: list[dict], fields: Fields, contract: Contract, client: Client | None,
+                knowledge: Knowledge, log: Path | None = None) -> tuple[dict, dict]:
+    """The fields over the document into the record; without a client the record stays as it is."""
+    return fill_document(record, pages, first_pages(pages), fields, contract, client, knowledge, log)
 
 
 def first_pages(pages: list[dict]) -> list[int]:

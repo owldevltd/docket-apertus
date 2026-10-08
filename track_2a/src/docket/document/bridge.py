@@ -56,10 +56,21 @@ BLOCK_KINDS = {"head", "p", "list", "def-list", "sig-block"}
 
 
 class Knowledge:
-    """The section names, growing with every find."""
+    """What earlier documents taught: the section names, and the values that stood on the page per field,
+    each with its count. Both grow with every find; the values are kept for a person to look at, not offered
+    to the model (measured 6 October 2026: offered values bring more values that are not on the page)."""
 
-    def __init__(self, sections: dict[str, int]):
+    def __init__(self, sections: dict[str, int], values: dict[str, dict[str, int]] | None = None):
         self.sections = dict(sections)
+        self.values = {name: dict(seen) for name, seen in (values or {}).items()}
+
+    def learn(self, values: dict[str, list[dict]]) -> None:
+        """Counts the values that stood on the page, per field."""
+        for name, hits in values.items():
+            seen = self.values.setdefault(name, {})
+            for hit in hits:
+                v = hit["value"].strip()
+                seen[v] = seen.get(v, 0) + 1
 
     def section(self, text: str) -> str | None:
         """The section name a short line begins with ("Begründung:", "2. Antrag der Kommission" → antrag)."""

@@ -40,6 +40,26 @@ class Contract:
         """The violations of the data against the contract, each with its path; empty when it fits."""
         return self._check(data, self.schema, "$")
 
+    def part(self, path: list[str]) -> dict | None:
+        """The rule at a path through the data ("docs", "data", "[]", "body"), with references followed; None
+        where the contract knows nothing."""
+        node: dict | None = self.schema
+        for key in path:
+            if node is None:
+                return None
+            if "$ref" in node:
+                node = self._resolve(node["$ref"])
+                if node is None:
+                    return None
+            if key == "[]":
+                node = node.get("items") if isinstance(node.get("items"), dict) else None
+            else:
+                props = node.get("properties", {})
+                node = props.get(key) if isinstance(props.get(key), dict) else None
+        if node is not None and "$ref" in node:
+            node = self._resolve(node["$ref"])
+        return node
+
     def _unknown(self, s, at: str) -> set[str]:
         out = set()
         if not isinstance(s, dict):

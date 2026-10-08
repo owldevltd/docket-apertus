@@ -56,6 +56,31 @@ HEAD_WIDTH = 0.6
 MARK = re.compile(r"^(\(?\d{1,2}(\.\d{1,2})*[.)]?|\(?[a-zA-Z][.)]|[IVX]+\.|[•·▪■◦○\-–—*»])$")
 BESIDE = 6.0
 
+# of several blocks holding a value, one whose text is at least this share the value (a header entry) comes
+# before one in which the value is a word among many
+SHARE = 0.3
+
+
+def pick_block(value: str, blocks: dict[str, dict]) -> str:
+    """Of several blocks in which a value stands, the fittest: one whose text is largely the value (a header
+    entry) before one in which the value is a word among many; at a tie the one further up. `blocks` per id."""
+    want = len(_plain(value))
+    scored: dict[str, tuple[int, int, int]] = {}
+    for ident, b in blocks.items():
+        if "rows" in b:
+            text = " ".join(cell for row in b["rows"] for cell in row)
+        elif "items" in b:
+            text = " ".join(f"{i['term']} {i['def']}" if isinstance(i, dict) else i for i in b["items"])
+        else:
+            text = str(b.get("title") or b.get("text") or "")
+        share = want / max(1, len(_plain(text)))
+        scored[ident] = (0 if share >= SHARE else 1, b["page"], b["y"])
+    return min(scored, key=lambda ident: scored[ident])
+
+
+def _plain(t: str) -> str:
+    return re.sub(r"[\W_]+", "", t.lower())
+
 
 def join_lines(elements: list[dict], px: float, section) -> list[dict]:
     """Joins text elements that are lines of the same paragraph into one element, in reading order. `section`

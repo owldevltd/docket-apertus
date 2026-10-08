@@ -60,6 +60,35 @@ def draw_elements(image: np.ndarray, target: str | Path, elements: list[dict]) -
     _save(canvas, target)
 
 
+# colour per block type for the control image of the fields
+BLOCKS = {
+    "sec": "#c80000",
+    "p": "#006ec8",
+    "table-wrap": "#00963c",
+    "graphic": "#969696",
+    "list": "#e68200",
+    "def-list": "#9600c8",
+    "sig-block": "#00a0aa",
+}
+
+
+def draw_blocks(image: np.ndarray, target: str | Path, blocks: list[dict], n: int, found: dict[str, str]) -> None:
+    """The blocks of page n framed in the colour of their type with their id beside them; a block holding a
+    value filled green when it was found by code (literal, derived) and red where a person has to look."""
+    canvas = to_rgb(image).astype(np.float32).copy()
+    for b in blocks:
+        if b["page"] != n:
+            continue
+        color = BLOCKS.get(b["type"], "#000000")
+        state = found.get(b["id"])
+        if state is not None:
+            _fill(canvas, b["x"], b["y"], b["width"], b["height"], "#00c800" if state == "ok" else "#ff0000", 0.25)
+        _stroke(canvas, b["x"], b["y"], b["width"], b["height"], color)
+        rgb = tuple(int(v) for v in _rgb(color))
+        draw_label(canvas, max(2, b["x"] - 6 * 3 * len(b["id"]) - 8), b["y"], b["id"], rgb, scale=3)
+    _save(canvas, target)
+
+
 # a small bitmap font, 5 x 7, for the ids the model is shown in a crop; enough for "[block_12]"
 GLYPHS = {
     "[": ("###..", "#....", "#....", "#....", "#....", "#....", "###.."),

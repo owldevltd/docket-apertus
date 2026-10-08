@@ -1,4 +1,4 @@
-.PHONY: run test bench reference
+.PHONY: run test bench bench-read reference
 
 export PYTHONPATH := src
 
@@ -8,21 +8,28 @@ run:
 	@echo "make run is not implemented yet — edit this Makefile"; exit 1
 
 # Runs the geometry and the text layer over the shipped documents and measures them against the text layer of
-# their PDFs. No model call, no network; needs poppler to render the pages. Results and control images land in
+# their PDFs, builds the blocks and the record, and looks for the known values of the affairs on the first
+# pages. No model call, no network; needs poppler to render the pages. Results and control images land in
 # storage/tests/.
 test:
 	python3 -m docket analyze --out storage/tests/pages data/documents/*/*.pdf
 	python3 tests/sources.py --got=storage/tests/pages --out=storage/tests/sources.md data/documents/*
 	python3 tests/text.py --got=storage/tests/pages data/documents/*
 	python3 tests/blocks.py --pages=storage/tests/pages --out=storage/tests/documents data/documents/*
+	python3 tests/fields.py --pages=storage/tests/pages --documents=storage/tests/documents --out=storage/tests/fields.md data/documents/*
 
-# With the model: the whole chain over the shipped documents (the scan page read, the leftover elements of the
-# first pages sorted), and two digital first pages read as if they had no text layer, held against their text
-# layer. Needs API_KEY in .env (copy .env.example). About 65 calls, one after the other, under five minutes.
-# Results and the raw exchange land in storage/bench/; the committed run is in results/.
+# With the model: the whole chain over the shipped documents, the scan page read, the leftover elements of the
+# first pages sorted, the fields asked and placed, every record validated. Needs API_KEY in .env (copy
+# .env.example). About 70 calls, one after the other, about five minutes. Results, the raw exchange and the
+# control images land in storage/bench/; the committed run is in results/.
 bench:
 	@test -f .env || { echo "copy .env.example to .env and set API_KEY"; exit 1; }
 	python3 -m docket document --model --out storage/bench/documents data/documents/*/*.pdf
+
+# With the model: two digital first pages read as if they had no text layer, held against their text layer.
+# About 35 calls, under three minutes.
+bench-read:
+	@test -f .env || { echo "copy .env.example to .env and set API_KEY"; exit 1; }
 	python3 tests/read.py --out=storage/bench/read.md data/documents/nidau-m185 data/documents/zuerich-219587
 
 # Rebuilds the reference JSON beside the shipped documents from their text layer. A preparation step, its
