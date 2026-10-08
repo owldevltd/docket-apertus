@@ -122,19 +122,23 @@ def scale_rgb(image: np.ndarray, width: int) -> np.ndarray:
     return out
 
 
-def write_png(path: str | Path, image: np.ndarray) -> None:
-    """An 8-bit colour image as PNG, no filtering, deflate from the standard library."""
+def encode_png(image: np.ndarray) -> bytes:
+    """An 8-bit colour image as PNG bytes, no filtering, deflate from the standard library."""
     rgb = to_rgb(np.ascontiguousarray(image))
     height, width = rgb.shape[:2]
     raw = np.zeros((height, 1 + width * 3), dtype=np.uint8)
     raw[:, 1:] = rgb.reshape(height, width * 3)
     header = struct.pack(">IIBBBBB", width, height, 8, 2, 0, 0, 0)
-    Path(path).write_bytes(
+    return (
         b"\x89PNG\r\n\x1a\n"
         + _chunk(b"IHDR", header)
         + _chunk(b"IDAT", zlib.compress(raw.tobytes(), 6))
         + _chunk(b"IEND", b"")
     )
+
+
+def write_png(path: str | Path, image: np.ndarray) -> None:
+    Path(path).write_bytes(encode_png(image))
 
 
 def _chunk(name: bytes, body: bytes) -> bytes:

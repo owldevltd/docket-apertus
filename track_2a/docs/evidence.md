@@ -44,6 +44,7 @@ on parliamentary documents; the rules are in `src/docket/page/` with their const
 | 06.10. | Where is the image-check threshold for documents? | 172 read elements with reference, the rendered text against the image by glyph shapes | 0.005 flags 62 of 71 wrong and 31 of 101 right readings; **0.01: 61 / 30**; 0.02: 53 / 26; 0.05: 22 / 14; median deviation right 0, wrong 0.036 | 0.01 for documents (nearly every wrong reading, a third of the right ones), set by the assistant, open |
 | 06.10. | Spell-check the readings? | a vocabulary from the text layers of 90 digital pages (5 022 words), the nearest known word within distance 1 (2 from 8 characters) | of 38 flagged readings changed 6 closer to the reference, 28 further away; 101 of 127 wrong words are non-words, 26 are plausible real words | not again: too small a vocabulary corrects names and terms away |
 | 06.10. | A page without a text layer through the whole pipeline | the Aargau request rendered and saved as an image-only PDF (shipped as `aargau-scan`) | 16 elements read, 8 with approve, 19 calls, 67 s; number, type, date and submitters found literally, the title through the cited block | the scan path works end to end; measured on one page |
+| 08.10. | The Python reading step, `make bench` | the scan page (13 calls, 53 s) and two digital first pages read as if they had no text layer, 50 elements against the text layer, 35 calls, 1.9 minutes | identical 35, near 12, other 3, empty 0, 8.3 % character errors (three long paragraphs cut short); the image check at 0.01 flags all 15 that are not identical and 26 of the 35 identical | the committed run is `results/read.md`; the threshold flags more right readings than measured on the ten pages, the number stands |
 
 ## 4 The affair type and its vocabulary
 
@@ -110,5 +111,7 @@ runs the geometry over them and holds it against their text layer; the numbers a
 and are reproduced by the same scripts on it.
 
 On the shipped pages (run of 8 October 2026, no model call): 175 of 204 reference blocks map to exactly one
-object (85.8 %), 378 of 481 lines, 4 286 of 4 287 words lie in an object. The page without a text layer is
-analysed but not measured; the reading step is what handles it.
+object (85.8 %), 378 of 481 lines, 4 286 of 4 287 words lie in an object. The text layer lands in the elements
+on all 14 pages that have one: 4 284 of 4 287 words in a text element, every text element with its font from
+the PDF. The page without a text layer is seen as such and left to the reading step; `make bench` reads it with
+the model (13 calls) and measures the reading on two digital pages against their text layer (`results/read.md`).

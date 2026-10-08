@@ -60,6 +60,58 @@ def draw_elements(image: np.ndarray, target: str | Path, elements: list[dict]) -
     _save(canvas, target)
 
 
+# a small bitmap font, 5 x 7, for the ids the model is shown in a crop; enough for "[block_12]"
+GLYPHS = {
+    "[": ("###..", "#....", "#....", "#....", "#....", "#....", "###.."),
+    "]": ("..###", "....#", "....#", "....#", "....#", "....#", "..###"),
+    "b": ("#....", "#....", "####.", "#...#", "#...#", "#...#", "####."),
+    "l": ("..#..", "..#..", "..#..", "..#..", "..#..", "..#..", "..##."),
+    "o": (".....", ".....", ".###.", "#...#", "#...#", "#...#", ".###."),
+    "c": (".....", ".....", ".####", "#....", "#....", "#....", ".####"),
+    "k": ("#....", "#....", "#..#.", "#.#..", "##...", "#.#..", "#..#."),
+    "_": (".....", ".....", ".....", ".....", ".....", ".....", "#####"),
+    "0": (".###.", "#...#", "#..##", "#.#.#", "##..#", "#...#", ".###."),
+    "1": ("..#..", ".##..", "..#..", "..#..", "..#..", "..#..", ".###."),
+    "2": (".###.", "#...#", "....#", "...#.", "..#..", ".#...", "#####"),
+    "3": ("####.", "....#", "....#", ".###.", "....#", "....#", "####."),
+    "4": ("...#.", "..##.", ".#.#.", "#..#.", "#####", "...#.", "...#."),
+    "5": ("#####", "#....", "####.", "....#", "....#", "#...#", ".###."),
+    "6": (".###.", "#....", "####.", "#...#", "#...#", "#...#", ".###."),
+    "7": ("#####", "....#", "...#.", "..#..", ".#...", ".#...", ".#..."),
+    "8": (".###.", "#...#", "#...#", ".###.", "#...#", "#...#", ".###."),
+    "9": (".###.", "#...#", "#...#", ".####", "....#", "....#", ".###."),
+}
+
+
+def draw_label(canvas: np.ndarray, x: int, y: int, text: str, color: tuple[int, int, int], scale: int = 4) -> None:
+    """Writes the text in the bitmap font, each glyph 5 x 7 pixels times the scale, at x, y (top left)."""
+    cx = x
+    for ch in text:
+        rows = GLYPHS.get(ch)
+        if rows:
+            for r, row in enumerate(rows):
+                for c, bit in enumerate(row):
+                    if bit == "#":
+                        y0, x0 = y + r * scale, cx + c * scale
+                        canvas[max(0, y0) : max(0, y0 + scale), max(0, x0) : max(0, x0 + scale)] = color
+        cx += 6 * scale
+
+
+def draw_frame(canvas: np.ndarray, x: int, y: int, w: int, h: int, thickness: int, color: tuple[int, int, int]) -> None:
+    """A rectangle outline of the thickness, clipped to the canvas."""
+    sides = (
+        (x, y, w, thickness),
+        (x, y + h - thickness, w, thickness),
+        (x, y, thickness, h),
+        (x + w - thickness, y, thickness, h),
+    )
+    for rx, ry, rw, rh in sides:
+        y0, y1 = max(0, ry), min(canvas.shape[0], ry + rh)
+        x0, x1 = max(0, rx), min(canvas.shape[1], rx + rw)
+        if y1 > y0 and x1 > x0:
+            canvas[y0:y1, x0:x1] = color
+
+
 def _save(canvas: np.ndarray, target: str | Path) -> None:
     write_png(target, scale_rgb(np.clip(np.rint(canvas), 0, 255).astype(np.uint8), OUT_WIDTH))
 
