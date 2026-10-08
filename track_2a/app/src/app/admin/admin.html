@@ -1,0 +1,98 @@
+<div class="bar">
+    <h1>Admin</h1>
+    @if ( health(); as h ) {
+        <span class="muted">Bestand: {{ h.store }} · Modell: {{ h.model ? 'bereit' : 'kein Schlüssel' }} · Admin: {{ h.admin === 'token' ? 'mit Token' : 'offen' }}</span>
+    }
+</div>
+
+<div class="panel card">
+    <nav class="drawer">
+        <mat-nav-list>
+            @for ( a of areas; track a.id ) {
+                <a mat-list-item [activated]="area() === a.id" (click)="area.set( a.id )">
+                    <app-icon matListItemIcon [name]="a.icon" />
+                    <span matListItemTitle>{{ a.name }}</span>
+                </a>
+            }
+        </mat-nav-list>
+    </nav>
+
+    <section class="content">
+        @switch ( area() ) {
+            @case ( 'runs' ) {
+                <h2>Läufe</h2>
+                <table class="plain">
+                    <thead>
+                        <tr><th>Wann</th><th>Dokument</th><th>Quelle</th><th>Stand</th><th class="num">Aufrufe</th><th>Geschäft</th><th>Zuletzt</th></tr>
+                    </thead>
+                    <tbody>
+                        @for ( r of runs(); track r.id ) {
+                            <tr>
+                                <td>{{ r.created | stamp }}</td>
+                                <td>{{ r.name }}</td>
+                                <td>{{ r.source }}</td>
+                                <td><span class="chip" [class]="'chip ' + r.state">{{ words.STATE[ r.state ] }}</span>@if ( r.error ) { <div class="err">{{ r.error }}</div> }</td>
+                                <td class="num">{{ r.calls }}</td>
+                                <td>@for ( a of r.affairs; track a.key ) { <a [routerLink]="[ '/affairs', a.key ]">{{ a.key }}</a> }</td>
+                                <td class="lines">{{ lastLine( r ) }}</td>
+                            </tr>
+                        } @empty {
+                            <tr><td colspan="7" class="empty">Noch keine Läufe.</td></tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            @case ( 'rules' ) {
+                <h2>Regeln</h2>
+                <p class="muted">Dieselbe Änderung dreimal am selben Feld wird zur Regel und gilt dann für den ganzen Bestand; jede
+                    Anwendung steht als Entscheidung „Regel“ und lässt sich einzeln zurücknehmen.</p>
+                <table class="plain">
+                    <thead>
+                        <tr><th>Regel</th><th>Feld</th><th>Muster</th><th class="num">Zähler</th><th class="num">Angewandt</th>
+                            <th class="num">Bestätigt</th><th class="num">Zurück</th><th>Aktiv</th></tr>
+                    </thead>
+                    <tbody>
+                        @for ( r of rules(); track r.id ) {
+                            <tr>
+                                <td>{{ r.id }}</td>
+                                <td>{{ words.LABELS[ r.field ] || r.field }}</td>
+                                <td>{{ words.KINDS[ r.kind ] || r.kind }} „{{ r.parameter }}“</td>
+                                <td class="num">{{ r.count }}</td>
+                                <td class="num">{{ r.applied }}</td>
+                                <td class="num">{{ r.confirmed }}</td>
+                                <td class="num">{{ r.withdrawn }}</td>
+                                <td><mat-slide-toggle [checked]="r.active" (change)="toggle( r, $event.checked )" [disabled]="busy()" /></td>
+                            </tr>
+                        } @empty {
+                            <tr><td colspan="8" class="empty">Noch keine Regeln.</td></tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            @case ( 'process' ) {
+                <h2>Dokument verarbeiten</h2>
+                <p class="muted">Ein PDF hochladen oder die Kennung eines Dokuments bei OpenParlData eingeben. Der Lauf geht durch
+                    die ganze Strecke und legt das Geschäft im Bestand ab; ein vorhandenes Geschäft behält seine Entscheidungen.</p>
+                <div class="row">
+                    <input type="file" accept="application/pdf" (change)="chose( $event )">
+                    <button mat-flat-button (click)="upload()" [disabled]="busy()"><app-icon name="upload" /> Hochladen</button>
+                </div>
+                <div class="row">
+                    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="grow">
+                        <mat-label>Dokument-Kennung bei OpenParlData</mat-label>
+                        <input matInput type="number" min="1" [ngModel]="docId()" (ngModelChange)="docId.set( $event )">
+                    </mat-form-field>
+                    <button mat-stroked-button (click)="fetch()" [disabled]="busy()"><app-icon name="cloud" /> Von OpenParlData holen</button>
+                </div>
+                <mat-checkbox [checked]="withModel()" (change)="withModel.set( $event.checked )">mit dem Modell (Scans lesen, Rest einordnen, Felder)</mat-checkbox>
+                <div class="row">
+                    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="grow">
+                        <mat-label>Admin-Token</mat-label>
+                        <input matInput type="password" [ngModel]="token()" (ngModelChange)="saveToken( $event )">
+                    </mat-form-field>
+                    <span class="muted">{{ health()?.admin === 'token' ? 'nötig' : 'nicht nötig' }}</span>
+                </div>
+            }
+        }
+    </section>
+</div>

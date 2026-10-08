@@ -6,7 +6,7 @@ from __future__ import annotations
 import json
 import re
 import shutil
-import time
+from datetime import datetime
 from pathlib import Path
 
 
@@ -14,8 +14,13 @@ def safe_name(key: str) -> str:
     return re.sub(r"[^\w.-]+", "_", key)
 
 
+def stamp() -> str:
+    """The time now, ISO 8601 with the server's zone (TZ=Europe/Zurich in the container)."""
+    return datetime.now().astimezone().isoformat(timespec="seconds")
+
+
 def now() -> str:
-    return time.strftime("%Y-%m-%dT%H:%M:%S%z")
+    return stamp()
 
 
 class Store:
@@ -56,6 +61,13 @@ class Store:
         raise NotImplementedError
 
     def list_decisions(self, key: str | None = None) -> list[dict]:
+        raise NotImplementedError
+
+    # rules of the general repair
+    def get_rules(self) -> list[dict]:
+        raise NotImplementedError
+
+    def put_rules(self, rules: list[dict]) -> None:
         raise NotImplementedError
 
     # pages, on disk in every backend

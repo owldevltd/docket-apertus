@@ -11,9 +11,9 @@ without review. A new run over the same document keeps every review a person wro
 from __future__ import annotations
 
 import copy
-import time
 
 from docket.fields.placer import get_at, set_at
+from docket.store.base import stamp
 
 DECISIONS = ("confirmed", "changed", "rejected")
 
@@ -39,7 +39,8 @@ def _walk(node, path: list[str], out: list[dict]) -> None:
             leaves = _leaves(node, path)
             if leaves:
                 value_path, value = leaves[0]
-                entry = _entry(".".join([*path, "source"]), value_path, _label(path), value, node["source"])
+                label = str(node["meta-name"]) if node.get("meta-name") else _label(value_path)
+                entry = _entry(".".join([*path, "source"]), value_path, label, value, node["source"])
                 entry["values"] = {p: v for p, v in leaves}
                 out.append(entry)
         for key, child in node.items():
@@ -66,8 +67,10 @@ def _leaves(node: dict, path: list[str]) -> list[tuple[str, object]]:
 
 
 def _label(path: str | list[str]) -> str:
+    """The field a value belongs to, the same across affairs: the path of the value without indexes and
+    without the language ("contributors.data.2.party.de" to "contributors.party")."""
     parts = path.split(".") if isinstance(path, str) else list(path)
-    words = [p for p in parts if not p.isdigit() and p not in ("data", "de")]
+    words = [p for p in parts if not p.isdigit() and p not in ("data", "de", "fr", "it")]
     return ".".join(words)
 
 
@@ -115,7 +118,7 @@ def apply_decision(record: dict, source_path: str, decision: str, by: str, after
     if entry.get("values") is None and path != entry["path"]:
         raise ValueError(f"the source at {source_path} belongs to {entry['path']}, not {path}")
     before = get_at(out, path.split("."))
-    review: dict = {"at": at or time.strftime("%Y-%m-%dT%H:%M:%S%z"), "decision": decision}
+    review: dict = {"at": at or stamp(), "decision": decision}
     if by:
         review["by"] = by
     if rule:

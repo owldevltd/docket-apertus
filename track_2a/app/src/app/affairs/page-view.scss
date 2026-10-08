@@ -1,0 +1,94 @@
+.bar.small {
+    gap: 10px;
+    margin-bottom: 8px;
+    font-size: 13px;
+}
+
+.pager {
+    display: inline-flex;
+    gap: 2px;
+    align-items: center;
+}
+
+.legend {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    color: var( --opd-grey );
+    margin-left: auto;
+
+    i {
+        width: 10px;
+        height: 10px;
+        display: inline-block;
+        border-radius: 2px;
+        margin-right: 2px;
+
+        &.sec { background: var( --sec ); }
+        &.p { background: var( --p ); }
+        &.table-wrap { background: var( --table-wrap ); }
+        &.list { background: var( --list ); }
+        &.def-list { background: var( --def-list ); }
+        &.graphic { background: var( --graphic ); }
+        &.sig-block { background: var( --sig-block ); }
+    }
+}
+
+.sheet {
+    position: relative;
+    background: #fff;
+    border: 1px solid var( --opd-line );
+    overflow: hidden;
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    rect {
+        fill: transparent;
+        stroke-width: 6;
+        cursor: pointer;
+
+        &.sec { stroke: var( --sec ); }
+        &.p { stroke: var( --p ); }
+        &.table-wrap { stroke: var( --table-wrap ); }
+        &.graphic { stroke: var( --graphic ); }
+        &.list { stroke: var( --list ); }
+        &.def-list { stroke: var( --def-list ); }
+        &.sig-block { stroke: var( --sig-block ); }
+        &.flag { stroke: var( --opd-red ); stroke-width: 12; }
+        &.hit { fill: rgba( 0, 200, 0, .18 ); }
+        &.look { fill: rgba( 255, 0, 0, .22 ); }
+        &.focus { fill: rgba( 255, 212, 0, .45 ); }
+    }
+
+    text {
+        font: 600 30px 'Open Sans', sans-serif;
+        fill: var( --opd-dark );
+        paint-order: stroke;
+        stroke: #fff;
+        stroke-width: 6px;
+    }
+}
+
+.block-info {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var( --opd-slate );
+
+    .text {
+        white-space: pre-wrap;
+        max-height: 120px;
+        overflow: auto;
+        color: var( --opd-grey );
+    }
+}

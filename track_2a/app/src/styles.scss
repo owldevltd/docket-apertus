@@ -1,0 +1,260 @@
+// The look follows OpenParlData's public app: Open Sans, slate and light blue, white cards on a light ground.
+// Material 3 draws the components; the system variables below bend its palette to theirs. The font is
+// served by the app itself, nothing is loaded from elsewhere.
+@use '@angular/material' as mat;
+
+:root {
+    --opd-dark: #2a3643;
+    --opd-slate: #3d4f63;
+    --opd-accent: #97aedc;
+    --opd-link: #5e81c9;
+    --opd-grey: #919aa7;
+    --opd-line: #d2d6db;
+    --opd-ground: #f5f5f5;
+    --opd-red: #c8102e;
+    --opd-red-soft: #fbe9ec;
+    --opd-green: #1f8a4c;
+    --opd-green-soft: #e6f4ea;
+    --sec: #c80000;
+    --p: #006ec8;
+    --table-wrap: #00963c;
+    --graphic: #969696;
+    --list: #e68200;
+    --def-list: #9600c8;
+    --sig-block: #00a0aa;
+}
+
+html {
+    height: 100%;
+    @include mat.theme( (
+        color: (
+            primary: mat.$azure-palette,
+            tertiary: mat.$blue-palette,
+        ),
+        typography: 'Open Sans',
+        density: 0,
+    ) );
+
+    --mat-sys-primary: #3d4f63;
+    --mat-sys-on-primary: #ffffff;
+    --mat-sys-primary-container: #97aedc;
+    --mat-sys-on-primary-container: #1b2430;
+    --mat-sys-secondary: #5e81c9;
+    --mat-sys-surface: #f5f5f5;
+    --mat-sys-surface-container: #ffffff;
+    --mat-sys-surface-container-low: #fafafa;
+    --mat-sys-surface-container-high: #ededed;
+    --mat-sys-on-surface: #2a3643;
+    --mat-sys-on-surface-variant: #4c5a6e;
+    --mat-sys-outline: #919aa7;
+    --mat-sys-outline-variant: #d2d6db;
+}
+
+body {
+    color-scheme: light;
+    background-color: var( --opd-ground );
+    color: var( --mat-sys-on-surface );
+    font: 400 15px / 1.45 'Open Sans', sans-serif;
+    margin: 0;
+    height: 100%;
+}
+
+a {
+    color: var( --opd-link );
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: 400;
+    margin: 0;
+}
+
+h2 {
+    font-size: 17px;
+    font-weight: 600;
+    margin: 0 0 8px;
+}
+
+.muted {
+    color: var( --opd-grey );
+}
+
+// a white card on the ground, the building block of every list
+.card {
+    background: #fff;
+    border: 1px solid var( --opd-line );
+    border-radius: 6px;
+    box-shadow: 0 1px 2px rgba( 42, 54, 67, .06 );
+}
+
+// the result card of OpenParlData: icon at the left, title and meta line, a dark zoom button at the right
+.result {
+    @extend .card;
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    align-items: stretch;
+    margin-bottom: 10px;
+    overflow: hidden;
+
+    .icon {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding-top: 18px;
+        color: var( --opd-slate );
+    }
+
+    .body {
+        padding: 14px 12px 12px 0;
+        min-width: 0;
+    }
+
+    .title {
+        font-size: 18px;
+        color: var( --opd-slate );
+        margin: 0 0 4px;
+        line-height: 1.3;
+    }
+
+    .meta {
+        font-size: 13px;
+        color: var( --opd-slate );
+
+        b {
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: .03em;
+        }
+
+        .sep {
+            color: var( --opd-grey );
+            margin: 0 6px;
+        }
+    }
+
+    .side {
+        display: flex;
+        align-items: stretch;
+    }
+
+    .counts {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: center;
+        padding: 0 14px;
+        font-size: 12px;
+        color: var( --opd-grey );
+        min-width: 80px;
+
+        .open {
+            color: var( --opd-red );
+            font-weight: 700;
+            font-size: 18px;
+        }
+    }
+
+    .zoom {
+        width: 46px;
+        background: var( --opd-slate );
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+
+        &:hover {
+            background: var( --opd-dark );
+        }
+    }
+}
+
+// a status chip as in their admin panel
+.chip {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    padding: 3px 12px;
+    border-radius: 999px;
+    color: #fff;
+    background: var( --opd-grey );
+
+    &.done { background: var( --opd-green ); }
+    &.failed { background: var( --opd-red ); }
+    &.running { background: var( --opd-link ); }
+    &.queued { background: var( --opd-grey ); }
+    &.soft { background: var( --opd-red-soft ); color: var( --opd-red ); }
+}
+
+// key-value rows as in their detail view
+.rows {
+    .row {
+        display: flex;
+        gap: 10px;
+        padding: 9px 0;
+        border-bottom: 1px solid var( --opd-line );
+        font-size: 14px;
+
+        b {
+            color: var( --opd-slate );
+        }
+
+        .pipe {
+            color: var( --opd-grey );
+        }
+    }
+}
+
+table.plain {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border: 1px solid var( --opd-line );
+    border-radius: 6px;
+    overflow: hidden;
+
+    th,
+    td {
+        text-align: left;
+        padding: 9px 12px;
+        border-bottom: 1px solid var( --opd-line );
+        vertical-align: top;
+        font-size: 14px;
+    }
+
+    th {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        color: var( --opd-grey );
+        font-weight: 600;
+    }
+
+    .num {
+        text-align: right;
+    }
+
+    tbody tr.link {
+        cursor: pointer;
+
+        &:hover {
+            background: var( --opd-ground );
+        }
+    }
+}
+
+.bar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.empty {
+    color: var( --opd-grey );
+    padding: 30px;
+    text-align: center;
+}

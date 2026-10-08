@@ -1,0 +1,53 @@
+.panel {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    min-height: 480px;
+
+    @media ( max-width: 800px ) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.drawer {
+    border-right: 1px solid var( --opd-line );
+    background: #fff;
+    padding: 6px 0;
+}
+
+.content {
+    padding: 16px 18px;
+    min-width: 0;
+
+    p {
+        margin: 0 0 12px;
+        font-size: 13px;
+    }
+}
+
+.row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin: 10px 0;
+    flex-wrap: wrap;
+
+    .grow {
+        flex: 1;
+        min-width: 240px;
+    }
+}
+
+.err {
+    font-size: 12px;
+    color: var( --opd-red );
+    margin-top: 4px;
+}
+
+.lines {
+    font-size: 12px;
+    color: var( --opd-grey );
+    max-width: 320px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

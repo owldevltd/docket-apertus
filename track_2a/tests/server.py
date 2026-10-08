@@ -16,9 +16,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
+from docket.api import App  # noqa: E402
 from docket.config import load_config  # noqa: E402
 from docket.pipeline import load_contract  # noqa: E402
-from docket.server import App, serve  # noqa: E402
+from docket.server import serve  # noqa: E402
 from docket.store.files import FileStore  # noqa: E402
 from docket.store.review import carry_reviews, sources_of  # noqa: E402
 
@@ -43,7 +44,8 @@ def main(argv: list[str]) -> int:
         print("usage: python3 tests/server.py --store=<file store dir>")
         return 1
     store = FileStore(store_dir)
-    app = App(store, load_contract(load_config()))
+    config = load_config()
+    app = App(store, load_contract(config), config)
     server = serve(app, 0, host="127.0.0.1")
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
@@ -113,6 +115,7 @@ def main(argv: list[str]) -> int:
               f"{count} review carried into a new run, with the changed value")
     finally:
         server.shutdown()
+        app.jobs.stop()
     return 1 if failed else 0
 
 

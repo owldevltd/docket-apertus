@@ -27,6 +27,10 @@ CREATE TABLE IF NOT EXISTS decisions (
     at timestamptz NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS decisions_affair ON decisions (affair);
+CREATE TABLE IF NOT EXISTS rules (
+    id text PRIMARY KEY,
+    row jsonb NOT NULL
+);
 """
 
 
@@ -102,6 +106,20 @@ class PostgresStore(Store):
             else:
                 rows = db.execute("SELECT row FROM decisions WHERE affair = %s ORDER BY id", (key,)).fetchall()
         return [r[0] for r in rows]
+
+    def get_rules(self) -> list[dict]:
+        with self._connect() as db:
+            rows = db.execute("SELECT row FROM rules ORDER BY id").fetchall()
+        return [r[0] for r in rows]
+
+    def put_rules(self, rules: list[dict]) -> None:
+        with self._connect() as db:
+            for rule in rules:
+                db.execute(
+                    "INSERT INTO rules (id, row) VALUES (%s, %s::jsonb) "
+                    "ON CONFLICT (id) DO UPDATE SET row = EXCLUDED.row",
+                    (rule["id"], json.dumps(rule, ensure_ascii=False)),
+                )
 
     @staticmethod
     def _affair(row) -> dict:

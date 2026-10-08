@@ -25,6 +25,7 @@ services:
         required: false
     environment:
       DATABASE_URL: postgresql://docket:docket@db:5432/docket
+      TZ: Europe/Zurich
     volumes:
       - ./storage:/app/storage
 

@@ -1,4 +1,4 @@
-.PHONY: run fill test bench bench-read reference knowledge
+.PHONY: run fill test bench bench-read reference knowledge app
 
 export PYTHONPATH := src
 
@@ -27,6 +27,8 @@ test:
 	python3 tests/fields.py --pages=storage/tests/pages --documents=storage/tests/documents --out=storage/tests/fields.md data/documents/*
 	python3 tests/affairs.py --pages=storage/tests/pages --documents=storage/tests/documents --out=storage/tests/affairs.md --store=storage/tests/store data/documents/*
 	python3 tests/server.py --store=storage/tests/store --pages=storage/tests/pages
+	python3 tests/rules.py
+	python3 tests/admin.py data/documents/neuchatel-grand-conseil/*.pdf
 
 # With the model: the whole chain over the shipped documents, the scan page read, the leftover elements of the
 # first pages sorted, the fields asked and placed, every document keyed and the documents of one key merged
@@ -42,6 +44,12 @@ bench:
 bench-read:
 	@test -f .env || { echo "copy .env.example to .env and set API_KEY"; exit 1; }
 	python3 tests/read.py --out=storage/bench/read.md data/documents/nidau-m185 data/documents/zuerich-219587
+
+# Builds the browser app (Angular, in app/) into src/docket/app/, from where the Python server serves it.
+# Node is needed for this build only, never to run the server; the Docker build does the same in its first
+# stage. The built bundle is not committed.
+app:
+	cd app && npm ci --no-audit --no-fund && npx ng build
 
 # Rebuilds the reference JSON beside the shipped documents from their text layer. A preparation step, its
 # results are committed; needs poppler (pdftoppm, pdftotext, pdftohtml).

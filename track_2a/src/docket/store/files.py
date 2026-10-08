@@ -63,3 +63,11 @@ class FileStore(Store):
             return []
         rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
         return [r for r in rows if key is None or r.get("affair") == key]
+
+    def get_rules(self) -> list[dict]:
+        path = self.folder / "rules.json"
+        return json.loads(path.read_text(encoding="utf-8"))["rules"] if path.is_file() else []
+
+    def put_rules(self, rules: list[dict]) -> None:
+        text = json.dumps({"rules": rules}, ensure_ascii=False, indent=2) + "\n"
+        (self.folder / "rules.json").write_text(text, encoding="utf-8")

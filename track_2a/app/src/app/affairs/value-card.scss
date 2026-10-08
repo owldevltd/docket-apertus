@@ -1,0 +1,105 @@
+.value {
+    border: 1px solid var( --opd-line );
+    border-radius: 6px;
+    padding: 8px 10px;
+    display: grid;
+    gap: 4px;
+    background: #fff;
+
+    &.open {
+        border-color: var( --opd-red );
+        background: var( --opd-red-soft );
+    }
+
+    &.done {
+        background: var( --opd-green-soft );
+    }
+
+    &.focus {
+        outline: 2px solid var( --list );
+    }
+}
+
+.head {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    flex-wrap: wrap;
+}
+
+.label {
+    font-weight: 600;
+    color: var( --opd-slate );
+}
+
+.how {
+    font-size: 12px;
+    color: var( --opd-grey );
+}
+
+.where {
+    font-size: 12px;
+    color: var( --opd-grey );
+    text-decoration: underline dotted;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.text {
+    white-space: pre-wrap;
+    word-break: break-word;
+
+    .leaf {
+        color: var( --opd-grey );
+        margin-right: 6px;
+    }
+}
+
+.mark {
+    color: var( --opd-red );
+    font-weight: 700;
+}
+
+.answer {
+    font-size: 12px;
+    color: var( --opd-link );
+}
+
+.decided {
+    font-size: 13px;
+    color: var( --opd-green );
+
+    &.rejected {
+        color: var( --opd-grey );
+        text-decoration: line-through;
+    }
+}
+
+.same {
+    font-size: 13px;
+    color: var( --opd-grey );
+
+    summary {
+        cursor: pointer;
+    }
+}
+
+.acts {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 2px;
+
+    .new {
+        flex: 1;
+        min-width: 160px;
+    }
+
+    .pick {
+        width: 140px;
+    }
+}

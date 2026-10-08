@@ -1,0 +1,61 @@
+.top {
+    background: var( --opd-dark );
+    color: #fff;
+    height: 52px;
+    gap: 24px;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+.wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 18px;
+
+    i {
+        width: 14px;
+        height: 14px;
+        border-radius: 4px;
+        background: var( --opd-accent );
+        display: inline-block;
+    }
+}
+
+.areas {
+    display: flex;
+    gap: 4px;
+
+    a {
+        color: rgba( 255, 255, 255, .78 );
+        text-decoration: none;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 15px;
+
+        &.on,
+        &:hover {
+            color: #fff;
+            background: rgba( 255, 255, 255, .12 );
+        }
+    }
+}
+
+.spacer {
+    flex: 1;
+}
+
+.who {
+    color: rgba( 255, 255, 255, .85 );
+    font-size: 13px;
+}
+
+main {
+    padding: 18px 20px 40px;
+    max-width: 1500px;
+    margin: 0 auto;
+}

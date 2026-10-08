@@ -1,0 +1,13 @@
+<mat-toolbar class="top">
+    <a class="wordmark" routerLink="/"><i></i>Docket</a>
+    <nav class="areas">
+        <a routerLink="/" routerLinkActive="on" [routerLinkActiveOptions]="{ exact: true }">Geschäfte</a>
+        <a routerLink="/decisions" routerLinkActive="on">Entscheidungen</a>
+        <a routerLink="/admin" routerLinkActive="on">Admin</a>
+    </nav>
+    <span class="spacer"></span>
+    <button mat-button class="who" (click)="rename()">{{ who.name() ? 'als ' + who.name() : 'Kürzel setzen' }}</button>
+</mat-toolbar>
+<main>
+    <router-outlet />
+</main>

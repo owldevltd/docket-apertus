@@ -1,0 +1,29 @@
+<div class="bar small">
+    <span class="pager">
+        <button mat-icon-button (click)="turn( -1 )" [disabled]="page() <= 1"><app-icon name="back" /></button>
+        <span>Seite {{ page() }} von {{ pages() }}</span>
+        <button mat-icon-button (click)="turn( 1 )" [disabled]="page() >= pages()"><app-icon name="next" /></button>
+    </span>
+    <span class="legend">
+        <i class="sec"></i>sec <i class="p"></i>p <i class="table-wrap"></i>table <i class="list"></i>list
+        <i class="def-list"></i>def-list <i class="graphic"></i>graphic <i class="sig-block"></i>sig
+    </span>
+</div>
+<div class="sheet">
+    <img [src]="image()( page() )" alt="Seite {{ page() }}" (load)="loaded( $event )">
+    @if ( size().width ) {
+        <svg [attr.viewBox]="'0 0 ' + size().width + ' ' + size().height">
+            @for ( b of onPage(); track b.id ) {
+                <rect [attr.x]="b.x" [attr.y]="b.y" [attr.width]="b.width" [attr.height]="b.height"
+                    [attr.class]="classOf( b )" (click)="focus.set( b.id )" />
+                <text [attr.x]="labelX( b )" [attr.y]="b.y + 30">{{ b.id }}</text>
+            }
+        </svg>
+    }
+</div>
+@if ( focused(); as b ) {
+    <div class="block-info">
+        <b>{{ b.id }}</b> · {{ b.type }}@if ( b.approve ) { · Lesung prüfen }
+        <div class="text">{{ focusedText() }}</div>
+    </div>
+}

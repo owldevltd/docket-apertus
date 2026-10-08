@@ -1,0 +1,44 @@
+@let e = entry();
+<div class="value" [class.open]="e.open" [class.done]="!!e.review" [class.focus]="focused()">
+    <div class="head">
+        @if ( e.open ) { <span class="mark">!</span> }
+        <span class="label">{{ label() }}</span>
+        <span class="how">{{ words.HOW[ e.how || '' ] || e.how }}</span>
+        <button class="where" (click)="jump.emit( e )">{{ docName() || 'Dokument ' + e.doc }} · {{ e.block }}</button>
+    </div>
+    @for ( v of values(); track v.path ) {
+        <div class="text">@if ( several() ) { <span class="leaf">{{ v.leaf }}:</span> }{{ v.value }}</div>
+    }
+    @if ( modelDiffers() ) {
+        <div class="answer">Modell: {{ answer() }}</div>
+    }
+    @if ( e.review; as r ) {
+        <div class="decided" [class.rejected]="r.decision === 'rejected'">
+            {{ words.DECISION[ r.decision ] }}@if ( r.decision === 'changed' && r.before !== undefined ) { von „{{ r.before }}“ }
+            @if ( r.by ) { · {{ r.by }} } · {{ r.at | stamp }}@if ( r.rule ) { · Regel {{ r.rule }} }
+        </div>
+    }
+    @if ( e.same?.count ) {
+        <details class="same">
+            <summary>{{ e.same!.count }} weitere Dokumente mit demselben Muster</summary>
+            @for ( x of e.same!.examples; track x.key ) {
+                <div><a [routerLink]="[ '/affairs', x.key ]">{{ x.key }}</a> · {{ x.value }}</div>
+            }
+        </details>
+    }
+    <div class="acts">
+        <button mat-flat-button (click)="confirm()">Bestätigen</button>
+        @if ( several() ) {
+            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="pick">
+                <mat-select [value]="path()" (valueChange)="pick( $event )">
+                    @for ( v of values(); track v.path ) { <mat-option [value]="v.path">{{ v.leaf }}</mat-option> }
+                </mat-select>
+            </mat-form-field>
+        }
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="new">
+            <input matInput [ngModel]="after()" (ngModelChange)="after.set( $event )" placeholder="neuer Wert">
+        </mat-form-field>
+        <button mat-stroked-button (click)="change()">Ändern</button>
+        <button mat-button (click)="reject()">Verwerfen</button>
+    </div>
+</div>

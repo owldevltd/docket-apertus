@@ -1,0 +1,47 @@
+@if ( error() ) {
+    <div class="empty">{{ error() }}</div>
+} @else if ( affair(); as a ) {
+    <div class="head card">
+        <a class="back" routerLink="/"><app-icon name="back" [size]="28" /></a>
+        <div class="icon"><app-icon name="affair" [size]="34" /></div>
+        <div class="text">
+            <h1>{{ title() }}</h1>
+            <div class="meta">
+                <b>Geschäft</b>
+                @for ( m of meta(); track $index ) { <span class="sep">|</span>{{ m }} }
+                <span class="sep">|</span>{{ a.key }}
+            </div>
+        </div>
+        <div class="state">
+            <span class="chip" [class.soft]="a.counts.open > 0" [class.done]="a.counts.open === 0 && a.counts.done > 0">
+                {{ a.counts.open }} offen · {{ a.counts.done }} erledigt · {{ a.counts.places }} Fundstellen
+            </span>
+        </div>
+    </div>
+
+    <div class="split">
+        <div class="left card">
+            @if ( a.documents.length > 1 ) {
+                <mat-select class="doc" [value]="doc()" (valueChange)="selectDoc( $event )">
+                    @for ( d of a.documents; track d.id; let i = $index ) {
+                        <mat-option [value]="i">{{ d.name }} ({{ d.pages }} S.)</mat-option>
+                    }
+                </mat-select>
+            } @else {
+                <div class="doc-name muted">{{ current()?.name }}</div>
+            }
+            @if ( current(); as d ) {
+                <app-page-view [name]="d.name" [pages]="d.pages" [blocks]="blocks()" [sources]="docSources()"
+                    [image]="image()" [(page)]="page" [(focus)]="focus" />
+            }
+        </div>
+        <div class="right">
+            @for ( s of sorted(); track s.source ) {
+                <app-value-card [entry]="s" [docName]="docName( s )" [answer]="answerOf( s )"
+                    [focused]="focus() === s.block && s.doc === docRecord()?.id" (decided)="decide( $event )" (jump)="jump( $event )" />
+            } @empty {
+                <div class="empty">Keine Werte mit Fundstelle.</div>
+            }
+        </div>
+    </div>
+}

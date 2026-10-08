@@ -1,31 +1,38 @@
 """The web server: the app as static files, the API under /api/. The standard library's HTTP server with a
-small router; one process, one store, one lock per affair for decisions.
+small router; what it answers with is in api.py.
 
-    GET  /api/health                              the store in use
+    GET  /api/health                              the store, the model, the admin mode
     GET  /api/affairs                             every affair: key, number, title, type, counts
     GET  /api/affairs/<key>                       the record, its documents and every value with a place
     GET  /api/affairs/<key>/decisions             the decisions taken on it
     POST /api/affairs/<key>/decisions             {source, decision, by, after?, path?} -> the affair as above
+    GET  /api/decisions                           every decision in the store
     GET  /api/documents/<name>/fields             the fields report of a document (the model's answers)
     GET  /api/documents/<name>/pages/<n>          the page's elements
     GET  /api/documents/<name>/pages/<n>.png      the page image
+    GET  /api/rules                               the rules of the general repair
+    POST /api/rules/<id>                          {active, by} switches a rule (admin)
+    GET  /api/runs                                the runs of the admin, newest first
+    GET  /api/runs/<id>                           one run with all its lines
+    POST /api/runs                                a PDF (Content-Type application/pdf, X-Name) or
+                                                  {document: <OpenParlData doc id>}, {model?} (admin)
 """
 
 from __future__ import annotations
 
 import json
 import re
-import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
-from docket.affair.validator import Contract
-from docket.store.base import Store
-from docket.store.review import apply_decision, counts, sources_of
+from docket.api import App
+from docket.config import Config
+from docket.pipeline import load_contract
+from docket.store import open_store
 
 APP = Path(__file__).resolve().parent / "app"
-BODY_LIMIT = 32 * 1024 * 1024
+BODY_LIMIT = 64 * 1024 * 1024
 TYPES = {
     ".html": "text/html; charset=utf-8",
     ".css": "text/css; charset=utf-8",
@@ -36,75 +43,6 @@ TYPES = {
     ".ico": "image/x-icon",
     ".woff2": "font/woff2",
 }
-
-
-class App:
-    """What the handlers share: the store, the contract, the locks."""
-
-    def __init__(self, store: Store, contract: Contract):
-        self.store = store
-        self.contract = contract
-        self.locks: dict[str, threading.Lock] = {}
-        self._guard = threading.Lock()
-
-    def lock(self, key: str) -> threading.Lock:
-        with self._guard:
-            return self.locks.setdefault(key, threading.Lock())
-
-    def affair(self, key: str) -> dict | None:
-        data = self.store.get_affair(key)
-        if data is None:
-            return None
-        record = data["record"]
-        return {
-            "key": key,
-            "record": record,
-            "documents": data.get("documents", []),
-            "sources": sources_of(record),
-            "counts": counts(record),
-            "updated_at": data.get("updated_at"),
-        }
-
-    def summaries(self) -> list[dict]:
-        out = []
-        for a in self.store.list_affairs():
-            r = a["record"]
-            out.append({
-                "key": a["key"],
-                "number": r.get("number"),
-                "title": (r.get("title") or {}).get("de"),
-                "type": (r.get("type_harmonized") or {}).get("de") or (r.get("type_name") or {}).get("de"),
-                "documents": [d.get("name") for d in a.get("documents", [])],
-                "counts": counts(r),
-                "updated_at": a.get("updated_at"),
-            })
-        return sorted(out, key=lambda s: (-s["counts"]["open"], s["key"]))
-
-    def decide(self, key: str, body: dict) -> tuple[int, dict]:
-        with self.lock(key):
-            data = self.store.get_affair(key)
-            if data is None:
-                return 404, {"error": "no such affair"}
-            try:
-                record = apply_decision(
-                    data["record"], str(body.get("source", "")), str(body.get("decision", "")),
-                    str(body.get("by", "")), body.get("after"), body.get("path"), body.get("rule"),
-                )
-            except ValueError as e:
-                return 400, {"error": str(e)}
-            errors = self.contract.check(record)
-            if errors:
-                return 409, {"error": "the record would not fit the contract", "violations": errors[:5]}
-            self.store.save_record(key, record)
-            entry = next(e for e in sources_of(record) if e["source"] == body.get("source"))
-            self.store.add_decision({
-                "affair": key, "doc": entry["doc"], "block": entry["block"], "path": entry["path"],
-                "label": entry["label"], "how": entry["how"], "approve": entry["approve"],
-                "decision": entry["review"]["decision"], "before": entry["review"].get("before"),
-                "after": entry["value"], "by": entry["review"].get("by"), "at": entry["review"]["at"],
-                "rule": entry["review"].get("rule"),
-            })
-        return 200, self.affair(key) or {}
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -135,9 +73,11 @@ class Handler(BaseHTTPRequestHandler):
 
     def _api(self, app: App, method: str, route: str) -> tuple[int, object]:
         if route == "health" and method == "GET":
-            return 200, {"ok": True, "store": app.store.kind}
+            return 200, app.health()
         if route == "affairs" and method == "GET":
             return 200, app.summaries()
+        if route == "decisions" and method == "GET":
+            return 200, app.store.list_decisions()
         m = re.fullmatch(r"affairs/([^/]+)", route)
         if m and method == "GET":
             affair = app.affair(m.group(1))
@@ -146,7 +86,7 @@ class Handler(BaseHTTPRequestHandler):
         if m and method == "GET":
             return 200, app.store.list_decisions(m.group(1))
         if m and method == "POST":
-            body = self._body()
+            body = self._json_body()
             if not isinstance(body, dict):
                 return 400, {"error": "a JSON object is expected"}
             return app.decide(m.group(1), body)
@@ -156,22 +96,69 @@ class Handler(BaseHTTPRequestHandler):
             return (200, report) if report is not None else (404, {"error": "no such document"})
         m = re.fullmatch(r"documents/([^/]+)/pages/(\d+)(\.png)?", route)
         if m and method == "GET":
-            name, n = m.group(1), int(m.group(2))
-            if m.group(3):
-                image = app.store.page_path(name, n)
-                if image is None:
-                    return 404, {"error": "no such page"}
-                self._file(image, "image/png")
-                return 0, None
-            page = app.store.page_data(name, n)
-            return (200, page) if page is not None else (404, {"error": "no such page"})
+            return self._page(app, m.group(1), int(m.group(2)), bool(m.group(3)))
+        if route == "rules" and method == "GET":
+            return 200, app.rules()
+        m = re.fullmatch(r"rules/([^/]+)", route)
+        if m and method == "POST":
+            if not app.allowed(self.headers.get("X-Token")):
+                return 403, {"error": "the admin token is missing or wrong"}
+            body = self._json_body()
+            if not isinstance(body, dict):
+                return 400, {"error": "a JSON object is expected"}
+            return app.switch_rule(m.group(1), bool(body.get("active")), str(body.get("by", "")))
+        if route == "runs" and method == "GET":
+            return 200, app.jobs.list()
+        m = re.fullmatch(r"runs/([^/]+)", route)
+        if m and method == "GET":
+            job = app.jobs.get(m.group(1))
+            return (200, job) if job else (404, {"error": "no such run"})
+        if route == "runs" and method == "POST":
+            return self._run(app)
         return 404, {"error": "no such route"}
 
-    def _body(self) -> object:
+    def _page(self, app: App, name: str, n: int, image: bool) -> tuple[int, object]:
+        if image:
+            path = app.store.page_path(name, n)
+            if path is None:
+                return 404, {"error": "no such page"}
+            self._file(path, "image/png")
+            return 0, None
+        page = app.store.page_data(name, n)
+        return (200, page) if page is not None else (404, {"error": "no such page"})
+
+    def _run(self, app: App) -> tuple[int, object]:
+        if not app.allowed(self.headers.get("X-Token")):
+            return 403, {"error": "the admin token is missing or wrong"}
+        kind = (self.headers.get("Content-Type") or "").split(";")[0].strip().lower()
+        raw = self._raw_body()
+        if raw is None:
+            return 413, {"error": "the body is too large"}
+        if kind == "application/pdf":
+            model = self.headers.get("X-Model")
+            return app.run_pdf(self.headers.get("X-Name") or "upload.pdf", raw, None if model is None else model == "1")
+        try:
+            body = json.loads(raw.decode("utf-8")) if raw else {}
+        except (UnicodeDecodeError, json.JSONDecodeError):
+            return 400, {"error": "a JSON object or a PDF is expected"}
+        if not isinstance(body, dict) or "document" not in body:
+            return 400, {"error": "a JSON object with document, or a PDF, is expected"}
+        try:
+            doc_id = int(body["document"])
+        except (TypeError, ValueError):
+            return 400, {"error": "document must be the id of a document at OpenParlData"}
+        return app.run_document(doc_id, body.get("model"))
+
+    def _raw_body(self) -> bytes | None:
         length = int(self.headers.get("Content-Length") or 0)
         if length > BODY_LIMIT:
             return None
-        raw = self.rfile.read(length) if length else b""
+        return self.rfile.read(length) if length else b""
+
+    def _json_body(self) -> object:
+        raw = self._raw_body()
+        if raw is None:
+            return None
         try:
             return json.loads(raw.decode("utf-8")) if raw else {}
         except (UnicodeDecodeError, json.JSONDecodeError):
@@ -194,7 +181,24 @@ class Handler(BaseHTTPRequestHandler):
         if not str(target).startswith(str(APP)) or not target.is_file():
             # the app routes its own screens; any unknown path shows the app
             target = APP / "index.html"
+        if not target.is_file():
+            self._notice()
+            return
         self._file(target, TYPES.get(target.suffix, "application/octet-stream"))
+
+    def _notice(self) -> None:
+        """Without a built app the API still answers; the page says how to build the app."""
+        text = (
+            "<!doctype html><meta charset=utf-8><title>Docket</title>"
+            "<p>The API answers under /api/. The browser app is not built: run <code>make app</code> "
+            "(needs Node for the build only), or start the container, which builds it.</p>"
+        )
+        data = text.encode("utf-8")
+        self.send_response(200)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Length", str(len(data)))
+        self.end_headers()
+        self.wfile.write(data)
 
     def _file(self, target: Path, kind: str) -> None:
         data = target.read_bytes()
@@ -211,3 +215,9 @@ def serve(app: App, port: int, host: str = "0.0.0.0") -> ThreadingHTTPServer:
     server = ThreadingHTTPServer((host, port), Handler)
     server.app = app  # type: ignore[attr-defined]
     return server
+
+
+def start(config: Config, port: int | None = None, host: str = "0.0.0.0") -> tuple[ThreadingHTTPServer, App]:
+    """The app over the configured store, bound to the port."""
+    app = App(open_store(config), load_contract(config), config)
+    return serve(app, port if port is not None else config.port, host), app
