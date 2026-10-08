@@ -14,13 +14,15 @@ test:
 	python3 -m docket analyze --out storage/tests/pages data/documents/*/*.pdf
 	python3 tests/sources.py --got=storage/tests/pages --out=storage/tests/sources.md data/documents/*
 	python3 tests/text.py --got=storage/tests/pages data/documents/*
+	python3 tests/blocks.py --pages=storage/tests/pages --out=storage/tests/documents data/documents/*
 
-# Reads with the model: the page without a text layer, and two digital first pages as if they had none, held
-# against their text layer. Needs API_KEY in .env (copy .env.example). About 50 calls, one after the other,
-# under five minutes. Results and the raw exchange land in storage/bench/; the committed run is in results/.
+# With the model: the whole chain over the shipped documents (the scan page read, the leftover elements of the
+# first pages sorted), and two digital first pages read as if they had no text layer, held against their text
+# layer. Needs API_KEY in .env (copy .env.example). About 65 calls, one after the other, under five minutes.
+# Results and the raw exchange land in storage/bench/; the committed run is in results/.
 bench:
 	@test -f .env || { echo "copy .env.example to .env and set API_KEY"; exit 1; }
-	python3 -m docket read --out storage/bench/pages data/documents/aargau-scan/aargau-scan.pdf
+	python3 -m docket document --model --out storage/bench/documents data/documents/*/*.pdf
 	python3 tests/read.py --out=storage/bench/read.md data/documents/nidau-m185 data/documents/zuerich-219587
 
 # Rebuilds the reference JSON beside the shipped documents from their text layer. A preparation step, its

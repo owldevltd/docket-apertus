@@ -1,0 +1,20 @@
+{
+    "about": "Section names that open a section of a parliamentary document, lower case, as printed at the start of a short line; the number is how often each was found. Built from the working set on 6 October 2026; grows with every find.",
+    "sections": {
+        "begründung": 63,
+        "text": 41,
+        "antrag": 32,
+        "beschluss": 26,
+        "ausgangslage": 20,
+        "zusammenfassung": 15,
+        "antwort": 12,
+        "erwägungen": 1,
+        "sachverhalt": 1,
+        "einleitung": 1,
+        "fragen": 1,
+        "stellungnahme": 0,
+        "fazit": 0,
+        "vorbemerkung": 0,
+        "würdigung": 0
+    }
+}

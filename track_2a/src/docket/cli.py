@@ -1,11 +1,14 @@
 """The command line.
 
-    python -m docket analyze --out <dir> <file.pdf | page.ppm> ...
-    python -m docket read    --out <dir> <file.pdf> ...
+    python -m docket analyze  --out <dir> <file.pdf | page.ppm> ...
+    python -m docket read     --out <dir> <file.pdf> ...
+    python -m docket document --out <dir> [--model] <file.pdf> ...
 
 analyze writes per page <dir>/<name>-s<n>.json (the geometry and, from a PDF, the text of its text layer in the
 elements), <name>-s<n>.png (the page) and <name>-s<n>-page.png (the control image). read does the same and then
 reads the pages without a text layer with the model; the raw exchange lands in <dir>/<name>-s<n>.read/.
+document runs the whole chain and writes <dir>/<name>.json, the affair record, with the pages under
+<dir>/<name>/; with --model it reads scans and lets the model sort the leftover elements of the first pages.
 """
 
 from __future__ import annotations
@@ -23,6 +26,7 @@ from docket.page.analyze import analyze_page
 from docket.page.painter import draw_elements, draw_geometry
 from docket.page.raster import write_png
 from docket.page.render import render_pdf
+from docket.pipeline import build_document, load_contract, load_knowledge, process_pages
 from docket.read.reader import read_page
 from docket.text.layer import fill_text_layer
 
@@ -33,13 +37,52 @@ def main(argv: list[str] | None = None) -> int:
     helps = (
         ("analyze", "the geometry and the text layer of every page, without a model"),
         ("read", "analyze, then read pages without a text layer with the model"),
+        ("document", "the whole document: pages, blocks, the affair record; --model reads scans and sorts the rest"),
     )
     for name, help_text in helps:
         command = commands.add_parser(name, help=help_text)
         command.add_argument("--out", required=True, help="directory for the results")
+        if name == "document":
+            command.add_argument("--model", action="store_true", help="use the model for scans and the rest")
         command.add_argument("files", nargs="+", help="PDF files, or page images as PPM/PGM")
     args = parser.parse_args(argv)
+    if args.command == "document":
+        return run_document(Path(args.out), [Path(f) for f in args.files], args.model)
     return run(args.command, Path(args.out), [Path(f) for f in args.files])
+
+
+def run_document(out: Path, files: list[Path], with_model: bool) -> int:
+    config = load_config()
+    client = Client(config) if with_model else None
+    if client is not None and not config.api_key:
+        print("no API_KEY: copy .env.example to .env and fill it in", file=sys.stderr)
+        return 1
+    contract = load_contract(config)
+    knowledge = load_knowledge(config)
+    out.mkdir(parents=True, exist_ok=True)
+    for pdf in files:
+        if not pdf.is_file() or pdf.suffix.lower() != ".pdf":
+            print(f"not a PDF: {pdf}", file=sys.stderr)
+            continue
+        started = time.monotonic()
+        before = client.calls if client else 0
+        pages_dir = out / pdf.stem
+        pages_dir.mkdir(parents=True, exist_ok=True)
+        pages = process_pages(pdf, pages_dir, client)
+        record, report = build_document(pdf.stem, pages, knowledge, client, log=pages_dir / "sort.read")
+        errors = contract.check(record)
+        (out / f"{pdf.stem}.json").write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        kinds = ", ".join(f"{k} {v}" for k, v in sorted(report["blocks"].items(), key=lambda item: -item[1]))
+        calls = f"  {client.calls - before} calls" if client else ""
+        state = "valid" if not errors else f"{len(errors)} violations, first: {errors[0]}"
+        print(
+            f"{pdf.stem:<28} {len(pages)} pages  {sum(report['blocks'].values())} blocks ({kinds})"
+            f"  rest {report['rest']}{calls}  {state}  {time.monotonic() - started:.0f}s"
+        )
+        if client is not None and client.halted:
+            print(f"halted after HTTP {client.halted}", file=sys.stderr)
+            return 2
+    return 0
 
 
 def run(command: str, out: Path, files: list[Path]) -> int:

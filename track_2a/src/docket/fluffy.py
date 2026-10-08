@@ -40,6 +40,80 @@ INVERSE = 0.5
 # before these words a hyphen at the line end stays ("Bau- und Verkehrsdepartement")
 KEEP = ["und", "oder", "bzw.", "sowie", "resp.", "beziehungsweise"]
 
+# two lines belong to the same paragraph when they stand flush left within this share of the font size, their
+# top edges lie at most this many font sizes apart and the font size is the same within this share; STEP from
+# the distribution on 72 first pages: lines of a paragraph at 2.0 to 2.5, paragraphs start from 3.25
+FLUSH = 0.5
+STEP = 2.75
+SIZE = 0.15
+
+# a short first line before a long one is a heading, not the start of a paragraph: at most this many words and
+# narrower than this share of the next line
+HEAD_WORDS = 4
+HEAD_WIDTH = 0.6
+
+# a counter or bullet left of a line (up to this many font sizes away) makes it a list item, not a next line
+MARK = re.compile(r"^(\(?\d{1,2}(\.\d{1,2})*[.)]?|\(?[a-zA-Z][.)]|[IVX]+\.|[•·▪■◦○\-–—*»])$")
+BESIDE = 6.0
+
+
+def join_lines(elements: list[dict], px: float, section) -> list[dict]:
+    """Joins text elements that are lines of the same paragraph into one element, in reading order. `section`
+    says whether a text is a known section name, which stays a heading."""
+    ordered = sorted(elements, key=lambda e: (e["y"], e["x"]))
+    out: list[dict] = []
+    for e in ordered:
+        if out and _follows(out[-1], e, px, section) and not _marked(e, ordered, px):
+            p = out[-1]
+            p["content"] = hyphens(p["content"] + "\n" + e["content"])
+            right = max(p["x"] + p["width"], e["x"] + e["width"])
+            p["x"] = min(p["x"], e["x"])
+            p["width"] = right - p["x"]
+            p["height"] = e["y"] + e["height"] - p["y"]
+            for flag in ("approve", "isOCR"):
+                if flag in p or flag in e:
+                    p[flag] = bool(p.get(flag) or e.get(flag))
+            continue
+        out.append(dict(e))
+    for e in out:
+        if isinstance(e.get("content"), str):
+            e["content"] = e["content"].replace("\n", " ")
+    return out
+
+
+def _follows(p: dict, e: dict, px: float, section) -> bool:
+    """Whether e is the next line of the paragraph that ends with p."""
+    if p["type"] != "text" or e["type"] != "text" or not p.get("content") or not e.get("content"):
+        return False
+    size = float(p.get("fontSize") or 0)
+    nxt = float(e.get("fontSize") or 0)
+    if size <= 0 or nxt <= 0 or abs(size - nxt) > SIZE * size:
+        return False
+    # a heading (a known section name, or a short line before a long one) stays on its own
+    words = len(p["content"].split())
+    if section(p["content"]) is not None or (words <= HEAD_WORDS and p["width"] < HEAD_WIDTH * e["width"]):
+        return False
+    # a line ending in a colon introduces what follows (a quote, a list); that is a new block
+    if p["content"].rstrip().endswith(":") and e["content"].lstrip()[:1].isupper():
+        return False
+    # the top edge of the last line of the paragraph so far: one line up from its bottom
+    top = p["y"] + p["height"] - min(p["height"], e["height"])
+    return abs(e["x"] - p["x"]) <= FLUSH * size * px and e["y"] > top and e["y"] - top <= STEP * size * px
+
+
+def _marked(e: dict, all_elements: list[dict], px: float) -> bool:
+    """Whether a counter or bullet stands left of the line."""
+    size = float(e.get("fontSize") or 10) * px
+    for o in all_elements:
+        if o["type"] != "text" or not MARK.match((o.get("content") or "").strip()):
+            continue
+        mid = o["y"] + o["height"] / 2
+        right = o["x"] + o["width"]
+        beside = right <= e["x"] + 0.5 * size and e["x"] - right <= BESIDE * size
+        if beside and e["y"] - 0.5 * size <= mid <= e["y"] + e["height"] + 0.5 * size:
+            return True
+    return False
+
 
 def hyphens(text: str) -> str:
     """Heals hyphens at line ends: "Zu-\\nständigkeit" becomes "Zuständigkeit" when the next line continues in
