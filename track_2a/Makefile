@@ -25,6 +25,7 @@ test:
 	python3 tests/text.py --got=storage/tests/pages data/documents/*
 	python3 tests/blocks.py --pages=storage/tests/pages --out=storage/tests/documents data/documents/*
 	python3 tests/fields.py --pages=storage/tests/pages --documents=storage/tests/documents --out=storage/tests/fields.md data/documents/*
+	python3 tests/kinds.py --pages=storage/tests/pages --documents=storage/tests/documents --out=storage/tests/kinds.md data/documents/*
 	python3 tests/affairs.py --pages=storage/tests/pages --documents=storage/tests/documents --out=storage/tests/affairs.md --store=storage/tests/store data/documents/*
 	python3 tests/server.py --store=storage/tests/store --pages=storage/tests/pages
 	python3 tests/rules.py

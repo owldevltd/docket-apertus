@@ -10,5 +10,9 @@
     "language": "fr",
     "pages": 1,
     "text_layer": true,
-    "origin": "files.openparldata.ch/doc/NE/a4282b9aef28f3c38bf855246d885fd24acb289dd0d077a24d096b1624f28618"
+    "origin": "files.openparldata.ch/doc/NE/a4282b9aef28f3c38bf855246d885fd24acb289dd0d077a24d096b1624f28618",
+    "kind": {
+        "value": "submission",
+        "why": "Question to the Grand Conseil, signed"
+    }
 }

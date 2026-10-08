@@ -1,0 +1,48 @@
+{
+  "source": "the kinds of documents and the words that show them, measured 8 October 2026 on 48 documents of the file server against a reading by hand and on 64 documents of the working set; the order of the list is the rule: the first kind whose words stand on the first page wins, a document without any of them gets no kind",
+  "kinds": [
+    {
+      "id": "committee-report",
+      "name": { "de": "Kommissionsbericht", "fr": "Rapport de commission", "it": "Rapporto di commissione", "en": "Committee report" },
+      "headline": [ "bericht der kommission", "kommissionsbericht", "rapport de la commission", "rapporto della commissione", "commission de gestion", "commissione della gestione", "geschäftsprüfungskommission", "rechnungsprüfungskommission" ],
+      "sections": [ "kommission", "commission de", "commissione" ]
+    },
+    {
+      "id": "answer",
+      "name": { "de": "Antwort", "fr": "Réponse", "it": "Risposta", "en": "Answer" },
+      "headline": [ "beantwortung", "antwort", "stellungnahme", "réponse", "risposta" ],
+      "sections": [ "antwort", "stellungnahme", "beantwortung", "réponse", "risposta" ]
+    },
+    {
+      "id": "bill",
+      "name": { "de": "Vorlage", "fr": "Message", "it": "Messaggio", "en": "Bill" },
+      "headline": [ "bericht und antrag", "botschaft", "vorlage", "weisung", "message du conseil", "messaggio", "bericht der regierung", "rapport du conseil", "antrag des stadtrates", "antrag des gemeinderates", "antrag des regierungsrates" ],
+      "sections": []
+    },
+    {
+      "id": "minutes",
+      "name": { "de": "Protokoll", "fr": "Procès-verbal", "it": "Verbale", "en": "Minutes" },
+      "headline": [ "protokoll", "beschluss", "traktand", "auszug", "procès-verbal", "verbale", "séance", "seduta", "trattand", "sitzung vom", "ordre du jour", "ordine del giorno" ],
+      "sections": [ "beschluss", "traktandum" ]
+    },
+    {
+      "id": "act",
+      "name": { "de": "Erlass", "fr": "Acte", "it": "Atto", "en": "Act" },
+      "headline": [ "reglement", "verordnung", "gesetz", "geschäftsordnung", "règlement", "regolamento", "dekret", "statut" ],
+      "sections": []
+    },
+    {
+      "id": "submission",
+      "name": { "de": "Eingereichter Text", "fr": "Texte déposé", "it": "Testo depositato", "en": "Submission" },
+      "labels": [ "motion", "postulat", "interpellation", "anfrage", "initiative", "antrag", "interpellanza", "mozione", "postulato", "interrogazione", "question", "petition", "vorstoss", "anzug", "résolution" ],
+      "sections": [ "antrag", "begründung", "begruendung", "wortlaut", "text" ],
+      "needs": "a label of a submission on the first page, and one of: a section of the list, a signature block, the label in the headline"
+    },
+    {
+      "id": "attachment",
+      "name": { "de": "Beilage", "fr": "Annexe", "it": "Allegato", "en": "Attachment" },
+      "rule": false,
+      "note": "never set by the rule; a person sets it in the review"
+    }
+  ]
+}

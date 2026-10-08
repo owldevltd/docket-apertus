@@ -18,5 +18,9 @@
         "title": "Aufnahme eines neuen Paragrafen 20b zur Zuständigkeit der Subkommission Oberaufsicht Nachrichtendienst in die Geschäftsordnung (GO)",
         "begin_date": "2019-06-25",
         "type_harmonized": "Ergänzungsantrag"
+    },
+    "kind": {
+        "value": "submission",
+        "why": "Antrag auf Direktbeschluss with Text and Begründung"
     }
 }

@@ -57,6 +57,7 @@ class App:
                 "title": (r.get("title") or {}).get("de"),
                 "type": (r.get("type_harmonized") or {}).get("de") or (r.get("type_name") or {}).get("de"),
                 "documents": [d.get("name") for d in a.get("documents", [])],
+                "kinds": [d.get("article-type") for d in (r.get("docs") or {}).get("data", [])],
                 "counts": counts(r),
                 "updated_at": a.get("updated_at"),
             })

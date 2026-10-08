@@ -4,6 +4,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Api } from '../api/api';
 import { AffairSummary } from '../api/types';
 import { Icon } from '../shared/icon';
+import { kindName } from '../shared/words';
 
 // The affairs as result cards, the ones with open marks first; a switch keeps only those.
 @Component( {
@@ -30,5 +31,10 @@ export class AffairsList implements OnInit {
     toggle( value: boolean ): void {
         this.onlyOpen.set( value );
         localStorage.setItem( 'docket.onlyOpen', value ? '1' : '0' );
+    }
+
+    // the documents of an affair with their kinds, "Typ offen" where the rule found none
+    documents( a: AffairSummary ): string {
+        return a.documents.map( ( name, i ) => name + ' (' + kindName( ( a.kinds || [] )[ i ] ) + ')' ).join( ', ' );
     }
 }

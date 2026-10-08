@@ -18,5 +18,9 @@
         "title": "Einreichung einer Standesinitiative zur Einführung einer nationalen Elternzeit",
         "begin_date": "2023-09-14",
         "type_harmonized": "Ergänzungsantrag"
+    },
+    "kind": {
+        "value": "submission",
+        "why": "Antrag auf Einreichung einer Standesinitiative, with signatories"
     }
 }

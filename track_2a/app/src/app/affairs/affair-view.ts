@@ -7,7 +7,7 @@ import { Api } from '../api/api';
 import { Affair, Block, DecisionBody, FieldsReport, SourceEntry } from '../api/types';
 import { Icon } from '../shared/icon';
 import { Who } from '../shared/who';
-import { blocksOf } from '../shared/words';
+import { blocksOf, kindName } from '../shared/words';
 import { PageView } from './page-view';
 import { ValueCard } from './value-card';
 
@@ -46,6 +46,8 @@ export class AffairView implements OnInit {
         return docs.find( ( x ) => x.id === d?.id ) || docs[ this.doc() ];
     } );
     readonly blocks = computed<Block[]>( () => blocksOf( this.docRecord()?.body ) );
+    readonly kind = computed( () => this.docRecord()?.[ 'article-type' ] as string | undefined );
+    readonly kindText = computed( () => kindName( this.kind() ) );
     readonly docSources = computed( () => ( this.affair()?.sources || [] ).filter( ( s ) => s.doc === this.docRecord()?.id ) );
     readonly sorted = computed( () => [ ...( this.affair()?.sources || [] ) ].sort( ( a, b ) => Number( b.open ) - Number( a.open ) ) );
     readonly image = computed( () => {

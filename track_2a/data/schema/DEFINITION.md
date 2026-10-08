@@ -44,7 +44,7 @@ Everything from OpenParlData stays with its name and form: the affair with `docs
 | Key | Content |
 | --- | --- |
 | `schema` | version of this definition, here `"0.8"` |
-| `sources` | places for values whose own place carries no `source` (`number`, `title.de`, `type_name.de`, `begin_date`, `article-version`, `abstract.de`, `kwd-group.<n>`): per entry `path` (the way to the value, with dots), `doc`, `block`, `how`, `approve` |
+| `sources` | places for values whose own place carries no `source` (`number`, `title.de`, `type_name.de`, `begin_date`, `article-version`, `article-type`, `abstract.de`, `kwd-group.<n>`): per entry `path` (the way to the value, with dots), `doc`, `block`, `how`, `approve` |
 | `custom-meta` | printed header entries without a place of their own (file reference, department): `meta-name`, `meta-value` |
 | `related-article` | related affairs: `affair_id` or `number` |
 | `related-object` (dynamic) | a reference to something that is not an affair (an act, a plan, a report): `text`, `uri` when there is one |
@@ -56,6 +56,7 @@ Everything from OpenParlData stays with its name and form: the affair with `docs
 | --- | --- |
 | `page-count` | number of pages |
 | `article-version` (dynamic) | the version as printed ("Fassung nach 2. Lesung") |
+| `article-type` (dynamic) | the kind of the document in the affair, its role rather than the affair's type: `submission` (the text handed in), `answer`, `bill`, `minutes`, `committee-report`, `act`, `attachment`. Set by code from the words of the first page (`data/knowledge/kinds.json`, the list grows with the knowledge), absent when none of them stands there; a person confirms it in the review |
 | `abstract` (dynamic) | a summary, per language as OpenParlData has it (`{ "de": …, "fr": … }`); this covers `trans-abstract` too |
 | `conference` (dynamic) | the session or meeting the document names: `conf-name`, `conf-date`, `conf-loc`. Only when the document is not already attached to an OpenParlData meeting (`meeting_id`) |
 | `journal-meta` (dynamic) | press and periodicals only: `journal-title`, `publisher-name`, `issn` |

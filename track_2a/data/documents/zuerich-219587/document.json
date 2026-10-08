@@ -18,5 +18,9 @@
         "title": "Standesinitiative zur Kompetenzübertragung an Kantone für Arbeitsbewilligungsverlängerung von Asylsuchenden mit Negativentscheid",
         "begin_date": "2018-11-27",
         "type_harmonized": "Parlamentarische Initiative"
+    },
+    "kind": {
+        "value": "submission",
+        "why": "Parlamentarische Initiative with Begründung and signatories"
     }
 }

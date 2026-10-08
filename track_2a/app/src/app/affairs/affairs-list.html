@@ -17,7 +17,7 @@
                 <b>Geschäft</b>
                 <span class="sep">|</span>{{ a.number || '–' }}
                 <span class="sep">|</span>{{ a.type || '–' }}
-                <span class="sep">|</span>{{ a.documents.join( ', ' ) }}
+                <span class="sep">|</span>{{ documents( a ) }}
             </div>
         </div>
         <div class="side">

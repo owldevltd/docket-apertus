@@ -18,5 +18,9 @@
         "title": "Betreffend eMobilität Wettingen",
         "begin_date": "2017-06-22",
         "type_harmonized": "Motion"
+    },
+    "kind": {
+        "value": "submission",
+        "why": "Motion with Begründung"
     }
 }

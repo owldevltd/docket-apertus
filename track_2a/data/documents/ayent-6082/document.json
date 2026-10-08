@@ -10,5 +10,9 @@
     "language": "fr",
     "pages": 4,
     "text_layer": true,
-    "origin": "files.openparldata.ch/doc/6082/bad53e67713716281e379824943888427be9a5e7a05621ebc6e83873e681cc43; one of the eight bodies that hold documents but no affairs"
+    "origin": "files.openparldata.ch/doc/6082/bad53e67713716281e379824943888427be9a5e7a05621ebc6e83873e681cc43; one of the eight bodies that hold documents but no affairs",
+    "kind": {
+        "value": "minutes",
+        "why": "Séance du Conseil communal, decisions of a sitting"
+    }
 }

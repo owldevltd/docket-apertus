@@ -13,6 +13,7 @@ export interface AffairSummary {
     title: string | null;
     type: string | null;
     documents: string[];
+    kinds: ( string | null )[];
     counts: Counts;
     updated_at: string | null;
 }

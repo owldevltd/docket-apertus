@@ -186,6 +186,7 @@ h2 {
     &.running { background: var( --opd-link ); }
     &.queued { background: var( --opd-grey ); }
     &.soft { background: var( --opd-red-soft ); color: var( --opd-red ); }
+    &.kind { background: var( --opd-accent ); color: var( --opd-dark ); }
 }
 
 // key-value rows as in their detail view

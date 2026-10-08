@@ -62,7 +62,7 @@ class Knowledge:
 
     def __init__(self, sections: dict[str, int], values: dict[str, dict[str, int]] | None = None,
                  types: dict[str, dict] | None = None, forms: dict[str, dict[str, int]] | None = None,
-                 bodies: dict[str, dict] | None = None):
+                 bodies: dict[str, dict] | None = None, kinds: list[dict] | None = None):
         self.sections = dict(sections)
         self.values = {name: dict(seen) for name, seen in (values or {}).items()}
         # from the export of OpenParlData: the harmonised type per label, the number forms per parliament, and
@@ -70,6 +70,8 @@ class Knowledge:
         self.types = dict(types or {})
         self.forms = dict(forms or {})
         self.bodies = dict(bodies or {})
+        # the kinds of documents with their words, in the order of the rule (data/knowledge/kinds.json)
+        self.kinds = list(kinds or [])
 
     def learn(self, values: dict[str, list[dict]]) -> None:
         """Counts the values that stood on the page, per field."""

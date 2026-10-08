@@ -12,6 +12,7 @@ export const LABELS: Record<string, string> = {
     'kwd-group': 'Schlagwort',
     'docs.abstract': 'Zusammenfassung',
     'docs.article-version': 'Fassung',
+    'docs.article-type': 'Dokumenttyp',
     'contributors.fullname': 'Beteiligte',
     'contributors.party': 'Partei',
     'contributors.on-behalf-of': 'Im Namen von',
@@ -43,6 +44,21 @@ export const STATE: Record<string, string> = {
     done: 'erfolgreich',
     failed: 'fehlgeschlagen',
 };
+
+// the kinds of documents (data/knowledge/kinds.json); an unknown one is shown as it is
+export const DOCUMENT_KINDS: Record<string, string> = {
+    'submission': 'Eingereichter Text',
+    'answer': 'Antwort',
+    'bill': 'Vorlage',
+    'minutes': 'Protokoll',
+    'committee-report': 'Kommissionsbericht',
+    'act': 'Erlass',
+    'attachment': 'Beilage',
+};
+
+export function kindName( kind: string | null | undefined ): string {
+    return kind ? DOCUMENT_KINDS[ kind ] || kind : 'Typ offen';
+}
 
 export const KINDS: Record<string, string> = {
     'prefix-off': 'Anfang weg',

@@ -39,6 +39,14 @@
     }
 }
 
+.state {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
 .split {
     display: grid;
     grid-template-columns: minmax( 380px, 1fr ) minmax( 360px, 1fr );

@@ -13,6 +13,7 @@
             </div>
         </div>
         <div class="state">
+            <span class="chip" [class.soft]="!kind()" [class.kind]="!!kind()" title="Dokumenttyp">{{ kindText() }}</span>
             <span class="chip" [class.soft]="a.counts.open > 0" [class.done]="a.counts.open === 0 && a.counts.done > 0">
                 {{ a.counts.open }} offen · {{ a.counts.done }} erledigt · {{ a.counts.places }} Fundstellen
             </span>

@@ -126,7 +126,7 @@
     },
     "sources": {
       "type": "array",
-      "description": "places in the document for values whose own place carries no source (number, title, type_name, begin_date, article-version, abstract, kwd-group); path is the way to the value, with dots",
+      "description": "places in the document for values whose own place carries no source (number, title, type_name, begin_date, article-version, article-type, abstract, kwd-group); path is the way to the value, with dots",
       "items": {
         "type": "object",
         "required": [
@@ -247,6 +247,11 @@
           "type": "string",
           "description": "the version, as printed",
           "dynamic": true
+        },
+        "article-type": {
+          "type": "string",
+          "dynamic": true,
+          "description": "the kind of the document in the affair, from data/knowledge/kinds.json: submission, answer, bill, minutes, committee-report, act, attachment; set by the rule from the words of the first page, absent when none of them stands there; its place is in the root sources"
         },
         "abstract": {
           "$ref": "#/$defs/languages",

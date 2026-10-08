@@ -11,6 +11,7 @@ from docket.affair.merge import SCHEMA
 from docket.affair.validator import Contract
 from docket.config import Config
 from docket.document.bridge import Knowledge, add_blocks, build_blocks
+from docket.document.kind import document_kind
 from docket.document.sorter import sort_rest
 from docket.fields.fields import Fields, load_fields
 from docket.fields.filler import fill_document
@@ -38,7 +39,24 @@ def load_knowledge(config: Config) -> Knowledge:
     types = part("types.json", "types")
     forms = part("number-forms.json", "forms")
     bodies = part("bodies.json", "bodies")
-    return Knowledge(sections, types=types, forms=forms, bodies=bodies)
+    kinds = part("kinds.json", "kinds")
+    return Knowledge(sections, types=types, forms=forms, bodies=bodies, kinds=kinds)
+
+
+def add_kind(record: dict, pages: list[dict], knowledge: Knowledge, printed_type: str | None = None) -> dict | None:
+    """Sets the document's kind (article-type) on its entry with a place in the root sources, when the words
+    of a kind stand on the first page; a person has to look (approve), since the rule reads words, not
+    meaning. Returns what was found."""
+    entry = record["docs"]["data"][0]
+    found = document_kind(pages, entry["body"], knowledge, printed_type)
+    if found is None:
+        return None
+    entry["article-type"] = found["kind"]
+    at = record["docs"]["data"].index(entry)
+    place = {"path": f"docs.data.{at}.article-type", "doc": entry["id"], "block": found["block"] or "b1",
+             "how": "derived", "approve": True}
+    record.setdefault("sources", []).append(place)
+    return found
 
 
 def identify(report: dict[str, dict], fields: Fields, pages: list[dict], name: str, knowledge: Knowledge) -> Identity:

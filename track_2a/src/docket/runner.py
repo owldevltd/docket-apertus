@@ -20,7 +20,8 @@ from docket.fields.placer import blocks_of, day, find_block
 from docket.model.client import Client
 from docket.page.painter import draw_blocks
 from docket.pipeline import (
-    build_document, fill_fields, first_pages, identify, load_contract, load_field_file, load_knowledge, process_pages,
+    add_kind, build_document, fill_fields, first_pages, identify, load_contract, load_field_file, load_knowledge,
+    process_pages,
 )
 from docket.store import open_store
 from docket.store.review import carry_reviews
@@ -68,7 +69,8 @@ def run_affairs(files: list[Path], out: Path, config: Config, with_model: bool, 
         kinds = ", ".join(f"{k} {v}" for k, v in sorted(p.report["blocks"].items(), key=lambda item: -item[1]))
         calls = f"  {p.calls} calls" if client else ""
         state = "valid" if not p.errors else f"{len(p.errors)} violations, first: {p.errors[0]}"
-        summary = f"  {_states(p.filled)}  key {p.identity.key}" if p.identity is not None else ""
+        kind = f"  kind {p.report['kind']['kind']}" if p.report.get("kind") else "  kind -"
+        summary = f"  {_states(p.filled)}  key {p.identity.key}{kind}" if p.identity is not None else kind
         say(
             f"{p.name:<28} {len(p.pages)} pages  {sum(p.report['blocks'].values())} blocks ({kinds})"
             f"  rest {p.report['rest']}{calls}  {state}{summary}  {p.seconds:.0f}s"
@@ -78,7 +80,7 @@ def run_affairs(files: list[Path], out: Path, config: Config, with_model: bool, 
         result.documents.append({
             "name": p.name, "pages": len(p.pages), "blocks": sum(p.report["blocks"].values()), "calls": p.calls,
             "valid": not p.errors, "key": p.identity.key if p.identity else None, "seconds": round(p.seconds),
-            "identity": asdict(p.identity) if p.identity else None,
+            "identity": asdict(p.identity) if p.identity else None, "kind": p.report.get("kind"),
         })
         body = p.record["docs"]["data"][0]["body"]
         values = values_of(p.filled["fields"])
@@ -108,6 +110,10 @@ def _process(pdf: Path, out: Path, client: Client | None, contract: Contract, kn
     pages = process_pages(pdf, pages_dir, client, keep)
     record, report = build_document(pdf.stem, pages, knowledge, client, log=pages_dir / "sort.read")
     record, filled = fill_fields(record, pages, fields, contract, client, knowledge, log=pages_dir / "fields.read")
+    # the kind of the document from the words of its first page, with the printed type the model read
+    printed = _printed_type(filled["fields"], fields)
+    found = add_kind(record, pages, knowledge, printed)
+    report["kind"] = found
     errors = contract.check(record)
     (out / f"{pdf.stem}.json").write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     identity = None
@@ -116,6 +122,13 @@ def _process(pdf: Path, out: Path, client: Client | None, contract: Contract, kn
         _write_fields(out, pdf.stem, record, pages, filled, fields, keep, identity)
     calls = client.calls - before if client else 0
     return Processed(pdf.stem, pages, record, report, filled, identity, errors, calls, time.monotonic() - started)
+
+
+def _printed_type(report: dict[str, dict], fields: Fields) -> str | None:
+    """The type the model read from the page (the field at type_name.de), when it stood on the page."""
+    name = next((n for n, f in fields.fields.items() if f.path == ["type_name", "de"]), None)
+    r = report.get(name or "", {})
+    return r.get("value") if r.get("state") == "on the page" else None
 
 
 def _write_fields(out: Path, name: str, record: dict, pages: list[dict], filled: dict, fields: Fields,
