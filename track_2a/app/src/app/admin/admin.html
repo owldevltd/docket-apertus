@@ -44,30 +44,50 @@
             }
             @case ( 'rules' ) {
                 <h2>Regeln</h2>
-                <p class="muted">Dieselbe Änderung dreimal am selben Feld wird zur Regel und gilt dann für den ganzen Bestand; jede
-                    Anwendung steht als Entscheidung „Regel“ und lässt sich einzeln zurücknehmen.</p>
+                <p class="muted">Dieselbe Änderung zweimal am selben Feld schlägt eine Regel vor. Angewandt wird sie erst nach einem Ja;
+                    jede Anwendung steht als Entscheidung „Regel“ und lässt sich einzeln zurücknehmen. Eine Regel, der eine
+                    Entscheidung von Hand widerspricht, wird nicht vorgeschlagen.</p>
+                <div class="wide">
                 <table class="plain">
                     <thead>
-                        <tr><th>Regel</th><th>Feld</th><th>Muster</th><th class="num">Zähler</th><th class="num">Angewandt</th>
-                            <th class="num">Bestätigt</th><th class="num">Zurück</th><th>Aktiv</th></tr>
+                        <tr><th>Regel</th><th>Feld</th><th>Was sie tut</th><th>Stand</th><th>Entscheide</th><th></th></tr>
                     </thead>
                     <tbody>
-                        @for ( r of rules(); track r.id ) {
-                            <tr>
-                                <td>{{ r.id }}</td>
+                        @for ( r of ruleRows(); track r.id ) {
+                            <tr [class.quiet]="r.state === 'counting'">
+                                <td class="id">{{ r.id }}</td>
                                 <td>{{ words.LABELS[ r.field ] || r.field }}</td>
-                                <td>{{ words.KINDS[ r.kind ] || r.kind }} „{{ r.parameter }}“</td>
-                                <td class="num">{{ r.count }}</td>
-                                <td class="num">{{ r.applied }}</td>
-                                <td class="num">{{ r.confirmed }}</td>
-                                <td class="num">{{ r.withdrawn }}</td>
-                                <td><mat-slide-toggle [checked]="r.active" (change)="toggle( r, $event.checked )" [disabled]="busy()" /></td>
+                                <td>{{ ruleWords( r ) }}
+                                    @if ( r.state === 'proposed' && r.reach ) {
+                                        @if ( r.reach.count ) {
+                                            <div class="muted">träfe {{ r.reach.count }} {{ r.reach.count === 1 ? 'Wert' : 'Werte' }} in {{ r.reach.affairs }}
+                                                {{ r.reach.affairs === 1 ? 'Geschäft' : 'Geschäften' }}@for ( x of r.reach.examples.slice( 0, 2 ); track x.key + x.before ) { · „{{ x.before }}“ → „{{ x.after }}“ }</div>
+                                        } @else {
+                                            <div class="muted">trifft im Bestand derzeit keinen weiteren Wert</div>
+                                        }
+                                    }
+                                </td>
+                                <td><span class="chip" [class.running]="r.state === 'proposed'" [class.done]="r.state === 'active'">{{ words.RULE_STATE[ r.state || '' ] || r.state }}</span></td>
+                                <td>{{ r.count }} dafür · {{ r.against || 0 }} dagegen
+                                    @if ( r.applied || r.confirmed || r.withdrawn ) {
+                                        <div class="muted">{{ r.applied }} angewandt · {{ r.confirmed }} bestätigt · {{ r.withdrawn }} zurück</div>
+                                    }
+                                </td>
+                                <td class="act">
+                                    @if ( r.state === 'proposed' ) {
+                                        <button mat-flat-button (click)="answer( r, true )" [disabled]="busy()">Annehmen</button>
+                                        <button mat-button (click)="answer( r, false )" [disabled]="busy()">Ablehnen</button>
+                                    } @else if ( r.state === 'active' || r.state === 'off' ) {
+                                        <mat-slide-toggle [checked]="r.active" (change)="toggle( r, $event.checked )" [disabled]="busy()" />
+                                    }
+                                </td>
                             </tr>
                         } @empty {
-                            <tr><td colspan="8" class="empty">Noch keine Regeln.</td></tr>
+                            <tr><td colspan="6" class="empty">Noch keine Regeln.</td></tr>
                         }
                     </tbody>
                 </table>
+                </div>
             }
             @case ( 'vocabulary' ) {
                 <app-vocabulary />

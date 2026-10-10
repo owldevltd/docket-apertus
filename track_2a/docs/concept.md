@@ -37,7 +37,8 @@ them without a text layer; only 14 are a motion or its answer. The affair types 
   derived (every word of it in the block); what the model only cites or composes is marked for a person. A
   value with no place does not come from the document and is dropped.
 - **The person's decision stays with the value.** Confirmed, changed or rejected, at the place, with the
-  value before; the same change made three times becomes a rule, and every decision is teaching material.
+  value before; the same change made twice proposes a rule that a person accepts or declines, and every
+  decision is teaching material.
 - **Prior knowledge is a table, not the model.** The harmonised type, the number forms per parliament, the
   section names and the values seen come from the export and from the documents, checked, and are shipped
   with the pipeline.

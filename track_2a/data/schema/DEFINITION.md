@@ -123,7 +123,7 @@ Every value that comes from the document points at its block with `source`: `{ "
 
 What a person does with a value stands at its place as `review`: `{ "at": <time>, "decision": "confirmed" | "changed" | "rejected", "before": <the value before>, "by": <who>, "rule": <rule> }`. The value itself is changed in place; `before` keeps the old one. `rule` names the general rule when the change came from one ("Kanton X" → "X") or founded one.
 
-The review view shows, for a flagged value, how many further documents carry the same value with the same flag (same field, same `how`, same pattern), counted over the collected affairs. A change a person makes the same way several times (from the third on) becomes a general rule: the same replacement on every value with the same pattern, with `rule` at every place; the project's prior knowledge keeps the rules. The decisions are at the same time the teaching material for a small model that later learns which values a person has to see.
+The review view shows, for a flagged value, how many further documents carry the same value with the same flag (same field, same `how`, same pattern), counted over the collected affairs. A change a person makes the same way twice proposes a general rule: the same replacement on every value with the same pattern. The proposal says how many values it would change; a person accepts or declines it, and only an accepted rule changes values, with `rule` at every place. A rule a decision by hand speaks against is not proposed. The store keeps the rules. The decisions are at the same time the teaching material for a small model that later learns which values a person has to see.
 
 ## Fields without a fixed list of values
 

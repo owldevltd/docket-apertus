@@ -69,10 +69,14 @@ rejected, with the value left in place and marked, so an export can leave it out
 machine's signal; open means approve without review. A new run over a document that is already stored keeps
 every review, matched by document name, block and path.
 
-The same change three times on the same field becomes a rule (`store/rules.py`): prefix or suffix off or on,
-a letter read for a digit, the spelling. An active rule changes every fitting value of that field in the
-store, each with a review that names the rule, so every application can be seen and taken back; a person can
-switch a rule off and on, and what people confirm or withdraw is counted on it.
+The same change twice on the same field proposes a rule (`store/rules.py`): prefix or suffix off or on, a
+letter read for a digit, the spelling, or the same value becoming the same value. Nothing is applied by
+itself. The answer to the second decision carries the proposal with its reach, how many values in how many
+affairs it would change and what they would become, and the app asks. A yes makes the rule active: it changes
+every fitting value of that field in the store, each with a review that names the rule, so every application
+can be seen and taken back. A no keeps the rule from being proposed again. A rule a decision by hand speaks
+against is not proposed: a person confirmed a value it would change, or changed it into something else. A
+person can switch an accepted rule off and on, and what people confirm or withdraw is counted on it.
 
 The vocabulary (`store/vocabulary.py`) is a stem that can be changed. When the store is opened it is brought
 up to the stem of the checkout: an empty store is filled, a newer stem replaces every row nobody changed.

@@ -20,6 +20,29 @@
         </div>
     </div>
 
+    @if ( proposal(); as p ) {
+        <div class="proposal card">
+            <div class="ask">
+                <b>Dieselbe Änderung passt auf {{ p.reach!.count }} {{ p.reach!.count === 1 ? 'weiteren Wert' : 'weitere Werte' }}
+                    in {{ p.reach!.affairs }} {{ p.reach!.affairs === 1 ? 'Geschäft' : 'Geschäften' }}.</b>
+                {{ fieldOf( p ) }}: {{ ruleWords( p ) }}. Soll ich die gleich mit geradeziehen?
+            </div>
+            <ul>
+                @for ( x of p.reach!.examples; track x.key + x.before ) {
+                    <li><a [routerLink]="[ '/affairs', x.key ]">{{ x.key }}</a>: „{{ x.before }}“ → „{{ x.after }}“</li>
+                }
+                @if ( p.reach!.count > p.reach!.examples.length ) {
+                    <li class="muted">und {{ p.reach!.count - p.reach!.examples.length }} weitere</li>
+                }
+            </ul>
+            <div class="acts">
+                <button mat-flat-button (click)="answer( p, true )">Ja, geradeziehen</button>
+                <button mat-stroked-button (click)="answer( p, false )">Nein, so nicht</button>
+                <button mat-button (click)="proposal.set( null )">Später</button>
+            </div>
+        </div>
+    }
+
     <div class="split">
         <div class="left card">
             @if ( a.documents.length > 1 ) {

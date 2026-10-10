@@ -51,3 +51,22 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+// a rule that only counts so far stays in the background
+tr.quiet td {
+    color: var( --opd-grey );
+}
+
+.act {
+    white-space: nowrap;
+    text-align: right;
+}
+
+.id {
+    white-space: nowrap;
+}
+
+// a table wider than a narrow screen scrolls inside its frame
+.wide {
+    overflow-x: auto;
+}

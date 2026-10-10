@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Block, SourceEntry } from '../api/types';
+import { Block, Rule, SourceEntry } from '../api/types';
 
 // The words of the app, German first; the field names of the record translated for the screen. The fields
 // file names its fields in German already (nummer, titel), the record keeps OpenParlData's keys.
@@ -60,15 +60,6 @@ export function kindName( kind: string | null | undefined ): string {
     return kind ? DOCUMENT_KINDS[ kind ] || kind : 'Typ offen';
 }
 
-export const KINDS: Record<string, string> = {
-    'prefix-off': 'Anfang weg',
-    'suffix-off': 'Ende weg',
-    'prefix-on': 'Anfang dazu',
-    'suffix-on': 'Ende dazu',
-    'digits': 'Ziffern',
-    'spelling': 'Schreibung',
-};
-
 // the lists of the vocabulary, and where a row comes from
 export const LISTS: Record<string, string> = {
     types: 'Arten',
@@ -80,6 +71,30 @@ export const ORIGIN: Record<string, string> = {
     stem: 'Stamm',
     person: 'von Hand',
 };
+
+export const RULE_STATE: Record<string, string> = {
+    counting: 'zählt',
+    proposed: 'vorgeschlagen',
+    active: 'aktiv',
+    declined: 'abgelehnt',
+    contradicted: 'widersprochen',
+    off: 'aus',
+};
+
+// what a rule does, in words
+export function ruleWords( rule: Rule ): string {
+    const p = '„' + rule.parameter + '“';
+    switch ( rule.kind ) {
+        case 'prefix-off': return p + ' am Anfang weg';
+        case 'suffix-off': return p + ' am Ende weg';
+        case 'prefix-on': return p + ' am Anfang dazu';
+        case 'suffix-on': return p + ' am Ende dazu';
+        case 'digits': return 'Buchstabe als Ziffer gelesen (' + rule.parameter + ')';
+        case 'spelling': return 'Schreibung ' + p;
+        case 'value': return p + ' wird „' + ( rule.to ?? '' ) + '“';
+        default: return rule.kind + ' ' + p;
+    }
+}
 
 export function labelOf( entry: SourceEntry ): string {
     return LABELS[ entry.label ] || entry.label;

@@ -78,3 +78,27 @@
     flex-direction: column;
     gap: 8px;
 }
+
+// the question after the second decision of a kind: plain, above the page, so it is seen and can wait
+.proposal {
+    margin-bottom: 12px;
+    padding: 14px 16px;
+    border-left: 4px solid var( --opd-link );
+
+    .ask b {
+        display: block;
+        margin-bottom: 2px;
+    }
+
+    ul {
+        margin: 8px 0 10px;
+        padding-left: 18px;
+        font-size: 13px;
+    }
+
+    .acts {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+}

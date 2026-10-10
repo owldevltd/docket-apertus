@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,14 +12,15 @@ import { Api } from '../api/api';
 import { Health, Job, Rule } from '../api/types';
 import { Icon } from '../shared/icon';
 import { Who } from '../shared/who';
-import { KINDS, LABELS, STATE, StampPipe } from '../shared/words';
+import { LABELS, RULE_STATE, STATE, StampPipe, ruleWords } from '../shared/words';
 import { VocabularyArea } from './vocabulary';
 
 type Area = 'runs' | 'rules' | 'vocabulary' | 'process';
 
 // The admin as in OpenParlData's panel: a drawer with the areas at the left, the area at the right. Runs
-// start here (a PDF, or a document of theirs by id) and are watched while they run; rules are seen and
-// switched here; the vocabulary is seen and changed in an area of its own (vocabulary.ts).
+// start here (a PDF, or a document of theirs by id) and are watched while they run; rules are seen here, a
+// proposed one answered, an accepted one switched; the vocabulary is seen and changed in an area of its own
+// (vocabulary.ts).
 @Component( {
     selector: 'app-admin',
     imports: [ FormsModule, RouterLink, MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule,
@@ -42,7 +43,13 @@ export class Admin implements OnInit, OnDestroy {
     readonly withModel = signal( true );
     readonly token = signal( localStorage.getItem( 'docket.token' ) || '' );
     readonly busy = signal( false );
-    readonly words = { STATE, KINDS, LABELS };
+    readonly words = { STATE, LABELS, RULE_STATE };
+    readonly ruleWords = ruleWords;
+    // the rules that wait for an answer first, then the accepted ones, last those that only count
+    readonly ruleRows = computed( () => {
+        const order = [ 'proposed', 'active', 'off', 'declined', 'contradicted', 'counting' ];
+        return [ ...this.rules() ].sort( ( a, b ) => order.indexOf( a.state || 'counting' ) - order.indexOf( b.state || 'counting' ) );
+    } );
     readonly areas: { id: Area; name: string; icon: string }[] = [
         { id: 'runs', name: 'Läufe', icon: 'runs' },
         { id: 'rules', name: 'Regeln', icon: 'rule' },
@@ -102,6 +109,11 @@ export class Admin implements OnInit, OnDestroy {
             this.docId.set( null );
             this.area.set( 'runs' );
         } );
+    }
+
+    async answer( rule: Rule, accept: boolean ): Promise<void> {
+        const by = this.who.require();
+        await this.guard( () => this.api.answerRule( rule.id, accept, by ) );
     }
 
     async toggle( rule: Rule, active: boolean ): Promise<void> {

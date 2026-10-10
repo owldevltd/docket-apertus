@@ -1,6 +1,6 @@
 """What the web server answers with: the affairs and their values with a place, the decisions and what they
-set in motion (the general repair), the vocabulary, the runs of the admin. One object, shared by the request
-handlers."""
+set in motion (a rule proposed, a rule applied), the vocabulary, the runs of the admin. One object, shared by
+the request handlers."""
 
 from __future__ import annotations
 
@@ -107,8 +107,8 @@ class App:
             self.store.save_record(key, record)
             entry = next(e for e in sources_of(record) if e["source"] == source_path)
             self._log(key, entry)
-            self._rules_after(key, entry, earlier)
-        return 200, self.affair(key) or {}
+            proposals = self._rules_after(key, entry, earlier)
+        return 200, {**(self.affair(key) or {}), "proposals": proposals}
 
     def _log(self, key: str, entry: dict) -> None:
         review = entry["review"]
@@ -119,23 +119,49 @@ class App:
             "by": review.get("by"), "at": review["at"], "rule": review.get("rule"),
         })
 
-    def _rules_after(self, key: str, entry: dict, earlier: dict | None) -> None:
-        """Counts the change for the general repair, and applies a rule that just became active."""
-        rules = Rules(self.store.get_rules())
+    def _rules_after(self, key: str, entry: dict, earlier: dict | None) -> list[dict]:
+        """Counts a decision by hand for the learning: on the rule it took back or confirmed, against the rules
+        it contradicts, on the patterns its change carries. Returns the rules that stand proposed for this
+        field and would change something, the one that reaches furthest first; nothing is applied here."""
         review = entry["review"]
+        if review.get("by") == "rule":
+            return []
+        rules = Rules(self.store.get_rules())
         changed = False
         # a person confirms or takes back what a rule had set
-        if earlier and earlier.get("review") and earlier["review"].get("rule") and review.get("by") != "rule":
+        if earlier and earlier.get("review") and earlier["review"].get("rule"):
             rules.tally(earlier["review"]["rule"], "confirmed" if review["decision"] == "confirmed" else "withdrawn")
             changed = True
-        if review["decision"] == "changed" and review.get("by") != "rule" and "before" in review:
-            rule = rules.note(entry["label"], review["before"], str(entry["value"]), key, review.get("by", ""))
-            changed = changed or rule is not None
-            if rule is not None and rule["activated"]:
-                rule["applied"] = rules.get(rule["id"]).get("applied", 0) + self._apply_rule(rules.get(rule["id"]))
-                rules.get(rule["id"])["applied"] = rule["applied"]
+        value = None if entry["value"] is None else str(entry["value"])
+        before = review.get("before") if review["decision"] == "changed" else value
+        if review["decision"] in ("confirmed", "changed") and before is not None:
+            changed = rules.speak_against(entry["label"], before, value, review["decision"]) or changed
+        if review["decision"] == "changed" and "before" in review and value is not None:
+            changed = bool(rules.note(entry["label"], review["before"], value, key, review.get("by", ""))) or changed
         if changed:
             self.store.put_rules(rules.rows)
+        return self._proposals(rules, entry["label"])
+
+    def _proposals(self, rules: Rules, field: str | None = None) -> list[dict]:
+        out = [{**r, "reach": self._reach(r)} for r in rules.proposed(field)]
+        return sorted((r for r in out if r["reach"]["count"]), key=lambda r: -r["reach"]["count"])
+
+    def _reach(self, rule: dict) -> dict:
+        """What a rule would change in the store: how many values in how many affairs, with examples. The same
+        values _apply_rule changes: of the rule's field, without a review, fitting the rule."""
+        count, affairs, examples = 0, set(), []
+        for a in self.store.list_affairs():
+            for e in sources_of(a["record"]):
+                if e["label"] != rule["field"] or e["review"] is not None or e["value"] is None:
+                    continue
+                after = apply(rule, str(e["value"]))
+                if after is None:
+                    continue
+                count += 1
+                affairs.add(a["key"])
+                if len(examples) < SAME_EXAMPLES:
+                    examples.append({"key": a["key"], "before": str(e["value"]), "after": after})
+        return {"count": count, "affairs": len(affairs), "examples": examples}
 
     def _apply_rule(self, rule: dict) -> int:
         """Changes every value of the rule's field in the store that fits and has no review yet; returns the
@@ -167,7 +193,24 @@ class App:
     # ---- rules
 
     def rules(self) -> list[dict]:
-        return self.store.get_rules()
+        """Every rule; a proposed one with what it would change."""
+        rows = self.store.get_rules()
+        return [{**r, "reach": self._reach(r)} if r.get("state") == "proposed" else r for r in rows]
+
+    def answer_rule(self, rule_id: str, accept: bool, by: str) -> tuple[int, dict]:
+        """A person's answer to a proposed rule. Yes applies it to every value that fits; no keeps it from
+        being proposed again."""
+        rules = Rules(self.store.get_rules())
+        try:
+            rule = rules.answer(rule_id, accept, by)
+        except ValueError as e:
+            return 409, {"error": str(e)}
+        if rule is None:
+            return 404, {"error": "no such rule"}
+        if accept:
+            rule["applied"] = rule.get("applied", 0) + self._apply_rule(rule)
+        self.store.put_rules(rules.rows)
+        return 200, rule
 
     def switch_rule(self, rule_id: str, active: bool, by: str) -> tuple[int, dict]:
         rules = Rules(self.store.get_rules())

@@ -1,6 +1,9 @@
-"""The general repair, without a model: three changes with the same pattern on the same field make a rule,
-the rule changes the fitting values of that field in the other affairs with a review by "rule", a person's
-confirmation of such a value is counted on the rule, and a switched-off rule applies nothing new.
+"""Learning from decisions, without a model: two changes by hand with the same pattern on the same field
+propose a rule and apply nothing; the proposal says how many values it would change; a person's yes changes
+them, each with a review by "rule"; a person's no keeps the rule from being proposed again; a decision by hand
+that speaks against a rule takes the proposal away; the same value becoming the same value is a pattern of its
+own; a person's confirmation of a value a rule set is counted on the rule, and a switched-off rule applies
+nothing new.
 
     python3 tests/rules.py
 """
@@ -49,47 +52,112 @@ def main() -> int:
         got = pattern(before, after)
         check((got or {}).get("kind") == kind, f"pattern {before!r} -> {after!r}: {got}")
 
-    with tempfile.TemporaryDirectory() as tmp:
-        config = load_config()
-        store = FileStore(Path(tmp) / "store")
-        for i, place in enumerate(PLACES):
+    config = load_config()
+    contract = load_contract(config)
+    source = "custom-meta.0.source"
+
+    def fresh(tmp: str, name: str, places: list[str]) -> tuple[FileStore, App, Jobs]:
+        store = FileStore(Path(tmp) / name)
+        for i, place in enumerate(places):
             store.put_affair(f"nr-{i}", record_with(place), [{"name": f"doc-{i}", "id": 1, "pages": 1}])
-        jobs = Jobs(type(config)(**{**config.__dict__, "storage_dir": Path(tmp)}))
-        app = App(store, load_contract(config), config, jobs)
-        source = "custom-meta.0.source"
-        for i in range(3):
-            status, _ = app.decide(f"nr-{i}", {"source": source, "decision": "changed", "by": "test",
-                                               "after": PLACES[i].replace("Kanton ", "")})
-            check(status == 200, f"change {i + 1}: {PLACES[i]!r} without the prefix")
-        rules = store.get_rules()
-        check(len(rules) == 1 and rules[0]["active"] and rules[0]["count"] == 3,
-              f"one rule, active after three changes: {rules[0] if rules else None}")
-        rule = rules[0]
-        check(rule["kind"] == "prefix-off" and rule["parameter"] == "Kanton ", "the rule takes 'Kanton ' off")
-        fourth = sources_of(store.get_affair("nr-3")["record"])[0]
+        jobs = Jobs(type(config)(**{**config.__dict__, "storage_dir": Path(tmp) / (name + "-runs")}))
+        return store, App(store, contract, config, jobs), jobs
+
+    def change(app: App, i: int, after: str) -> tuple[int, dict]:
+        return app.decide(f"nr-{i}", {"source": source, "decision": "changed", "by": "test", "after": after})
+
+    def value(store: FileStore, i: int) -> dict:
+        return sources_of(store.get_affair(f"nr-{i}")["record"])[0]
+
+    with tempfile.TemporaryDirectory() as tmp:
+        # two changes propose, a yes applies
+        store, app, jobs = fresh(tmp, "yes", PLACES)
+        status, answer = change(app, 0, "Zürich")
+        check(status == 200 and answer["proposals"] == [], "the first change proposes nothing")
+        status, answer = change(app, 1, "Bern")
+        proposals = answer["proposals"]
+        check(status == 200 and len(proposals) == 1, f"the second change with the same pattern proposes one rule: "
+              f"{[(r['kind'], r['parameter']) for r in proposals]}")
+        rule = proposals[0]
+        check(rule["kind"] == "prefix-off" and rule["parameter"] == "Kanton " and rule["state"] == "proposed"
+              and rule["count"] == 2, "the rule takes 'Kanton ' off and stands proposed after two changes")
+        reach = rule["reach"]
+        check(reach["count"] == 2 and reach["affairs"] == 2
+              and {e["after"] for e in reach["examples"]} == {"Aargau", "Luzern"},
+              f"it says what it would change: {reach['count']} values in {reach['affairs']} affairs")
+        check(value(store, 2)["value"] == "Kanton Aargau" and value(store, 3)["review"] is None,
+              "nothing is changed before a person answers")
+        kinds = sorted((r["kind"], r["state"]) for r in store.get_rules())
+        check(kinds == [("prefix-off", "proposed"), ("value", "counting"), ("value", "counting")],
+              f"each change also counts as its value becoming that value: {kinds}")
+        listed = next(r for r in app.rules() if r["id"] == rule["id"])
+        check(listed["reach"]["count"] == 2, "the list of rules shows the proposal with its reach")
+
+        status, rule = app.answer_rule(rule["id"], True, "test")
+        check(status == 200 and rule["state"] == "active" and rule["applied"] == 2, "a yes makes the rule active")
+        fourth = value(store, 3)
         review = fourth["review"] or {}
-        check(fourth["value"] == "Luzern" and review.get("by") == "rule" and review.get("rule") == rule["id"],
-              f"the fourth affair was changed by the rule: {fourth['value']}")
-        fifth = sources_of(store.get_affair("nr-4")["record"])[0]
+        check(fourth["value"] == "Luzern" and review.get("by") == "rule" and review.get("rule") == rule["id"]
+              and value(store, 2)["value"] == "Aargau", "the values that fit are changed by the rule")
+        fifth = value(store, 4)
         check(fifth["value"] == "Stadt Bern" and fifth["review"] is None, "a value without the prefix stays")
-        check(rule["applied"] == 1, f"the rule counts {rule['applied']} application")
         rows = store.list_decisions("nr-3")
         logged = len(rows) == 1 and rows[0]["by"] == "rule" and rows[0]["rule"] == rule["id"]
         check(logged, "the rule's change is logged")
+        status, answer = app.answer_rule(rule["id"], True, "test")
+        check(status == 409, f"an answered rule cannot be answered again: {answer.get('error')}")
 
         status, _ = app.decide("nr-3", {"source": source, "decision": "confirmed", "by": "test"})
-        rule = store.get_rules()[0]
+        rule = next(r for r in store.get_rules() if r["id"] == rule["id"])
         check(status == 200 and rule["confirmed"] == 1, "a person confirming the rule's value counts on the rule")
 
         status, switched = app.switch_rule(rule["id"], False, "test")
-        check(status == 200 and not switched["active"], "the rule can be switched off")
+        check(status == 200 and not switched["active"] and switched["state"] == "off", "the rule can be switched off")
         store.put_affair("nr-5", record_with("Kanton Glarus"), [{"name": "doc-5", "id": 1, "pages": 1}])
         status, _ = app.decide("nr-0", {"source": source, "decision": "confirmed", "by": "test"})
-        sixth = sources_of(store.get_affair("nr-5")["record"])[0]
+        sixth = value(store, 5)
         check(sixth["value"] == "Kanton Glarus" and sixth["review"] is None, "a switched-off rule applies nothing new")
         status, switched = app.switch_rule(rule["id"], True, "test")
-        sixth = sources_of(store.get_affair("nr-5")["record"])[0]
-        check(status == 200 and sixth["value"] == "Glarus", "switching the rule on applies it to the new value")
+        check(status == 200 and value(store, 5)["value"] == "Glarus",
+              "switching the rule on applies it to the new value")
+        jobs.stop()
+
+        # a no
+        store, app, jobs = fresh(tmp, "no", PLACES)
+        change(app, 0, "Zürich")
+        _, answer = change(app, 1, "Bern")
+        rule = answer["proposals"][0]
+        status, rule = app.answer_rule(rule["id"], False, "test")
+        check(status == 200 and rule["state"] == "declined" and not rule["active"], "a no declines the rule")
+        check(value(store, 2)["value"] == "Kanton Aargau", "a declined rule changes nothing")
+        _, answer = change(app, 2, "Aargau")
+        check(answer["proposals"] == [], "the same change a third time does not propose it again")
+        jobs.stop()
+
+        # a decision by hand that speaks against the rule
+        store, app, jobs = fresh(tmp, "against", PLACES)
+        change(app, 0, "Zürich")
+        _, answer = change(app, 1, "Bern")
+        rule = answer["proposals"][0]
+        status, answer = app.decide("nr-2", {"source": source, "decision": "confirmed", "by": "test"})
+        held = next(r for r in store.get_rules() if r["id"] == rule["id"])
+        check(status == 200 and held["state"] == "contradicted" and held["against"] == 1 and answer["proposals"] == [],
+              "a person confirming 'Kanton Aargau' as it stands takes the proposal away")
+        status, answer = app.answer_rule(rule["id"], True, "test")
+        check(status == 409 and value(store, 3)["value"] == "Kanton Luzern",
+              f"a contradicted rule cannot be accepted: {answer.get('error')}")
+        jobs.stop()
+
+        # the same value becomes the same value
+        store, app, jobs = fresh(tmp, "value", ["Standesinitiative", "Standesinitiative", "Standesinitiative", "Anzug"])
+        change(app, 0, "Antrag")
+        _, answer = change(app, 1, "Antrag")
+        proposals = answer["proposals"]
+        check(len(proposals) == 1 and proposals[0]["kind"] == "value" and proposals[0]["to"] == "Antrag"
+              and proposals[0]["reach"]["count"] == 1, "two equal replacements propose the replacement for the third")
+        status, rule = app.answer_rule(proposals[0]["id"], True, "test")
+        check(status == 200 and value(store, 2)["value"] == "Antrag" and value(store, 3)["value"] == "Anzug",
+              "accepted, it changes the equal value and no other")
         jobs.stop()
     return 1 if failed else 0
 

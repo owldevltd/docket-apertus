@@ -76,6 +76,8 @@ export interface Affair {
     sources: SourceEntry[];
     counts: Counts;
     updated_at: string | null;
+    // after a decision: the rules it leaves proposed for the field, the one that reaches furthest first
+    proposals?: Rule[];
 }
 
 export interface Decision {
@@ -136,18 +138,31 @@ export interface Job {
     error: string | null;
 }
 
+// what a proposed rule would change in the store
+export interface Reach {
+    count: number;
+    affairs: number;
+    examples: { key: string; before: string; after: string }[];
+}
+
+// A rule learnt from decisions. counting: one change so far; proposed: two, a person is asked; active: accepted;
+// declined: a person said no; contradicted: a decision by hand speaks against it; off: switched off by hand.
 export interface Rule {
     id: string;
     field: string;
     kind: string;
     parameter: string;
+    to?: string;
     count: number;
+    against?: number;
     confirmed: number;
     withdrawn: number;
     applied: number;
     active: boolean;
+    state?: 'counting' | 'proposed' | 'active' | 'declined' | 'contradicted' | 'off';
     since: string | null;
     examples: { affair: string; before: string; after: string; by: string }[];
+    reach?: Reach;
 }
 
 // the standard name of a type, an event or a kind of group, in the four languages of the record

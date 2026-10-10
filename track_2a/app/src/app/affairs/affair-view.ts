@@ -4,15 +4,17 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Api } from '../api/api';
-import { Affair, Block, DecisionBody, FieldsReport, SourceEntry } from '../api/types';
+import { Affair, Block, DecisionBody, FieldsReport, Rule, SourceEntry } from '../api/types';
 import { Icon } from '../shared/icon';
 import { Who } from '../shared/who';
-import { blocksOf, kindName } from '../shared/words';
+import { LABELS, blocksOf, kindName, ruleWords } from '../shared/words';
 import { PageView } from './page-view';
 import { ValueCard } from './value-card';
 
 // One affair: the head as in OpenParlData's detail, the page with its blocks at the left, every value with a
-// place at the right, the open ones first. A decision goes to the server and the affair comes back whole.
+// place at the right, the open ones first. A decision goes to the server and the affair comes back whole. When
+// the decision was the second of its kind, the server sends a proposed rule along: the screen asks whether the
+// other values it fits should be set right too, and the person says yes, no or later.
 @Component( {
     selector: 'app-affair-view',
     imports: [ RouterLink, MatButtonModule, MatSelectModule, Icon, PageView, ValueCard ],
@@ -27,6 +29,8 @@ export class AffairView implements OnInit {
     readonly key = input.required<string>();
     readonly affair = signal<Affair | null>( null );
     readonly error = signal( '' );
+    readonly proposal = signal<Rule | null>( null );
+    readonly ruleWords = ruleWords;
     readonly doc = signal( 0 );
     readonly page = signal( 1 );
     readonly focus = signal<string | null>( null );
@@ -109,7 +113,31 @@ export class AffairView implements OnInit {
             return;
         }
         try {
-            this.affair.set( await this.api.decide( this.key(), { ...body, by } ) );
+            const affair = await this.api.decide( this.key(), { ...body, by } );
+            this.affair.set( affair );
+            this.proposal.set( affair.proposals?.[ 0 ] || null );
+        } catch ( e ) {
+            this.snack.open( ( e as Error ).message, 'OK', { duration: 6000 } );
+        }
+    }
+
+    fieldOf( rule: Rule ): string {
+        return LABELS[ rule.field ] || rule.field;
+    }
+
+    // yes changes every value the rule fits, here and in the other affairs; no keeps it from being proposed again
+    async answer( rule: Rule, accept: boolean ): Promise<void> {
+        const by = this.who.require();
+        if ( !by ) {
+            return;
+        }
+        try {
+            const done = await this.api.answerRule( rule.id, accept, by );
+            this.proposal.set( null );
+            if ( accept ) {
+                this.affair.set( await this.api.affair( this.key() ) );
+                this.snack.open( done.applied + ( done.applied === 1 ? ' Wert geändert.' : ' Werte geändert.' ), 'OK', { duration: 5000 } );
+            }
         } catch ( e ) {
             this.snack.open( ( e as Error ).message, 'OK', { duration: 6000 } );
         }

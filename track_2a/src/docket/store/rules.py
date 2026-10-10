@@ -1,11 +1,17 @@
-"""General repair from decisions: a change a person makes carries a pattern, the same pattern on the same field
-three times becomes a rule, and an active rule changes every value of that field in the store that fits, each
-with a review that names the rule, so every application can be seen and taken back one by one.
+"""Learning from decisions: a change a person makes carries a pattern. When two changes by hand carry the same
+pattern on the same field, the rule is proposed: the app says how many further values it fits and asks whether
+they should be set right too. A person answers yes or no. Only an accepted rule changes values, each with a
+review that names the rule, so every application can be seen and taken back one by one.
 
-Patterns, the first that fits (set by the project lead, 6 October 2026): prefix-off, suffix-off, prefix-on,
-suffix-on, digits (a letter read for a digit), spelling (case only); anything else is a single case and does not
-count. A rule is active from three changes; a person can switch it off and on by hand. When a rule becomes
-inactive nothing is turned back, only nothing new is applied.
+A rule a decision by hand speaks against is not proposed: a person kept a value the rule would change, or
+changed it into something else. Played through on 10 October 2026 with 200 corrections on 60 documents: without
+this check 54 right proposals came with 44 wrong ones, with it 50 with 3.
+
+Patterns, every one that fits a change (the first six set by the project lead, 6 October 2026): prefix-off,
+suffix-off, prefix-on, suffix-on, digits (a letter read for a digit), spelling (case only); and value: the same
+value becomes the same value ("Standesinitiative" to "Antrag"), whatever else the change is. A person can
+switch an accepted rule off and on by hand. When a rule stops being active nothing is turned back, only nothing
+new is applied.
 """
 
 from __future__ import annotations
@@ -14,7 +20,8 @@ import re
 
 from docket.store.base import stamp
 
-ACTIVE_AT = 3
+# a rule is proposed from this many changes by hand
+PROPOSE_AT = 2
 DIGITS = {"o": "0", "O": "0", "l": "1", "I": "1", "i": "1", "s": "5", "S": "5", "B": "8"}
 EXAMPLES = 3
 
@@ -47,9 +54,23 @@ def pattern(before: str, after: str) -> dict | None:
     return None
 
 
+def patterns(before: str, after: str) -> list[dict]:
+    """Every pattern a change carries: the one of its form, when it has one, and the value itself."""
+    if before == after or not before or not after:
+        return []
+    found = pattern(before, after)
+    out = [found] if found else []
+    # a change of spelling is the same value already; anything else also counts as this value becoming that one
+    if found is None or found["kind"] != "spelling":
+        out.append({"kind": "value", "parameter": before, "to": after})
+    return out
+
+
 def apply(rule: dict, value: str) -> str | None:
     """The value after the rule, or None when the rule does not fit it."""
     kind, p = rule["kind"], rule["parameter"]
+    if kind == "value":
+        return rule.get("to") if value == p and rule.get("to") not in (None, value) else None
     if kind == "prefix-off":
         return value[len(p):] if value.startswith(p) and len(value) > len(p) else None
     if kind == "suffix-off":
@@ -75,36 +96,82 @@ def _between_digits(value: str, i: int) -> bool:
     return left.isdigit() or right.isdigit()
 
 
+def state_of(rule: dict) -> str:
+    """Where a rule stands: counting (one change so far), proposed, active, declined (a person said no),
+    contradicted (a decision by hand speaks against it), off (switched off by hand)."""
+    if rule.get("active"):
+        return "active"
+    if rule.get("switched") and not rule["switched"].get("active"):
+        return "off"
+    if rule.get("answer") and not rule["answer"].get("accept"):
+        return "declined"
+    if rule.get("against"):
+        return "contradicted"
+    return "proposed" if rule.get("count", 0) >= PROPOSE_AT else "counting"
+
+
 class Rules:
-    """The rules of a store: counting, activation, switching. `rows` is the stored list."""
+    """The rules of a store: counting, proposing, answering, switching. `rows` is the stored list."""
 
     def __init__(self, rows: list[dict]):
         self.rows = list(rows)
 
-    def note(self, field: str, before: str, after: str, affair: str, by: str) -> dict | None:
-        """Counts a person's change; returns the rule when the change had a pattern, with "activated" when
-        this change made it active."""
-        p = pattern(before, after)
-        if p is None:
-            return None
-        rule = next((r for r in self.rows if r["field"] == field and r["kind"] == p["kind"]
-                     and r["parameter"] == p["parameter"]), None)
+    def note(self, field: str, before: str, after: str, affair: str, by: str) -> list[dict]:
+        """Counts a person's change on every pattern it carries; returns the rules it counted on."""
+        counted = []
+        for p in patterns(before, after):
+            rule = next((r for r in self.rows if r["field"] == field and r["kind"] == p["kind"]
+                         and r["parameter"] == p["parameter"] and r.get("to") == p.get("to")), None)
+            if rule is None:
+                rule = {
+                    "id": f"r-{len(self.rows) + 1:04d}", "field": field, "kind": p["kind"],
+                    "parameter": p["parameter"], "count": 0, "against": 0, "confirmed": 0, "withdrawn": 0,
+                    "applied": 0, "active": False, "state": "counting", "since": None, "examples": [],
+                }
+                if "to" in p:
+                    rule["to"] = p["to"]
+                self.rows.append(rule)
+            rule["count"] += 1
+            if len(rule["examples"]) < EXAMPLES:
+                rule["examples"].append({"affair": affair, "before": before, "after": after, "by": by})
+            rule["state"] = state_of(rule)
+            counted.append(rule)
+        return counted
+
+    def speak_against(self, field: str, before: str, after: str | None, decision: str) -> bool:
+        """A decision by hand held against the rules of its field that are not active yet: a person confirmed
+        a value a rule would change, or changed it into something else than the rule would. Such a rule is
+        not proposed. Returns whether a rule was touched."""
+        touched = False
+        for rule in self.rows:
+            if rule["field"] != field or rule.get("active"):
+                continue
+            would = apply(rule, before)
+            if would is None:
+                continue
+            if decision == "confirmed" or (decision == "changed" and after != would):
+                rule["against"] = rule.get("against", 0) + 1
+                rule["state"] = state_of(rule)
+                touched = True
+        return touched
+
+    def proposed(self, field: str | None = None) -> list[dict]:
+        return [r for r in self.rows if state_of(r) == "proposed" and (field is None or r["field"] == field)]
+
+    def answer(self, rule_id: str, accept: bool, by: str) -> dict | None:
+        """A person's answer to a proposed rule: yes makes it active, no keeps it from being proposed again.
+        None when there is no such rule; ValueError when the rule is not proposed."""
+        rule = self.get(rule_id)
         if rule is None:
-            rule = {
-                "id": f"r-{len(self.rows) + 1:04d}", "field": field, "kind": p["kind"], "parameter": p["parameter"],
-                "count": 0, "confirmed": 0, "withdrawn": 0, "applied": 0, "active": False,
-                "since": None, "examples": [],
-            }
-            self.rows.append(rule)
-        rule["count"] += 1
-        if len(rule["examples"]) < EXAMPLES:
-            rule["examples"].append({"affair": affair, "before": before, "after": after, "by": by})
-        activated = False
-        if not rule["active"] and rule["count"] >= ACTIVE_AT and not rule.get("switched"):
+            return None
+        if state_of(rule) != "proposed":
+            raise ValueError(f"the rule is {state_of(rule)}, not proposed")
+        rule["answer"] = {"by": by, "at": stamp(), "accept": bool(accept)}
+        if accept:
             rule["active"] = True
             rule["since"] = stamp()
-            activated = True
-        return {**rule, "activated": activated}
+        rule["state"] = state_of(rule)
+        return rule
 
     def active(self, field: str) -> list[dict]:
         return [r for r in self.rows if r["active"] and r["field"] == field]
@@ -118,6 +185,9 @@ class Rules:
             return None
         rule["active"] = bool(active)
         rule["switched"] = {"by": by, "at": stamp(), "active": bool(active)}
+        if active and not rule.get("since"):
+            rule["since"] = stamp()
+        rule["state"] = state_of(rule)
         return rule
 
     def tally(self, rule_id: str, what: str) -> None:

@@ -63,7 +63,7 @@ class Store:
     def list_decisions(self, key: str | None = None) -> list[dict]:
         raise NotImplementedError
 
-    # rules of the general repair
+    # rules learnt from decisions (docket.store.rules)
     def get_rules(self) -> list[dict]:
         raise NotImplementedError
 

@@ -62,6 +62,11 @@ export class Api {
         return this.get<Rule[]>( 'rules' );
     }
 
+    // a person's yes or no to a proposed rule; yes applies it to every value that fits
+    answerRule( id: string, accept: boolean, by: string ): Promise<Rule> {
+        return this.post<Rule>( 'rules/' + encodeURIComponent( id ) + '/answer', { accept, by } );
+    }
+
     switchRule( id: string, active: boolean, by: string ): Promise<Rule> {
         return this.post<Rule>( 'rules/' + encodeURIComponent( id ), { active, by } );
     }

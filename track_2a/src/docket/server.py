@@ -5,12 +5,14 @@ small router; what it answers with is in api.py.
     GET  /api/affairs                             every affair: key, number, title, type, counts
     GET  /api/affairs/<key>                       the record, its documents and every value with a place
     GET  /api/affairs/<key>/decisions             the decisions taken on it
-    POST /api/affairs/<key>/decisions             {source, decision, by, after?, path?} -> the affair as above
+    POST /api/affairs/<key>/decisions             {source, decision, by, after?, path?} -> the affair as above,
+                                                  with the rules the decision leaves proposed (proposals)
     GET  /api/decisions                           every decision in the store
     GET  /api/documents/<name>/fields             the fields report of a document (the model's answers)
     GET  /api/documents/<name>/pages/<n>          the page's elements
     GET  /api/documents/<name>/pages/<n>.png      the page image
-    GET  /api/rules                               the rules of the general repair
+    GET  /api/rules                               the rules learnt from decisions; a proposed one with its reach
+    POST /api/rules/<id>/answer                   {accept, by} a person's yes or no to a proposed rule
     POST /api/rules/<id>                          {active, by} switches a rule (admin)
     GET  /api/vocabulary?list=&body=              the names of the parliaments with their standard names
     POST /api/vocabulary                          {list, body, name, standard, by} sets what a name stands
@@ -103,6 +105,12 @@ class Handler(BaseHTTPRequestHandler):
             return self._page(app, m.group(1), int(m.group(2)), bool(m.group(3)))
         if route == "rules" and method == "GET":
             return 200, app.rules()
+        m = re.fullmatch(r"rules/([^/]+)/answer", route)
+        if m and method == "POST":
+            body = self._json_body()
+            if not isinstance(body, dict) or not isinstance(body.get("accept"), bool):
+                return 400, {"error": "a JSON object with accept (true or false) is expected"}
+            return app.answer_rule(m.group(1), body["accept"], str(body.get("by", "")))
         m = re.fullmatch(r"rules/([^/]+)", route)
         if m and method == "POST":
             if not app.allowed(self.headers.get("X-Token")):
