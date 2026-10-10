@@ -75,23 +75,47 @@ def shape(number_text: str) -> str:
     return re.sub(r"[^\W\d_]", "a", re.sub(r"\d", "9", t))
 
 
+# the word in front of a name that says which of two bodies of the same name is meant ("Kanton Luzern", "Stadt
+# Luzern"), in the languages of the documents
+LEVEL_WORDS = {
+    "canton": re.compile(r"\b(kanton|kantons|canton|cantone|chantun|staat|etat|état|stato)\b", re.I),
+    "local": re.compile(
+        r"\b(stadt|ville|città|citta|gemeinde|einwohnergemeinde|commune|comune|municipio|municipalité)\b", re.I
+    ),
+}
+
+
 def body_of(place: str, parliament: str, bodies: dict[str, dict]) -> str:
     """The parliament for a read place or parliament name, as OpenParlData's body key ("ZH"); empty when
-    unknown. The place decides; the name of the parliament alone only when it is unambiguous ("Kantonsrat"
-    exists several times)."""
+    unknown. The place decides, by the body's name in any language it is held in ("Vaud", "Waadt"). Where a
+    canton and a town carry the same name, the word in front of it says which ("Kanton", "Stadt", "canton",
+    "ville"), and then the name of the parliament ("Kantonsrat", "Grosser Stadtrat"). The name of the
+    parliament alone counts only when it is unambiguous ("Kantonsrat" exists several times)."""
+    read = (place + " " + parliament).strip()
     place, parliament = plain(place), plain(parliament)
     strong, weak = [], []
 
     def fits(w: str, n: str) -> bool:
         return w != "" and n != "" and (w == n or n in w)
 
-    for key, names in bodies.items():
-        town = plain(str(names.get("name") or ""))
-        hall = plain(str(names.get("parliament") or ""))
-        if fits(place, town) or fits(parliament, town):
+    def halls(key: str) -> list[str]:
+        b = bodies[key]
+        return [plain(str(n)) for n in (b.get("parliaments") or [b.get("parliament")]) if n]
+
+    for key, b in bodies.items():
+        towns = [plain(str(n)) for n in (b.get("names") or [b.get("name")]) if n]
+        if any(fits(place, t) or fits(parliament, t) for t in towns):
             strong.append(str(key))
-        elif fits(parliament, hall) or fits(place, hall):
+        elif any(fits(parliament, h) or fits(place, h) for h in halls(str(key))):
             weak.append(str(key))
+    if len(strong) > 1:
+        level = next((name for name, words in LEVEL_WORDS.items() if words.search(read)), "")
+        if level:
+            same = [k for k in strong if (bodies[k].get("level") == "canton") == (level == "canton")]
+            strong = same or strong
+    if len(strong) > 1:
+        named = [k for k in strong if any(fits(parliament, h) for h in halls(k))]
+        strong = named if len(named) == 1 else strong
     if len(strong) == 1:
         return strong[0]
     return weak[0] if not strong and len(weak) == 1 else ""

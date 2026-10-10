@@ -83,6 +83,23 @@ class Store:
         """Removes the rows with the list, body and name of the given ones."""
         raise NotImplementedError
 
+    # register: the persons of the parliaments (docket.store.register)
+    def get_register(self, body: str) -> list[dict]:
+        """The rows of one parliament."""
+        raise NotImplementedError
+
+    def put_register(self, rows: list[dict]) -> None:
+        """Stores rows; a row with the same body and key is replaced."""
+        raise NotImplementedError
+
+    def drop_register(self, rows: list[dict]) -> None:
+        """Removes the rows with the body and key of the given ones."""
+        raise NotImplementedError
+
+    def register_bodies(self) -> list[str]:
+        """The parliaments the register holds rows for."""
+        raise NotImplementedError
+
     # pages, on disk in every backend
     def put_pages(self, name: str, source: Path) -> int:
         """Copies the page images and page files of a document from a run folder; returns the count."""

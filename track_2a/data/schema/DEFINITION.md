@@ -76,7 +76,7 @@ Everything from OpenParlData stays with its name and form: the affair with `docs
 | `author-comment` (dynamic) | an addition about the person |
 | `etal` (dynamic) | `true` when further persons are named without names ("und Mitunterzeichnende") |
 
-When the person is known to OpenParlData (`person_id`), title, address and email are already in `persons` there.
+When the person is known to OpenParlData (`person_id`), title, address and email are already in `persons` there. For a contributor read from a document, `person_id` is set when the printed name is found as exactly one person of that document's parliament; its place stands in `sources` (`how: derived`), with `approve` when the name was found by the last name alone or with one character off. The printed name stays as it stands.
 
 ## The blocks
 

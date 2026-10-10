@@ -26,9 +26,9 @@ PDF ──pdftoppm──▶ page images ──▶ geometry ──▶ elements �
 | Sorting | `document/sorter.py`, `document/picture.py` | the rest of the first pages goes to the model as a text image, six elements per call, to be named one of eight kinds | yes |
 | Fields | `fields/` (`fields`, `filler`, `placer`) | the fields file asks the model six questions per call over the first pages and over the whole document; code takes an answer only with a place: literal in a block, derived from the named block, or cited with a word in it; composed values and cited ones carry `approve` | yes |
 | Kind | `document/kind.py` | the document's role in the affair from the words of its first page, by the list in `data/knowledge/kinds.json` | no |
-| Key | `affair/identity.py` | the affair number, normalised; checked against the number forms of the parliament, searched on the page by form, or a weak key from place, date and title | no |
-| Affair | `affair/merge.py`, `affair/types.py`, `affair/validator.py` | the documents of one key become one affair; the harmonised type comes from the label, through the names of the parliament in the vocabulary and else through the table of the export; the record is checked against the contract by an own validator | no |
-| Store | `store/` (`files`, `postgres`, `review`, `rules`, `vocabulary`) | the affair with its documents, the fields reports, the decisions, the vocabulary; reviews survive a new run over the same document | no |
+| Key | `affair/identity.py` | the affair number, normalised; checked against the number forms of the parliament, searched on the page by form, or a weak key from place, date and title; the parliament from the read names of polity and parliament, in any language | no |
+| Affair | `affair/merge.py`, `affair/types.py`, `affair/validator.py` | the documents of one key become one affair; the harmonised type comes from the label, through the names of the parliament in the vocabulary and else through the table of the export; the persons named are looked up in the register of the parliament (`affair/persons.py`); the record is checked against the contract by an own validator | no |
+| Store | `store/` (`files`, `postgres`, `review`, `rules`, `vocabulary`, `register`) | the affair with its documents, the fields reports, the decisions, the vocabulary, the register of persons; reviews survive a new run over the same document | no |
 
 The command line runs the chain (`cli.py`, `runner.py`); the server runs the same function from its queue
 (`jobs.py`). `pipeline.py` holds the pieces every caller shares.
@@ -47,7 +47,8 @@ composed; a decision is confirmed, changed or rejected; a document kind is one o
 
 `data/knowledge/` holds what earlier documents and OpenParlData's export taught, all derived, none written by
 hand into the code: the section names with their counts, the harmonised type per label with its share, the
-number forms per parliament, the names of the parliaments, the kinds of documents with their words.
+number forms per parliament, the names of the parliaments in every language OpenParlData holds them in, the
+kinds of documents with their words.
 `tools/knowledge.py` rebuilds the three tables from the export and the API. The values the model placed are
 kept per run (`values.json`) for a person to look at and are never offered to the model: measured, that
 brought more values that are not on the page.
@@ -88,10 +89,22 @@ for another type elsewhere, so the table of all parliaments is asked only where 
 or does not list the label. OpenParlData calls its harmonised types provisional; that is why the stem is a
 list in the store and neither code nor a fixed file.
 
+The register (`store/register.py`) holds the persons of the parliaments. `tools/register.py` loads them from
+OpenParlData's exports into the store: id, name, parliament and party, nothing private, and nothing of it
+into the repository. A contributor a document names is looked up among the persons of that document's
+parliament only: exactly, in either order of first and last name and without a title, a party or a place
+behind it; by the last name alone; or with one character off. It counts as found when exactly one person
+fits. Then the entry gets that person's id, with a place in `sources`, and a person is asked to look where
+the name was not found exactly. The printed name is never changed. A name nobody carries, standing literally
+in the document and looking like a name, is kept as a candidate with the documents it was seen in, and from
+the third document on the register takes it in as learnt; a newer export replaces what came from OpenParlData
+and leaves what was learnt. Without a parliament nothing is looked up: over all parliaments one wrong
+character leaves too many candidates.
+
 ## The server and the app
 
 `server.py` is the standard library's HTTP server with a small router; `api.py` is what it answers with:
-the affairs with every value that has a place, the decisions, the rules, the vocabulary, the runs of the admin, and for every
+the affairs with every value that has a place, the decisions, the rules, the vocabulary, the register, the runs of the admin, and for every
 open value the count of documents with the same pattern. One lock per affair guards the decisions; the
 contract is checked before anything is saved. The admin's runs (`jobs.py`) take an uploaded PDF or a document
 of OpenParlData by its id, run one after the other, and stay on disk under `storage/runs/`. An optional token
@@ -109,7 +122,7 @@ the first stage of the Docker image.
 `make test` runs without a model and holds the chain against references that existed before any run: the
 text layer of the PDFs for the geometry and the text, the affairs of the API for the fields and the identity,
 a reading by hand for the kinds, and the contract for every record; it also runs the server, the decisions,
-the rules, the vocabulary and the admin's queue on a file store. `make test-store` runs the store's
+the rules, the vocabulary, the register and the admin's queue on a file store. `make test-store` runs the store's
 operations over Postgres as well, inside the running container, in a schema of its own. `make bench` runs the whole chain with the model over the
 eight shipped documents, about sixty calls, under five minutes, and keeps the raw exchange of every call.
 `docs/evidence.md` holds every number behind a decision, `results/` the committed runs.

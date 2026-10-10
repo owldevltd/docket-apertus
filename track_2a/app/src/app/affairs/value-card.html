@@ -9,6 +9,9 @@
     @for ( v of values(); track v.path ) {
         <div class="text">@if ( several() ) { <span class="leaf">{{ v.leaf }}:</span> }{{ v.value }}</div>
     }
+    @if ( e.hint ) {
+        <div class="answer">Register: {{ e.hint }}</div>
+    }
     @if ( modelDiffers() ) {
         <div class="answer">Modell: {{ answer() }}</div>
     }

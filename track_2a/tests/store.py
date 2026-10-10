@@ -1,5 +1,5 @@
 """The store's operations, without a model: an affair is stored, read, replaced and listed, a fields report
-and the decisions come back, rules and vocabulary rows are replaced by their key, vocabulary rows are
+and the decisions come back, rules, vocabulary rows and rows of the register are replaced by their key and
 dropped, and a second opening sees what the first one wrote. Over the file store, and over Postgres when a
 database is named: the test works there in a schema of its own and removes it at the end, so a store in use
 is not touched.
@@ -71,9 +71,24 @@ def run(name: str, open_again, check) -> None:
     store.drop_vocabulary([rows[1]])
     check([r["body"] for r in store.get_vocabulary()] == ["", "BS"], f"{name}: a vocabulary row is dropped")
 
+    people = [
+        {"body": "X", "key": "ignaz pellaton", "label": "Ignaz Pellaton", "ids": [1], "origin": "stem"},
+        {"body": "X", "key": "katja brand", "label": "Katja Brand", "origin": "candidate", "documents": ["a"]},
+        {"body": "Y", "key": "ignaz pellaton", "label": "Ignaz Pellaton", "ids": [2], "origin": "stem"},
+    ]
+    store.put_register(people)
+    store.put_register([{**people[1], "documents": ["a", "b"]}])
+    held = {r["key"]: r for r in store.get_register("X")}
+    check(len(held) == 2 and held["katja brand"]["documents"] == ["a", "b"] and store.get_register("Y")[0]["ids"] == [2]
+          and store.register_bodies() == ["X", "Y"] and store.get_register("Z") == [],
+          f"{name}: the register is kept per parliament, a row replaced by its key")
+    store.drop_register([people[1]])
+    check([r["key"] for r in store.get_register("X")] == ["ignaz pellaton"], f"{name}: a row of the register is dropped")
+
     again: Store = open_again()
     check(len(again.list_affairs()) == 1 and len(again.get_rules()) == 1 and len(again.get_vocabulary()) == 2
-          and len(again.list_decisions()) == 2, f"{name}: a second opening sees the same")
+          and len(again.list_decisions()) == 2 and len(again.get_register("X")) == 1,
+          f"{name}: a second opening sees the same")
 
 
 def main(argv: list[str]) -> int:
@@ -101,7 +116,7 @@ def main(argv: list[str]) -> int:
                 with psycopg.connect(url) as db:
                     row = db.execute("SELECT count(*) FROM information_schema.tables WHERE table_schema = %s",
                                      (schema,)).fetchone()
-                check(row[0] == 5, f"postgres: the five tables stand in the test's own schema ({row[0]})")
+                check(row[0] == 6, f"postgres: the six tables stand in the test's own schema ({row[0]})")
             finally:
                 with psycopg.connect(url, autocommit=True) as db:
                     db.execute(f"DROP SCHEMA {schema} CASCADE")

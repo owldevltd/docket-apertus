@@ -16,6 +16,7 @@ export const LABELS: Record<string, string> = {
     'contributors.fullname': 'Beteiligte',
     'contributors.party': 'Partei',
     'contributors.on-behalf-of': 'Im Namen von',
+    'contributors.person_id': 'Person im Register',
     'events.title': 'Ereignis',
     'events.date': 'Ereignisdatum',
     'docs.conference.conf-name': 'Sitzung',

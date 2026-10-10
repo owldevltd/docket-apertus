@@ -87,6 +87,37 @@ class FileStore(Store):
             held.pop((r["list"], r["body"], r["name"]), None)
         self._write_vocabulary(held)
 
+    def _register_file(self, body: str) -> Path:
+        return self.folder / "register" / f"{safe_name(body)}.json"
+
+    def get_register(self, body: str) -> list[dict]:
+        path = self._register_file(body)
+        return json.loads(path.read_text(encoding="utf-8"))["rows"] if path.is_file() else []
+
+    def put_register(self, rows: list[dict]) -> None:
+        self._change_register(rows, lambda held, r: held.__setitem__(r["key"], r))
+
+    def drop_register(self, rows: list[dict]) -> None:
+        self._change_register(rows, lambda held, r: held.pop(r["key"], None))
+
+    def _change_register(self, rows: list[dict], change) -> None:
+        # one file per parliament, one row per line: a parliament is read whole, never the whole register
+        for body in sorted({r["body"] for r in rows}):
+            held = {r["key"]: r for r in self.get_register(body)}
+            for r in rows:
+                if r["body"] == body:
+                    change(held, r)
+            path = self._register_file(body)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            lines = ",\n".join("  " + json.dumps(held[key], ensure_ascii=False) for key in sorted(held))
+            path.write_text('{"body": ' + json.dumps(body) + ', "rows": [\n' + lines + "\n]}\n", encoding="utf-8")
+
+    def register_bodies(self) -> list[str]:
+        folder = self.folder / "register"
+        if not folder.is_dir():
+            return []
+        return sorted(json.loads(f.read_text(encoding="utf-8"))["body"] for f in folder.glob("*.json"))
+
     def _write_vocabulary(self, held: dict[tuple[str, str, str], dict]) -> None:
         # one row per line: the file holds some fifteen hundred of them
         lines = ",\n".join("  " + json.dumps(held[key], ensure_ascii=False) for key in sorted(held))

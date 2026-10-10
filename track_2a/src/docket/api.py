@@ -41,6 +41,7 @@ class App:
         sources = sources_of(record)
         if any(e["open"] for e in sources):
             self._same(key, sources)
+        self._hints(data, sources)
         return {
             "key": key,
             "record": record,
@@ -65,6 +66,22 @@ class App:
                 "updated_at": a.get("updated_at"),
             })
         return sorted(out, key=lambda s: (-s["counts"]["open"], s["key"]))
+
+    def _hints(self, data: dict, sources: list[dict]) -> None:
+        """For the id of a person: the name the register holds for it, so a reviewer sees who is meant. The
+        parliament comes from the identity in the document's fields report."""
+        names = {d.get("id"): d.get("name") for d in data.get("documents", [])}
+        by_body: dict[str, dict] = {}
+        for e in sources:
+            if e["label"] != "contributors.person_id" or e["value"] is None:
+                continue
+            report = self.store.get_fields(str(names.get(e["doc"]) or "")) or {}
+            body = str((report.get("identity") or {}).get("body") or "")
+            if body and body not in by_body:
+                by_body[body] = {i: r for r in self.store.get_register(body) for i in r.get("ids") or []}
+            person = by_body.get(body, {}).get(e["value"])
+            if person is not None:
+                e["hint"] = person["label"] + (f" ({person['party']})" if person.get("party") else "")
 
     def _same(self, key: str, sources: list[dict]) -> None:
         """For every open value: how many values of the same field, found the same way, with the same shape
@@ -253,6 +270,29 @@ class App:
             return 400, {"error": str(e)}
         self.store.put_vocabulary([row])
         return 200, row
+
+    # ---- register
+
+    def register(self, body: str | None) -> list[dict]:
+        """The persons of one parliament; without one, what the register learnt and what it still counts, over
+        all parliaments."""
+        if body:
+            return self.store.get_register(body)
+        out = []
+        for b in self.store.register_bodies():
+            out.extend(r for r in self.store.get_register(b) if r.get("origin") != "stem")
+        return out
+
+    def forget(self, body: dict) -> tuple[int, dict]:
+        """Takes a learnt person or a candidate out of the register. A person of OpenParlData's list stays."""
+        where, key = str(body.get("body", "")), str(body.get("key", ""))
+        row = next((r for r in self.store.get_register(where) if r["key"] == key), None) if where else None
+        if row is None:
+            return 404, {"error": "no such row"}
+        if row.get("origin") == "stem":
+            return 409, {"error": "a person of OpenParlData's list is not removed here"}
+        self.store.drop_register([row])
+        return 200, {**row, "removed": True}
 
     # ---- runs
 

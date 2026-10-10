@@ -2,10 +2,11 @@
 type in four languages, per parliament the forms of its affair numbers, and the names of the parliaments from
 the API. Writes data/knowledge/types.json, number-forms.json and bodies.json; what else lies there stays.
 
-    python3 tools/knowledge.py <affairs.ndjson.gz> [--no-bodies]
+    python3 tools/knowledge.py <affairs.ndjson.gz> [--no-bodies | --only-bodies]
 
 The export is the daily affairs export (NDJSON, gzip). The names come from the API, one page of bodies at a
-time with a pause, only for the parliaments that hold affairs or documents; --no-bodies skips the network.
+time with a pause, only for the parliaments that hold affairs or documents; --no-bodies skips the network,
+--only-bodies leaves the two tables of the export as they are.
 """
 
 from __future__ import annotations
@@ -78,6 +79,19 @@ def fetch(url: str) -> dict:
         return json.loads(r.read().decode("utf-8"))
 
 
+def every(names: object) -> list[str]:
+    """A name in every language it is held in, each once; a name with an addition in brackets ("Gossau (SG)")
+    also without it, as a document prints it."""
+    import re
+
+    out: list[str] = []
+    for value in (names.values() if isinstance(names, dict) else [names]):
+        for form in (str(value or "").strip(), re.sub(r"\s*\([^)]*\)\s*$", "", str(value or "")).strip()):
+            if form and form not in out:
+                out.append(form)
+    return out
+
+
 def read_bodies(keys: set[str]) -> dict[str, dict]:
     """The names of the parliaments with affairs or documents, from the API, page by page."""
     with_docs = fetch(API + "/docs/group_by/body_key")
@@ -97,7 +111,9 @@ def read_bodies(keys: set[str]) -> dict[str, dict]:
                 continue
             name = (b.get("name") or {}).get("de") or (b.get("name") or {}).get("fr") or ""
             hall = (b.get("legislative_name") or {}).get("de") or (b.get("legislative_name") or {}).get("fr") or ""
-            bodies[key] = {"name": name, "parliament": hall, "canton": b.get("canton_key"), "level": b.get("type")}
+            # the name for the screen is the German one; a document is found by the name in its own language
+            bodies[key] = {"name": name, "parliament": hall, "canton": b.get("canton_key"), "level": b.get("type"),
+                           "names": every(b.get("name")), "parliaments": every(b.get("legislative_name"))}
         url = (page.get("meta") or {}).get("next_page")
     print(f"{pages} pages of bodies read, {len(bodies)} parliaments with affairs or documents named")
     return dict(sorted(bodies.items()))
@@ -106,7 +122,7 @@ def read_bodies(keys: set[str]) -> dict[str, dict]:
 def main(argv: list[str]) -> int:
     files = [a for a in argv if not a.startswith("--")]
     if not files:
-        print("usage: python3 tools/knowledge.py <affairs.ndjson.gz> [--no-bodies]")
+        print("usage: python3 tools/knowledge.py <affairs.ndjson.gz> [--no-bodies | --only-bodies]")
         return 1
     export = Path(files[0])
     types, shapes, keys, n = read_export(export)
@@ -124,10 +140,11 @@ def main(argv: list[str]) -> int:
             forms[key] = kept
 
     OUT.mkdir(parents=True, exist_ok=True)
-    source = f"affairs export of OpenParlData ({export.name}), {n} affairs, built {stamp}"
-    _write("types.json", {"source": source, "types": table})
-    _write("number-forms.json", {"source": source, "share": SHARE, "forms": forms})
-    print(f"{n} affairs read: {len(table)} type labels, number forms for {len(forms)} parliaments")
+    if "--only-bodies" not in argv:
+        source = f"affairs export of OpenParlData ({export.name}), {n} affairs, built {stamp}"
+        _write("types.json", {"source": source, "types": table})
+        _write("number-forms.json", {"source": source, "share": SHARE, "forms": forms})
+        print(f"{n} affairs read: {len(table)} type labels, number forms for {len(forms)} parliaments")
     if "--no-bodies" not in argv:
         bodies = read_bodies(set(keys))
         source = f"API of OpenParlData, bodies with affairs or documents, built {stamp}"

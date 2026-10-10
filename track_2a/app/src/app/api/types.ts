@@ -45,6 +45,8 @@ export interface SourceEntry {
     open: boolean;
     values?: Record<string, unknown>;
     same?: Same;
+    // for the id of a person: the name the register holds for it
+    hint?: string;
 }
 
 export interface DocumentInfo {

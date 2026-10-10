@@ -1,4 +1,4 @@
-.PHONY: run fill test test-store bench bench-read reference knowledge vocabulary app
+.PHONY: run fill test test-store bench bench-read reference knowledge vocabulary register app
 
 export PYTHONPATH := src
 
@@ -31,6 +31,7 @@ test:
 	python3 tests/rules.py
 	python3 tests/store.py
 	python3 tests/vocabulary.py
+	python3 tests/register.py
 	python3 tests/admin.py data/documents/neuchatel-grand-conseil/*.pdf
 
 # The store's operations over Postgres as well, inside the running container (after `make run`). The test
@@ -76,3 +77,10 @@ knowledge:
 # takes a newer stem at its next start and keeps what a person changed.
 vocabulary:
 	python3 tools/vocabulary.py
+
+# Loads the persons of the parliaments from OpenParlData's exports into the store, so printed names can be told
+# as persons: two files, fetched one after the other. Only id, name, parliament and party are taken; nothing of
+# it is written into the repository. Inside the running container: docker compose exec docket python3
+# tools/register.py. Run again with a newer export, it keeps what the register learnt.
+register:
+	python3 tools/register.py

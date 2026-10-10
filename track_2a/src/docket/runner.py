@@ -12,6 +12,7 @@ from typing import Callable
 
 from docket.affair.identity import Identity
 from docket.affair.merge import Document, merge, values_of
+from docket.affair.persons import link_persons
 from docket.affair.validator import Contract
 from docket.config import Config
 from docket.document.bridge import Knowledge
@@ -25,6 +26,7 @@ from docket.pipeline import (
 )
 from docket.store import open_store
 from docket.store.review import carry_reviews
+from docket.store.register import stop_words
 from docket.store.vocabulary import Vocabulary
 
 
@@ -170,10 +172,19 @@ def _write_affairs(out: Path, documents: list[Document], fields: Fields, contrac
     by_id = {d.id: d for d in documents}
     lines = []
     summaries = []
-    vocabulary = Vocabulary(store.get_vocabulary())
+    rows = store.get_vocabulary()
+    vocabulary = Vocabulary(rows)
+    stop = stop_words(rows)
+    found: dict[str, list[dict]] = {}
     for affair in merge(documents, fields, contract, knowledge.types, vocabulary):
         safe = re.sub(r"[^\w.-]+", "_", affair.key)
         record = affair.record
+        # who the named persons are, by the register of each document's parliament
+        linked = link_persons(record, {i: by_id[i].parliament for i in affair.documents},
+                              {i: by_id[i].name for i in affair.documents}, store, stop)
+        if linked:
+            found.update(linked)
+            affair.errors = contract.check(record)
         earlier = store.get_affair(affair.key)
         carried = 0
         if earlier is not None:
@@ -187,7 +198,12 @@ def _write_affairs(out: Path, documents: list[Document], fields: Fields, contrac
             name = by_id[i].name
             report_file = out / f"{name}-fields.json"
             if report_file.is_file():
-                store.put_fields(name, json.loads(report_file.read_text(encoding="utf-8")))
+                report = json.loads(report_file.read_text(encoding="utf-8"))
+                if name in found:
+                    # what became of every name stays with the document's report
+                    report["persons"] = found[name]
+                    report_file.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+                store.put_fields(name, report)
             store.put_pages(name, out / name)
         state = "valid" if not affair.errors else f"{len(affair.errors)} violations, first: {affair.errors[0]}"
         count = len(affair.documents)

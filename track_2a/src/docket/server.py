@@ -18,6 +18,8 @@ small router; what it answers with is in api.py.
     POST /api/vocabulary                          {list, body, name, standard, by} sets what a name stands
                                                   for, {list, body, name, reset} takes that back (admin)
     GET  /api/parliaments                         the parliaments by their key, with their names
+    GET  /api/register?body=                      the persons of a parliament; without one, what was learnt
+    POST /api/register                            {body, key} takes a learnt person or a candidate out (admin)
     GET  /api/runs                                the runs of the admin, newest first
     GET  /api/runs/<id>                           one run with all its lines
     POST /api/runs                                a PDF (Content-Type application/pdf, X-Name) or
@@ -131,6 +133,16 @@ class Handler(BaseHTTPRequestHandler):
             if not isinstance(body, dict):
                 return 400, {"error": "a JSON object is expected"}
             return app.set_name(body)
+        if route == "register" and method == "GET":
+            query = parse_qs(urlsplit(self.path).query)
+            return 200, app.register(query.get("body", [None])[0])
+        if route == "register" and method == "POST":
+            if not app.allowed(self.headers.get("X-Token")):
+                return 403, {"error": "the admin token is missing or wrong"}
+            body = self._json_body()
+            if not isinstance(body, dict):
+                return 400, {"error": "a JSON object is expected"}
+            return app.forget(body)
         if route == "runs" and method == "GET":
             return 200, app.jobs.list()
         m = re.fullmatch(r"runs/([^/]+)", route)
