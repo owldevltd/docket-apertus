@@ -1,4 +1,5 @@
-.PHONY: run fill test test-store bench bench-read reference knowledge vocabulary register rows learn app
+.PHONY: run fill test test-store bench bench-read reference knowledge vocabulary register rows learn
+.PHONY: questions app
 
 export PYTHONPATH := src
 
@@ -20,8 +21,9 @@ fill:
 # their PDFs, builds the blocks and the record, and looks for the known values of the affairs on the first
 # pages; then forms the affairs again from the stored run of every shipped document and compares them with
 # the stored ones, directly and by way of the rows, takes decisions on them and lays them into a second JSON
-# of another shape, and fills an empty store with them as a clean checkout does. No model call, no network; needs poppler to render the pages. Results and control images
-# land in storage/tests/.
+# of another shape, fills an empty store with them as a clean checkout does, and answers the three questions
+# across the parliaments from it. No model call, no network; needs poppler to render the pages. Results and
+# control images land in storage/tests/.
 test:
 	python3 -m docket analyze --out storage/tests/pages data/documents/*/*.pdf
 	python3 tests/sources.py --got=storage/tests/pages --out=storage/tests/sources.md data/documents/*
@@ -37,6 +39,7 @@ test:
 	python3 tests/second.py data/documents/*
 	python3 tests/ask.py --pages=storage/tests/pages data/documents/*
 	python3 tests/shipped.py --pages=storage/tests/pages
+	python3 tests/questions.py --pages=storage/tests/pages
 	python3 tests/server.py --store=storage/tests/store --pages=storage/tests/pages
 	python3 tests/rules.py
 	python3 tests/store.py
@@ -113,3 +116,11 @@ rows:
 # tools/learn.py.
 learn:
 	python3 tools/learn.py
+
+# Answers three questions across the parliaments from the store, without the model: how many members back an
+# affair, what kinds of documents hang on the affairs, which details a parliament prints at all. With the
+# exports of OpenParlData (--affairs= and --contributors=) the persons held there stand beside the first
+# answer, with the list the documents were drawn with (--drawn=) parliament and affair are certain; see
+# tools/questions.py. Inside the running container: docker compose exec docket python3 tools/questions.py.
+questions:
+	python3 tools/questions.py
