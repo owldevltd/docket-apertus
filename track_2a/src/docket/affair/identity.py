@@ -154,7 +154,8 @@ def number(text: str) -> str:
     if d:
         num = d.group(1)
     rest = t[m.end():]
-    # short groups of letters with digits behind them still belong to the number ("20/wa 63/372")
-    r = re.match(r"^[/.\-\s]*([a-z]{1,3}[/.\-\s]*\d[\d./\-\s]*)", rest)
+    # short groups of letters with digits behind them still belong to the number ("20/wa 63/372"), also where
+    # an underscore joins the parts ("18_INT_168": without it every affair of Vaud of one year got one key)
+    r = re.match(r"^[/.\-\s_]*([a-z]{1,3}[/.\-\s_]*\d[\d./\-\s]*)", rest)
     tail = r.group(1) if r else ""
     return plain(pre + num + tail)

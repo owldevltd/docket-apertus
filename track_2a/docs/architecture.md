@@ -28,7 +28,7 @@ PDF ──pdftoppm──▶ page images ──▶ geometry ──▶ elements �
 | Kind | `document/kind.py` | the document's role in the affair from the words of its first page, by the list in `data/knowledge/kinds.json` | no |
 | Key | `affair/identity.py` | the affair number, normalised; checked against the number forms of the parliament, searched on the page by form, or a weak key from place, date and title; the parliament from the read names of polity and parliament, in any language | no |
 | Affair | `affair/merge.py`, `affair/types.py`, `affair/validator.py` | the documents of one key become one affair; the harmonised type comes from the label, through the names of the parliament in the vocabulary and else through the table of the export; the persons named are looked up in the register of the parliament (`affair/persons.py`); the record is checked against the contract by an own validator | no |
-| Store | `store/` (`files`, `postgres`, `review`, `rules`, `vocabulary`, `register`) | the affair with its documents, the fields reports, the decisions, the vocabulary, the register of persons; reviews survive a new run over the same document | no |
+| Store | `store/` (`files`, `postgres`, `rows`, `review`, `rules`, `vocabulary`, `register`) | the affair with its documents, the fields reports, the rows of the documents, the decisions, the vocabulary, the register of persons; reviews survive a new run over the same document | no |
 
 The command line runs the chain (`cli.py`, `runner.py`); the server runs the same function from its queue
 (`jobs.py`). `pipeline.py` holds the pieces every caller shares.
@@ -60,24 +60,62 @@ is used lies in the store.
 
 ## The store and the review
 
-A store holds affairs by key, each with its record and its documents, the fields reports of the documents,
-the decisions, the rules and the vocabulary. Files under `storage/store/` serve a single machine and the
-tests; Postgres (`DATABASE_URL`) serves the container, with the records as JSONB and the decisions and the
-vocabulary as rows. Page images stay on disk in both.
+A store holds affairs by key, each with its record and its documents, the fields reports and the rows of the
+documents, the decisions, the rules and the vocabulary. Files under `storage/store/` serve a single machine
+and the tests; Postgres (`DATABASE_URL`) serves the container, with the records as JSONB and the rows, the
+decisions and the vocabulary as tables. Page images stay on disk in both.
+
+The rows (`store/rows.py`) say what was found in a document in terms that do not depend on the target JSON.
+A record places a value under the key its JSON happens to use; a row says what the value is: its entity
+(body, identifier, category, person, group, place, date, event, or text for what is none of these; the fields
+file names it per field), the role under it, the field that asked, the value as read, and where it stands,
+the page and the box of its block. The block's id is a reference into that document's blocks and means
+nothing in another document; over documents a value is asked for by entity and value, in Postgres through
+columns with an index. An answer that did not hold gets a row as well, without a place, and so does what
+the run found the document itself to be, its kind, which the affair's record then holds with its place. The blocks stay in
+the record, to show and to rebuild the document; the rows point into them. A run writes the rows with the
+fields report, and `make rows` writes them for a store filled earlier. The way back is exact: the values
+taken from the rows are the ones the answers held, and the affair built from them is the same record
+(`tests/rows.py`).
 
 A decision is written at the value's source: confirmed; changed, with the old value kept in `before`;
 rejected, with the value left in place and marked, so an export can leave it out. `approve` stays as the
-machine's signal; open means approve without review. A new run over a document that is already stored keeps
-every review, matched by document name, block and path.
+machine's signal; open means approve without review.
+
+What was decided is kept at the row of the value, and the record follows the rows. The row keeps the value as
+it was read; the decision stands beside it with the review and, after a change, the value that counts now.
+When an affair is built, each row is told where its value sits in that record, and this is written anew with
+every build. So a new run over a document that is already stored finds the rows of the earlier run again, by
+field, value and block, takes their decisions over and puts each at the place its value has now; the path in
+the record plays no part in it. One read value can sit in several entries, a party named once for three
+persons: a decision then belongs to the entry it was made on. A review a record held before the rows did is
+taken into them; the earlier way of carrying a review, by document, block and path, serves only an affair that
+was stored before its documents had rows.
+
+What a value can be is a list in the data (`data/knowledge/entities.json`), not in the code: body, identifier,
+category, person, group, place, date, event, and text for what is none of these, each with what stands behind
+it to hold a value against, the list of the parliaments, a list of the vocabulary, or the register. A new
+entity is a new entry, with a list behind it or without.
+
+A lookup goes by what stands behind the entity of a value, and the fields file says where its result goes. A field that is a category
+names the place of its standard name (`standard`), and the vocabulary is asked; a field that is a person names
+the key of the id beside the name (`id`), and the register is asked; no key of the record is written into the
+code for it. What the lookup found stands at the row of the value: the standard name, the person a name was
+told as, the parliament of a body. The id the record got for a name is a part of that name's row, and a
+decision on it is kept there like any other.
 
 The same change twice on the same field proposes a rule (`store/rules.py`): prefix or suffix off or on, a
-letter read for a digit, the spelling, or the same value becoming the same value. Nothing is applied by
-itself. The answer to the second decision carries the proposal with its reach, how many values in how many
+letter read for a digit, the spelling, or the same value becoming the same value. The field is the one of the
+fields file, taken from the row of the value that was changed, so a rule does not hang on a key of the record
+and counts for the right field where an entry holds several values, a name and its party. Nothing is applied
+by itself. The answer to the second decision carries the proposal with its reach, how many values in how many
 affairs it would change and what they would become, and the app asks. A yes makes the rule active: it changes
 every fitting value of that field in the store, each with a review that names the rule, so every application
 can be seen and taken back. A no keeps the rule from being proposed again. A rule a decision by hand speaks
 against is not proposed: a person confirmed a value it would change, or changed it into something else. A
-person can switch an accepted rule off and on, and what people confirm or withdraw is counted on it.
+person can switch an accepted rule off and on, and what people confirm or withdraw is counted on it. Which
+affairs a rule can reach is asked of the rows, by field and value; only those records are read and counted,
+not every record in the store.
 
 The vocabulary (`store/vocabulary.py`) is a stem that can be changed. When the store is opened it is brought
 up to the stem of the checkout: an empty store is filled, a newer stem replaces every row nobody changed.
@@ -88,6 +126,13 @@ taken back. The type of an affair is looked up in the names of its parliament fi
 for another type elsewhere, so the table of all parliaments is asked only where the parliament is not known
 or does not list the label. OpenParlData calls its harmonised types provisional; that is why the stem is a
 list in the store and neither code nor a fixed file.
+
+The roles of those who take part in an affair are a list of the vocabulary as well: the 21 standard roles
+OpenParlData knows (author, cosign, speaker …) and, per parliament, the names it uses for them, read from
+OpenParlData's export of the contributors (`tools/vocabulary.py --roles`). A field of the fields file names its
+role by the standard role's word, so the role of a value is a row of that list and a role that is new is a
+row a person adds, as with the types. The role itself still comes from the fields file, the field a name was
+asked under; reading the document's own word for it is tried and measured, not built.
 
 The register (`store/register.py`) holds the persons of the parliaments. `tools/register.py` loads them from
 OpenParlData's exports into the store: id, name, parliament and party, nothing private, and nothing of it
@@ -101,11 +146,46 @@ the third document on the register takes it in as learnt; a newer export replace
 and leaves what was learnt. Without a parliament nothing is looked up: over all parliaments one wrong
 character leaves too many candidates.
 
+Beside the model stands a second opinion on where the value of a field is, learnt from the rows without the
+model (`fields/second.py`, `make learn`). Two ways name a block for a field: the place where the value usually
+stood in the documents of a parliament, and a small network that tells a block that holds a field by its
+look, its page and box, its kind, its font, its length, its digits, never by a word of its text. The teacher
+is what the model read and what people decided. No cut for either is chosen by hand: when they are learnt
+they are tried on documents held back, the cut is taken where agreeing outweighs disagreeing by most, and a
+way is kept for a parliament and a field only where it outweighs at all. In a run after that, a value that
+does not stand in the block the opinion names is marked for a person; where the model found nothing, what has
+the form of the field in the named block is taken and marked; where the two agree, nothing changes, and a
+mark the model's reading set stays. For a
+list of names a network of its own names every block it takes to hold some of them, and a name placed
+elsewhere is marked; tried the same way it is kept for few such fields. A store that has learnt nothing runs
+as before.
+
+With that, the record is one way of laying out what the rows hold, not the place where it is kept.
+`affair/view.py` lays a stored affair into the shape of any fields file and contract: the values where that
+file places them, the standard name and the id where it names a place for them, a changed value changed.
+`data/schema/plain/` is a second contract of another build, kept to show it: `python3 -m docket view` writes
+the stored affairs in that shape, and `tests/views.py` holds the two shapes against each other field by field.
+What the main contract adds of its own, the blocks of the documents, the places and the reviews, is left out
+where the other has no room and stays in the store. The store and the app work on the contract that is
+configured; the app reads the places of the values from that record, so a contract without room for them can
+be written to, not yet worked on in the app.
+
 ## The server and the app
 
 `server.py` is the standard library's HTTP server with a small router; `api.py` is what it answers with:
 the affairs with every value that has a place, the decisions, the rules, the vocabulary, the register, the runs of the admin, and for every
-open value the count of documents with the same pattern. One lock per affair guards the decisions; the
+open value the count of documents with the same pattern. Number, title, date and type for the list and the
+head of an affair are found by their role in the fields file and sent as such; the app does not read them
+from keys of the record. Every document keeps with its answers what it was asked, the names of the fields and
+a mark of the questions; the admin's area for the definition lists the fields with their entity, their role
+and what stands behind them, and counts over the store in how many documents a field was asked and in how
+many never, because the document was read before the field existed. That is told apart from a field that was
+asked and found nothing. Such documents can be asked afterwards (`python3 -m docket ask`, or from that area):
+only the missing questions go to the model, over the pages the store kept, the answers join the document's
+report, and its affair is formed anew from the reports with every decision kept. A role or a kind of value
+that is new therefore comes in as a field of the fields file with its entity and role, and the documents
+already read are asked for it; reading the role of a person freely from the document was tried three ways and
+did worse than the field a name is asked under. One lock per affair guards the decisions; the
 contract is checked before anything is saved. The admin's runs (`jobs.py`) take an uploaded PDF or a document
 of OpenParlData by its id, run one after the other, and stay on disk under `storage/runs/`. An optional token
 guards the admin.
@@ -113,7 +193,7 @@ guards the admin.
 The app (`app/`, Angular with Angular Material) is built into `src/docket/app/` and served as static files.
 It shows the affairs as result cards, one affair with its page and every block framed, red where a person has
 to look, the values beside it with the three decisions, every decision taken, and the admin with the runs,
-the rules, the vocabulary and the upload. The vocabulary shows one parliament at a time: its names, what
+the rules, the vocabulary, the definition, what the second opinion learnt, and the upload. The vocabulary shows one parliament at a time: its names, what
 each stands for, and where a person changed the stem. Node is needed for the build only: locally through `make app`, in the container in
 the first stage of the Docker image.
 
@@ -122,7 +202,9 @@ the first stage of the Docker image.
 `make test` runs without a model and holds the chain against references that existed before any run: the
 text layer of the PDFs for the geometry and the text, the affairs of the API for the fields and the identity,
 a reading by hand for the kinds, and the contract for every record; it also runs the server, the decisions,
-the rules, the vocabulary, the register and the admin's queue on a file store. `make test-store` runs the store's
+the rules, the vocabulary, the register and the admin's queue on a file store. It forms the affairs of the
+shipped documents again from a stored run with the model and compares them with the stored affairs character
+by character, so that a change to the core cannot move a value unnoticed. `make test-store` runs the store's
 operations over Postgres as well, inside the running container, in a schema of its own. `make bench` runs the whole chain with the model over the
 eight shipped documents, about sixty calls, under five minutes, and keeps the raw exchange of every call.
 `docs/evidence.md` holds every number behind a decision, `results/` the committed runs.

@@ -33,7 +33,7 @@ def record_with(place: str) -> dict:
         "schema": "0.8",
         "docs": {"data": [{"id": 1, "name": "doc-" + place.lower().replace(" ", "-"), "page-count": 1,
                            "body": [block]}]},
-        "custom-meta": [{"meta-name": "gemeinwesen", "meta-value": place,
+        "custom-meta": [{"meta-name": "polity", "meta-value": place,
                          "source": {"doc": 1, "block": "b1", "how": "cited", "approve": True}}],
     }
 

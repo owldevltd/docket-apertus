@@ -4,7 +4,7 @@ A value counts only with a place. Literal: it stands in a block, a date in any s
 every word of it stands in the block the model named, only put together differently. Cited: the model named
 the block and at least a word of the value stands there; a person has to look. Composed: the model wrote it
 (a summary); a person has to look. What the record already holds stays; a different printed value goes beside
-it as custom-meta.
+it as custom-meta, where the contract has such a place.
 """
 
 from __future__ import annotations
@@ -13,7 +13,7 @@ import json
 import re
 
 from docket.affair.validator import Contract
-from docket.fields.fields import Field, Fields
+from docket.fields.fields import Field, Fields, has_room
 from docket.fluffy import pick_block
 
 MONTHS = [
@@ -23,10 +23,18 @@ MONTHS = [
 
 
 def fill(record: dict, doc: int, values: dict[str, list[dict]], fields: Fields, contract: Contract,
-         body: list[dict]) -> tuple[dict, dict[str, str]]:
+         body: list[dict], placed: list[dict] | None = None) -> tuple[dict, dict[str, str]]:
     """Builds the values into the record, `values` per field name: value, block, how. Returns the record and a
-    note per field: taken, already in the record, differs from the record."""
+    note per field: taken, already in the record, differs from the record. With `placed`, every value that
+    carries the number of its row ("n") is noted there with where it went: {doc, n, of, source, path}, `of`
+    being the row that made the list entry when the value went into the entry of another."""
     out = json.loads(json.dumps(record))
+
+    def note(hit: dict, source_path: list[str], value_path: list[str], of: int | None = None) -> None:
+        if placed is not None and hit.get("n") is not None:
+            place = {"doc": doc, "n": hit["n"], "of": of, "source": ".".join(source_path), "path": ".".join(value_path)}
+            placed.append(place)
+
     docs = out.setdefault("docs", {}).setdefault("data", [])
     at = next((i for i, d in enumerate(docs) if d.get("id") == doc), None)
     # the document gets its entry when it has none yet; details about it go there
@@ -49,6 +57,7 @@ def fill(record: dict, doc: int, values: dict[str, list[dict]], fields: Fields, 
                 have.append(hit["value"])
                 place = {"path": ".".join(path) + f".{len(have) - 1}"}
                 out.setdefault("sources", []).append({**place, **source(doc, hit, f, body)})
+                note(hit, ["sources", str(len(out["sources"]) - 1)], [*path, str(len(have) - 1)])
             set_at(out, path, have)
             notes[name] = "taken"
             continue
@@ -59,9 +68,15 @@ def fill(record: dict, doc: int, values: dict[str, list[dict]], fields: Fields, 
                 if same(f.form, hit["value"], str(existing)):
                     notes[name] = "already in the record"
                     continue
+                if not has_room(contract, ["custom-meta"]):
+                    # a record without a place beside its fields: the second value stays with its row
+                    notes[name] = "differs from the record, no place beside it"
+                    continue
                 notes[name] = "differs from the record, as custom-meta"
                 meta = {"meta-name": name, "meta-value": hit["value"], "source": source(doc, hit, f, body)}
                 out.setdefault("custom-meta", []).append(meta)
+                beside = ["custom-meta", str(len(out["custom-meta"]) - 1)]
+                note(hit, [*beside, "source"], [*beside, "meta-value"])
             continue
         if list_at is None:
             # one value at its path; a place for the source only where the contract has one
@@ -70,8 +85,10 @@ def fill(record: dict, doc: int, values: dict[str, list[dict]], fields: Fields, 
             parent = contract.part(spath[:-1]) if len(spath) > 1 else None
             if parent and "source" in parent.get("properties", {}):
                 set_at(out, [*path[:-1], "source"], source(doc, hit, f, body))
+                note(hit, [*path[:-1], "source"], path)
             else:
                 out.setdefault("sources", []).append({"path": ".".join(path), **source(doc, hit, f, body)})
+                note(hit, ["sources", str(len(out["sources"]) - 1)], path)
             notes[name] = "taken"
             continue
         # lists: every field of the same template goes into the same entries; the first field creates them
@@ -83,15 +100,20 @@ def fill(record: dict, doc: int, values: dict[str, list[dict]], fields: Fields, 
         into = path[:list_at]
         rows = list(get_at(out, into) or [])
         new = []
-        people = (record.get("contributors") or {}).get("data") or []
+        made = []
+        # a person the record already names in this list is not created again
+        people = (get_at(record, into) or []) if f.lookup == "register" else []
         for hit in hits:
-            if path[0] == "contributors" and known(hit["value"], people):
+            if people and known(hit["value"], people, path[list_at + 1:]):
                 notes[name] = "already in the record"
                 continue
             row = json.loads(json.dumps(f.fixed))
             set_at(row, path[list_at + 1:], day(hit["value"]) if f.form == "date" else hit["value"])
             row["source"] = source(doc, hit, f, body)
+            entry = [*into, str(len(rows) + len(new))]
+            note(hit, [*entry, "source"], [*entry, *path[list_at + 1:]])
             new.append(row)
+            made.append(hit)
             notes[name] = "taken"
         # the further fields of the template: one per entry, or a single value for all
         for mate in mates[1:]:
@@ -103,6 +125,8 @@ def fill(record: dict, doc: int, values: dict[str, list[dict]], fields: Fields, 
                 one = more[0] if len(more) == 1 else (more[i] if i < len(more) else None)
                 if one is not None:
                     set_at(row, mf.path[list_at + 1:], day(one["value"]) if mf.form == "date" else one["value"])
+                    entry = [*into, str(len(rows) + i)]
+                    note(one, [*entry, "source"], [*entry, *mf.path[list_at + 1:]], made[i].get("n"))
             notes[mate] = "taken, into the entries of the first field"
         set_at(out, into, [*rows, *new])
     return out, notes
@@ -110,12 +134,15 @@ def fill(record: dict, doc: int, values: dict[str, list[dict]], fields: Fields, 
 
 def source(doc: int, hit: dict, f: Field, body: list[dict]) -> dict:
     """The place of a value with its notes: how it got there, and approve where a person should look: not
-    found literally or derived, or the block itself carries approve (read from a scan)."""
+    found literally or derived, or the block itself carries approve (read from a scan). A value that comes
+    with a word on this of its own keeps it: a second opinion marks a value it speaks against
+    (docket.fields.second)."""
     how = hit.get("how", "literal")
     how = "composed" if f.free else (how if how in ("literal", "derived") else "cited")
     block = find_block(hit["block"], body)
     out = {"doc": doc, "block": hit["block"], "how": how}
-    if how not in ("literal", "derived") or (block is not None and block.get("approve")):
+    look = how not in ("literal", "derived") or (block is not None and bool(block.get("approve")))
+    if hit.get("approve", look):
         out["approve"] = True
     return out
 
@@ -202,10 +229,11 @@ def same(form: str, a: str, b: str) -> bool:
     return plain(a) == plain(b)
 
 
-def known(name: str, people: list[dict]) -> bool:
-    """Whether a person of this name is already among the contributors: every word of the name in one entry."""
+def known(name: str, people: list[dict], key: list[str]) -> bool:
+    """Whether a person of this name is already among the entries, the name standing at `key` in each: every
+    word of the name in one entry."""
     for p in people:
-        full = plain(str(p.get("fullname") or ""))
+        full = plain(str(get_at(p, key) or ""))
         if full and all(plain(w) == "" or plain(w) in full for w in name.split()):
             return True
     return False

@@ -1,6 +1,6 @@
-"""The store in Postgres: the records as JSONB, the decisions, the vocabulary and the register as rows. The
-tables are created on first use. Page images stay on disk under the store's folder (a volume in Docker), the
-database holds what is queried."""
+"""The store in Postgres: the records as JSONB, the rows of the documents with entity, field and value as columns
+to ask by, the decisions, the vocabulary and the register as rows. The tables are created on first use. Page
+images stay on disk under the store's folder (a volume in Docker), the database holds what is queried."""
 
 from __future__ import annotations
 
@@ -20,6 +20,24 @@ CREATE TABLE IF NOT EXISTS documents (
     name text PRIMARY KEY,
     fields jsonb NOT NULL,
     updated_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE TABLE IF NOT EXISTS rows (
+    doc text NOT NULL,
+    n integer NOT NULL,
+    affair text NOT NULL,
+    entity text NOT NULL,
+    field text NOT NULL,
+    value text NOT NULL,
+    row jsonb NOT NULL,
+    PRIMARY KEY (doc, n)
+);
+CREATE INDEX IF NOT EXISTS rows_entity_value ON rows (entity, value);
+CREATE INDEX IF NOT EXISTS rows_field_value ON rows (field, value);
+CREATE INDEX IF NOT EXISTS rows_affair ON rows (affair);
+CREATE TABLE IF NOT EXISTS learnt (
+    name text PRIMARY KEY,
+    data jsonb NOT NULL,
+    at timestamptz NOT NULL DEFAULT now()
 );
 CREATE TABLE IF NOT EXISTS decisions (
     id bigserial PRIMARY KEY,
@@ -105,6 +123,59 @@ class PostgresStore(Store):
         with self._connect() as db:
             row = db.execute("SELECT fields FROM documents WHERE name = %s", (name,)).fetchone()
         return row[0] if row else None
+
+    def asked_counts(self) -> dict:
+        with self._connect() as db:
+            documents = db.execute("SELECT count(*) FROM documents").fetchone()[0]
+            names = db.execute(
+                "SELECT asked, count(*) FROM documents, "
+                "jsonb_object_keys(coalesce(fields->'fields', '{}'::jsonb)) AS asked GROUP BY asked"
+            ).fetchall()
+            marks = db.execute(
+                "SELECT coalesce(fields->'definition'->>'version', ''), count(*) FROM documents GROUP BY 1"
+            ).fetchall()
+        return {"documents": documents, "fields": dict(names), "versions": dict(marks)}
+
+    def put_rows(self, doc: str, rows: list[dict]) -> None:
+        with self._connect() as db, db.cursor() as cursor:
+            cursor.execute("DELETE FROM rows WHERE doc = %s", (doc,))
+            cursor.executemany(
+                "INSERT INTO rows (doc, n, affair, entity, field, value, row) "
+                "VALUES (%s, %s, %s, %s, %s, %s, %s::jsonb)",
+                [(doc, r["n"], r.get("affair") or "", r["entity"], r["field"], str(r["value"]),
+                  json.dumps(r, ensure_ascii=False)) for r in rows],
+            )
+
+    def get_rows(self, doc: str) -> list[dict]:
+        with self._connect() as db:
+            rows = db.execute("SELECT row FROM rows WHERE doc = %s ORDER BY n", (doc,)).fetchall()
+        return [r[0] for r in rows]
+
+    def find_rows(self, entity: str | None = None, field: str | None = None, value: str | None = None) -> list[dict]:
+        given = [(k, v) for k, v in (("entity", entity), ("field", field), ("value", value)) if v is not None]
+        where = " WHERE " + " AND ".join(f"{k} = %s" for k, _ in given) if given else ""
+        with self._connect() as db:
+            rows = db.execute(f"SELECT row FROM rows{where} ORDER BY doc, n", [v for _, v in given]).fetchall()
+        return [r[0] for r in rows]
+
+    def affairs_without_rows(self) -> list[str]:
+        with self._connect() as db:
+            query = "SELECT key FROM affairs WHERE NOT EXISTS (SELECT 1 FROM rows WHERE rows.affair = affairs.key)"
+            rows = db.execute(query + " ORDER BY key").fetchall()
+        return [r[0] for r in rows]
+
+    def get_learnt(self) -> dict | None:
+        with self._connect() as db:
+            row = db.execute("SELECT data FROM learnt WHERE name = 'second'").fetchone()
+        return row[0] if row else None
+
+    def put_learnt(self, data: dict) -> None:
+        with self._connect() as db:
+            db.execute(
+                "INSERT INTO learnt (name, data, at) VALUES ('second', %s::jsonb, now()) "
+                "ON CONFLICT (name) DO UPDATE SET data = EXCLUDED.data, at = now()",
+                (json.dumps(data, ensure_ascii=False),),
+            )
 
     def add_decision(self, row: dict) -> None:
         with self._connect() as db:

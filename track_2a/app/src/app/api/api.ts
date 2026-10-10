@@ -1,9 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import {
-    Affair, AffairSummary, Decision, DecisionBody, FieldsReport, Health, Job, Parliament, Rule, VocabularyRow,
-} from './types';
+import { Affair, AffairSummary, Decision, DecisionBody, Definition, FieldsReport, Health, Job, Learnt, Parliament, Rule, VocabularyRow } from './types';
 
 // The one door to the server. Every call goes through here, so the admin token and the error text are in
 // one place; the server's error message is what the user gets to see.
@@ -69,6 +67,19 @@ export class Api {
 
     switchRule( id: string, active: boolean, by: string ): Promise<Rule> {
         return this.post<Rule>( 'rules/' + encodeURIComponent( id ), { active, by } );
+    }
+
+    definition(): Promise<Definition> {
+        return this.get<Definition>( 'definition' );
+    }
+
+    // queues a run that asks the stored documents a field they were never asked
+    askAgain( field: string ): Promise<Job> {
+        return this.post<Job>( 'definition/ask', { field } );
+    }
+
+    learnt(): Promise<Learnt> {
+        return this.get<Learnt>( 'learnt' );
     }
 
     vocabulary(): Promise<VocabularyRow[]> {

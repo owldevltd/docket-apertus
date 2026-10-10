@@ -56,7 +56,7 @@ Everything from OpenParlData stays with its name and form: the affair with `docs
 | --- | --- |
 | `page-count` | number of pages |
 | `article-version` (dynamic) | the version as printed ("Fassung nach 2. Lesung") |
-| `article-type` (dynamic) | the kind of the document in the affair, its role rather than the affair's type: `submission` (the text handed in), `answer`, `bill`, `minutes`, `committee-report`, `act`, `attachment`. Set by code from the words of the first page (`data/knowledge/kinds.json`, the list grows with the knowledge), absent when none of them stands there; a person confirms it in the review |
+| `article-type` (dynamic) | the kind of the document in the affair, its role rather than the affair's type: `submission` (the text handed in), `answer`, `bill`, `minutes`, `committee-report`, `act`, `attachment`. Set by code from the words of the first page (`data/knowledge/kinds.json`, the list grows with the knowledge), absent when none of them stands there; a person confirms it in the review. A run carries it into the affair's record with its place, like a value read from the document |
 | `abstract` (dynamic) | a summary, per language as OpenParlData has it (`{ "de": …, "fr": … }`); this covers `trans-abstract` too |
 | `conference` (dynamic) | the session or meeting the document names: `conf-name`, `conf-date`, `conf-loc`. Only when the document is not already attached to an OpenParlData meeting (`meeting_id`) |
 | `journal-meta` (dynamic) | press and periodicals only: `journal-title`, `publisher-name`, `issn` |
@@ -106,7 +106,7 @@ Every block also carries:
 
 ## Filling from the document
 
-The input is always the PDF alone; the affair arises from the document, in the form of the OpenParlData answer. Which values go where is in `fields.json`, built like this JSON: wherever a value belongs, it holds the question (`name`, `question`, `form`, `min-words`, `max-words`, `choice`, `dynamic`, `pages`, `when`, `free`, `block-text`). The pipeline asks the model with the text image of the first pages (page 1, with a cover sheet page 2 as well) and for some fields with the whole document, six fields per call, and builds the answers in like this:
+The input is always the PDF alone; the affair arises from the document, in the form of the OpenParlData answer. Which values go where is in `fields.json`, built like this JSON: wherever a value belongs, it holds the question (`name`, `question`, `form`, `min-words`, `max-words`, `choice`, `dynamic`, `pages`, `when`, `free`, `block-text`) and says what the value is: its `entity` (`body`, `identifier`, `category`, `person`, `group`, `place`, `date`, `event`, or `text` for what is none of these; the list is `data/knowledge/entities.json`, with what stands behind each to hold a value against) and, where several fields share an entity, the `role` under it (the affair's own `number`; for a person the word of a standard role of the vocabulary, `author`, `cosign`). The entity belongs to the value, not to its place: the store keeps every value under it, whatever JSON the value is placed in. Where a lookup has something to add, the field says where it goes: `standard` is the path of the standard name of a category (the affair's type through the vocabulary, `type_harmonized`), `id` the key beside a person's name for the id the register holds (`person_id`). The pipeline asks the model with the text image of the first pages (page 1, with a cover sheet page 2 as well) and for some fields with the whole document, six fields per call, and builds the answers in like this:
 
 - A field at a place that already has a value (from an earlier document of the same affair): if the value is the same, it stays; if it differs, the printed value goes beside it as `custom-meta` (`meta-name` = the field's name), with its place. Several documents belong to one affair when they carry the same affair number.
 - A list (`contributors.data`, `custom-meta`, `related-article`, `related-object`): one entry per value with the fixed parts of the template (role, `meta-name`) and its place. A person already among the contributors is not created again.
@@ -166,6 +166,22 @@ Why the journal block is in: the corpus also holds press and periodicals. The fi
 
 The validator has no schema built in; it takes the contract as input. A different kind of document can have its own contract beside this one.
 
+The same holds for the shape of the affair itself. What the store knows of an affair does not hang on this contract: every value is kept as a row that says what it is (its entity), which field asked for it and where it stands in the document, and what a person decided is kept there too. A fields file says where each of it goes. `plain/` holds a second contract with its fields file, built unlike this one on purpose: other keys, other nesting, closed everywhere, no room for the documents' blocks or the places of the values.
+
+```
+reference                     the affair's number
+subject.heading               the title
+subject.form                  the type as the document names it
+subject.form_standard         its standard name, from the vocabulary
+received                      the day it was handed in
+people[]  as, name, group     who submitted and who co-signed; person = the id from the register
+where     polity, council, place
+keywords[]
+course[]  what, when
+```
+
+`python3 -m docket view --fields data/schema/plain/fields.json --contract data/schema/plain/contract.json --out <dir>` writes every stored affair in that shape, from the rows and without reading a document again. A second fields file names the fields by the names they were read under; it can leave fields out, and it cannot ask for what was never read. What this contract adds of its own (`docs` with the blocks, `sources`, `source`, `review`) is left out where the other has no room for it and stays in the store; a value a person rejected is left out of a record that cannot show the mark, and a second value for a field that already has one (from a further document) stays with its row where the record has no place beside its fields.
+
 ## Example (excerpt)
 
 ```json
@@ -185,8 +201,8 @@ The validator has no schema built in; it takes the contract as input. A differen
     "… (5 entries)"
   ],
   "custom-meta": [
-    { "meta-name": "adressat", "meta-value": "Gemeinderat", "source": { "doc": 1, "block": "b11", "how": "literal" } },
-    { "meta-name": "ort", "meta-value": "Nidau", "source": { "doc": 1, "block": "b15", "how": "literal" } },
+    { "meta-name": "addressee", "meta-value": "Gemeinderat", "source": { "doc": 1, "block": "b11", "how": "literal" } },
+    { "meta-name": "place", "meta-value": "Nidau", "source": { "doc": 1, "block": "b15", "how": "literal" } },
     "… (5 entries)"
   ],
   "contributors": {
@@ -220,6 +236,9 @@ The full example is what the pipeline delivered for the Nidau PDF on 6 October 2
 
 ## Changes
 
+- **English field names** (10 October 2026): the fields of the fields file are named in English (`number`, `title`, `authors`, `polity` …) instead of German, and with them the `meta-name` of a value under `custom-meta` (`polity`, `place`, `parliament`, `department`, `addressee`). The questions put to the model stay German. The contract itself unchanged.
+- **A second contract** (10 October 2026): `plain/`, another shape for the same affair, filled from the same rows. This contract unchanged.
+- **Entity in the fields file** (10 October 2026): every field names what its value is (`entity`, with a `role` under it where needed), and where a lookup's result goes (`standard`, `id`). The contract itself unchanged.
 - **Repository edition** (8 October 2026): descriptions and enumerations in English; the contract itself unchanged.
 - **0.8** (6 October 2026): `how` knows `derived`. For the title the text of the named block counts when every word of the answer stands in it and the block is not much longer (fields file `block-text`).
 - **0.7** (6 October 2026): `review` at every place (`source` and `sources`): `at`, `decision`, `before`, `by`, `rule`. Reason: the person's decision belongs in the data model, so that the review view shows it, the general repair uses it and the learning gets it.

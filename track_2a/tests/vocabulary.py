@@ -205,12 +205,20 @@ def main() -> int:
         rows = stem_rows(shipped)
         keys = {(r["list"], r["body"], r["name"]) for r in rows}
         check(len(keys) == len(rows) and {r["list"] for r in rows} == set(LISTS),
-              f"its {len(rows)} rows are unique by list, body and name, in the three lists")
+              f"its {len(rows)} rows are unique by list, body and name, in the {len(LISTS)} lists")
         named = [r for r in rows if r["body"]]
         ids = {s["id"] for s in shipped["lists"]["types"]["standards"]}
         known = all(n["standard"] is None or n["standard"] in ids for n in shipped["lists"]["types"]["names"])
         check(known, f"every name points at a standard of its list or at none ({len(named)} names of "
               f"{len({r['body'] for r in named})} parliaments)")
+        # the roles: a parliament's name for a role stands for a standard role, known by OpenParlData's word
+        roles = Vocabulary(rows)
+        named_role = roles.row("roles", "BS", "Miturheber")
+        added = roles.set("roles", "BS", "Erstunterzeichnende", "cosign", "tester")
+        check(named_role is not None and named_role["key"] == "author" and named_role["standard"]["fr"] == "Auteur"
+              and added["key"] == "cosign" and added["standard"]["de"] == "Mitunterzeichner/in",
+              f"{len(roles.standards('roles'))} standard roles; a parliament's name stands for one, and a person "
+              f"can add a name by the role's word")
     return 1 if failed else 0
 
 

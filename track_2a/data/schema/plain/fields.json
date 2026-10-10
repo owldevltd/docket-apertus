@@ -1,0 +1,120 @@
+{
+  "schema": "plain",
+  "$task": {
+    "intro": "Unten steht eine Seite eines Dokuments aus einem Schweizer Parlament als Text, ungefähr so angeordnet wie auf dem Papier. [Bild] steht für ein Bild, einen Stempel oder eine Unterschrift. Es ist Seite {seite} von {seiten}.",
+    "whole": "Unten steht ein Dokument aus einem Schweizer Parlament als Text, {von} von {seiten} Seiten, jede beginnt mit einer Zeile \"===== Seite n =====\", ungefähr so angeordnet wie auf dem Papier. [Bild] steht für ein Bild, einen Stempel oder eine Unterschrift.",
+    "blocks": "Jeder Textblock beginnt mit seiner Kennung in eckigen Klammern, zum Beispiel [b12].",
+    "task": "Lies daraus ab:",
+    "missing": "Steht etwas nicht auf der Seite, schreibe dafür einen Strich (-). Erfinde nichts.",
+    "form": "Antworte mit genau einer Zeile je Angabe, in der Form \"name: wert [Kennung des Blocks, aus dem der Wert stammt]\", ohne weiteren Text."
+  },
+  "reference": {
+    "name": "number",
+    "entity": "identifier",
+    "role": "number",
+    "question": "Geschäftsnummer oder Aktenzeichen des Geschäfts"
+  },
+  "subject": {
+    "heading": {
+      "name": "title",
+      "entity": "text",
+      "role": "title",
+      "question": "Titel des Geschäfts",
+      "min-words": 3,
+      "block-text": true
+    },
+    "form": {
+      "name": "type",
+      "entity": "category",
+      "role": "type",
+      "question": "Art des Geschäfts, so wie das Dokument sie nennt (zum Beispiel Motion, Postulat, Interpellation, Anfrage)",
+      "max-words": 4,
+      "standard": "subject.form_standard"
+    }
+  },
+  "received": {
+    "name": "date",
+    "entity": "date",
+    "role": "date",
+    "question": "Datum, an dem das Geschäft eingereicht wurde, als TT.MM.JJJJ",
+    "form": "date"
+  },
+  "people": [
+    {
+      "as": "submitted",
+      "name": {
+        "name": "authors",
+        "entity": "person",
+        "role": "author",
+        "question": "wer das Geschäft eingereicht hat (bei mehreren durch Strichpunkt getrennt)",
+        "form": "list",
+        "id": "person"
+      },
+      "group": {
+        "name": "party",
+        "entity": "group",
+        "question": "Partei oder Fraktion der Einreichenden",
+        "form": "list"
+      }
+    },
+    {
+      "as": "co-signed",
+      "name": {
+        "name": "cosigners",
+        "entity": "person",
+        "role": "cosign",
+        "question": "wer mitunterzeichnet hat (bei mehreren durch Strichpunkt getrennt)",
+        "form": "list",
+        "pages": "all",
+        "id": "person"
+      }
+    }
+  ],
+  "where": {
+    "polity": {
+      "name": "polity",
+      "entity": "body",
+      "role": "place",
+      "question": "Gemeinde, Stadt oder Kanton, so wie es auf der Seite steht",
+      "choice": true
+    },
+    "council": {
+      "name": "parliament",
+      "entity": "body",
+      "role": "parliament",
+      "question": "Name des Parlaments oder Rats, so wie er auf der Seite steht",
+      "choice": true
+    },
+    "place": {
+      "name": "place",
+      "entity": "place",
+      "question": "Ort, an dem es eingereicht wurde"
+    }
+  },
+  "keywords": {
+    "name": "keywords",
+    "entity": "text",
+    "question": "gedruckte Schlagwörter, falls welche angegeben sind (durch Strichpunkt getrennt)",
+    "form": "list",
+    "dynamic": true,
+    "pages": "all"
+  },
+  "course": [
+    {
+      "what": {
+        "name": "event",
+        "entity": "event",
+        "question": "im Dokument genannte Ereignisse mit Datum, was geschah (zum Beispiel \"Beantwortung im Stadtrat\"; bei mehreren durch Strichpunkt getrennt, in derselben Reihenfolge wie ereignisdatum)",
+        "form": "list",
+        "pages": "all"
+      },
+      "when": {
+        "name": "event-date",
+        "entity": "date",
+        "question": "die Daten dieser Ereignisse, als TT.MM.JJJJ, durch Strichpunkt getrennt",
+        "form": "date",
+        "pages": "all"
+      }
+    }
+  ]
+}

@@ -71,8 +71,17 @@ export interface Block {
     content?: Block[];
 }
 
+// number, title, date and type of an affair, found by what its fields are, not by the keys of the record
+export interface Head {
+    number: string | null;
+    title: string | null;
+    date: string | null;
+    type: string | null;
+}
+
 export interface Affair {
     key: string;
+    head: Head;
     record: Record<string, any>;
     documents: DocumentInfo[];
     sources: SourceEntry[];
@@ -179,7 +188,7 @@ export interface Standard {
 // name it stands for, or none. A row with an empty body is a standard name itself. A row a person set says
 // who and when, and keeps what the stem said beside it.
 export interface VocabularyRow {
-    list: 'types' | 'events' | 'groups';
+    list: 'types' | 'events' | 'groups' | 'roles';
     body: string;
     name: string;
     label: string;
@@ -208,4 +217,44 @@ export interface Health {
     model: boolean;
     admin: 'token' | 'open';
     at: string;
+}
+
+// The fields of the fields file with what each is, held against the store: in how many documents a field was
+// asked, and in how many never, because the document was read before the field existed.
+export interface DefinitionField {
+    name: string;
+    entity: string;
+    role: string;
+    lookup: string;
+    list: string;
+    asked: number;
+    never: number;
+}
+
+export interface Definition {
+    version: string;
+    documents: number;
+    versions: Record<string, number>;
+    entities: { name: string; lookup?: string; list?: string; means: string }[];
+    fields: DefinitionField[];
+    gone: { name: string; asked: number }[];
+}
+
+// What the second opinion learnt from the store: per way (the usual place in a parliament, or the network)
+// and field, how often it agreed and disagreed on documents held back, and whether it is used in the runs.
+export interface LearntWay {
+    way: 'place' | 'network';
+    parliament: string;
+    field: string;
+    documents?: number;
+    share?: number;
+    cut: number | null;
+    agree: number;
+    disagree: number;
+    use: boolean;
+}
+
+export interface Learnt {
+    documents: number;
+    ways: LearntWay[];
 }

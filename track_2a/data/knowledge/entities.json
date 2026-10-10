@@ -1,0 +1,14 @@
+{
+  "about": "What a value can be, whatever JSON it goes into. A field of the fields file names one of these as its entity. `lookup` says what stands behind an entity to hold a value against: the list of the parliaments (bodies), a list of the vocabulary (named in `list`), or the register of persons. A new entity is a new entry here, with a list behind it or without; `text` takes what is none of the others.",
+  "entities": [
+    {"name": "body", "lookup": "bodies", "means": "the polity or the parliament a document belongs to"},
+    {"name": "identifier", "means": "a number or key that names an affair"},
+    {"name": "category", "lookup": "vocabulary", "list": "types", "means": "a kind with a standard name, as the type of an affair"},
+    {"name": "person", "lookup": "register", "means": "a named person"},
+    {"name": "group", "lookup": "vocabulary", "list": "groups", "means": "a party, a parliamentary group, a committee, a department"},
+    {"name": "place", "means": "a place something was done at"},
+    {"name": "date", "means": "a day"},
+    {"name": "event", "lookup": "vocabulary", "list": "events", "means": "something that happened to the affair, as a sitting or a decision"},
+    {"name": "text", "means": "wording of the document: a title, a summary, a keyword"}
+  ]
+}

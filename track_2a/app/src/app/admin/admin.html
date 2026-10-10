@@ -9,7 +9,7 @@
     <nav class="drawer">
         <mat-nav-list>
             @for ( a of areas; track a.id ) {
-                <a mat-list-item [activated]="area() === a.id" (click)="area.set( a.id )">
+                <a mat-list-item [activated]="area() === a.id" (click)="show( a.id )">
                     <app-icon matListItemIcon [name]="a.icon" />
                     <span matListItemTitle>{{ a.name }}</span>
                 </a>
@@ -91,6 +91,76 @@
             }
             @case ( 'vocabulary' ) {
                 <app-vocabulary />
+            }
+            @case ( 'definition' ) {
+                <h2>Definition</h2>
+                <p class="muted">Die Felder der Felderdatei: was ein Wert ist (die Art), welche Rolle er darunter hat und was
+                    hinter der Art steht. Daneben, in wie vielen Dokumenten des Bestands ein Feld gefragt wurde. „Nie gefragt“
+                    heisst: das Dokument wurde gelesen, bevor es das Feld gab – nicht, dass dort nichts steht. „Nachfragen“
+                    stellt diesen Dokumenten nur die fehlende Frage, auf den gespeicherten Seiten; Entscheide bleiben.</p>
+                @if ( definition(); as d ) {
+                    <p class="muted">{{ d.documents }} {{ d.documents === 1 ? 'Dokument' : 'Dokumente' }} im Bestand · Stand der
+                        Definition {{ d.version }}</p>
+                    <div class="wide">
+                    <table class="plain">
+                        <thead>
+                            <tr><th>Feld</th><th>Art</th><th>Rolle</th><th>Dahinter</th><th class="num">Gefragt</th><th class="num">Nie gefragt</th><th></th></tr>
+                        </thead>
+                        <tbody>
+                            @for ( f of d.fields; track f.name ) {
+                                <tr>
+                                    <td>{{ words.LABELS[ f.name ] || f.name }} <span class="muted">{{ f.name }}</span></td>
+                                    <td>{{ words.ENTITIES[ f.entity ] || f.entity }}</td>
+                                    <td>{{ f.role || '–' }}</td>
+                                    <td>{{ f.lookup ? ( words.LOOKUPS[ f.lookup ] || f.lookup ) + ( f.list ? ' (' + f.list + ')' : '' ) : '–' }}</td>
+                                    <td class="num">{{ f.asked }}</td>
+                                    <td class="num">@if ( f.never ) { <span class="chip running">{{ f.never }}</span> } @else { – }</td>
+                                    <td class="act">@if ( f.never && health()?.model ) {
+                                        <button mat-stroked-button (click)="askAgain( f.name )" [disabled]="busy()">Nachfragen</button>
+                                    }</td>
+                                </tr>
+                            }
+                            @for ( g of d.gone; track g.name ) {
+                                <tr class="quiet">
+                                    <td>{{ g.name }}</td><td colspan="3">nicht mehr in der Felderdatei</td>
+                                    <td class="num">{{ g.asked }}</td><td class="num">–</td><td></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    </div>
+                }
+            }
+            @case ( 'learnt' ) {
+                <h2>Zweite Meinung</h2>
+                <p class="muted">Was ohne das Modell gelernt wurde, um neben ihm zu stehen: wo der Wert eines Felds in den Dokumenten
+                    eines Parlaments üblicherweise steht (Lage), und ein kleines Netz, das einen Block an seinem Aussehen erkennt.
+                    Beides wird an zurückgehaltenen Dokumenten ausgemessen; verwendet wird ein Weg nur, wo er öfter einig war als
+                    uneinig. Gelernt wird mit <code>make learn</code>.</p>
+                @if ( learnt(); as l ) {
+                    <p class="muted">gelernt aus {{ l.documents }} {{ l.documents === 1 ? 'Dokument' : 'Dokumenten' }}</p>
+                    <div class="wide">
+                    <table class="plain">
+                        <thead>
+                            <tr><th>Weg</th><th>Parlament</th><th>Feld</th><th class="num">Einig</th><th class="num">Uneinig</th><th>Verwendet</th></tr>
+                        </thead>
+                        <tbody>
+                            @for ( w of l.ways; track w.way + w.parliament + w.field ) {
+                                <tr [class.quiet]="!w.use">
+                                    <td>{{ w.way === 'place' ? 'Lage' : 'Netz' }}</td>
+                                    <td>{{ w.parliament || 'alle' }}</td>
+                                    <td>{{ words.LABELS[ w.field ] || w.field }}</td>
+                                    <td class="num">{{ w.agree }}</td>
+                                    <td class="num">{{ w.disagree }}</td>
+                                    <td>@if ( w.use ) { <span class="chip done">ja</span> } @else { nein }</td>
+                                </tr>
+                            } @empty {
+                                <tr><td colspan="6" class="empty">Noch nichts gelernt.</td></tr>
+                            }
+                        </tbody>
+                    </table>
+                    </div>
+                }
             }
             @case ( 'process' ) {
                 <h2>Dokument verarbeiten</h2>

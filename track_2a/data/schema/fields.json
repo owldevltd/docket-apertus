@@ -9,13 +9,15 @@
     "form": "Antworte mit genau einer Zeile je Angabe, in der Form \"name: wert [Kennung des Blocks, aus dem der Wert stammt]\", ohne weiteren Text."
   },
   "number": {
-    "name": "nummer",
+    "name": "number",
+    "entity": "identifier",
     "role": "number",
     "question": "Geschäftsnummer oder Aktenzeichen des Geschäfts"
   },
   "title": {
     "de": {
-      "name": "titel",
+      "name": "title",
+      "entity": "text",
       "role": "title",
       "question": "Titel des Geschäfts",
       "min-words": 3,
@@ -24,14 +26,18 @@
   },
   "type_name": {
     "de": {
-      "name": "art",
+      "name": "type",
+      "entity": "category",
+      "role": "type",
+      "standard": "type_harmonized",
       "question": "Art des Geschäfts, so wie das Dokument sie nennt (zum Beispiel Motion, Postulat, Interpellation, Anfrage)",
       "max-words": 4
     }
   },
   "begin_date": {
-    "name": "datum",
-      "role": "date",
+    "name": "date",
+    "entity": "date",
+    "role": "date",
     "question": "Datum, an dem das Geschäft eingereicht wurde, als TT.MM.JJJJ",
     "form": "date"
   },
@@ -42,19 +48,24 @@
           "de": "Urheber/in"
         },
         "fullname": {
-          "name": "einreichende",
+          "name": "authors",
+          "entity": "person",
+          "role": "author",
+          "id": "person_id",
           "question": "wer das Geschäft eingereicht hat (bei mehreren durch Strichpunkt getrennt)",
           "form": "list"
         },
         "party": {
           "de": {
-            "name": "partei",
+            "name": "party",
+            "entity": "group",
             "question": "Partei oder Fraktion der Einreichenden",
             "form": "list"
           }
         },
         "on-behalf-of": {
-          "name": "im-namen-von",
+          "name": "on-behalf-of",
+          "entity": "group",
           "question": "in wessen Namen eingereicht wurde (Fraktion, Kommission), falls angegeben",
           "dynamic": true
         }
@@ -64,7 +75,10 @@
           "de": "Mitunterzeichner/in"
         },
         "fullname": {
-          "name": "mitunterzeichnende",
+          "name": "cosigners",
+          "entity": "person",
+          "role": "cosign",
+          "id": "person_id",
           "question": "wer mitunterzeichnet hat (bei mehreren durch Strichpunkt getrennt)",
           "form": "list",
           "pages": "all"
@@ -74,41 +88,46 @@
   },
   "custom-meta": [
     {
-      "meta-name": "adressat",
+      "meta-name": "addressee",
       "meta-value": {
-        "name": "adressat",
+        "name": "addressee",
+        "entity": "group",
         "question": "an wen es gerichtet ist"
       }
     },
     {
-      "meta-name": "ort",
+      "meta-name": "place",
       "meta-value": {
-        "name": "ort",
+        "name": "place",
+        "entity": "place",
         "question": "Ort, an dem es eingereicht wurde"
       }
     },
     {
-      "meta-name": "parlament",
+      "meta-name": "parliament",
       "meta-value": {
-        "name": "parlament",
+        "name": "parliament",
+        "entity": "body",
       "role": "parliament",
         "question": "Name des Parlaments oder Rats, so wie er auf der Seite steht",
         "choice": true
       }
     },
     {
-      "meta-name": "gemeinwesen",
+      "meta-name": "polity",
       "meta-value": {
-        "name": "gemeinwesen",
+        "name": "polity",
+        "entity": "body",
       "role": "place",
         "question": "Gemeinde, Stadt oder Kanton, so wie es auf der Seite steht",
         "choice": true
       }
     },
     {
-      "meta-name": "departement",
+      "meta-name": "department",
       "meta-value": {
-        "name": "departement",
+        "name": "department",
+        "entity": "group",
         "question": "zuständiges Departement, zuständige Direktion oder zuständiges Ressort",
         "when": [
           "Departement",
@@ -123,7 +142,8 @@
   "related-article": [
     {
       "number": {
-        "name": "verwandt",
+        "name": "related",
+        "entity": "identifier",
         "question": "Nummern anderer Geschäfte, auf die verwiesen wird (durch Strichpunkt getrennt)",
         "form": "list",
         "pages": "all"
@@ -133,7 +153,8 @@
   "related-object": [
     {
       "text": {
-        "name": "verweis",
+        "name": "reference",
+        "entity": "text",
         "question": "Erlasse, Pläne oder Berichte, auf die verwiesen wird (durch Strichpunkt getrennt)",
         "form": "list",
         "dynamic": true,
@@ -142,7 +163,8 @@
     }
   ],
   "kwd-group": {
-    "name": "schlagwoerter",
+    "name": "keywords",
+    "entity": "text",
     "question": "gedruckte Schlagwörter, falls welche angegeben sind (durch Strichpunkt getrennt)",
     "form": "list",
     "dynamic": true,
@@ -153,14 +175,16 @@
       {
         "title": {
           "de": {
-            "name": "ereignis",
+            "name": "event",
+            "entity": "event",
             "question": "im Dokument genannte Ereignisse mit Datum, was geschah (zum Beispiel \"Beantwortung im Stadtrat\"; bei mehreren durch Strichpunkt getrennt, in derselben Reihenfolge wie ereignisdatum)",
             "form": "list",
             "pages": "all"
           }
         },
         "date": {
-          "name": "ereignisdatum",
+          "name": "event-date",
+          "entity": "date",
           "question": "die Daten dieser Ereignisse, als TT.MM.JJJJ, durch Strichpunkt getrennt",
           "form": "date",
           "pages": "all"
@@ -172,7 +196,8 @@
     "data": [
       {
         "article-version": {
-          "name": "fassung",
+          "name": "version",
+          "entity": "text",
           "question": "Fassung des Dokuments, wie gedruckt (zum Beispiel \"Fassung nach 2. Lesung\")",
           "dynamic": true,
           "when": [
@@ -185,7 +210,8 @@
         },
         "abstract": {
           "de": {
-            "name": "zusammenfassung",
+            "name": "summary",
+            "entity": "text",
             "question": "eine Zusammenfassung des ganzen Dokuments in höchstens drei Sätzen",
             "dynamic": true,
             "pages": "all",
@@ -194,7 +220,8 @@
         },
         "conference": {
           "conf-name": {
-            "name": "sitzung",
+            "name": "session",
+            "entity": "event",
             "question": "Sitzung oder Tagung, die das Dokument nennt",
             "dynamic": true,
             "pages": "all",
@@ -206,7 +233,8 @@
             ]
           },
           "conf-date": {
-            "name": "sitzungsdatum",
+            "name": "session-date",
+            "entity": "date",
             "question": "Datum dieser Sitzung, als TT.MM.JJJJ",
             "form": "date",
             "dynamic": true,
@@ -219,7 +247,8 @@
             ]
           },
           "conf-loc": {
-            "name": "sitzungsort",
+            "name": "session-place",
+            "entity": "place",
             "question": "Ort dieser Sitzung",
             "dynamic": true,
             "pages": "all",

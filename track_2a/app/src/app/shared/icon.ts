@@ -16,6 +16,7 @@ const PATHS: Record<string, string> = {
     document: 'M7 3h7l5 5v13H7zM14 3v5h5M9 13h6M9 17h6',
     person: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm-7 9c1-4 4-6 7-6s6 2 7 6',
     list: 'M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01',
+    fields: 'M4 5h7v6H4zM13 5h7v6h-7zM4 13h7v6H4zM13 13h7v6h-7z',
     menu: 'M4 7h16M4 12h16M4 17h16',
 };
 

@@ -2,16 +2,19 @@
 
 They start from the lists OpenParlData keeps (the stem, data/knowledge/vocabulary.json, fetched by
 tools/vocabulary.py): per parliament the names of its affair types with the harmonised type, the harmonised
-names of the events, the kinds of groups. OpenParlData calls its harmonised types provisional, so the stem
+names of the events, the kinds of groups, and per parliament the names of the roles of those who take part
+in an affair with the standard role. OpenParlData calls its harmonised types provisional, so the stem
 is not code and not a fixed file: it lies in the store and can be changed there. A person sets another
 standard for a name or adds a name the stem does not have; such a row says who and when, and keeps what the
 stem said, so the difference can be seen and taken back. A newer stem replaces every row nobody changed, and
 leaves the changed ones as they are.
 
-A row: {list, body, name, label, standard, origin, fetched}. `list` is types, events or groups; `body` is the
-parliament's key at OpenParlData, empty for the standard names themselves; `name` is the label in small
+A row: {list, body, name, label, standard, origin, fetched}. `list` is types, events, groups or roles; `body`
+is the parliament's key at OpenParlData, empty for the standard names themselves; `name` is the label in small
 letters with single spaces, the key of the row; `standard` is the standard name in four languages, or None
-where the stem lists a name without one; `origin` is stem or person.
+where the stem lists a name without one; `origin` is stem or person. The roles carry the word OpenParlData
+knows a standard role by as well (`key`: author, cosign), since it names some of them by that word alone; a
+field of the fields file names its role by it.
 """
 
 from __future__ import annotations
@@ -22,7 +25,7 @@ from pathlib import Path
 
 from docket.store.base import Store, stamp
 
-LISTS = ("types", "events", "groups")
+LISTS = ("types", "events", "groups", "roles")
 LANGUAGES = ("de", "fr", "it", "en")
 
 
@@ -46,16 +49,23 @@ def stem_rows(stem: dict) -> list[dict]:
         for s in part.get("standards") or []:
             standard = {lang: s.get(lang) for lang in LANGUAGES}
             by_id[s.get("id")] = standard
-            row = {"list": name, "body": "", "name": key_of(s["de"]), "label": s["de"], "standard": standard,
+            # a standard OpenParlData names by a word only (some of the roles) is known by that word
+            label = s.get("de") or str(s["id"])
+            row = {"list": name, "body": "", "name": key_of(label), "label": label, "standard": standard,
                    "origin": "stem", "fetched": stem.get("fetched")}
             for extra in ("wikidata", "count"):
                 if s.get(extra) is not None:
                     row[extra] = s[extra]
+            if isinstance(s.get("id"), str):
+                row["key"] = s["id"]
             rows.append(row)
         for n in part.get("names") or []:
-            rows.append({"list": name, "body": str(n["body"]), "name": key_of(n["name"]), "label": n["name"],
-                         "lang": n.get("lang"), "standard": by_id.get(n.get("standard")), "origin": "stem",
-                         "fetched": stem.get("fetched")})
+            row = {"list": name, "body": str(n["body"]), "name": key_of(n["name"]), "label": n["name"],
+                   "lang": n.get("lang"), "standard": by_id.get(n.get("standard")), "origin": "stem",
+                   "fetched": stem.get("fetched")}
+            if isinstance(n.get("standard"), str):
+                row["key"] = n["standard"]
+            rows.append(row)
     return rows
 
 
@@ -129,20 +139,23 @@ class Vocabulary:
         its languages), or None for a name that has no standard. Returns the row to store; ValueError when
         the list, the parliament or the standard is not known."""
         if name_of_list not in LISTS or not str(body).strip() or not key_of(label):
-            raise ValueError("a row needs a list (types, events or groups), a parliament and a name")
-        found = None
+            raise ValueError(f"a row needs a list ({', '.join(LISTS)}), a parliament and a name")
+        found = chosen = None
         if standard is not None:
             wanted = key_of(standard)
-            found = next((s["standard"] for s in self.standards(name_of_list)
-                          if wanted in (key_of(v) for v in s["standard"].values() if v)), None)
-            if found is None:
+            chosen = next((s for s in self.standards(name_of_list)
+                           if wanted in (key_of(v) for v in [*s["standard"].values(), s.get("key")] if v)), None)
+            if chosen is None:
                 raise ValueError(f"{standard!r} is no standard name of the list {name_of_list}")
+            found = chosen["standard"]
         key = (name_of_list, str(body).strip(), key_of(label))
         old = self.rows.get(key)
         row = {"list": key[0], "body": key[1], "name": key[2], "label": (old or {}).get("label") or str(label).strip(),
                "standard": found, "origin": "person", "by": by, "at": stamp()}
         if old is not None and old.get("lang"):
             row["lang"] = old["lang"]
+        if chosen is not None and chosen.get("key"):
+            row["key"] = chosen["key"]
         # what the stem said stays beside the person's word
         if old is not None and old.get("origin") == "stem":
             row["stem"] = {"standard": old.get("standard"), "fetched": old.get("fetched")}

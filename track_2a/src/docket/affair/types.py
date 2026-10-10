@@ -10,6 +10,8 @@ from __future__ import annotations
 
 import re
 
+from docket.fields.fields import Fields
+from docket.fields.placer import get_at, set_at
 from docket.store.vocabulary import Vocabulary
 
 # an entry of the table counts only when this many affairs carry it and this share of them falls on one type
@@ -18,7 +20,7 @@ SHARE = 0.6
 
 
 def harmonized(label: str, table: dict[str, dict], vocabulary: Vocabulary | None = None,
-               parliament: str = "") -> dict | None:
+               parliament: str = "", name_of_list: str = "types") -> dict | None:
     """The harmonised type for a label, in four languages; None when nothing knows it. First the whole label,
     then the label without additions in brackets, then its first word ("Motion Muster Hans"). A label the
     parliament lists without a harmonised type has none: the table of all parliaments is not asked then."""
@@ -26,7 +28,7 @@ def harmonized(label: str, table: dict[str, dict], vocabulary: Vocabulary | None
     attempts = (flat, re.sub(r"\s*\(.*\)\s*", " ", flat).strip(), flat.split(" ")[0])
     if vocabulary is not None and parliament:
         for attempt in attempts:
-            row = vocabulary.row("types", parliament, attempt)
+            row = vocabulary.row(name_of_list, parliament, attempt)
             if row is not None:
                 return row["standard"]
     for attempt in attempts:
@@ -37,12 +39,21 @@ def harmonized(label: str, table: dict[str, dict], vocabulary: Vocabulary | None
 
 
 def harmonize(affair: dict, table: dict[str, dict], vocabulary: Vocabulary | None = None,
-              parliament: str = "") -> dict:
-    """Adds the harmonised type to an affair when the label is known and none stands there yet."""
-    label = (affair.get("type_name") or {}).get("de")
-    if affair.get("type_harmonized") or not label:
-        return affair
-    found = harmonized(label, table, vocabulary, parliament)
-    if found is not None:
-        affair["type_harmonized"] = {k: v for k, v in found.items() if v is not None}
+              parliament: str = "", fields: Fields | None = None) -> dict:
+    """Adds the harmonised type to an affair when the label is known and none stands there yet. Which value
+    is the label and where its standard name goes is said by the fields file: a field whose entity has a list
+    of the vocabulary behind it and that names a place for the standard name. Without a fields file, the keys
+    of OpenParlData."""
+    places = [(["type_name", "de"], ["type_harmonized"], "types")]
+    if fields is not None:
+        places = [(f.path, f.standard.split("."), f.list_name) for f in fields.fields.values()
+                  if f.lookup == "vocabulary" and f.standard and "[]" not in f.path]
+    for path, target, name_of_list in places:
+        label = get_at(affair, path)
+        if get_at(affair, target) or not label:
+            continue
+        # the table of the export knows the types alone
+        found = harmonized(str(label), table if name_of_list == "types" else {}, vocabulary, parliament, name_of_list)
+        if found is not None:
+            set_at(affair, target, {k: v for k, v in found.items() if v is not None})
     return affair

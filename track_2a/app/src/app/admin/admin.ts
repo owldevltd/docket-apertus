@@ -9,18 +9,18 @@ import { MatListModule } from '@angular/material/list';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Api } from '../api/api';
-import { Health, Job, Rule } from '../api/types';
+import { Definition, Health, Job, Learnt, Rule } from '../api/types';
 import { Icon } from '../shared/icon';
 import { Who } from '../shared/who';
-import { LABELS, RULE_STATE, STATE, StampPipe, ruleWords } from '../shared/words';
+import { ENTITIES, LABELS, LOOKUPS, RULE_STATE, STATE, StampPipe, ruleWords } from '../shared/words';
 import { VocabularyArea } from './vocabulary';
 
-type Area = 'runs' | 'rules' | 'vocabulary' | 'process';
+type Area = 'runs' | 'rules' | 'vocabulary' | 'definition' | 'learnt' | 'process';
 
 // The admin as in OpenParlData's panel: a drawer with the areas at the left, the area at the right. Runs
 // start here (a PDF, or a document of theirs by id) and are watched while they run; rules are seen here, a
 // proposed one answered, an accepted one switched; the vocabulary is seen and changed in an area of its own
-// (vocabulary.ts).
+// (vocabulary.ts); the definition shows the fields with what each is and in how many documents it was asked.
 @Component( {
     selector: 'app-admin',
     imports: [ FormsModule, RouterLink, MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule,
@@ -38,12 +38,14 @@ export class Admin implements OnInit, OnDestroy {
     readonly health = signal<Health | null>( null );
     readonly runs = signal<Job[]>( [] );
     readonly rules = signal<Rule[]>( [] );
+    readonly definition = signal<Definition | null>( null );
+    readonly learnt = signal<Learnt | null>( null );
     readonly file = signal<File | null>( null );
     readonly docId = signal<number | null>( null );
     readonly withModel = signal( true );
     readonly token = signal( localStorage.getItem( 'docket.token' ) || '' );
     readonly busy = signal( false );
-    readonly words = { STATE, LABELS, RULE_STATE };
+    readonly words = { STATE, LABELS, RULE_STATE, ENTITIES, LOOKUPS };
     readonly ruleWords = ruleWords;
     // the rules that wait for an answer first, then the accepted ones, last those that only count
     readonly ruleRows = computed( () => {
@@ -54,6 +56,8 @@ export class Admin implements OnInit, OnDestroy {
         { id: 'runs', name: 'Läufe', icon: 'runs' },
         { id: 'rules', name: 'Regeln', icon: 'rule' },
         { id: 'vocabulary', name: 'Vokabular', icon: 'list' },
+        { id: 'definition', name: 'Definition', icon: 'fields' },
+        { id: 'learnt', name: 'Zweite Meinung', icon: 'rule' },
         { id: 'process', name: 'Verarbeiten', icon: 'upload' },
     ];
 
@@ -73,6 +77,18 @@ export class Admin implements OnInit, OnDestroy {
         this.health.set( await this.api.health() );
         this.runs.set( await this.api.runs() );
         this.rules.set( await this.api.rules() );
+        // counted over every document of the store: only while it is looked at
+        if ( this.area() === 'definition' ) {
+            this.definition.set( await this.api.definition() );
+        }
+        if ( this.area() === 'learnt' ) {
+            this.learnt.set( await this.api.learnt() );
+        }
+    }
+
+    async show( area: Area ): Promise<void> {
+        this.area.set( area );
+        await this.refresh();
     }
 
     saveToken( value: string ): void {
@@ -108,6 +124,14 @@ export class Admin implements OnInit, OnDestroy {
             await this.api.fetchDocument( id, this.withModel() );
             this.docId.set( null );
             this.area.set( 'runs' );
+        } );
+    }
+
+    // the documents read before a field existed are asked for it now; the run shows among the runs
+    async askAgain( field: string ): Promise<void> {
+        await this.guard( async () => {
+            await this.api.askAgain( field );
+            this.snack.open( 'Nachfragen gestartet – der Lauf steht unter „Läufe“.', 'OK', { duration: 5000 } );
         } );
     }
 

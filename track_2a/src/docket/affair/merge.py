@@ -28,6 +28,8 @@ class Document:
     date: str = ""
     # the parliament's key at OpenParlData ("ZH"), empty when the document does not tell
     parliament: str = ""
+    # what the document itself is, as the run found it: {kind, block}, with the number of its row when it has one
+    kind: dict | None = None
 
 
 @dataclass
@@ -39,10 +41,10 @@ class Affair:
 
 
 def merge(documents: list[Document], fields: Fields, contract: Contract, types: dict[str, dict],
-          vocabulary: Vocabulary | None = None) -> list[Affair]:
+          vocabulary: Vocabulary | None = None, placed: list[dict] | None = None) -> list[Affair]:
     """Groups the documents by key and builds one affair per group, in the order the keys first appear. The
     type is harmonised through the names of the parliament the affair's documents tell, then through the
-    table."""
+    table. With `placed`, where every numbered value went is noted there (docket.fields.placer.fill)."""
     groups: dict[str, list[Document]] = {}
     for d in documents:
         groups.setdefault(d.key, []).append(d)
@@ -51,17 +53,31 @@ def merge(documents: list[Document], fields: Fields, contract: Contract, types: 
         members = sorted(members, key=lambda d: (d.date or "9", d.id))
         record: dict = {"schema": SCHEMA}
         for d in members:
-            record, _ = fill(record, d.id, d.values, fields, contract, d.body)
-            for entry in record["docs"]["data"]:
+            record, _ = fill(record, d.id, d.values, fields, contract, d.body, placed)
+            for at, entry in enumerate(record["docs"]["data"]):
                 if entry.get("id") == d.id:
                     entry.setdefault("name", d.name)
                     entry.setdefault("format", FORMAT)
                     entry.setdefault("page-count", d.pages)
                     entry.setdefault("body", d.body)
+                    if d.kind and d.kind.get("kind") and "article-type" not in entry:
+                        _place_kind(record, at, d, placed)
         parliament = next((d.parliament for d in members if d.parliament), "")
-        record = harmonize(record, types, vocabulary, parliament)
+        record = harmonize(record, types, vocabulary, parliament, fields)
         out.append(Affair(key, record, [d.id for d in members], contract.check(record)))
     return out
+
+
+def _place_kind(record: dict, at: int, d: Document, placed: list[dict] | None) -> None:
+    """Sets the kind of a document on its entry, with a place in the root sources: found from the words of its
+    first page, so a person has to look."""
+    record["docs"]["data"][at]["article-type"] = d.kind["kind"]
+    path = f"docs.data.{at}.article-type"
+    place = {"path": path, "doc": d.id, "block": d.kind.get("block") or "b1", "how": "derived", "approve": True}
+    record.setdefault("sources", []).append(place)
+    if placed is not None and d.kind.get("n") is not None:
+        placed.append({"doc": d.id, "n": d.kind["n"], "of": None, "source": f"sources.{len(record['sources']) - 1}",
+                       "path": path})
 
 
 def values_of(report: dict[str, dict]) -> dict[str, list[dict]]:

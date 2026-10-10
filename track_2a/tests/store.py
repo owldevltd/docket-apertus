@@ -1,6 +1,7 @@
-"""The store's operations, without a model: an affair is stored, read, replaced and listed, a fields report
-and the decisions come back, rules, vocabulary rows and rows of the register are replaced by their key and
-dropped, and a second opening sees what the first one wrote. Over the file store, and over Postgres when a
+"""The store's operations, without a model: an affair is stored, read, replaced and listed, a fields report,
+the rows of a document and the decisions come back, a value is found over the documents, rules, vocabulary rows
+and rows of the register are replaced by their key and dropped, and a second opening sees what the first one
+wrote. Over the file store, and over Postgres when a
 database is named: the test works there in a schema of its own and removes it at the end, so a store in use
 is not touched.
 
@@ -45,6 +46,41 @@ def run(name: str, open_again, check) -> None:
     store.put_fields("a", {"fields": {"title": {"state": "placed"}}})
     check(store.get_fields("a") == {"fields": {"title": {"state": "placed"}}} and store.get_fields("b") is None,
           f"{name}: a fields report comes back")
+    store.put_fields("later", {"definition": {"version": "later-mark"}, "fields": {"title": {}, "summary": {}}})
+    counts = store.asked_counts()
+    check(counts["documents"] == 2 and counts["fields"] == {"title": 2, "summary": 1}
+          and counts["versions"] == {"": 1, "later-mark": 1},
+          f"{name}: over the reports it is counted in how many a field stands, and under which definition")
+    found = [
+        {"doc": "a", "n": 0, "entity": "identifier", "role": "number", "field": "number", "entry": 0, "value": "1",
+         "state": "placed", "how": "literal", "block": "b2", "page": 1, "box": [10, 20, 300, 40]},
+        {"doc": "a", "n": 1, "entity": "person", "role": "author", "field": "authors", "entry": 0,
+         "value": "Zoë Müller", "state": "placed", "how": "literal", "block": "b4", "page": 1,
+         "box": [10, 90, 300, 40]},
+        {"doc": "a", "n": 2, "entity": "person", "role": "author", "field": "authors", "entry": 1,
+         "value": "Old Name", "state": "dropped", "how": "named block without coverage", "block": None, "page": None,
+         "box": None},
+    ]
+    store.put_rows("a", found)
+    store.put_rows("b", [{**found[1], "doc": "b", "n": 0, "block": "b7"}])
+    store.put_rows("a", found[:2])
+    check(store.get_rows("a") == found[:2] and store.get_rows("none") == [],
+          f"{name}: the rows of a document come back in their order, a second put replaces them")
+    check(store.affairs_without_rows() == ["nr-1"], f"{name}: an affair no row names is told")
+    store.put_rows("a", [{**r, "affair": "nr-1"} for r in found[:2]])
+    check(store.affairs_without_rows() == [] and store.get_rows("a")[0]["affair"] == "nr-1",
+          f"{name}: the rows of its document name the affair")
+    store.put_rows("a", found[:2])
+    people = store.find_rows(entity="person", value="Zoë Müller")
+    check([(r["doc"], r["block"]) for r in people] == [("a", "b4"), ("b", "b7")]
+          and len(store.find_rows(field="number")) == 1 and len(store.find_rows()) == 3
+          and store.find_rows(entity="person", value="Old Name") == [],
+          f"{name}: a value is found over the documents by entity, field and value")
+    check(store.get_learnt() is None, f"{name}: a store that has learnt nothing says so")
+    store.put_learnt({"documents": 3, "places": {"X": {"number": {"zone": [1, 0, 3], "use": True}}}, "network": None})
+    store.put_learnt({"documents": 4, "places": {"X": {"number": {"zone": [1, 0, 3], "use": True}}}, "network": None})
+    check(store.get_learnt()["documents"] == 4 and store.get_learnt()["places"]["X"]["number"]["zone"] == [1, 0, 3],
+          f"{name}: what was learnt is kept, a later learning replaces it")
     store.add_decision({"affair": "nr-1", "decision": "confirmed", "by": "test"})
     store.add_decision({"affair": "nr-2", "decision": "changed", "by": "test"})
     check([d["affair"] for d in store.list_decisions()] == ["nr-1", "nr-2"] and len(store.list_decisions("nr-2")) == 1,
@@ -87,7 +123,8 @@ def run(name: str, open_again, check) -> None:
 
     again: Store = open_again()
     check(len(again.list_affairs()) == 1 and len(again.get_rules()) == 1 and len(again.get_vocabulary()) == 2
-          and len(again.list_decisions()) == 2 and len(again.get_register("X")) == 1,
+          and len(again.list_decisions()) == 2 and len(again.get_register("X")) == 1
+          and len(again.get_rows("a")) == 2,
           f"{name}: a second opening sees the same")
 
 
@@ -116,7 +153,7 @@ def main(argv: list[str]) -> int:
                 with psycopg.connect(url) as db:
                     row = db.execute("SELECT count(*) FROM information_schema.tables WHERE table_schema = %s",
                                      (schema,)).fetchone()
-                check(row[0] == 6, f"postgres: the six tables stand in the test's own schema ({row[0]})")
+                check(row[0] == 8, f"postgres: the eight tables stand in the test's own schema ({row[0]})")
             finally:
                 with psycopg.connect(url, autocommit=True) as db:
                     db.execute(f"DROP SCHEMA {schema} CASCADE")

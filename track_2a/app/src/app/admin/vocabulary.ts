@@ -37,7 +37,7 @@ export class VocabularyArea implements OnInit {
     // counts the loads: a row is drawn anew after each, so a choice the server refused does not stay on screen
     readonly round = signal( 0 );
     readonly words = { LISTS };
-    readonly lists: ListName[] = [ 'types', 'events', 'groups' ];
+    readonly lists: ListName[] = [ 'types', 'events', 'groups', 'roles' ];
 
     // the standard names of the chosen list, by name
     readonly standards = computed( () => this.rows().filter( ( r ) => r.list === this.list() && r.body === '' ) );

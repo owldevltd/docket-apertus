@@ -13,7 +13,7 @@ from docket.config import Config
 from docket.document.bridge import Knowledge, add_blocks, build_blocks
 from docket.document.kind import document_kind
 from docket.document.sorter import sort_rest
-from docket.fields.fields import Fields, load_fields
+from docket.fields.fields import Fields, load_entities, load_fields
 from docket.fields.filler import fill_document
 from docket.model.client import Client
 from docket.page.analyze import analyze_page
@@ -76,7 +76,8 @@ def load_contract(config: Config) -> Contract:
 
 
 def load_field_file(config: Config, contract: Contract) -> Fields:
-    return load_fields(config.data_dir / "schema" / "fields.json", contract)
+    entities = load_entities(config.data_dir / "knowledge" / "entities.json")
+    return load_fields(config.data_dir / "schema" / "fields.json", contract, entities)
 
 
 def process_pages(pdf: Path, out: Path, client: Client | None, keep: dict | None = None) -> list[dict]:

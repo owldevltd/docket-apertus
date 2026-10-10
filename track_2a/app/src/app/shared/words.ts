@@ -1,8 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { Block, Rule, SourceEntry } from '../api/types';
 
-// The words of the app, German first; the field names of the record translated for the screen. The fields
-// file names its fields in German already (nummer, titel), the record keeps OpenParlData's keys.
+// The words of the app, German first: the keys of the record and the names of the fields, both English,
+// translated for the screen.
 
 export const LABELS: Record<string, string> = {
     'number': 'Nummer',
@@ -24,6 +24,29 @@ export const LABELS: Record<string, string> = {
     'docs.conference.conf-loc': 'Sitzungsort',
     'related-article.number': 'Verwandtes Geschäft',
     'related-object.text': 'Verweis',
+    // a rule names its field as the fields file does, whatever keys the record uses; a value under custom-meta
+    // carries the field's name as well
+    'type': 'Art',
+    'date': 'Datum',
+    'authors': 'Einreichende',
+    'cosigners': 'Mitunterzeichnende',
+    'party': 'Partei',
+    'on-behalf-of': 'Im Namen von',
+    'addressee': 'Adressat',
+    'place': 'Ort',
+    'parliament': 'Parlament',
+    'polity': 'Gemeinwesen',
+    'department': 'Departement',
+    'related': 'Verwandtes Geschäft',
+    'reference': 'Verweis',
+    'keywords': 'Schlagwort',
+    'event': 'Ereignis',
+    'event-date': 'Ereignisdatum',
+    'version': 'Fassung',
+    'summary': 'Zusammenfassung',
+    'session': 'Sitzung',
+    'session-date': 'Sitzungsdatum',
+    'session-place': 'Sitzungsort',
 };
 
 export const HOW: Record<string, string> = {
@@ -66,6 +89,26 @@ export const LISTS: Record<string, string> = {
     types: 'Arten',
     events: 'Ereignisse',
     groups: 'Gruppen',
+    roles: 'Rollen',
+};
+
+// what a value can be (data/knowledge/entities.json), and what stands behind an entity to hold a value against
+export const ENTITIES: Record<string, string> = {
+    body: 'Körperschaft',
+    identifier: 'Kennung',
+    category: 'Kategorie',
+    person: 'Person',
+    group: 'Gruppe',
+    place: 'Ort',
+    date: 'Datum',
+    event: 'Ereignis',
+    text: 'Text',
+};
+
+export const LOOKUPS: Record<string, string> = {
+    bodies: 'Liste der Parlamente',
+    vocabulary: 'Vokabular',
+    register: 'Register',
 };
 
 export const ORIGIN: Record<string, string> = {

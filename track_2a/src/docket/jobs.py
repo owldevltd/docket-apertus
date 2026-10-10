@@ -14,7 +14,7 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
 from docket.config import Config
-from docket.runner import run_affairs
+from docket.runner import ask_missing, run_affairs
 from docket.store.base import stamp
 
 API = "https://api.openparldata.ch/v1"
@@ -85,6 +85,12 @@ class Jobs:
         self._enqueue(job)
         return job
 
+    def submit_ask(self, name: str | None) -> Job:
+        """The stored documents are asked a field they were never asked (all such fields without a name)."""
+        job = self._new(name or "all", "ask", True)
+        self._enqueue(job)
+        return job
+
     def list(self) -> list[dict]:
         with self._lock:
             jobs = sorted(self.jobs.values(), key=lambda j: j.created, reverse=True)
@@ -123,8 +129,12 @@ class Jobs:
             job.state, job.started = "running", stamp()
             self._save(job)
             try:
-                pdf = self.folder / job.id / f"{job.name}.pdf"
-                result = run_affairs([pdf], self.folder / job.id, self.config, job.model, say=job.lines.append)
+                if job.source == "ask":
+                    names = None if job.name == "all" else [job.name]
+                    result = ask_missing(self.config, names, say=job.lines.append)
+                else:
+                    pdf = self.folder / job.id / f"{job.name}.pdf"
+                    result = run_affairs([pdf], self.folder / job.id, self.config, job.model, say=job.lines.append)
                 job.affairs, job.documents, job.calls = result.affairs, result.documents, result.calls
                 job.state = "failed" if result.halted or result.failed else "done"
                 if result.halted:

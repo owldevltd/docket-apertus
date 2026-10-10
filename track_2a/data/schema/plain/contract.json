@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A plain record of an affair",
+  "description": "A second shape for the same affair, built unlike the main contract on purpose: flat, closed everywhere, without the blocks of the documents and without places of the values. It serves to show that what was read can be laid into another JSON; the places and the decisions stay with the rows in the store.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "reference": {
+      "type": "string",
+      "description": "the affair's number as printed"
+    },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "heading": {
+          "type": "string"
+        },
+        "form": {
+          "type": "string",
+          "description": "the kind of affair as the document names it"
+        },
+        "form_standard": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "de": {
+              "type": "string"
+            },
+            "fr": {
+              "type": "string"
+            },
+            "it": {
+              "type": "string"
+            },
+            "en": {
+              "type": "string"
+            }
+          },
+          "description": "the standard name of the form, from the vocabulary"
+        }
+      }
+    },
+    "received": {
+      "type": "string",
+      "description": "the day it was handed in, YYYY-MM-DD"
+    },
+    "people": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "as",
+          "name"
+        ],
+        "properties": {
+          "as": {
+            "enum": [
+              "submitted",
+              "co-signed"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "group": {
+            "type": "string"
+          },
+          "person": {
+            "type": "integer",
+            "description": "the id of the person in the register"
+          }
+        }
+      }
+    },
+    "where": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "polity": {
+          "type": "string"
+        },
+        "council": {
+          "type": "string"
+        },
+        "place": {
+          "type": "string"
+        }
+      }
+    },
+    "keywords": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "course": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "what": {
+            "type": "string"
+          },
+          "when": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

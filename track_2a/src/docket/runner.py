@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import re
+import tempfile
 import time
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
@@ -16,7 +17,9 @@ from docket.affair.persons import link_persons
 from docket.affair.validator import Contract
 from docket.config import Config
 from docket.document.bridge import Knowledge
-from docket.fields.fields import Fields
+from docket.fields import second
+from docket.fields.fields import Fields, definition_of
+from docket.fields.filler import fill_document
 from docket.fields.placer import blocks_of, day, find_block
 from docket.model.client import Client
 from docket.page.painter import draw_blocks
@@ -27,6 +30,7 @@ from docket.pipeline import (
 from docket.store import open_store
 from docket.store.review import carry_reviews
 from docket.store.register import stop_words
+from docket.store.rows import adopt, carry_decisions, follow, kind_of, rows_of, set_matches, set_places, values_from
 from docket.store.vocabulary import Vocabulary
 
 
@@ -104,6 +108,71 @@ def run_affairs(files: list[Path], out: Path, config: Config, with_model: bool, 
     return result
 
 
+def ask_missing(config: Config, names: list[str] | None = None, limit: int | None = None,
+                say: Callable[[str], None] = print) -> RunResult:
+    """Asks the documents of the store what they were never asked: the fields that came into the fields file
+    after a document was read. Only those questions go to the model, over the pages the store kept; nothing
+    is read again. The answers join the document's report, and its affair is formed anew from the reports of
+    its documents, with every decision kept. `names` limits it to these fields, `limit` to so many
+    documents."""
+    client = Client(config)
+    contract = load_contract(config)
+    knowledge = load_knowledge(config)
+    fields = load_field_file(config, contract)
+    store = open_store(config)
+    result = RunResult()
+    date_field = fields.by_role().get("date", "")
+    with tempfile.TemporaryDirectory() as tmp:
+        out = Path(tmp)
+        for affair in store.list_affairs():
+            entries = {e.get("id"): e for e in (affair["record"].get("docs") or {}).get("data", [])}
+            documents: list[Document] = []
+            touched = False
+            for document in affair["documents"]:
+                name, entry = document["name"], entries.get(document["id"])
+                report = store.get_fields(name)
+                if report is None or entry is None:
+                    continue
+                missing = [n for n in fields.fields if n not in report["fields"] and (not names or n in names)]
+                open_for_more = not client.halted and (limit is None or len(result.documents) < limit)
+                if missing and open_for_more:
+                    count = int(document.get("pages") or 1)
+                    pages = [p for p in (store.page_data(name, n) for n in range(1, count + 1)) if p is not None]
+                    if len(pages) < count:
+                        say(f"{name}: the store did not keep its pages, not asked")
+                    else:
+                        part = Fields(fields.task, {n: fields.fields[n] for n in missing}, fields.entities)
+                        before = client.calls
+                        stub = {"docs": {"data": [{"id": 1, "body": entry.get("body") or []}]}}
+                        _, filled = fill_document(stub, pages, first_pages(pages), part, contract, client, knowledge)
+                        if filled["asked"]:
+                            report["fields"].update(filled["fields"])
+                            report.setdefault("asked", []).extend(filled["asked"])
+                            if all(n in report["fields"] for n in fields.fields):
+                                report["definition"] = definition_of(fields)
+                            store.put_fields(name, report)
+                            touched = True
+                            calls = client.calls - before
+                            result.calls += calls
+                            result.documents.append({"name": name, "asked": missing, "calls": calls})
+                            say(f"{name}: asked {', '.join(missing)}  {calls} calls")
+                (out / f"{name}-fields.json").write_text(json.dumps(report, ensure_ascii=False), encoding="utf-8")
+                values = values_of(report["fields"])
+                date = next((day(i["value"]) for i in values.get(date_field, [])), "")
+                documents.append(Document(document["id"], name, int(document.get("pages") or 1),
+                                          entry.get("body") or [], values, affair["key"], date,
+                                          str((report.get("identity") or {}).get("body") or "")))
+            if touched:
+                result.affairs.extend(_write_affairs(out, documents, fields, contract, knowledge, config, say))
+            if client.halted:
+                say(f"halted after HTTP {client.halted}")
+                result.halted = client.halted
+                break
+    if not result.documents and not result.halted:
+        say("no document lacks a field of the fields file" if client.config.api_key else "no API_KEY: nothing asked")
+    return result
+
+
 def _process(pdf: Path, out: Path, client: Client | None, contract: Contract, knowledge: Knowledge,
              fields: Fields) -> Processed:
     started = time.monotonic()
@@ -123,7 +192,7 @@ def _process(pdf: Path, out: Path, client: Client | None, contract: Contract, kn
     identity = None
     if client is not None:
         identity = identify(filled["fields"], fields, pages, pdf.stem, knowledge)
-        _write_fields(out, pdf.stem, record, pages, filled, fields, keep, identity)
+        _write_fields(out, pdf.stem, record, pages, filled, fields, keep, identity, found)
     calls = client.calls - before if client else 0
     return Processed(pdf.stem, pages, record, report, filled, identity, errors, calls, time.monotonic() - started)
 
@@ -136,10 +205,13 @@ def _printed_type(report: dict[str, dict], fields: Fields) -> str | None:
 
 
 def _write_fields(out: Path, name: str, record: dict, pages: list[dict], filled: dict, fields: Fields,
-                  keep: dict, identity: Identity) -> None:
-    """Writes the fields report with the identity, and the control images of the first pages."""
+                  keep: dict, identity: Identity, kind: dict | None) -> None:
+    """Writes the fields report with the identity and the kind the document was found to be, and the control
+    images of the first pages."""
     first = first_pages(pages)
-    text = json.dumps({"first": first, "identity": asdict(identity), **filled}, ensure_ascii=False, indent=2)
+    report = {"first": first, "identity": asdict(identity), "definition": definition_of(fields), "kind": kind,
+              **filled}
+    text = json.dumps(report, ensure_ascii=False, indent=2)
     (out / f"{name}-fields.json").write_text(text + "\n", encoding="utf-8")
     body = record["docs"]["data"][0]["body"]
     found: dict[str, str] = {}
@@ -172,23 +244,63 @@ def _write_affairs(out: Path, documents: list[Document], fields: Fields, contrac
     by_id = {d.id: d for d in documents}
     lines = []
     summaries = []
-    rows = store.get_vocabulary()
-    vocabulary = Vocabulary(rows)
-    stop = stop_words(rows)
+    names = store.get_vocabulary()
+    vocabulary = Vocabulary(names)
+    stop = stop_words(names)
     found: dict[str, list[dict]] = {}
-    for affair in merge(documents, fields, contract, knowledge.types, vocabulary):
+    learnt = store.get_learnt()
+    # what was found in every document, one row per value; the values go into the merge with the number of
+    # their row, so that it can note where each row sits in the record
+    rows_of_doc: dict[int, list[dict]] = {}
+    for d in documents:
+        report_file = out / f"{d.name}-fields.json"
+        if not report_file.is_file():
+            continue
+        report = json.loads(report_file.read_text(encoding="utf-8"))
+        rows = rows_of(d.name, report["fields"], fields, d.body, report.get("kind"))
+        d.kind = kind_of(rows)
+        given = {name: [{k: v for k, v in hit.items() if k != "n"} for hit in hits] for name, hits in d.values.items()}
+        # only when the report is the one the document's values came from
+        if values_from(rows) == given:
+            rows_of_doc[d.id] = rows
+            # the second opinion beside the model, where the store has learnt one
+            if learnt and d.parliament:
+                second.apply(d.name, rows, d.body, d.parliament, fields, learnt, knowledge.forms, vocabulary)
+            d.values = values_from(rows, numbered=True)
+    placed: list[dict] = []
+    for affair in merge(documents, fields, contract, knowledge.types, vocabulary, placed):
         safe = re.sub(r"[^\w.-]+", "_", affair.key)
         record = affair.record
         # who the named persons are, by the register of each document's parliament
         linked = link_persons(record, {i: by_id[i].parliament for i in affair.documents},
-                              {i: by_id[i].name for i in affair.documents}, store, stop)
+                              {i: by_id[i].name for i in affair.documents}, store, stop, fields)
         if linked:
             found.update(linked)
             affair.errors = contract.check(record)
+        # what was decided lives at the rows: the rows of an earlier run are found again and hand their
+        # decisions to the new ones, and the record follows the rows
+        together, known = [], True
+        for i in affair.documents:
+            if i not in rows_of_doc:
+                known = False
+                continue
+            set_places(rows_of_doc[i], affair.key, [p for p in placed if p["doc"] == i])
+            together.extend(rows_of_doc[i])
+        set_matches(record, together, fields, linked, {by_id[i].name: by_id[i].parliament for i in affair.documents})
+        for i in affair.documents:
+            if i in rows_of_doc:
+                before = store.get_rows(by_id[i].name)
+                known = known and bool(before)
+                carry_decisions(before, rows_of_doc[i])
         earlier = store.get_affair(affair.key)
         carried = 0
-        if earlier is not None:
+        if earlier is not None and not known:
+            # an affair stored before its documents had rows: its reviews are found the earlier way once more,
+            # by document, block and path, and taken into the rows
             record, carried = carry_reviews(earlier["record"], record)
+            adopt(record, together)
+        record, followed = follow(record, together)
+        carried = max(carried, followed)
         text = json.dumps(record, ensure_ascii=False, indent=2) + "\n"
         (folder / f"{safe}.json").write_text(text, encoding="utf-8")
         lines.append(json.dumps(record, ensure_ascii=False))
@@ -204,6 +316,8 @@ def _write_affairs(out: Path, documents: list[Document], fields: Fields, contrac
                     report["persons"] = found[name]
                     report_file.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
                 store.put_fields(name, report)
+            if i in rows_of_doc:
+                store.put_rows(name, rows_of_doc[i])
             store.put_pages(name, out / name)
         state = "valid" if not affair.errors else f"{len(affair.errors)} violations, first: {affair.errors[0]}"
         count = len(affair.documents)

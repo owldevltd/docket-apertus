@@ -53,6 +53,12 @@ def main(argv: list[str]) -> int:
     by_role = fields.by_role()
     print(f"ok   knowledge: {len(knowledge.types)} type labels, number forms for {len(knowledge.forms)} parliaments,"
           f" {len(knowledge.bodies)} parliaments named")
+    apart = number("18_INT_168") == "18int168" and number("18_MOT_030") == "18mot030"
+    kept = number("15.5098.01") == "155098" and number("KR-Nr. 357/2018") == "3572018" and number("M 185") == "185"
+    print(("ok   " if apart and kept else "FAIL ") + "numbers: parts joined by an underscore stay apart "
+          "(18_INT_168, 18_MOT_030), the other forms are told as before")
+    if not (apart and kept):
+        return 1
     stem = load_stem(config.data_dir / "knowledge" / "vocabulary.json")
     vocabulary = Vocabulary(stem_rows(stem) if stem else [])
     print(f"ok   vocabulary: {len(vocabulary.names('types'))} rows of the types, stem of "

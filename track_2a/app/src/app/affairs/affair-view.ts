@@ -37,11 +37,10 @@ export class AffairView implements OnInit {
     readonly reports = signal<Record<string, FieldsReport | null>>( {} );
 
     readonly record = computed( () => this.affair()?.record || {} );
-    readonly title = computed( () => this.record()[ 'title' ]?.de || this.key() );
+    readonly title = computed( () => this.affair()?.head?.title || this.key() );
     readonly meta = computed( () => {
-        const r = this.record();
-        const kind = r[ 'type_harmonized' ]?.de || r[ 'type_name' ]?.de;
-        return [ r[ 'number' ], r[ 'begin_date' ], kind ].filter( Boolean );
+        const head = this.affair()?.head;
+        return [ head?.number, head?.date, head?.type ].filter( Boolean );
     } );
     readonly current = computed( () => this.affair()?.documents[ this.doc() ] );
     readonly docRecord = computed( () => {

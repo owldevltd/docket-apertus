@@ -198,23 +198,34 @@ CITED = re.compile(r"\s*\[\s*b\d+(?:\s*[,;/\-–]\s*b\d+)*\s*\]|\s*\[\s*b\d*(?:\
 def parse(answer: str, names: list[str]) -> tuple[dict[str, str], dict[str, list[str]]]:
     """The answer lines "name: value" for the fields asked, and per field the block ids named with the value
     ("[b12]"), taken off the value. A field without a line is missing."""
-    lines: list[list[str] | None] = []
+    lines: list[tuple[str, str]] = []
     for line in answer.splitlines():
         m = re.match(r"^[\s\-\*]*([\w _-]{2,40}?)\s*:\s*(.*)$", line)
         if m:
-            lines.append([m.group(1).strip().lower(), m.group(2).strip(" \t\"'`")])
+            lines.append((m.group(1).strip().lower(), m.group(2).strip(" \t\"'`")))
     out: dict[str, str] = {}
     cited: dict[str, list[str]] = {}
-    # first the exact name, then one that ends with it ("Geschäftsnummer" for nummer)
+    taken: dict[int, str] = {}
+
+    def take(i: int, name: str) -> None:
+        ids = [m for group in CITED.findall(lines[i][1]) for m in re.findall(r"b\d+", group)]
+        cited[name] = list(dict.fromkeys(ids))
+        out[name] = CITED.sub("", lines[i][1]).strip(" \t\"'`")
+        taken[i] = name
+
+    # first the exact name, then one that ends with it ("affair number" for number)
     for fits in (lambda key, name: key == name, lambda key, name: key.endswith(name)):
-        for i, entry in enumerate(lines):
+        for i, (key, _) in enumerate(lines):
             for name in names:
-                if name in out or lines[i] is None or entry is None or not fits(entry[0], name.lower()):
-                    continue
-                ids = [m for group in CITED.findall(entry[1]) for m in re.findall(r"b\d+", group)]
-                cited[name] = list(dict.fromkeys(ids))
-                out[name] = CITED.sub("", entry[1]).strip(" \t\"'`")
-                lines[i] = None
+                if name not in out and i not in taken and fits(key, name.lower()):
+                    take(i, name)
+    # the model now and then puts its own word for a name, in the language of the question ("Geschäftsnummer"
+    # for number). Then the place of the line tells the field: when the answer has one line per field asked and
+    # every line known by its name stands where its field was asked
+    if len(lines) == len(names) and all(names[i] == name for i, name in taken.items()):
+        for i, name in enumerate(names):
+            if name not in out and i not in taken:
+                take(i, name)
     return out, cited
 
 

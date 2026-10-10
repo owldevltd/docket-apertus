@@ -1,5 +1,5 @@
-"""The store in files: one JSON per affair, one per document's fields report, the decisions as NDJSON. For a
-run without a database, and for the tests."""
+"""The store in files: one JSON per affair, one per document's fields report, one per document's rows, the
+decisions as NDJSON. For a run without a database, and for the tests."""
 
 from __future__ import annotations
 
@@ -52,6 +52,54 @@ class FileStore(Store):
     def get_fields(self, name: str) -> dict | None:
         path = self.folder / "documents" / f"{safe_name(name)}.json"
         return json.loads(path.read_text(encoding="utf-8")) if path.is_file() else None
+
+    def asked_counts(self) -> dict:
+        out: dict = {"documents": 0, "fields": {}, "versions": {}}
+        for path in (self.folder / "documents").glob("*.json"):
+            report = json.loads(path.read_text(encoding="utf-8"))
+            out["documents"] += 1
+            for name in report.get("fields") or {}:
+                out["fields"][name] = out["fields"].get(name, 0) + 1
+            mark = str((report.get("definition") or {}).get("version") or "")
+            out["versions"][mark] = out["versions"].get(mark, 0) + 1
+        return out
+
+    def _rows_file(self, doc: str) -> Path:
+        return self.folder / "rows" / f"{safe_name(doc)}.json"
+
+    def put_rows(self, doc: str, rows: list[dict]) -> None:
+        path = self._rows_file(doc)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        # one row per line, as the register and the vocabulary are kept
+        lines = ",\n".join("  " + json.dumps(r, ensure_ascii=False) for r in sorted(rows, key=lambda r: r["n"]))
+        path.write_text('{"doc": ' + json.dumps(doc, ensure_ascii=False) + ', "rows": [\n' + lines + "\n]}\n",
+                        encoding="utf-8")
+
+    def get_rows(self, doc: str) -> list[dict]:
+        path = self._rows_file(doc)
+        return json.loads(path.read_text(encoding="utf-8"))["rows"] if path.is_file() else []
+
+    def find_rows(self, entity: str | None = None, field: str | None = None, value: str | None = None) -> list[dict]:
+        # every document's file is read: enough for a run without a database, the database asks its index
+        folder = self.folder / "rows"
+        out = []
+        for path in sorted(folder.glob("*.json")) if folder.is_dir() else []:
+            for r in json.loads(path.read_text(encoding="utf-8"))["rows"]:
+                if entity in (None, r["entity"]) and field in (None, r["field"]) and value in (None, r["value"]):
+                    out.append(r)
+        return sorted(out, key=lambda r: (r["doc"], r["n"]))
+
+    def affairs_without_rows(self) -> list[str]:
+        named = {r.get("affair") for r in self.find_rows()}
+        keys = [json.loads(p.read_text(encoding="utf-8"))["key"] for p in (self.folder / "affairs").glob("*.json")]
+        return sorted(k for k in keys if k not in named)
+
+    def get_learnt(self) -> dict | None:
+        path = self.folder / "learnt.json"
+        return json.loads(path.read_text(encoding="utf-8")) if path.is_file() else None
+
+    def put_learnt(self, data: dict) -> None:
+        (self.folder / "learnt.json").write_text(json.dumps(data, ensure_ascii=False) + "\n", encoding="utf-8")
 
     def add_decision(self, row: dict) -> None:
         with (self.folder / "decisions.ndjson").open("a", encoding="utf-8") as f:

@@ -14,6 +14,12 @@ small router; what it answers with is in api.py.
     GET  /api/rules                               the rules learnt from decisions; a proposed one with its reach
     POST /api/rules/<id>/answer                   {accept, by} a person's yes or no to a proposed rule
     POST /api/rules/<id>                          {active, by} switches a rule (admin)
+    GET  /api/definition                          the fields with their entity, and in how many documents each
+                                                  was asked and never asked
+    POST /api/definition/ask                      {field} queues a run that asks the stored documents a field
+                                                  they were never asked (admin); without a field, all such
+    GET  /api/learnt                              what the second opinion learnt, way by way, with how often
+                                                  each agreed on documents held back and whether it is used
     GET  /api/vocabulary?list=&body=              the names of the parliaments with their standard names
     POST /api/vocabulary                          {list, body, name, standard, by} sets what a name stands
                                                   for, {list, body, name, reset} takes that back (admin)
@@ -121,6 +127,15 @@ class Handler(BaseHTTPRequestHandler):
             if not isinstance(body, dict):
                 return 400, {"error": "a JSON object is expected"}
             return app.switch_rule(m.group(1), bool(body.get("active")), str(body.get("by", "")))
+        if route == "definition" and method == "GET":
+            return 200, app.definition()
+        if route == "learnt" and method == "GET":
+            return 200, app.learnt()
+        if route == "definition/ask" and method == "POST":
+            if not app.allowed(self.headers.get("X-Token")):
+                return 403, {"error": "the admin token is missing or wrong"}
+            body = self._json_body()
+            return app.ask_again(body.get("field") if isinstance(body, dict) else None)
         if route == "vocabulary" and method == "GET":
             query = parse_qs(urlsplit(self.path).query)
             return 200, app.vocabulary(query.get("list", [None])[0], query.get("body", [None])[0])

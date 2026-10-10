@@ -5,7 +5,9 @@ A source sits either beside its value (custom-meta, contributors, events, confer
 `source`) or in the root list `sources[]` with the path to the value. A decision writes `review` at the source;
 "changed" also sets the new value at its place and keeps the old one in `before`; "rejected" leaves the value
 and marks it, so an export can leave it out. `approve` stays: it is the machine's signal, "open" means approve
-without review. A new run over the same document keeps every review a person wrote.
+without review. A new run over the same document keeps every review a person wrote: the store holds each
+decision at the row of its value (docket.store.rows) and the record follows; carry_reviews is the earlier way,
+by the path in the record, and serves an affair that was stored before its documents had rows.
 """
 
 from __future__ import annotations
@@ -72,6 +74,17 @@ def _label(path: str | list[str]) -> str:
     parts = path.split(".") if isinstance(path, str) else list(path)
     words = [p for p in parts if not p.isdigit() and p not in ("data", "de", "fr", "it")]
     return ".".join(words)
+
+
+def label_of_path(path: str) -> str:
+    """The label of a value in a record from its path alone."""
+    return _label(path)
+
+
+def label_of(path: list[str], fixed: dict) -> str:
+    """The label the values of a field of the fields file stand under in a record, from the field's path and
+    the fixed parts of its entry: the same label sources_of gives the value once it is placed."""
+    return str(fixed["meta-name"]) if fixed.get("meta-name") else _label([p for p in path if p != "[]"])
 
 
 def _entry(source_path: str, value_path: str, label: str, value, source: dict) -> dict:

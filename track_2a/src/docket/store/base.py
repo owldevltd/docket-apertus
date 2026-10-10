@@ -56,6 +56,37 @@ class Store:
     def get_fields(self, name: str) -> dict | None:
         raise NotImplementedError
 
+    def asked_counts(self) -> dict:
+        """Over the fields reports of all documents: how many there are (documents), in how many a field has
+        an answer or the note why it was not asked (fields, by name), and how many were read under which
+        state of the definition (versions, by its mark; "" for a report from before it was kept)."""
+        raise NotImplementedError
+
+    # rows: what was found in the documents, one row per value (docket.store.rows)
+    def put_rows(self, doc: str, rows: list[dict]) -> None:
+        """Stores the rows of a document; replaces what was stored for it."""
+        raise NotImplementedError
+
+    def get_rows(self, doc: str) -> list[dict]:
+        """The rows of a document, in their order."""
+        raise NotImplementedError
+
+    def find_rows(self, entity: str | None = None, field: str | None = None, value: str | None = None) -> list[dict]:
+        """The rows over all documents with this entity, field and value, each as far as given; by document
+        and order."""
+        raise NotImplementedError
+
+    def affairs_without_rows(self) -> list[str]:
+        """The keys of the affairs no row names: put into the store directly, or before the rows existed."""
+        raise NotImplementedError
+
+    # what was learnt from the rows for a second opinion (docket.fields.second)
+    def get_learnt(self) -> dict | None:
+        raise NotImplementedError
+
+    def put_learnt(self, data: dict) -> None:
+        raise NotImplementedError
+
     # decisions
     def add_decision(self, row: dict) -> None:
         raise NotImplementedError

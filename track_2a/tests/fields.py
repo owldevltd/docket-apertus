@@ -18,6 +18,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from docket.config import load_config  # noqa: E402
+from docket.fields.filler import parse  # noqa: E402
 from docket.fields.placer import fill, locate  # noqa: E402
 from docket.pipeline import first_pages, load_contract, load_field_file  # noqa: E402
 
@@ -46,6 +47,21 @@ def main(argv: list[str]) -> int:
     missing = [key for key, name in names.items() if name is None]
     if missing:
         print("FAIL the fields file has no field for " + ", ".join(missing))
+        return 1
+    # the lines of an answer are told by the field's name; where the model puts its own word for a name, in the
+    # language of the question, the place of the line tells the field, as long as the answer has one line per
+    # field asked and nothing is out of place
+    asked = ["number", "title", "type"]
+    plain = parse("number: 1 [b2]\ntitle: A title [b3]\ntype: Motion [b4]", asked)
+    own_words = parse("Geschäftsnummer: 1 [b2]\ntitle: A title [b3]\nArt: Motion [b4]", asked)
+    moved = parse("Geschäftsnummer: 1 [b2]\ntype: Motion [b4]\ntitle: A title [b3]", asked)
+    short = parse("Geschäftsnummer: 1 [b2]\ntitle: A title [b3]", asked)
+    told = {"number": "1", "title": "A title", "type": "Motion"}
+    ok = (plain[0] == told and plain[1]["number"] == ["b2"] and own_words[0] == told
+          and own_words[1]["type"] == ["b4"] and "number" not in moved[0] and "number" not in short[0])
+    print(("ok   " if ok else "FAIL ") + "answer lines: by the field's name, by their place where the model used "
+          "its own word, and not by place when a line is missing or moved")
+    if not ok:
         return 1
     print(f"ok   fields file: {len(fields.fields)} fields, every path open in the contract")
 

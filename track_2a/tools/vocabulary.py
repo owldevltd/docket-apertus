@@ -4,20 +4,29 @@ events, and the kinds of groups. Writes data/knowledge/vocabulary.json. The stor
 and can be changed from there on (docket.store.vocabulary).
 
     python3 tools/vocabulary.py
+    python3 tools/vocabulary.py --roles <contributors.ndjson.gz>
 
 The panel shows these lists to a visitor without a login. They are read one page at a time with a pause, 18
 requests on 10 October 2026; who last edited a row is not taken along. OpenParlData calls its harmonised
 types provisional, so the file carries the day it was fetched and a newer file replaces in the store what
 nobody changed by hand.
+
+The roles of those who take part in an affair (author, co-signer, speaker) are not among the panel's lists.
+With --roles they are taken from OpenParlData's export of the contributors
+(files.openparldata.ch/exports/contributors.ndjson.gz, fetched once by hand): per parliament the names it
+gives the roles, with the standard role each stands for. Only the parliament's key and the names of the role
+are read from a row, nobody's name; the other lists of the file stay as they are.
 """
 
 from __future__ import annotations
 
+import gzip
 import json
 import re
 import sys
 import time
 import urllib.request
+from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -83,10 +92,45 @@ def type_names(rows: list[dict]) -> tuple[list[dict], int]:
     return sorted(out, key=lambda e: (e["body"], e["name"].lower())), len(rows) - len(out)
 
 
+def roles(export: Path) -> tuple[list[dict], list[dict], int]:
+    """The standard roles and what every parliament calls its roles, from the export of the contributors. A
+    name that stands for two standard roles in one parliament goes to the one it stands for more often;
+    returns the standards, the names and how many names that were."""
+    standard: dict[str, dict] = {}
+    seen: Counter = Counter()
+    with gzip.open(export, "rt", encoding="utf-8") as f:
+        for line in f:
+            r = json.loads(line)
+            key = r.get("role_harmonized")
+            name, lang = next(((clean(r.get(f"role_{lang}")), lang) for lang in ("de", "fr", "it")
+                               if clean(r.get(f"role_{lang}"))), ("", ""))
+            if not key:
+                continue
+            entry = standard.setdefault(key, {"id": key, "count": 0})
+            entry["count"] += 1
+            for language in LANGUAGES:
+                entry.setdefault(language, clean(r.get(f"role_harmonized_{language}")) or None)
+            # a standard role is listed also when no parliament has a name of its own for it
+            if name and r.get("body_key"):
+                seen[(str(r["body_key"]), name, lang, key)] += 1
+    best: dict[tuple[str, str], tuple[int, str, str]] = {}
+    for (body, name, lang, key), count in seen.items():
+        if count > best.get((body, name.lower()), (0, "", ""))[0]:
+            best[(body, name.lower())] = (count, name, lang, key)
+    names = [{"body": body, "name": name, "lang": lang, "standard": key}
+             for (body, _), (_, name, lang, key) in best.items()]
+    standards_out = [{"id": e["id"], **{language: e.get(language) for language in LANGUAGES}, "count": e["count"]}
+                     for e in sorted(standard.values(), key=lambda e: -e["count"])]
+    return standards_out, sorted(names, key=lambda e: (e["body"], e["name"].lower())), len(seen) - len(names)
+
+
 def write(data: dict) -> None:
     """One row per line, so a newer stem shows as changed lines."""
     lines = ["{", f'  "source": {json.dumps(data["source"], ensure_ascii=False)},',
-             f'  "fetched": {json.dumps(data["fetched"])},', '  "lists": {']
+             f'  "fetched": {json.dumps(data["fetched"])},']
+    if "roles" in data:
+        lines.append(f'  "roles": {json.dumps(data["roles"], ensure_ascii=False)},')
+    lines.append('  "lists": {')
     names = list(data["lists"])
     for name in names:
         lines.append(f'    "{name}": {{')
@@ -102,7 +146,21 @@ def write(data: dict) -> None:
     OUT.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
-def main() -> int:
+def main(argv: list[str]) -> int:
+    held = json.loads(OUT.read_text(encoding="utf-8")) if OUT.is_file() else {"lists": {}}
+    if argv[:1] == ["--roles"] and len(argv) == 2:
+        if not held["lists"]:
+            print("no vocabulary file yet: run without --roles first", file=sys.stderr)
+            return 1
+        standard, names, twice = roles(Path(argv[1]))
+        held["lists"]["roles"] = {"standards": standard, "names": names}
+        held["roles"] = {"source": "the export of the contributors of OpenParlData (files.openparldata.ch/exports)",
+                         "read": time.strftime("%Y-%m-%d")}
+        write(held)
+        print(f"{len(standard)} standard roles, {sum(1 for s in standard if s['de'])} with names in the four "
+              f"languages; {len(names)} role names of {len({n['body'] for n in names})} parliaments, {twice} that "
+              f"stood for two roles given to the more frequent one")
+        return 0
     types = standards(fetch("affair_types_harmonized"), "affair_type_harmonized_")
     names, twice = type_names(fetch("affair_type_mapping"))
     events = standards(fetch("event_texts_harmonized"), "event_text_harmonized_")
@@ -114,7 +172,10 @@ def main() -> int:
             "types": {"standards": types, "names": names},
             "events": {"standards": events, "names": []},
             "groups": {"standards": groups, "names": []},
+            # the roles come from the export, not from the panel: a new stem keeps the ones the file has
+            **({"roles": held["lists"]["roles"]} if "roles" in held["lists"] else {}),
         },
+        **({"roles": held["roles"]} if "roles" in held else {}),
     })
     with_type = sum(1 for n in names if n["standard"] is not None)
     ways: dict[str, set] = {}
@@ -128,4 +189,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(main(sys.argv[1:]))

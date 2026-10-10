@@ -1,8 +1,8 @@
 # Documents
 
 The documents the demo and the tests run on. Each folder holds the PDF, a `document.json` with name, body,
-language, origin and, where known, the affair it belongs to at OpenParlData, and one JSON per page with the
-reference the tests measure against.
+language, origin and, where known, the affair it belongs to at OpenParlData, one JSON per page with the
+reference the tests measure against, and a stored run with the affair it became.
 
 | Folder | Body | Language | Pages | Text layer | What it is |
 |---|---|---|---:|---|---|
@@ -40,3 +40,16 @@ images[] { x, y, w, h, ink }                    raster images on the page
 
 Coordinates are pixels at 300 dpi. A page without a text layer has no words; the tests skip it and the
 reading step handles it.
+
+## The stored run
+
+`run.json` is what a run with the model left for the document on 10 October 2026: the blocks (`body`), the
+number of pages, the identity the run found (`identity`), the kind it took the document for (`kind`) and, for
+every field of the definition, the model's
+answer with its state and the values taken from it (`fields`); the raw exchange of the calls is left out. The
+fields were named in German when the run was made; they stand here under the English names the fields file
+has since, the answers untouched.
+`affair.json` is the affair the code makes of that run, as a run writes it. `tests/baseline.py` forms it again
+without a model and compares the two character by character, so a change to the core that moves a value or
+a place shows at once. After a change that is meant, `python3 tests/baseline.py --write data/documents/*`
+replaces the stored affairs.

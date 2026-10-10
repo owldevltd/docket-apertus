@@ -534,7 +534,7 @@
   },
   "custom-meta": [
     {
-      "meta-name": "adressat",
+      "meta-name": "addressee",
       "meta-value": "Gemeinderat",
       "source": {
         "doc": 1,
@@ -543,7 +543,7 @@
       }
     },
     {
-      "meta-name": "ort",
+      "meta-name": "place",
       "meta-value": "Nidau",
       "source": {
         "doc": 1,
@@ -552,7 +552,7 @@
       }
     },
     {
-      "meta-name": "parlament",
+      "meta-name": "parliament",
       "meta-value": "Stadtrat",
       "source": {
         "doc": 1,
@@ -561,7 +561,7 @@
       }
     },
     {
-      "meta-name": "gemeinwesen",
+      "meta-name": "polity",
       "meta-value": "Nidau",
       "source": {
         "doc": 1,
@@ -570,7 +570,7 @@
       }
     },
     {
-      "meta-name": "departement",
+      "meta-name": "department",
       "meta-value": "Präsidiales",
       "source": {
         "doc": 1,
