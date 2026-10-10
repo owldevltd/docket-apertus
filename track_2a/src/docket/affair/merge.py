@@ -9,6 +9,7 @@ from docket.affair.types import harmonize
 from docket.affair.validator import Contract
 from docket.fields.fields import Fields
 from docket.fields.placer import fill
+from docket.store.vocabulary import Vocabulary
 
 SCHEMA = "0.8"
 FORMAT = "application/pdf"
@@ -25,6 +26,8 @@ class Document:
     values: dict[str, list[dict]] = field(default_factory=dict)
     key: str = ""
     date: str = ""
+    # the parliament's key at OpenParlData ("ZH"), empty when the document does not tell
+    parliament: str = ""
 
 
 @dataclass
@@ -35,8 +38,11 @@ class Affair:
     errors: list[str]
 
 
-def merge(documents: list[Document], fields: Fields, contract: Contract, types: dict[str, dict]) -> list[Affair]:
-    """Groups the documents by key and builds one affair per group, in the order the keys first appear."""
+def merge(documents: list[Document], fields: Fields, contract: Contract, types: dict[str, dict],
+          vocabulary: Vocabulary | None = None) -> list[Affair]:
+    """Groups the documents by key and builds one affair per group, in the order the keys first appear. The
+    type is harmonised through the names of the parliament the affair's documents tell, then through the
+    table."""
     groups: dict[str, list[Document]] = {}
     for d in documents:
         groups.setdefault(d.key, []).append(d)
@@ -52,7 +58,8 @@ def merge(documents: list[Document], fields: Fields, contract: Contract, types: 
                     entry.setdefault("format", FORMAT)
                     entry.setdefault("page-count", d.pages)
                     entry.setdefault("body", d.body)
-        record = harmonize(record, types)
+        parliament = next((d.parliament for d in members if d.parliament), "")
+        record = harmonize(record, types, vocabulary, parliament)
         out.append(Affair(key, record, [d.id for d in members], contract.check(record)))
     return out
 

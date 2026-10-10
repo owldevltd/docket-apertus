@@ -1,10 +1,11 @@
-"""The affair's identity, the type table and the merging, without a model.
+"""The affair's identity, the type and the merging, without a model.
 
 For every shipped document with a known affair: the API's number normalised to the key; the first page of the
 analyzed pages searched for a number of the parliament's form (the way the identity takes when the read number
-is missing or does not fit), and whether that gives the same key; the printed type label through the type
-table against the harmonised type the API holds. Then the documents are keyed and merged into affairs, Nidau
-twice under the same key, and every affair must validate against the contract.
+is missing or does not fit), and whether that gives the same key; the type label against the harmonised type
+the API holds, once through the table of all parliaments alone and once through the names of the parliament
+the identity found (the shipped stem of the vocabulary) before it. Then the documents are keyed and merged
+into affairs, Nidau twice under the same key, and every affair must validate against the contract.
 
     python3 tests/affairs.py --pages=<analyzed dir> --documents=<records dir> [--out=<file.md>] [--store=<dir>]
         <document dir> ...
@@ -29,6 +30,7 @@ from docket.config import load_config  # noqa: E402
 from docket.fields.placer import locate  # noqa: E402
 from docket.pipeline import first_pages, load_contract, load_field_file, load_knowledge  # noqa: E402
 from docket.store.files import FileStore  # noqa: E402
+from docket.store.vocabulary import Vocabulary, load_stem, stem_rows  # noqa: E402
 
 # the affair's values in document.json and the role of the field that asks for them
 ROLES = {"number": "number", "title": "title", "type": None, "begin_date": "date"}
@@ -51,10 +53,14 @@ def main(argv: list[str]) -> int:
     by_role = fields.by_role()
     print(f"ok   knowledge: {len(knowledge.types)} type labels, number forms for {len(knowledge.forms)} parliaments,"
           f" {len(knowledge.bodies)} parliaments named")
+    stem = load_stem(config.data_dir / "knowledge" / "vocabulary.json")
+    vocabulary = Vocabulary(stem_rows(stem) if stem else [])
+    print(f"ok   vocabulary: {len(vocabulary.names('types'))} rows of the types, stem of "
+          f"{stem.get('fetched') if stem else 'none'}")
 
     rows = []
     documents: list[Document] = []
-    same_key = known_key = same_type = known_type = 0
+    same_key = known_key = same_type = same_table = known_type = 0
     failed = False
     for d in dirs:
         info = d / "document.json"
@@ -85,13 +91,16 @@ def main(argv: list[str]) -> int:
         if api_key:
             known_key += 1
             same_key += 1 if identity.key == api_key else 0
-        # the type label through the table
-        kind = harmonized(str(affair["type"]), knowledge.types) if affair.get("type") else None
+        # the type label through the table alone, and through the names of the found parliament before it
+        label = str(affair["type"]) if affair.get("type") else ""
+        by_table = ((harmonized(label, knowledge.types) if label else None) or {}).get("de") or "-"
+        kind = harmonized(label, knowledge.types, vocabulary, identity.body) if label else None
         got_type = (kind or {}).get("de") or "-"
         want_type = affair.get("type_harmonized") or ""
         if want_type:
             known_type += 1
             same_type += 1 if got_type == want_type else 0
+            same_table += 1 if by_table == want_type else 0
 
         values: dict[str, list[dict]] = {}
         for key, role in ROLES.items():
@@ -104,11 +113,12 @@ def main(argv: list[str]) -> int:
                 values[field_name] = [{"value": str(value), "block": block, "how": "literal"}]
         doc_key = api_key or identity.key
         date = str(affair.get("begin_date") or "")
-        documents.append(Document(len(documents) + 1, pdf.stem, len(pages), body, values, doc_key, date))
+        documents.append(Document(len(documents) + 1, pdf.stem, len(pages), body, values, doc_key, date,
+                                  identity.body))
         rows.append(
             f"| {pdf.stem} | {affair.get('number') or '—'} | {api_key or '—'} | {identity.key} ({identity.way}"
-            f"{', body ' + identity.body if identity.body else ''}) | {affair.get('type') or '—'} | {got_type} | "
-            f"{want_type or '—'} |"
+            f"{', body ' + identity.body if identity.body else ''}) | {affair.get('type') or '—'} | {by_table} | "
+            f"{got_type} | {want_type or '—'} |"
         )
         key_fits = not api_key or identity.key == api_key
         type_fits = not want_type or got_type == want_type
@@ -121,8 +131,9 @@ def main(argv: list[str]) -> int:
     if twin is not None:
         again = Document(len(documents) + 1, twin.name + "-again", twin.pages, twin.body, twin.values, twin.key)
         again.date = twin.date
+        again.parliament = twin.parliament
         documents.append(again)
-    affairs = merge(documents, fields, contract, knowledge.types)
+    affairs = merge(documents, fields, contract, knowledge.types, vocabulary)
     for a in affairs:
         state = "valid" if not a.errors else f"{len(a.errors)} violations, first: {a.errors[0]}"
         if a.errors:
@@ -147,7 +158,8 @@ def main(argv: list[str]) -> int:
                 store.put_pages(by_id[i].name, pages_dir)
         print(f"ok   {len(affairs)} affairs in the file store {store_dir}")
     print(f"{same_key} of {known_key} keys from the page as from the API's number; "
-          f"{same_type} of {known_type} type labels onto the API's harmonised type; "
+          f"{same_type} of {known_type} type labels onto the API's harmonised type "
+          f"({same_table} through the table of all parliaments alone); "
           f"{len(affairs)} affairs from {len(documents)} documents")
 
     if out_file is not None:
@@ -156,14 +168,17 @@ def main(argv: list[str]) -> int:
             "# Identity and type against the API\n\n"
             f"Generated by `tests/affairs.py` on {time.strftime('%Y-%m-%d')}, no model call. Per shipped document: the "
             "affair's number as OpenParlData holds it and the key it gives; the key the identity finds from the first "
-            "page by the parliament's number form, with the way it took; the printed type label through the type table "
-            "from the export against the harmonised type of the API.\n\n"
-            "| Document | API number | Key from it | Key from the page | Type label | Through the table | API |\n"
-            "|---|---|---|---|---|---|---|\n"
+            "page by the parliament's number form, with the way it took; the type label through the type table from "
+            "the export alone, and through the names of the found parliament before it (the stem of the vocabulary), "
+            "against the harmonised type of the API.\n\n"
+            "| Document | API number | Key from it | Key from the page | Type label | Table alone | With the "
+            "parliament's names | API |\n"
+            "|---|---|---|---|---|---|---|---|\n"
         )
         foot = (
             f"\n{same_key} of {known_key} keys from the page as from the API's number; "
-            f"{same_type} of {known_type} type labels onto the API's harmonised type; "
+            f"{same_type} of {known_type} type labels onto the API's harmonised type "
+            f"({same_table} through the table of all parliaments alone); "
             f"{len(affairs)} affairs from {len(documents)} documents, all {'valid' if not failed else 'NOT valid'}.\n"
         )
         out_file.write_text(head + "\n".join(rows) + "\n" + foot, encoding="utf-8")

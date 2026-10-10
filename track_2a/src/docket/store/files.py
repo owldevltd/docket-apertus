@@ -71,3 +71,23 @@ class FileStore(Store):
     def put_rules(self, rules: list[dict]) -> None:
         text = json.dumps({"rules": rules}, ensure_ascii=False, indent=2) + "\n"
         (self.folder / "rules.json").write_text(text, encoding="utf-8")
+
+    def get_vocabulary(self) -> list[dict]:
+        path = self.folder / "vocabulary.json"
+        return json.loads(path.read_text(encoding="utf-8"))["rows"] if path.is_file() else []
+
+    def put_vocabulary(self, rows: list[dict]) -> None:
+        held = {(r["list"], r["body"], r["name"]): r for r in self.get_vocabulary()}
+        held.update({(r["list"], r["body"], r["name"]): r for r in rows})
+        self._write_vocabulary(held)
+
+    def drop_vocabulary(self, rows: list[dict]) -> None:
+        held = {(r["list"], r["body"], r["name"]): r for r in self.get_vocabulary()}
+        for r in rows:
+            held.pop((r["list"], r["body"], r["name"]), None)
+        self._write_vocabulary(held)
+
+    def _write_vocabulary(self, held: dict[tuple[str, str, str], dict]) -> None:
+        # one row per line: the file holds some fifteen hundred of them
+        lines = ",\n".join("  " + json.dumps(held[key], ensure_ascii=False) for key in sorted(held))
+        (self.folder / "vocabulary.json").write_text('{"rows": [\n' + lines + "\n]}\n", encoding="utf-8")

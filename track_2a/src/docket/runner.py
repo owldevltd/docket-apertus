@@ -25,6 +25,7 @@ from docket.pipeline import (
 )
 from docket.store import open_store
 from docket.store.review import carry_reviews
+from docket.store.vocabulary import Vocabulary
 
 
 @dataclass
@@ -86,7 +87,8 @@ def run_affairs(files: list[Path], out: Path, config: Config, with_model: bool, 
         values = values_of(p.filled["fields"])
         date = next((day(i["value"]) for i in values.get(fields.by_role().get("date", ""), [])), "")
         key = p.identity.key if p.identity is not None else "dok-" + p.name
-        documents.append(Document(len(documents) + 1, p.name, len(p.pages), body, values, key, date))
+        parliament = p.identity.body if p.identity is not None else ""
+        documents.append(Document(len(documents) + 1, p.name, len(p.pages), body, values, key, date, parliament))
         if client is not None and client.halted:
             say(f"halted after HTTP {client.halted}")
             result.halted = client.halted
@@ -168,7 +170,8 @@ def _write_affairs(out: Path, documents: list[Document], fields: Fields, contrac
     by_id = {d.id: d for d in documents}
     lines = []
     summaries = []
-    for affair in merge(documents, fields, contract, knowledge.types):
+    vocabulary = Vocabulary(store.get_vocabulary())
+    for affair in merge(documents, fields, contract, knowledge.types, vocabulary):
         safe = re.sub(r"[^\w.-]+", "_", affair.key)
         record = affair.record
         earlier = store.get_affair(affair.key)

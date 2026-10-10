@@ -1,5 +1,6 @@
-"""The store in Postgres: the records as JSONB, the decisions as rows. The tables are created on first use.
-Page images stay on disk under the store's folder (a volume in Docker), the database holds what is queried."""
+"""The store in Postgres: the records as JSONB, the decisions and the vocabulary as rows. The tables are
+created on first use. Page images stay on disk under the store's folder (a volume in Docker), the database
+holds what is queried."""
 
 from __future__ import annotations
 
@@ -30,6 +31,13 @@ CREATE INDEX IF NOT EXISTS decisions_affair ON decisions (affair);
 CREATE TABLE IF NOT EXISTS rules (
     id text PRIMARY KEY,
     row jsonb NOT NULL
+);
+CREATE TABLE IF NOT EXISTS vocabulary (
+    list text NOT NULL,
+    body text NOT NULL,
+    name text NOT NULL,
+    row jsonb NOT NULL,
+    PRIMARY KEY (list, body, name)
 );
 """
 
@@ -120,6 +128,26 @@ class PostgresStore(Store):
                     "ON CONFLICT (id) DO UPDATE SET row = EXCLUDED.row",
                     (rule["id"], json.dumps(rule, ensure_ascii=False)),
                 )
+
+    def get_vocabulary(self) -> list[dict]:
+        with self._connect() as db:
+            rows = db.execute("SELECT row FROM vocabulary ORDER BY list, body, name").fetchall()
+        return [r[0] for r in rows]
+
+    def put_vocabulary(self, rows: list[dict]) -> None:
+        with self._connect() as db, db.cursor() as cursor:
+            cursor.executemany(
+                "INSERT INTO vocabulary (list, body, name, row) VALUES (%s, %s, %s, %s::jsonb) "
+                "ON CONFLICT (list, body, name) DO UPDATE SET row = EXCLUDED.row",
+                [(r["list"], r["body"], r["name"], json.dumps(r, ensure_ascii=False)) for r in rows],
+            )
+
+    def drop_vocabulary(self, rows: list[dict]) -> None:
+        with self._connect() as db, db.cursor() as cursor:
+            cursor.executemany(
+                "DELETE FROM vocabulary WHERE list = %s AND body = %s AND name = %s",
+                [(r["list"], r["body"], r["name"]) for r in rows],
+            )
 
     @staticmethod
     def _affair(row) -> dict:

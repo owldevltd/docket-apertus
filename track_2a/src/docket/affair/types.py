@@ -1,34 +1,48 @@
 """Translates what the document names into what OpenParlData holds: the type label ("Schriftliche Anfrage",
-"Standesinitiative") into the harmonised type in four languages. The table comes from the export
-(tools/knowledge.py); OpenParlData calls its harmonised types provisional, so the table is data, not code.
+"Standesinitiative") into the harmonised type in four languages. First through the vocabulary of the
+parliament (docket.store.vocabulary): the same label stands for another type in another parliament ("Antrag"
+is an amendment in Basel-Stadt and government business elsewhere). Where the parliament is not known or does
+not list the label, through the table of the export (tools/knowledge.py), which knows the label alone.
+OpenParlData calls its harmonised types provisional, so both are data, not code.
 """
 
 from __future__ import annotations
 
 import re
 
+from docket.store.vocabulary import Vocabulary
+
 # an entry of the table counts only when this many affairs carry it and this share of them falls on one type
 COUNT = 3
 SHARE = 0.6
 
 
-def harmonized(label: str, table: dict[str, dict]) -> dict | None:
-    """The harmonised type for a label, in four languages; None when the table does not know it. First the
-    whole label, then the label without additions in brackets, then its first word ("Motion Muster Hans")."""
+def harmonized(label: str, table: dict[str, dict], vocabulary: Vocabulary | None = None,
+               parliament: str = "") -> dict | None:
+    """The harmonised type for a label, in four languages; None when nothing knows it. First the whole label,
+    then the label without additions in brackets, then its first word ("Motion Muster Hans"). A label the
+    parliament lists without a harmonised type has none: the table of all parliaments is not asked then."""
     flat = re.sub(r"\s+", " ", label).strip().lower()
-    for attempt in (flat, re.sub(r"\s*\(.*\)\s*", " ", flat).strip(), flat.split(" ")[0]):
+    attempts = (flat, re.sub(r"\s*\(.*\)\s*", " ", flat).strip(), flat.split(" ")[0])
+    if vocabulary is not None and parliament:
+        for attempt in attempts:
+            row = vocabulary.row("types", parliament, attempt)
+            if row is not None:
+                return row["standard"]
+    for attempt in attempts:
         hit = table.get(attempt)
         if hit is not None and hit["count"] >= COUNT and hit["share"] >= SHARE:
             return hit["type"]
     return None
 
 
-def harmonize(affair: dict, table: dict[str, dict]) -> dict:
+def harmonize(affair: dict, table: dict[str, dict], vocabulary: Vocabulary | None = None,
+              parliament: str = "") -> dict:
     """Adds the harmonised type to an affair when the label is known and none stands there yet."""
     label = (affair.get("type_name") or {}).get("de")
     if affair.get("type_harmonized") or not label:
         return affair
-    found = harmonized(label, table)
+    found = harmonized(label, table, vocabulary, parliament)
     if found is not None:
         affair["type_harmonized"] = {k: v for k, v in found.items() if v is not None}
     return affair

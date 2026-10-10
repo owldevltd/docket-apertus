@@ -27,8 +27,8 @@ PDF ──pdftoppm──▶ page images ──▶ geometry ──▶ elements �
 | Fields | `fields/` (`fields`, `filler`, `placer`) | the fields file asks the model six questions per call over the first pages and over the whole document; code takes an answer only with a place: literal in a block, derived from the named block, or cited with a word in it; composed values and cited ones carry `approve` | yes |
 | Kind | `document/kind.py` | the document's role in the affair from the words of its first page, by the list in `data/knowledge/kinds.json` | no |
 | Key | `affair/identity.py` | the affair number, normalised; checked against the number forms of the parliament, searched on the page by form, or a weak key from place, date and title | no |
-| Affair | `affair/merge.py`, `affair/types.py`, `affair/validator.py` | the documents of one key become one affair; the harmonised type comes from the label through the table of the export; the record is checked against the contract by an own validator | no |
-| Store | `store/` (`files`, `postgres`, `review`, `rules`) | the affair with its documents, the fields reports, the decisions; reviews survive a new run over the same document | no |
+| Affair | `affair/merge.py`, `affair/types.py`, `affair/validator.py` | the documents of one key become one affair; the harmonised type comes from the label, through the names of the parliament in the vocabulary and else through the table of the export; the record is checked against the contract by an own validator | no |
+| Store | `store/` (`files`, `postgres`, `review`, `rules`, `vocabulary`) | the affair with its documents, the fields reports, the decisions, the vocabulary; reviews survive a new run over the same document | no |
 
 The command line runs the chain (`cli.py`, `runner.py`); the server runs the same function from its queue
 (`jobs.py`). `pipeline.py` holds the pieces every caller shares.
@@ -52,12 +52,17 @@ number forms per parliament, the names of the parliaments, the kinds of document
 kept per run (`values.json`) for a person to look at and are never offered to the model: measured, that
 brought more values that are not on the page.
 
+`vocabulary.json` is the stem of the vocabulary, as OpenParlData keeps it in its admin panel
+(`tools/vocabulary.py`): per parliament the names of its affair types with the harmonised type each stands
+for, the harmonised names of the events, the kinds of groups. It is only where the vocabulary starts; what
+is used lies in the store.
+
 ## The store and the review
 
 A store holds affairs by key, each with its record and its documents, the fields reports of the documents,
-the decisions and the rules. Files under `storage/store/` serve a single machine and the tests; Postgres
-(`DATABASE_URL`) serves the container, with the records as JSONB and the decisions as rows. Page images stay
-on disk in both.
+the decisions, the rules and the vocabulary. Files under `storage/store/` serve a single machine and the
+tests; Postgres (`DATABASE_URL`) serves the container, with the records as JSONB and the decisions and the
+vocabulary as rows. Page images stay on disk in both.
 
 A decision is written at the value's source: confirmed; changed, with the old value kept in `before`;
 rejected, with the value left in place and marked, so an export can leave it out. `approve` stays as the
@@ -69,10 +74,20 @@ a letter read for a digit, the spelling. An active rule changes every fitting va
 store, each with a review that names the rule, so every application can be seen and taken back; a person can
 switch a rule off and on, and what people confirm or withdraw is counted on it.
 
+The vocabulary (`store/vocabulary.py`) is a stem that can be changed. When the store is opened it is brought
+up to the stem of the checkout: an empty store is filled, a newer stem replaces every row nobody changed.
+A row says what a name of a parliament stands for ("Anzug" in Basel-Stadt is a postulate), or lists a name
+without a standard. A person can set another standard for a name or add a name the stem does not have; that
+row carries who and when and keeps what the stem said beside it, a newer stem leaves it alone, and it can be
+taken back. The type of an affair is looked up in the names of its parliament first: the same label stands
+for another type elsewhere, so the table of all parliaments is asked only where the parliament is not known
+or does not list the label. OpenParlData calls its harmonised types provisional; that is why the stem is a
+list in the store and neither code nor a fixed file.
+
 ## The server and the app
 
 `server.py` is the standard library's HTTP server with a small router; `api.py` is what it answers with:
-the affairs with every value that has a place, the decisions, the rules, the runs of the admin, and for every
+the affairs with every value that has a place, the decisions, the rules, the vocabulary, the runs of the admin, and for every
 open value the count of documents with the same pattern. One lock per affair guards the decisions; the
 contract is checked before anything is saved. The admin's runs (`jobs.py`) take an uploaded PDF or a document
 of OpenParlData by its id, run one after the other, and stay on disk under `storage/runs/`. An optional token
@@ -81,7 +96,8 @@ guards the admin.
 The app (`app/`, Angular with Angular Material) is built into `src/docket/app/` and served as static files.
 It shows the affairs as result cards, one affair with its page and every block framed, red where a person has
 to look, the values beside it with the three decisions, every decision taken, and the admin with the runs,
-the rules and the upload. Node is needed for the build only: locally through `make app`, in the container in
+the rules, the vocabulary and the upload. The vocabulary shows one parliament at a time: its names, what
+each stands for, and where a person changed the stem. Node is needed for the build only: locally through `make app`, in the container in
 the first stage of the Docker image.
 
 ## Measuring
@@ -89,7 +105,8 @@ the first stage of the Docker image.
 `make test` runs without a model and holds the chain against references that existed before any run: the
 text layer of the PDFs for the geometry and the text, the affairs of the API for the fields and the identity,
 a reading by hand for the kinds, and the contract for every record; it also runs the server, the decisions,
-the rules and the admin's queue on a file store. `make bench` runs the whole chain with the model over the
+the rules, the vocabulary and the admin's queue on a file store. `make test-store` runs the store's
+operations over Postgres as well, inside the running container, in a schema of its own. `make bench` runs the whole chain with the model over the
 eight shipped documents, about sixty calls, under five minutes, and keeps the raw exchange of every call.
 `docs/evidence.md` holds every number behind a decision, `results/` the committed runs.
 

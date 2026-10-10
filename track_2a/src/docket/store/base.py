@@ -70,6 +70,19 @@ class Store:
     def put_rules(self, rules: list[dict]) -> None:
         raise NotImplementedError
 
+    # vocabulary: the names of the parliaments and their standard names (docket.store.vocabulary)
+    def get_vocabulary(self) -> list[dict]:
+        """Every row."""
+        raise NotImplementedError
+
+    def put_vocabulary(self, rows: list[dict]) -> None:
+        """Stores rows; a row with the same list, body and name is replaced."""
+        raise NotImplementedError
+
+    def drop_vocabulary(self, rows: list[dict]) -> None:
+        """Removes the rows with the list, body and name of the given ones."""
+        raise NotImplementedError
+
     # pages, on disk in every backend
     def put_pages(self, name: str, source: Path) -> int:
         """Copies the page images and page files of a document from a run folder; returns the count."""

@@ -1,4 +1,4 @@
-.PHONY: run fill test bench bench-read reference knowledge app
+.PHONY: run fill test test-store bench bench-read reference knowledge vocabulary app
 
 export PYTHONPATH := src
 
@@ -29,7 +29,14 @@ test:
 	python3 tests/affairs.py --pages=storage/tests/pages --documents=storage/tests/documents --out=storage/tests/affairs.md --store=storage/tests/store data/documents/*
 	python3 tests/server.py --store=storage/tests/store --pages=storage/tests/pages
 	python3 tests/rules.py
+	python3 tests/store.py
+	python3 tests/vocabulary.py
 	python3 tests/admin.py data/documents/neuchatel-grand-conseil/*.pdf
+
+# The store's operations over Postgres as well, inside the running container (after `make run`). The test
+# works in a schema of its own and removes it at the end; the store in use is not touched.
+test-store:
+	docker compose exec docket sh -c 'python3 tests/store.py --postgres="$$DATABASE_URL"'
 
 # With the model: the whole chain over the shipped documents, the scan page read, the leftover elements of the
 # first pages sorted, the fields asked and placed, every document keyed and the documents of one key merged
@@ -62,3 +69,10 @@ reference:
 # are committed; the type table is provisional, as OpenParlData calls its harmonised types.
 knowledge:
 	python3 tools/knowledge.py $(EXPORT)
+
+# Fetches the stem of the vocabulary anew from OpenParlData's admin panel into data/knowledge/vocabulary.json:
+# per parliament the names of its affair types with the harmonised type, the names of the events, the kinds
+# of groups. 18 requests, one every four seconds. A preparation step, its result is committed; the store
+# takes a newer stem at its next start and keeps what a person changed.
+vocabulary:
+	python3 tools/vocabulary.py

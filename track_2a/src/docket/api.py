@@ -1,8 +1,10 @@
 """What the web server answers with: the affairs and their values with a place, the decisions and what they
-set in motion (the general repair), the runs of the admin. One object, shared by the request handlers."""
+set in motion (the general repair), the vocabulary, the runs of the admin. One object, shared by the request
+handlers."""
 
 from __future__ import annotations
 
+import json
 import threading
 
 from docket.affair.validator import Contract
@@ -11,6 +13,7 @@ from docket.jobs import Jobs
 from docket.store.base import Store, stamp
 from docket.store.review import apply_decision, counts, sources_of
 from docket.store.rules import Rules, apply, shape
+from docket.store.vocabulary import Vocabulary
 
 SAME_EXAMPLES = 5
 
@@ -175,6 +178,38 @@ class App:
             rule["applied"] = rule.get("applied", 0) + self._apply_rule(rule)
         self.store.put_rules(rules.rows)
         return 200, rule
+
+    # ---- vocabulary
+
+    def vocabulary(self, name_of_list: str | None, body: str | None) -> list[dict]:
+        return Vocabulary(self.store.get_vocabulary()).names(name_of_list or None, body)
+
+    def parliaments(self) -> dict:
+        """The parliaments by OpenParlData's body key, with their names (data/knowledge/bodies.json): the
+        vocabulary speaks of a parliament by its key, the screen by its name."""
+        path = self.config.data_dir / "knowledge" / "bodies.json"
+        return json.loads(path.read_text(encoding="utf-8"))["bodies"] if path.is_file() else {}
+
+    def set_name(self, body: dict) -> tuple[int, dict]:
+        """A person says what a name of a parliament stands for, or with "reset" takes that back."""
+        vocabulary = Vocabulary(self.store.get_vocabulary())
+        where = (str(body.get("list", "")), str(body.get("body", "")).strip(), str(body.get("name", "")))
+        if body.get("reset"):
+            row, gone = vocabulary.reset(*where)
+            if row is None and gone is None:
+                return 404, {"error": "no row a person changed"}
+            if row is not None:
+                self.store.put_vocabulary([row])
+            else:
+                self.store.drop_vocabulary([gone])
+            return 200, row or {**gone, "removed": True}
+        standard = body.get("standard")
+        try:
+            row = vocabulary.set(*where, None if standard is None else str(standard), str(body.get("by", "")))
+        except ValueError as e:
+            return 400, {"error": str(e)}
+        self.store.put_vocabulary([row])
+        return 200, row
 
     # ---- runs
 

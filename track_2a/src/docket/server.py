@@ -12,6 +12,10 @@ small router; what it answers with is in api.py.
     GET  /api/documents/<name>/pages/<n>.png      the page image
     GET  /api/rules                               the rules of the general repair
     POST /api/rules/<id>                          {active, by} switches a rule (admin)
+    GET  /api/vocabulary?list=&body=              the names of the parliaments with their standard names
+    POST /api/vocabulary                          {list, body, name, standard, by} sets what a name stands
+                                                  for, {list, body, name, reset} takes that back (admin)
+    GET  /api/parliaments                         the parliaments by their key, with their names
     GET  /api/runs                                the runs of the admin, newest first
     GET  /api/runs/<id>                           one run with all its lines
     POST /api/runs                                a PDF (Content-Type application/pdf, X-Name) or
@@ -24,7 +28,7 @@ import json
 import re
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import unquote, urlsplit
+from urllib.parse import parse_qs, unquote, urlsplit
 
 from docket.api import App
 from docket.config import Config
@@ -107,6 +111,18 @@ class Handler(BaseHTTPRequestHandler):
             if not isinstance(body, dict):
                 return 400, {"error": "a JSON object is expected"}
             return app.switch_rule(m.group(1), bool(body.get("active")), str(body.get("by", "")))
+        if route == "vocabulary" and method == "GET":
+            query = parse_qs(urlsplit(self.path).query)
+            return 200, app.vocabulary(query.get("list", [None])[0], query.get("body", [None])[0])
+        if route == "parliaments" and method == "GET":
+            return 200, app.parliaments()
+        if route == "vocabulary" and method == "POST":
+            if not app.allowed(self.headers.get("X-Token")):
+                return 403, {"error": "the admin token is missing or wrong"}
+            body = self._json_body()
+            if not isinstance(body, dict):
+                return 400, {"error": "a JSON object is expected"}
+            return app.set_name(body)
         if route == "runs" and method == "GET":
             return 200, app.jobs.list()
         m = re.fullmatch(r"runs/([^/]+)", route)
