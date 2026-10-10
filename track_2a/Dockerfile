@@ -1,6 +1,6 @@
 # Two stages. The first builds the browser app with Node, which is needed for that build only; the second
 # runs the Python server with numpy for the pixel fields and psycopg for the store, poppler renders the
-# pages. The model is reached over the network (BASE_URL). Nothing of Node is in the image that runs.
+# pages. The model is reached over the network (LLM_BASE_URL). Nothing of Node is in the image that runs.
 FROM node:24-alpine AS app
 WORKDIR /build
 COPY app/package.json app/package-lock.json ./
@@ -22,7 +22,7 @@ COPY data ./data
 COPY tests ./tests
 COPY tools ./tools
 COPY Makefile ./
-COPY --from=app /build/out ./src/docket/app
+COPY --from=app /build/out/browser ./src/docket/app
 
 ENV PYTHONPATH=/app/src
 ENV PORT=8080

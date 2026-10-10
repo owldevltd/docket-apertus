@@ -26,6 +26,10 @@ services:
     environment:
       DATABASE_URL: postgresql://docket:docket@db:5432/docket
       TZ: Europe/Zurich
+      # the model: from the shell that runs `make run`, or from .env beside this file
+      LLM_NAME:
+      LLM_BASE_URL:
+      LLM_API_KEY:
     volumes:
       - ./storage:/app/storage
 

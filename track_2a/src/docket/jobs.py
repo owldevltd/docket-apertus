@@ -1,4 +1,5 @@
-"""The queue of runs behind the admin: an uploaded PDF or a document of OpenParlData goes in, one worker
+"""The queue of runs behind the admin: an uploaded PDF or a document of OpenParlData goes in (or, on a clean
+checkout, the shipped documents with the runs stored beside them), one worker
 takes the runs one after the other (the model is called one call at a time anyway), every run lands under
 storage/runs/<id>/ with its lines and its result, so it can be read after a restart."""
 
@@ -14,7 +15,7 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
 from docket.config import Config
-from docket.runner import ask_missing, run_affairs
+from docket.runner import ask_missing, run_affairs, run_shipped
 from docket.store.base import stamp
 
 API = "https://api.openparldata.ch/v1"
@@ -91,6 +92,12 @@ class Jobs:
         self._enqueue(job)
         return job
 
+    def submit_shipped(self) -> Job:
+        """The shipped documents, formed from the runs stored beside them; no model."""
+        job = self._new("shipped", "shipped", False)
+        self._enqueue(job)
+        return job
+
     def list(self) -> list[dict]:
         with self._lock:
             jobs = sorted(self.jobs.values(), key=lambda j: j.created, reverse=True)
@@ -132,6 +139,8 @@ class Jobs:
                 if job.source == "ask":
                     names = None if job.name == "all" else [job.name]
                     result = ask_missing(self.config, names, say=job.lines.append)
+                elif job.source == "shipped":
+                    result = run_shipped(self.folder / job.id, self.config, say=job.lines.append)
                 else:
                     pdf = self.folder / job.id / f"{job.name}.pdf"
                     result = run_affairs([pdf], self.folder / job.id, self.config, job.model, say=job.lines.append)

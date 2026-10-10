@@ -42,9 +42,9 @@ def _read_env_file() -> None:
 def load_config() -> Config:
     _read_env_file()
     return Config(
-        model=os.environ.get("MODEL", "swiss-ai/Apertus-v1.5-8B"),
-        base_url=os.environ.get("BASE_URL", "https://api.inference.cscs.ch/v1"),
-        api_key=os.environ.get("API_KEY", ""),
+        model=os.environ.get("LLM_NAME", "swiss-ai/Apertus-v1.5-8B"),
+        base_url=os.environ.get("LLM_BASE_URL", "https://api.inference.cscs.ch/v1"),
+        api_key=os.environ.get("LLM_API_KEY", ""),
         data_dir=Path(os.environ.get("DATA_DIR", ROOT / "data")),
         storage_dir=Path(os.environ.get("STORAGE_DIR", ROOT / "storage")),
         database_url=os.environ.get("DATABASE_URL", ""),

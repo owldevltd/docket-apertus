@@ -84,7 +84,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "ask":
         config = load_config()
         if not config.api_key:
-            print("no API_KEY: copy .env.example to .env and fill it in", file=sys.stderr)
+            print("no LLM_API_KEY: copy .env.example to .env and fill it in", file=sys.stderr)
             return 1
         result = ask_missing(config, args.field, args.limit)
         print(f"{len(result.documents)} documents asked, {result.calls} calls, {len(result.affairs)} affairs "
@@ -99,6 +99,11 @@ def run_server(port: int | None) -> int:
     config = load_config()
     server, app = start(config, port)
     print(f"docket serves on http://localhost:{server.server_address[1]} over the {app.store.kind} store")
+    # a clean checkout has nothing to show: the shipped documents then come from the runs stored beside them,
+    # without the model, as a run in the queue while the server already answers
+    if not app.store.list_affairs() and not app.jobs.list():
+        app.jobs.submit_shipped()
+        print("the store is empty: the shipped documents are formed from their stored runs (see the runs)")
     try:
         server.serve_forever()
     except KeyboardInterrupt:
@@ -136,7 +141,7 @@ def run_view(fields_file: Path, contract_file: Path, out: Path) -> int:
 def run_documents(out: Path, files: list[Path], with_model: bool, affairs: bool) -> int:
     config = load_config()
     if with_model and not config.api_key:
-        print("no API_KEY: copy .env.example to .env and fill it in", file=sys.stderr)
+        print("no LLM_API_KEY: copy .env.example to .env and fill it in", file=sys.stderr)
         return 1
     result = run_affairs(files, out, config, with_model, merge_affairs=affairs)
     if result.halted:
@@ -148,7 +153,7 @@ def run(command: str, out: Path, files: list[Path]) -> int:
     out.mkdir(parents=True, exist_ok=True)
     client = Client(load_config()) if command == "read" else None
     if client is not None and not client.config.api_key:
-        print("no API_KEY: copy .env.example to .env and fill it in", file=sys.stderr)
+        print("no LLM_API_KEY: copy .env.example to .env and fill it in", file=sys.stderr)
         return 1
     for file in files:
         if not file.is_file():

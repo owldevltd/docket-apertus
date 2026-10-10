@@ -5,9 +5,10 @@ export PYTHONPATH := src
 # the daily affairs export of OpenParlData (NDJSON, gzip), for make knowledge
 EXPORT ?= affairs.ndjson.gz
 
-# Starts Postgres and the web server in Docker; the app is at http://localhost:8080. The store is empty on a
-# clean checkout: `make bench` (with API_KEY in .env) fills it with the shipped documents, or run
-# `python3 -m docket affairs --model --out storage/bench/documents <pdf...>` inside the container.
+# Starts Postgres and the web server in Docker; the app is at http://localhost:8080. On a clean checkout the
+# store is empty: the server then forms the affairs of the shipped documents from the runs stored beside them
+# (data/documents/*/run.json), without the model and without a key; it takes about two minutes and shows under
+# the runs of the admin. With LLM_API_KEY set (in the shell or in .env), `make fill` runs them with the model.
 run:
 	docker compose up --build
 
@@ -19,7 +20,7 @@ fill:
 # their PDFs, builds the blocks and the record, and looks for the known values of the affairs on the first
 # pages; then forms the affairs again from the stored run of every shipped document and compares them with
 # the stored ones, directly and by way of the rows, takes decisions on them and lays them into a second JSON
-# of another shape. No model call, no network; needs poppler to render the pages. Results and control images
+# of another shape, and fills an empty store with them as a clean checkout does. No model call, no network; needs poppler to render the pages. Results and control images
 # land in storage/tests/.
 test:
 	python3 -m docket analyze --out storage/tests/pages data/documents/*/*.pdf
@@ -35,6 +36,7 @@ test:
 	python3 tests/views.py data/documents/*
 	python3 tests/second.py data/documents/*
 	python3 tests/ask.py --pages=storage/tests/pages data/documents/*
+	python3 tests/shipped.py --pages=storage/tests/pages
 	python3 tests/server.py --store=storage/tests/store --pages=storage/tests/pages
 	python3 tests/rules.py
 	python3 tests/store.py
@@ -49,17 +51,17 @@ test-store:
 
 # With the model: the whole chain over the shipped documents, the scan page read, the leftover elements of the
 # first pages sorted, the fields asked and placed, every document keyed and the documents of one key merged
-# into one affair, every record validated. Needs API_KEY in .env (copy .env.example). About 60 calls, one
+# into one affair, every record validated. Needs LLM_API_KEY in .env (copy .env.example). About 60 calls, one
 # after the other, under five minutes. Results, the raw exchange and the control images land in storage/bench/;
 # the committed run is in results/.
 bench:
-	@test -f .env || { echo "copy .env.example to .env and set API_KEY"; exit 1; }
+	@test -f .env || { echo "copy .env.example to .env and set LLM_API_KEY"; exit 1; }
 	python3 -m docket affairs --model --out storage/bench/documents data/documents/*/*.pdf
 
 # With the model: two digital first pages read as if they had no text layer, held against their text layer.
 # About 35 calls, under three minutes.
 bench-read:
-	@test -f .env || { echo "copy .env.example to .env and set API_KEY"; exit 1; }
+	@test -f .env || { echo "copy .env.example to .env and set LLM_API_KEY"; exit 1; }
 	python3 tests/read.py --out=storage/bench/read.md data/documents/nidau-m185 data/documents/zuerich-219587
 
 # Builds the browser app (Angular, in app/) into src/docket/app/, from where the Python server serves it.

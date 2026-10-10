@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import re
+import shutil
 import tempfile
 import time
 from dataclasses import asdict, dataclass, field
@@ -108,6 +109,54 @@ def run_affairs(files: list[Path], out: Path, config: Config, with_model: bool, 
     return result
 
 
+def run_shipped(out: Path, config: Config, say: Callable[[str], None] = print,
+                pages: Path | None = None) -> RunResult:
+    """Forms the affairs of the shipped documents from the runs stored beside them, without the model: the
+    answers come from run.json, the pages are rendered and measured anew (or taken from `pages`, a folder that
+    holds them already). What a clean checkout has to show before anyone has set a key."""
+    contract = load_contract(config)
+    knowledge = load_knowledge(config)
+    fields = load_field_file(config, contract)
+    out.mkdir(parents=True, exist_ok=True)
+    result = RunResult()
+    documents: list[Document] = []
+    for folder in sorted((config.data_dir / "documents").glob("*/")):
+        pdf = next(iter(sorted(folder.glob("*.pdf"))), None)
+        stored = folder / "run.json"
+        if pdf is None or not stored.is_file():
+            continue
+        started = time.monotonic()
+        run = json.loads(stored.read_text(encoding="utf-8"))
+        name = pdf.stem
+        (out / name).mkdir(parents=True, exist_ok=True)
+        if pages is None:
+            process_pages(pdf, out / name, None)
+        else:
+            for file in sorted(pages.glob(f"{name}-s*")):
+                if file.is_file():
+                    shutil.copyfile(file, out / name / file.name)
+        # the report as a run leaves it beside the record, for the store
+        report = {"identity": run["identity"], "kind": run.get("kind"), "fields": run["fields"]}
+        (out / f"{name}-fields.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n",
+                                                 encoding="utf-8")
+        values = values_of(run["fields"])
+        date = next((day(i["value"]) for i in values.get(fields.by_role().get("date", ""), [])), "")
+        identity = run["identity"]
+        key = identity.get("key") or "dok-" + name
+        documents.append(Document(len(documents) + 1, name, run["pages"], run["body"], values, key, date,
+                                  identity.get("body") or ""))
+        seconds = time.monotonic() - started
+        say(f"{name:<28} {run['pages']} pages  from its stored run  key {key}  {seconds:.0f}s")
+        result.documents.append({
+            "name": name, "pages": run["pages"], "blocks": len(blocks_of(run["body"])), "calls": 0, "valid": True,
+            "key": key, "seconds": round(seconds), "identity": identity, "kind": run.get("kind"),
+        })
+    if documents:
+        result.affairs = _write_affairs(out, documents, fields, contract, knowledge, config, say)
+        result.failed = sum(1 for a in result.affairs if not a["valid"])
+    return result
+
+
 def ask_missing(config: Config, names: list[str] | None = None, limit: int | None = None,
                 say: Callable[[str], None] = print) -> RunResult:
     """Asks the documents of the store what they were never asked: the fields that came into the fields file
@@ -169,7 +218,8 @@ def ask_missing(config: Config, names: list[str] | None = None, limit: int | Non
                 result.halted = client.halted
                 break
     if not result.documents and not result.halted:
-        say("no document lacks a field of the fields file" if client.config.api_key else "no API_KEY: nothing asked")
+        say("no document lacks a field of the fields file" if client.config.api_key
+            else "no LLM_API_KEY: nothing asked")
     return result
 
 

@@ -3,7 +3,7 @@ layer, and every reading is held against the text the PDF carries for the same e
 
     python3 tests/read.py [--out=<file.md>] <document dir> [<document dir> ...]
 
-Needs API_KEY in .env. One strip call per three elements plus one call per multi-line element; the raw exchange
+Needs LLM_API_KEY in .env. One strip call per three elements plus one call per multi-line element; the raw exchange
 lands in storage/bench/read/. Judgements: identical, near (edit distance at most 10 % of the reference), other,
 empty; character errors over all elements with a reference.
 """
@@ -35,7 +35,7 @@ def main(argv: list[str]) -> int:
     out_file = next((Path(a[6:]) for a in argv if a.startswith("--out=")), None)
     client = Client(load_config())
     if not client.config.api_key:
-        print("no API_KEY in .env")
+        print("no LLM_API_KEY in .env")
         return 1
     rows = []
     started = time.time()
