@@ -1,7 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { Affair, AffairSummary, Decision, DecisionBody, FieldsReport, Health, Job, Rule } from './types';
+import {
+    Affair, AffairSummary, Decision, DecisionBody, FieldsReport, Health, Job, Parliament, Rule, VocabularyRow,
+} from './types';
 
 // The one door to the server. Every call goes through here, so the admin token and the error text are in
 // one place; the server's error message is what the user gets to see.
@@ -62,6 +64,23 @@ export class Api {
 
     switchRule( id: string, active: boolean, by: string ): Promise<Rule> {
         return this.post<Rule>( 'rules/' + encodeURIComponent( id ), { active, by } );
+    }
+
+    vocabulary(): Promise<VocabularyRow[]> {
+        return this.get<VocabularyRow[]>( 'vocabulary' );
+    }
+
+    parliaments(): Promise<Record<string, Parliament>> {
+        return this.get<Record<string, Parliament>>( 'parliaments' );
+    }
+
+    // standard is one of the list's standard names, or null for a name that stands for none
+    setName( row: { list: string; body: string; name: string }, standard: string | null, by: string ): Promise<VocabularyRow> {
+        return this.post<VocabularyRow>( 'vocabulary', { list: row.list, body: row.body, name: row.name, standard, by } );
+    }
+
+    resetName( row: { list: string; body: string; name: string } ): Promise<VocabularyRow> {
+        return this.post<VocabularyRow>( 'vocabulary', { list: row.list, body: row.body, name: row.name, reset: true } );
     }
 
     private get<T>( route: string ): Promise<T> {

@@ -69,6 +69,18 @@ export const KINDS: Record<string, string> = {
     'spelling': 'Schreibung',
 };
 
+// the lists of the vocabulary, and where a row comes from
+export const LISTS: Record<string, string> = {
+    types: 'Arten',
+    events: 'Ereignisse',
+    groups: 'Gruppen',
+};
+
+export const ORIGIN: Record<string, string> = {
+    stem: 'Stamm',
+    person: 'von Hand',
+};
+
 export function labelOf( entry: SourceEntry ): string {
     return LABELS[ entry.label ] || entry.label;
 }

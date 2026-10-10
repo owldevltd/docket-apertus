@@ -13,16 +13,17 @@ import { Health, Job, Rule } from '../api/types';
 import { Icon } from '../shared/icon';
 import { Who } from '../shared/who';
 import { KINDS, LABELS, STATE, StampPipe } from '../shared/words';
+import { VocabularyArea } from './vocabulary';
 
-type Area = 'runs' | 'rules' | 'process';
+type Area = 'runs' | 'rules' | 'vocabulary' | 'process';
 
 // The admin as in OpenParlData's panel: a drawer with the areas at the left, the area at the right. Runs
 // start here (a PDF, or a document of theirs by id) and are watched while they run; rules are seen and
-// switched here.
+// switched here; the vocabulary is seen and changed in an area of its own (vocabulary.ts).
 @Component( {
     selector: 'app-admin',
     imports: [ FormsModule, RouterLink, MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule,
-        MatListModule, MatSlideToggleModule, Icon, StampPipe ],
+        MatListModule, MatSlideToggleModule, Icon, StampPipe, VocabularyArea ],
     templateUrl: './admin.html',
     styleUrl: './admin.scss',
 } )
@@ -45,6 +46,7 @@ export class Admin implements OnInit, OnDestroy {
     readonly areas: { id: Area; name: string; icon: string }[] = [
         { id: 'runs', name: 'Läufe', icon: 'runs' },
         { id: 'rules', name: 'Regeln', icon: 'rule' },
+        { id: 'vocabulary', name: 'Vokabular', icon: 'list' },
         { id: 'process', name: 'Verarbeiten', icon: 'upload' },
     ];
 

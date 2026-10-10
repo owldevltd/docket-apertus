@@ -150,6 +150,41 @@ export interface Rule {
     examples: { affair: string; before: string; after: string; by: string }[];
 }
 
+// the standard name of a type, an event or a kind of group, in the four languages of the record
+export interface Standard {
+    de: string | null;
+    fr: string | null;
+    it: string | null;
+    en: string | null;
+}
+
+// A row of the vocabulary: what a parliament calls a thing (body is its key at OpenParlData) and the standard
+// name it stands for, or none. A row with an empty body is a standard name itself. A row a person set says
+// who and when, and keeps what the stem said beside it.
+export interface VocabularyRow {
+    list: 'types' | 'events' | 'groups';
+    body: string;
+    name: string;
+    label: string;
+    lang?: string | null;
+    standard: Standard | null;
+    origin: 'stem' | 'person';
+    fetched?: string | null;
+    by?: string;
+    at?: string;
+    stem?: { standard: Standard | null; fetched: string | null };
+    wikidata?: string;
+    count?: number;
+    removed?: boolean;
+}
+
+export interface Parliament {
+    name: string;
+    parliament: string;
+    canton: string | null;
+    level: string | null;
+}
+
 export interface Health {
     ok: boolean;
     store: string;
