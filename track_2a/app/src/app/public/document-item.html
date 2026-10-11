@@ -1,0 +1,50 @@
+@if ( error() ) {
+    <div class="empty">{{ error() }}</div>
+} @else if ( affair(); as a ) {
+    <div class="item card">
+        <div class="top-row">
+            <a class="back" [routerLink]="[ '/affairs', a[ 'id' ] ]" title="Zum Geschäft" i18n-title><app-icon name="back" [size]="28" /></a>
+            <app-url-box [address]="address()" [(json)]="json" />
+        </div>
+        <div class="head">
+            <div class="icon"><app-icon name="document" [size]="40" /></div>
+            <div class="text">
+                <h1>{{ name() }}</h1>
+                <div class="meta">
+                    <b i18n>Dokument</b>
+                    @for ( m of meta(); track $index ) { <span class="sep">|</span>{{ m }} }
+                </div>
+            </div>
+            @if ( body(); as b ) {
+                <div class="where"><b>{{ b.name }}</b></div>
+            }
+        </div>
+        <div class="links">
+            <a [routerLink]="[ '/affairs', a[ 'id' ] ]"><app-icon name="affair" [size]="16" /> <span i18n>Geschäft</span>: {{ affairTitle() }}</a>
+        </div>
+
+        @if ( json() ) {
+            <pre class="raw">{{ raw() }}</pre>
+        } @else {
+            <div class="rows">
+                @for ( r of rows(); track r.label ) {
+                    <div class="row"><b>{{ r.label }}</b><span class="pipe">|</span><span>{{ r.value }}</span></div>
+                }
+            </div>
+            @for ( r of answers(); track $index ) {
+                <div class="note"><ng-container i18n>Antwort im Dokument</ng-container>: <a href="#pages" (click)="page.set( r.page )" i18n>{{ r.title }} (ab S. {{ r.page }})</a></div>
+            }
+
+            <h2 id="pages" i18n>Seiten</h2>
+            <div class="sheet-box">
+                <div class="pager">
+                    <button type="button" (click)="turn( -1 )" [disabled]="page() <= 1" title="Seite zurück" i18n-title><app-icon name="back" /></button>
+                    <span i18n>Seite {{ page() }} von {{ pages() }}</span>
+                    <button type="button" (click)="turn( 1 )" [disabled]="page() >= pages()" title="Seite weiter" i18n-title><app-icon name="next" /></button>
+                </div>
+                <app-sheet [blocks]="blocks()" [page]="page()" />
+                <p class="muted set" i18n>Gesetzt aus den Blöcken des Datensatzes: jeder Text an seiner Stelle, in seiner Schrift, Grösse und Farbe. Ein Bild oder eine Linie der Seite ist ein graues Feld. Der Zeiger auf einem Block zeigt, was der Datensatz über ihn sagt.</p>
+            </div>
+        }
+    </div>
+}

@@ -46,18 +46,18 @@ export class ValueCard {
     }
 
     confirm(): void {
-        this.decided.emit( { id: this.entry().id, decision: 'confirmed', by: '' } );
+        this.decided.emit( { id: this.entry().id, decision: 'confirmed' } );
     }
 
     // of several values in one entry the picked one is changed: it has an id of its own
     change(): void {
         const e = this.entry();
         const id = e.ids?.[ this.path() ] || e.id;
-        this.decided.emit( { id, decision: 'changed', by: '', after: this.after(), path: this.path() } );
+        this.decided.emit( { id, decision: 'changed', after: this.after(), path: this.path() } );
     }
 
     reject(): void {
-        this.decided.emit( { id: this.entry().id, decision: 'rejected', by: '' } );
+        this.decided.emit( { id: this.entry().id, decision: 'rejected' } );
     }
 
     pick( path: string ): void {

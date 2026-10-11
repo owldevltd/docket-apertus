@@ -29,3 +29,11 @@ track_2a/app/node_modules/
 track_2a/app/dist/
 track_2a/app/.angular/
 track_2a/src/docket/app/
+
+# The parliamentary documents the tests and the demo run on: publications taken from OpenParlData, kept beside
+# the repository and not in it, because they name people. Each folder keeps its document.json, which says where
+# the document comes from (track_2a/data/documents/README.md).
+track_2a/data/documents/*/*.pdf
+track_2a/data/documents/*/*-s[0-9]*.json
+track_2a/data/documents/*/affair.json
+track_2a/data/documents/*/run.json

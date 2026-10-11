@@ -27,6 +27,6 @@ export class Decisions implements OnInit {
     }
 
     open( row: Decision ): void {
-        this.router.navigate( [ '/affairs', row.affair ] );
+        this.router.navigate( [ '/admin/review', row.affair ] );
     }
 }

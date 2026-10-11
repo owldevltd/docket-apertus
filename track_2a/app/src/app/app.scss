@@ -49,7 +49,32 @@
     flex: 1;
 }
 
+.languages {
+    display: flex;
+    gap: 2px;
+
+    a {
+        color: rgba( 255, 255, 255, .78 );
+        text-decoration: none;
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 600;
+
+        &.on,
+        &:hover {
+            color: #fff;
+            background: rgba( 255, 255, 255, .12 );
+        }
+    }
+}
+
 .who {
+    color: rgba( 255, 255, 255, .85 );
+    font-size: 13px;
+}
+
+.out {
     color: rgba( 255, 255, 255, .85 );
     font-size: 13px;
 }

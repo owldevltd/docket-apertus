@@ -70,3 +70,26 @@ tr.quiet td {
 .wide {
     overflow-x: auto;
 }
+
+// the form to sign in: narrow, in the middle
+.signin {
+    max-width: 380px;
+    margin: 40px auto;
+    padding: 22px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    h2 {
+        margin: 0;
+    }
+
+    p {
+        margin: 0;
+    }
+
+    .refused {
+        color: #b3261e;
+        font-size: 14px;
+    }
+}

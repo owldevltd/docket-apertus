@@ -4,8 +4,11 @@
 runs stored beside them (run.json), as a run in its queue. The test does the same into a store of its own,
 with the pages `make test` analysed before: every shipped document with a stored run sits in an affair, every
 affair is valid and is the one stored beside its document (affair.json, but for the number the document has
-within its run: there it ran alone, here with the others), the first page of every document can be shown, and
-doing it a second time changes nothing.
+within its run: there it ran alone, here with the others), the first page of every document can be shown,
+doing it a second time changes nothing, and what a visitor is given from that store hangs together: every
+affair names itself and its parliament, every row of the tables that follow from the affairs names an affair
+that is there, one person, group or meeting asked for by its name comes with its rows alone, and every
+document is found as its entry in the record of its affair.
 
     python3 tests/shipped.py --pages=<analyzed dir>
 """
@@ -19,7 +22,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
+from docket.api import App  # noqa: E402
 from docket.config import load_config  # noqa: E402
+from docket.pipeline import load_contract  # noqa: E402
 from docket.runner import run_shipped  # noqa: E402
 from docket.store import open_store  # noqa: E402
 
@@ -75,6 +80,41 @@ def main(argv: list[str]) -> int:
         after = {d["name"]: a["record"] for a in store.list_affairs() for d in a["documents"]}
         check(len(again.affairs) == len(result.affairs) and all(after[n] == held[n]["record"] for n in shipped),
               "a second time changes nothing")
+
+        # what a visitor is given from this store
+        app = App(store, load_contract(config), config)
+        try:
+            listed = app.records()["data"]
+            keys = {a["key"] for a in store.list_affairs()}
+            check({r.get("id") for r in listed} == keys and len(listed) == len(keys)
+                  and all(r.get("body_key") for r in listed),
+                  f"each of the {len(listed)} affairs a visitor is given names itself by its key, and its parliament")
+            for name, column in (("contributors", "fullname"), ("groups", "name"), ("meetings", "conf-name"),
+                                 ("events", "")):
+                rows = app.table(name)["data"]
+                check(len(rows) > 0 and all(r.get("affair_id") in keys for r in rows),
+                      f"the table of {name} has {len(rows)} rows, each of an affair that is there")
+                # the name with the most signs in it first: round brackets, commas
+                names = sorted({str(r[column]) for r in rows if column and r.get(column)},
+                               key=lambda n: (-sum(n.count(c) for c in "(),/"), n))
+                if names:
+                    mine = app.table(name, {column: names[0]})
+                    want = [r for r in rows if r.get(column) == names[0]]
+                    check(mine["data"] == want and 0 < len(want) < len(rows) and mine["meta"]["count"] == len(want),
+                          f"asked for the one name '{names[0][:40]}', it gives its rows alone: {len(want)}")
+            # a type is found by its standard name in every language it has one, and by the name printed
+            typed = next((r for r in listed if len(r.get("type_harmonized") or {}) > 1), None)
+            names = [*(typed or {}).get("type_harmonized", {}).values(), *(typed or {}).get("type_name", {}).values()]
+            check(typed is not None and len(set(names)) > 2 and all(
+                typed["id"] in {r["id"] for r in app.records({"type": n})["data"]} for n in names)
+                  and app.records({"type": "zzzqqqxxx"})["data"] == [],
+                  f"an affair is found by every wording of its type: {', '.join(sorted(set(names)))}")
+            entries = {d["name"]: d for r in (app.record(k) for k in keys) for d in r["docs"]["data"]}
+            check(set(entries) == set(shipped) and all(app.document_record(n) == entries[n] for n in shipped),
+                  "every document is found alone as its entry in the record of its affair")
+            check(app.name_records() == 0, "no affair has to be given its id afterwards")
+        finally:
+            app.jobs.stop()
     return 1 if failed else 0
 
 

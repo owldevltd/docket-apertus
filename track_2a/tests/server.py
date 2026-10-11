@@ -1,5 +1,7 @@
-"""The web server over a file store, without a model: the routes answer, a decision lands at the source and
-keeps the record valid, a wrong decision is refused, and a new run over the same document keeps the review.
+"""The web server over a file store, without a model: the routes answer, the app is served per language and
+an address without one goes on to the German build, a record of an older store is given its id, a decision
+lands at the source and keeps the record valid, with an account it is by the account, a wrong decision is
+refused, and a new run over the same document keeps the review.
 
     python3 tests/server.py --store=<file store dir> [--pages=<analyzed dir>]
 """
@@ -9,13 +11,16 @@ from __future__ import annotations
 import copy
 import json
 import sys
+import tempfile
 import threading
 import urllib.error
+import urllib.parse
 import urllib.request
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
+from docket import server as web  # noqa: E402
 from docket.api import App  # noqa: E402
 from docket.config import load_config  # noqa: E402
 from docket.pipeline import load_contract  # noqa: E402
@@ -24,11 +29,13 @@ from docket.store.files import FileStore  # noqa: E402
 from docket.store.review import carry_reviews, sources_of  # noqa: E402
 
 
-def call(base: str, route: str, body: dict | None = None) -> tuple[int, object]:
+def call(base: str, route: str, body: dict | None = None, session: str = "") -> tuple[int, object]:
     data = json.dumps(body).encode("utf-8") if body is not None else None
     request = urllib.request.Request(base + route, data=data, method="POST" if data else "GET")
     if data:
         request.add_header("Content-Type", "application/json")
+    if session:
+        request.add_header("Cookie", session)
     try:
         with urllib.request.urlopen(request, timeout=10) as r:
             raw = r.read()
@@ -36,6 +43,38 @@ def call(base: str, route: str, body: dict | None = None) -> tuple[int, object]:
             return r.status, json.loads(raw.decode("utf-8")) if kind.startswith("application/json") else raw
     except urllib.error.HTTPError as e:
         return e.code, json.loads(e.read().decode("utf-8"))
+
+
+def languages(base: str) -> bool:
+    """The app per language, on two builds of one line each in place of the real ones: a folder with a page
+    is a language, an unknown address under it shows its page, a file under it is the file, nothing outside
+    the folder is read, and an address without a language lands in the German build with its rest kept."""
+    built = web.APP
+    with tempfile.TemporaryDirectory() as tmp:
+        web.APP = Path(tmp).resolve()
+        try:
+            for language in ("de", "fr"):
+                (web.APP / language).mkdir()
+                (web.APP / language / "index.html").write_text(f"<title>{language}</title>", encoding="utf-8")
+            (web.APP / "fr" / "main.js").write_text("//fr", encoding="utf-8")
+            (web.APP / "secret.txt").write_text("outside", encoding="utf-8")
+            want = {
+                "/": b"<title>de</title>",
+                "/affairs/nr-x?tab=events": b"<title>de</title>",
+                "/de/affairs/nr-x": b"<title>de</title>",
+                "/fr/": b"<title>fr</title>",
+                "/fr/documents/a%20b": b"<title>fr</title>",
+                "/fr/main.js": b"//fr",
+                "/fr/../secret.txt": b"<title>fr</title>",
+                "/it/": b"<title>de</title>",
+            }
+            got = {route: call(base, route) for route in want}
+            with urllib.request.urlopen(base + "/affairs/nr-x?tab=events", timeout=10) as r:
+                landed = r.url
+            return all(got[route] == (200, page) for route, page in want.items()) \
+                and landed == base + "/de/affairs/nr-x?tab=events"
+        finally:
+            web.APP = built
 
 
 def main(argv: list[str]) -> int:
@@ -62,16 +101,72 @@ def main(argv: list[str]) -> int:
         check(status == 200 and health.get("store") == "files", f"health: {health}")
         status, page = call(base, "/")
         check(status == 200 and b"<title>" in page, "the app's page is served")
+        check(languages(base), "each language has its build, an address without one goes on to the German one")
         status, affairs = call(base, "/api/affairs")
         check(status == 200 and isinstance(affairs, list) and len(affairs) > 0, f"{len(affairs)} affairs listed")
         with_place = next((a for a in affairs if a["counts"]["places"] > 0), None)
         check(with_place is not None, "an affair with a value that has a place")
+        word = next((w for a in affairs for w in str(a["title"] or "").split() if len(w) > 6), None)
+        if word is not None:
+            status, hits = call(base, "/api/affairs?q=" + urllib.parse.quote(word.lower()))
+            with_word = {a["key"] for a in affairs if word.lower() in str(a["title"] or "").lower()}
+            check(status == 200 and with_word <= {a["key"] for a in hits} and len(hits) <= len(affairs),
+                  f"the search for a word of a title finds its affair: {len(hits)} of {len(affairs)} for '{word}'")
+        status, none = call(base, "/api/affairs?q=zzzqqqxxx")
+        check(status == 200 and none == [] and all("date" in a and "papers" in a and "body" in a for a in affairs),
+              "a search for nothing that is there finds nothing; every affair comes with date, parliament, documents")
         if with_place is None:
             return 1
         key = with_place["key"]
         status, affair = call(base, f"/api/affairs/{key}")
         places = len(affair.get("sources") or [])
         check(status == 200 and affair["key"] == key and places > 0, f"affair {key}: {places} places")
+        status, alone = call(base, f"/api/records/{key}")
+        check(status == 200 and alone == affair["record"] and alone.get("id") == key,
+              "the affair alone is served in the affair schema, and names itself")
+        # a store filled before a record named itself: the record is given its id again, and its parliament
+        # from what the run of its document noted
+        held = store.get_affair(key)
+        paper = held["documents"][0]["name"]
+        report = store.get_fields(paper) or {}
+        store.put_fields(paper, {**report, "identity": {**(report.get("identity") or {}), "body": "ZZ"}})
+        store.put_affair(key, {k: v for k, v in held["record"].items() if k not in ("id", "body_key")},
+                         held["documents"])
+        _, bare = call(base, f"/api/records/{key}")
+        named = app.name_records()
+        _, again = call(base, f"/api/records/{key}")
+        check("id" not in bare and named == 1 and list(again)[:3] == ["schema", "id", "body_key"]
+              and again == {**alone, "body_key": "ZZ"} and app.name_records() == 0,
+              "an affair stored without its id and its parliament is given both at the start, once")
+        store.put_fields(paper, report)
+        store.put_affair(key, held["record"], held["documents"])
+        status, listed = call(base, "/api/records")
+        mine = next((r for r in listed["data"] if r.get("id") == key), None)
+        no_blocks = all("body" not in d for r in listed["data"] for d in (r.get("docs") or {}).get("data") or [])
+        check(status == 200 and listed["meta"]["count"] == len(listed["data"]) == len(affairs) and mine is not None
+              and no_blocks and {k: v for k, v in mine.items() if k != "docs"} == {
+                  k: v for k, v in alone.items() if k != "docs"},
+              f"the list a visitor reads is the affairs in the affair schema, without blocks: {len(listed['data'])}")
+        status, nothing = call(base, "/api/records?q=zzzqqqxxx")
+        check(status == 200 and nothing["data"] == [] and nothing["meta"]["total"] == len(affairs),
+              "its search finds nothing where nothing fits")
+        for name in ("contributors", "groups", "meetings", "events"):
+            status, rows = call(base, "/api/" + name)
+            known = {r.get("id") for r in listed["data"]}
+            check(status == 200 and rows["meta"]["count"] == len(rows["data"])
+                  and all(r.get("affair_id") in known for r in rows["data"]),
+                  f"the table of {name} follows from the affairs: {len(rows['data'])} rows, each with its affair")
+        # one person, one group, one meeting: the rows that hold exactly the name, whatever signs it has
+        for name, column in (("contributors", "fullname"), ("groups", "name"), ("meetings", "conf-name")):
+            _, rows = call(base, "/api/" + name)
+            names = sorted({str(r[column]) for r in rows["data"] if r.get(column)}, key=lambda n: ("(" not in n, n))
+            if not names:
+                continue
+            status, mine = call(base, f"/api/{name}?{urllib.parse.quote(column)}={urllib.parse.quote(names[0])}")
+            want = [r for r in rows["data"] if r.get(column) == names[0]]
+            check(status == 200 and mine["data"] == want and mine["meta"] == {"total": len(rows["data"]),
+                                                                              "count": len(want)},
+                  f"the table of {name} asked for one name gives its rows alone: {len(want)} of {len(rows['data'])}")
         first = affair["sources"][0]
         name = affair["documents"][0]["name"]
         status, image = call(base, f"/api/documents/{name}/pages/1.png")
@@ -85,6 +180,10 @@ def main(argv: list[str]) -> int:
               f"the blocks of {name} are served on their own: {count}, language {shown['language'] or 'none'}")
         status, _ = call(base, "/api/documents/none/blocks")
         check(status == 404, "the blocks of a document that is not there are 404")
+        status, entry = call(base, f"/api/documents/{name}/record")
+        check(status == 200 and entry == in_record, "the document alone is served in the affair schema: its entry")
+        status, _ = call(base, "/api/documents/none/record")
+        check(status == 404, "a document no affair holds is 404")
         status, _ = call(base, "/api/affairs/no-such-key")
         check(status == 404, "an unknown affair is 404")
 
@@ -107,6 +206,28 @@ def main(argv: list[str]) -> int:
         status, rows = call(base, f"/api/affairs/{key}/decisions")
         new_rows = len(rows) - len(before_rows)
         check(status == 200 and new_rows == 2 and rows[-1]["decision"] == "changed", f"{new_rows} decisions logged")
+
+        # with an account, a decision is by the account, whoever the request names, and needs its session
+        open_config = app.config
+        app.config = type(open_config)(**{**open_config.__dict__, "admin_password": "secret"})
+        try:
+            # on another value than the one changed above, whose review the checks below still read
+            other = next(e for e in affair["sources"] if e["source"] != first["source"])
+            body = {"source": other["source"], "decision": "confirmed", "by": "visitor"}
+            status, _ = call(base, f"/api/affairs/{key}/decisions", body)
+            login = urllib.request.Request(base + "/api/login", method="POST",
+                                           data=json.dumps({"user": "admin", "password": "secret"}).encode("utf-8"))
+            with urllib.request.urlopen(login, timeout=10) as r:
+                session = (r.headers.get("Set-Cookie") or "").split(";")[0]
+                guarded = "HttpOnly" in (r.headers.get("Set-Cookie") or "")
+            status2, answer = call(base, f"/api/affairs/{key}/decisions", body, session)
+            done = next(e for e in answer["sources"] if e["source"] == other["source"])
+            _, rows = call(base, f"/api/affairs/{key}/decisions", None, session)
+            check(status == 401 and status2 == 200 and guarded and done["review"]["by"] == "admin"
+                  and rows[-1]["by"] == "admin",
+                  "with an account a decision needs its session and is by the account, whoever the request names")
+        finally:
+            app.config = open_config
 
         # a new run over the same documents: the review is carried over
         stored = store.get_affair(key)

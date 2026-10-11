@@ -4,18 +4,22 @@ the request handlers."""
 
 from __future__ import annotations
 
+import hmac
 import json
+import secrets
 import threading
+import time
 
 from typing import Callable
 
 from docket.affair.validator import Contract
+from docket import public
 from docket.config import Config
 from docket.document.bridge import Knowledge
 from docket.document.language import language_of
 from docket.document.response import lift, whole
 from docket.fields.fields import Fields, definition_of
-from docket.fields.placer import blocks_of, day, find_block, get_at
+from docket.fields.placer import blocks_of, day, find_block, get_at, read_at
 from docket.jobs import Jobs
 from docket.pipeline import load_field_file, load_knowledge
 from docket.store.base import Store, stamp
@@ -34,6 +38,10 @@ SAME_EXAMPLES = 5
 KIND_LABEL = "docs.article-type"
 
 
+# how long a session of the administration lasts after its last request, in seconds
+SESSION = 12 * 60 * 60
+
+
 class _Unfit(ValueError):
     """A decision after which the record would no longer fit the contract, with what would not fit."""
 
@@ -49,6 +57,8 @@ class App:
         self.config = config
         self.jobs = jobs if jobs is not None else Jobs(config)
         self.locks: dict[str, threading.Lock] = {}
+        # who is signed in to the administration: session to the name of the account and the time it ends
+        self.sessions: dict[str, tuple[str, float]] = {}
         self._guard = threading.Lock()
         self._fields: Fields | None = None
         self._knowledge: Knowledge | None = None
@@ -77,7 +87,7 @@ class App:
 
         def at(role: str):
             f = fields.get(by_role.get(role, ""))
-            return get_at(record, f.path) if f is not None and "[]" not in f.path else None
+            return read_at(record, f) if f is not None and "[]" not in f.path else None
 
         kind = fields.get(by_role.get("type", ""))
         standard = get_at(record, kind.standard.split(".")) if kind is not None and kind.standard else None
@@ -134,6 +144,44 @@ class App:
                 label = e["label"] if path == e["path"] else label_of_path(path)
                 yield e, path, value, at.get((e["source"], path)) or self._field_of(label), label
 
+    # ---- what a visitor reads: the affairs in the affair schema, and the tables that follow from them
+
+    def name_records(self) -> int:
+        """Gives the records a store holds from before a record named itself the two fields it is known by:
+        `id`, the key it is stored under, and `body_key`, the parliament its documents were told or read to
+        come from. Everything a visitor is shown hangs on them, and a store is older than the code that reads
+        it. A record that has both stays as it is. Returns how many were completed."""
+        done = 0
+        for a in self.store.list_affairs():
+            record = a["record"]
+            if "schema" not in record:
+                continue
+            body = record.get("body_key") or next(
+                (k for k in (self._body_of(d.get("name")) for d in a.get("documents", [])) if k), "")
+            named = {"schema": record["schema"], "id": record.get("id") or a["key"]}
+            if body:
+                named["body_key"] = body
+            if all(record.get(k) == v for k, v in named.items()):
+                continue
+            with self.lock(a["key"]):
+                rest = {k: v for k, v in record.items() if k not in named}
+                self.store.put_affair(a["key"], {**named, **rest}, a["documents"])
+            done += 1
+        return done
+
+    def records(self, asked: dict[str, str] | None = None) -> dict:
+        """The affairs that fit a search, in the affair schema, without the blocks of their documents."""
+        return public.listed([a["record"] for a in self.store.list_affairs()], asked, self.knowledge().bodies)
+
+    def record(self, key: str) -> dict | None:
+        """One affair in the affair schema, whole."""
+        data = self.store.get_affair(key)
+        return data["record"] if data else None
+
+    def table(self, name: str, asked: dict[str, str] | None = None) -> dict:
+        """Those who take part, the groups, the meetings or the events of the affairs that fit."""
+        return public.table(name, [a["record"] for a in self.store.list_affairs()], asked, self.knowledge().bodies)
+
     # ---- documents
 
     def document(self, name: str) -> dict | None:
@@ -141,24 +189,39 @@ class App:
         reading order, its language, and the answers within it with the block each begins at. None when the
         store does not know the document."""
         blocks = self.store.get_blocks(name)
-        if blocks is None:
+        affair = held = None
+        for a in self.store.list_affairs():
+            held = next((d for d in a.get("documents", []) if d["name"] == name), None)
+            if held is not None:
+                affair = a
+                break
+        if blocks is None and affair is not None:
             # a store filled before the blocks were kept on their own: the record of the affair holds them
-            for a in self.store.list_affairs():
-                held = next((d for d in a.get("documents", []) if d["name"] == name), None)
-                if held is not None:
-                    entries = (a["record"].get("docs") or {}).get("data", [])
-                    blocks = whole(next((e for e in entries if e.get("id") == held["id"]), None))
-                    break
+            entries = (affair["record"].get("docs") or {}).get("data", [])
+            blocks = whole(next((e for e in entries if e.get("id") == held["id"]), None))
         if blocks is None:
             return None
         _, answers = lift(blocks, self.knowledge().answers)
         return {
             "name": name,
+            "affair": affair["key"] if affair else None,
+            "id": held["id"] if held else None,
+            "pages": held.get("pages") if held else None,
             "language": language_of(blocks),
             "answers": [{"title": r["title"], "block": r["body"][0]["id"], "page": r["body"][0]["page"]}
                         for r in answers if r["body"]],
             "blocks": blocks,
         }
+
+    def document_record(self, name: str) -> dict | None:
+        """One document alone, in the affair schema: its entry in the record of its affair, with what the
+        record says of it and its blocks. None when no affair holds the document."""
+        for a in self.store.list_affairs():
+            held = next((d for d in a.get("documents", []) if d["name"] == name), None)
+            if held is not None:
+                entries = (a["record"].get("docs") or {}).get("data", [])
+                return next((e for e in entries if e.get("id") == held["id"]), None)
+        return None
 
     # ---- affairs
 
@@ -191,34 +254,77 @@ class App:
         if any(e["open"] for e in sources):
             self._same(key, sources)
         self._hints(data, sources)
+        card = self._card(data, sources)
         return {
             "key": key,
             "head": self.head(record),
+            "body": card["body"],
+            "papers": card["papers"],
             "record": record,
             "documents": data.get("documents", []),
             "sources": sources,
-            "counts": counts_of(sources),
+            "counts": card["counts"],
             "updated_at": data.get("updated_at"),
         }
 
-    def summaries(self) -> list[dict]:
+    def summaries(self, asked: dict[str, str] | None = None) -> list[dict]:
+        """The affairs for the lists: number, title, date and type, the parliament, the documents with what
+        each is and its language, and how many values are open. `asked` narrows them as a visitor searches:
+        `q` (every word must stand in the title, the number, the type, the parliament or a document's name),
+        `body` (the parliament's key), `type`, `kind` (of a document) and `language`."""
+        asked = {k: v.strip() for k, v in (asked or {}).items() if v and v.strip()}
         out = []
         for a in self.store.list_affairs():
-            head = self.head(a["record"])
-            entries = self.entries(a)
-            # what each document is within the affair: a value like the others, told by its field
-            kinds = {e["doc"]: e["value"] for e in entries if e.get("field") == KIND or e["label"] == KIND_LABEL}
-            out.append({
-                "key": a["key"],
-                "number": head["number"],
-                "title": head["title"],
-                "type": head["type"],
-                "documents": [d.get("name") for d in a.get("documents", [])],
-                "kinds": [kinds.get(d.get("id")) for d in a.get("documents", [])],
-                "counts": counts_of(entries),
-                "updated_at": a.get("updated_at"),
-            })
+            one = self._card(a, self.entries(a))
+            if self._asked_for(one, asked):
+                out.append(one)
         return sorted(out, key=lambda s: (-s["counts"]["open"], s["key"]))
+
+    def _card(self, a: dict, entries: list[dict]) -> dict:
+        """One affair as a list shows it: its head, its parliament, its documents, its counts."""
+        head = self.head(a["record"])
+        # what each document is within the affair: a value like the others, told by its field
+        kinds = {e["doc"]: e["value"] for e in entries if e.get("field") == KIND or e["label"] == KIND_LABEL}
+        in_record = {e.get("id"): e for e in (a["record"].get("docs") or {}).get("data") or []}
+        documents = a.get("documents", [])
+        papers = [{"name": d.get("name"), "id": d.get("id"), "pages": d.get("pages"),
+                   "kind": kinds.get(d.get("id")), "language": (in_record.get(d.get("id")) or {}).get("language")}
+                  for d in documents]
+        key = next((k for k in (self._body_of(d.get("name")) for d in documents) if k), "")
+        body = self.knowledge().bodies.get(key) or {}
+        return {
+            "key": a["key"],
+            "number": head["number"],
+            "title": head["title"],
+            "date": head["date"],
+            "type": head["type"],
+            "body": {"key": key, "name": body.get("name") or "", "level": body.get("level") or "",
+                     "parliament": body.get("parliament") or ""} if key else None,
+            "documents": [d.get("name") for d in documents],
+            "kinds": [p["kind"] for p in papers],
+            "papers": papers,
+            "counts": counts_of(entries),
+            "updated_at": a.get("updated_at"),
+        }
+
+    def _body_of(self, name: str | None) -> str:
+        """The key of the parliament a document was told to come from, or was read to; empty when unknown."""
+        report = self.store.get_fields(str(name or "")) or {}
+        return str((report.get("identity") or {}).get("body") or "")
+
+    @staticmethod
+    def _asked_for(one: dict, asked: dict[str, str]) -> bool:
+        """Whether an affair of the list is what a visitor searches for."""
+        body = one["body"] or {}
+        text = " ".join(str(v or "") for v in (one["title"], one["number"], one["type"], one["key"], body.get("name"),
+                                              body.get("parliament"), *one["documents"])).lower()
+        return (
+            all(word in text for word in asked.get("q", "").lower().split())
+            and asked.get("body", body.get("key")) == body.get("key")
+            and asked.get("type", one["type"]) == one["type"]
+            and ("kind" not in asked or asked["kind"] in one["kinds"])
+            and ("language" not in asked or asked["language"] in [p["language"] for p in one["papers"]])
+        )
 
     def _hints(self, data: dict, sources: list[dict]) -> None:
         """For the id of a person: the name the register holds for it, so a reviewer sees who is meant. The
@@ -502,11 +608,16 @@ class App:
         return json.loads(path.read_text(encoding="utf-8"))["bodies"] if path.is_file() else {}
 
     def set_name(self, body: dict) -> tuple[int, dict]:
-        """A person says what a name of a parliament stands for, or with "reset" takes that back."""
+        """A person says what a name of a parliament stands for, or with "reset" takes that back. Without a
+        parliament and with the wordings of a new standard name (`standard` as {de, fr, it, en}), the person
+        adds that standard name to the list."""
         vocabulary = Vocabulary(self.store.get_vocabulary())
         where = (str(body.get("list", "")), str(body.get("body", "")).strip(), str(body.get("name", "")))
         if body.get("reset"):
-            row, gone = vocabulary.reset(*where)
+            try:
+                row, gone = vocabulary.reset(*where)
+            except ValueError as e:
+                return 409, {"error": str(e)}
             if row is None and gone is None:
                 return 404, {"error": "no row a person changed"}
             if row is not None:
@@ -516,7 +627,10 @@ class App:
             return 200, row or {**gone, "removed": True}
         standard = body.get("standard")
         try:
-            row = vocabulary.set(*where, None if standard is None else str(standard), str(body.get("by", "")))
+            if not where[1] and isinstance(standard, dict):
+                row = vocabulary.add(where[0], standard, str(body.get("by", "")))
+            else:
+                row = vocabulary.set(*where, None if standard is None else str(standard), str(body.get("by", "")))
         except ValueError as e:
             return 400, {"error": str(e)}
         self.store.put_vocabulary([row])
@@ -547,8 +661,37 @@ class App:
 
     # ---- runs
 
-    def allowed(self, token: str | None) -> bool:
-        return not self.config.admin_token or token == self.config.admin_token
+    # ---- the account of the administration
+
+    def sign_in(self, user: str, password: str) -> str | None:
+        """A session for the account of the administration, or None when the name or the password is not
+        the one set (ADMIN_USER, ADMIN_PASSWORD). Without a password set there is nothing to sign in to."""
+        wanted = self.config.admin_password
+        right = bool(wanted) and hmac.compare_digest(user.strip().encode(), self.config.admin_user.encode()) \
+            and hmac.compare_digest(password.encode(), wanted.encode())
+        if not right:
+            return None
+        now = time.time()
+        self.sessions = {s: held for s, held in self.sessions.items() if held[1] > now}
+        session = secrets.token_urlsafe(32)
+        self.sessions[session] = (self.config.admin_user, now + SESSION)
+        return session
+
+    def sign_out(self, session: str | None) -> None:
+        self.sessions.pop(session or "", None)
+
+    def account(self, session: str | None) -> str | None:
+        """The name of the account behind a request to the administration: the one signed in with this
+        session; without a password set, the administration is open and everyone acts under the account's
+        name. None when a password is set and the session is none or over."""
+        if not self.config.admin_password:
+            return self.config.admin_user
+        held = self.sessions.get(session or "")
+        if held is None or held[1] < time.time():
+            self.sessions.pop(session or "", None)
+            return None
+        self.sessions[session] = (held[0], time.time() + SESSION)
+        return held[0]
 
     def run_pdf(self, name: str, data: bytes, model: bool | None, body: str = "") -> tuple[int, dict]:
         """Queues a run over an uploaded PDF. `body` is the key of its parliament where the person tells it;
@@ -575,4 +718,4 @@ class App:
 
     def health(self) -> dict:
         return {"ok": True, "store": self.store.kind, "model": bool(self.config.api_key),
-                "admin": "token" if self.config.admin_token else "open", "at": stamp()}
+                "admin": "account" if self.config.admin_password else "open", "at": stamp()}

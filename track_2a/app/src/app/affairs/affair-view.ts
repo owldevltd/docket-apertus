@@ -6,7 +6,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Api } from '../api/api';
 import { Affair, Block, DecisionBody, DocumentView, FieldsReport, Rule, SourceEntry } from '../api/types';
 import { Icon } from '../shared/icon';
-import { Who } from '../shared/who';
 import { LABELS, LANGUAGES, blocksOf, kindName, ruleWords } from '../shared/words';
 import { PageView } from './page-view';
 import { ValueCard } from './value-card';
@@ -23,7 +22,6 @@ import { ValueCard } from './value-card';
 } )
 export class AffairView implements OnInit {
     private readonly api = inject( Api );
-    private readonly who = inject( Who );
     private readonly snack = inject( MatSnackBar );
 
     readonly key = input.required<string>();
@@ -116,12 +114,8 @@ export class AffairView implements OnInit {
     }
 
     async decide( body: DecisionBody ): Promise<void> {
-        const by = this.who.require();
-        if ( !by ) {
-            return;
-        }
         try {
-            const affair = await this.api.decide( this.key(), { ...body, by } );
+            const affair = await this.api.decide( this.key(), body );
             this.affair.set( affair );
             this.proposal.set( affair.proposals?.[ 0 ] || null );
         } catch ( e ) {
@@ -135,16 +129,13 @@ export class AffairView implements OnInit {
 
     // yes changes every value the rule fits, here and in the other affairs; no keeps it from being proposed again
     async answer( rule: Rule, accept: boolean ): Promise<void> {
-        const by = this.who.require();
-        if ( !by ) {
-            return;
-        }
         try {
-            const done = await this.api.answerRule( rule.id, accept, by );
+            const done = await this.api.answerRule( rule.id, accept );
             this.proposal.set( null );
             if ( accept ) {
                 this.affair.set( await this.api.affair( this.key() ) );
-                this.snack.open( done.applied + ( done.applied === 1 ? ' Wert geändert.' : ' Werte geändert.' ), 'OK', { duration: 5000 } );
+                const changed = done.applied === 1 ? $localize`1 Wert geändert.` : $localize`${done.applied}:count: Werte geändert.`;
+                this.snack.open( changed, 'OK', { duration: 5000 } );
             }
         } catch ( e ) {
             this.snack.open( ( e as Error ).message, 'OK', { duration: 6000 } );

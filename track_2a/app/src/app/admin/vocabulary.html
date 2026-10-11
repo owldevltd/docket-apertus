@@ -1,13 +1,15 @@
-<h2>Vokabular</h2>
-<p class="muted">Was ein Parlament wie nennt und wofür der Name steht. Der Stamm kommt von OpenParlData und gilt dort als
+<h2 i18n>Vokabular</h2>
+<p class="muted" i18n>Was ein Parlament wie nennt und wofür der Name steht. Der Stamm kommt von OpenParlData und gilt dort als
     vorläufig; darum lässt sich jede Zeile von Hand ändern. Eine geänderte Zeile bleibt stehen, wenn ein neuerer Stamm
     kommt, zeigt daneben, was der Stamm sagt, und lässt sich zurücknehmen.</p>
-<p class="muted">Stamm vom {{ fetched() | stamp: false }} · {{ n( named().length ) }} Namen von {{ n( bodyCount() ) }} Parlamenten ·
+<p class="muted" i18n>Fehlt einer Liste ein Standardname, lässt er sich unter „Standardnamen der Liste“ anlegen; danach kann ein
+    Name eines Parlaments für ihn stehen.</p>
+<p class="muted" i18n>Stamm vom {{ fetched() | stamp: false }} · {{ n( named().length ) }} Namen von {{ n( bodyCount() ) }} Parlamenten ·
     {{ n( byHand() ) }} von Hand gesetzt</p>
 
 <div class="row">
     <mat-form-field appearance="outline" subscriptSizing="dynamic">
-        <mat-label>Liste</mat-label>
+        <mat-label i18n>Liste</mat-label>
         <mat-select [value]="list()" (selectionChange)="list.set( $event.value )">
             @for ( l of lists; track l ) {
                 <mat-option [value]="l">{{ words.LISTS[ l ] }}</mat-option>
@@ -15,9 +17,9 @@
         </mat-select>
     </mat-form-field>
     <mat-form-field appearance="outline" subscriptSizing="dynamic" class="grow">
-        <mat-label>Parlament</mat-label>
+        <mat-label i18n>Parlament</mat-label>
         <mat-select [value]="body()" (selectionChange)="body.set( $event.value )">
-            <mat-option value="">Standardnamen der Liste ({{ standards().length }})</mat-option>
+            <mat-option value="" i18n>Standardnamen der Liste ({{ standards().length }})</mat-option>
             @for ( b of bodies(); track b.key ) {
                 <mat-option [value]="b.key">{{ b.name }}@if ( b.count ) { ({{ b.count }}) }</mat-option>
             }
@@ -29,30 +31,56 @@
     <div class="wide">
     <table class="plain">
         <thead>
-            <tr><th>Standardname</th><th>Französisch</th><th>Italienisch</th><th>Englisch</th>
-                @if ( list() === 'events' ) { <th class="num">Ereignisse bei OpenParlData</th> }
-                @if ( list() === 'types' ) { <th>Wikidata</th> }</tr>
+            <tr><th i18n>Standardname</th><th i18n>Französisch</th><th i18n>Italienisch</th><th i18n>Englisch</th>
+                @if ( list() === 'events' ) { <th class="num" i18n>Ereignisse bei OpenParlData</th> }
+                @if ( list() === 'types' ) { <th i18n>Wikidata</th> }
+                <th i18n>Herkunft</th><th></th></tr>
         </thead>
         <tbody>
-            @for ( s of standardsShown(); track s.name ) {
-                <tr>
+            @for ( s of standardsShown(); track key( s ) ) {
+                <tr [class.hand]="s.origin === 'person'">
                     <td>{{ s.label }}</td>
                     <td>{{ s.standard?.fr || '–' }}</td>
                     <td>{{ s.standard?.it || '–' }}</td>
                     <td>{{ s.standard?.en || '–' }}</td>
                     @if ( list() === 'events' ) { <td class="num">{{ n( s.count ?? 0 ) }}</td> }
                     @if ( list() === 'types' ) { <td>{{ s.wikidata || '–' }}</td> }
+                    <td>
+                        @if ( s.origin === 'person' ) {
+                            <span class="chip kind" i18n>von Hand</span> <span class="muted">{{ s.by }} · {{ s.at | stamp }}</span>
+                        } @else {
+                            <span class="muted" i18n>Stamm</span>
+                        }
+                    </td>
+                    <td class="act">
+                        @if ( s.origin === 'person' ) {
+                            <button mat-button (click)="reset( s )" [disabled]="busy()" i18n>Zurücknehmen</button>
+                        }
+                    </td>
                 </tr>
             } @empty {
-                <tr><td colspan="5" class="empty">Der Bestand hat für diese Liste keinen Stamm.</td></tr>
+                <tr><td colspan="7" class="empty" i18n>Der Bestand hat für diese Liste keinen Stamm.</td></tr>
             }
+            <tr class="add">
+                <td><input class="pick" placeholder="Neuer Standardname (Deutsch)" i18n-placeholder aria-label="Neuer Standardname (Deutsch)" i18n-aria-label
+                    [ngModel]="own()[ 'de' ]" (ngModelChange)="word( 'de', $event )" (keyup.enter)="addStandard()"></td>
+                <td><input class="pick" placeholder="Französisch" i18n-placeholder aria-label="Französisch" i18n-aria-label
+                    [ngModel]="own()[ 'fr' ]" (ngModelChange)="word( 'fr', $event )" (keyup.enter)="addStandard()"></td>
+                <td><input class="pick" placeholder="Italienisch" i18n-placeholder aria-label="Italienisch" i18n-aria-label
+                    [ngModel]="own()[ 'it' ]" (ngModelChange)="word( 'it', $event )" (keyup.enter)="addStandard()"></td>
+                <td><input class="pick" placeholder="Englisch" i18n-placeholder aria-label="Englisch" i18n-aria-label
+                    [ngModel]="own()[ 'en' ]" (ngModelChange)="word( 'en', $event )" (keyup.enter)="addStandard()"></td>
+                @if ( list() === 'events' || list() === 'types' ) { <td></td> }
+                <td></td>
+                <td class="act"><button mat-stroked-button (click)="addStandard()" [disabled]="busy() || !own()[ 'de' ].trim()" i18n>Hinzufügen</button></td>
+            </tr>
         </tbody>
     </table>
     </div>
 } @else {
     <table class="plain names">
         <thead>
-            <tr><th>Name im Parlament</th><th>Steht für</th><th>Herkunft</th><th></th></tr>
+            <tr><th i18n>Name im Parlament</th><th i18n>Steht für</th><th i18n>Herkunft</th><th></th></tr>
         </thead>
         <tbody>
             @for ( r of shown(); track key( r ) ) {
@@ -60,8 +88,8 @@
                     <td>{{ r.label }}@if ( r.lang && r.lang !== 'de' ) { <span class="muted"> · {{ r.lang }}</span> }</td>
                     <td>
                         <select class="pick" [disabled]="busy()" (change)="change( r, $any( $event.target ).value )"
-                            [attr.aria-label]="'Steht für: ' + r.label">
-                            <option value="" [selected]="!r.standard">ohne Standardnamen</option>
+                            aria-label="Steht für" i18n-aria-label>
+                            <option value="" [selected]="!r.standard" i18n>ohne Standardnamen</option>
                             @for ( s of standards(); track s.name ) {
                                 <option [value]="s.label" [selected]="s.label === r.standard?.de">{{ s.label }}</option>
                             }
@@ -69,34 +97,38 @@
                     </td>
                     <td>
                         @if ( r.origin === 'person' ) {
-                            <span class="chip kind">von Hand</span> <span class="muted">{{ r.by }} · {{ r.at | stamp }}</span>
-                            <div class="muted">{{ r.stem ? 'Stamm: ' + ( r.stem.standard?.de || 'ohne Standardnamen' ) : 'nicht im Stamm' }}</div>
+                            <span class="chip kind" i18n>von Hand</span> <span class="muted">{{ r.by }} · {{ r.at | stamp }}</span>
+                            <div class="muted">
+                                @if ( !r.stem ) { <ng-container i18n>nicht im Stamm</ng-container> }
+                                @else if ( r.stem.standard?.de ) { <ng-container i18n>Stamm</ng-container>: {{ r.stem.standard?.de }} }
+                                @else { <ng-container i18n>Stamm</ng-container>: <ng-container i18n>ohne Standardnamen</ng-container> }
+                            </div>
                         } @else {
-                            <span class="muted">Stamm</span>
+                            <span class="muted" i18n>Stamm</span>
                         }
                     </td>
                     <td class="act">
                         @if ( r.origin === 'person' ) {
-                            <button mat-button (click)="reset( r )" [disabled]="busy()">Zurücknehmen</button>
+                            <button mat-button (click)="reset( r )" [disabled]="busy()" i18n>Zurücknehmen</button>
                         }
                     </td>
                 </tr>
             } @empty {
-                <tr><td colspan="4" class="empty">Für dieses Parlament steht in dieser Liste noch kein Name.</td></tr>
+                <tr><td colspan="4" class="empty" i18n>Für dieses Parlament steht in dieser Liste noch kein Name.</td></tr>
             }
             <tr class="add">
-                <td><input class="pick" placeholder="Neuer Name, wie das Parlament ihn führt" aria-label="Neuer Name"
+                <td><input class="pick" placeholder="Neuer Name, wie das Parlament ihn führt" i18n-placeholder aria-label="Neuer Name" i18n-aria-label
                     [ngModel]="newName()" (ngModelChange)="newName.set( $event )" (keyup.enter)="add()"></td>
                 <td>
-                    <select class="pick" aria-label="Steht für" [ngModel]="newStandard()" (ngModelChange)="newStandard.set( $event )">
-                        <option value="">ohne Standardnamen</option>
+                    <select class="pick" aria-label="Steht für" i18n-aria-label [ngModel]="newStandard()" (ngModelChange)="newStandard.set( $event )">
+                        <option value="" i18n>ohne Standardnamen</option>
                         @for ( s of standards(); track s.name ) {
                             <option [value]="s.label">{{ s.label }}</option>
                         }
                     </select>
                 </td>
                 <td></td>
-                <td class="act"><button mat-stroked-button (click)="add()" [disabled]="busy() || !newName().trim()">Hinzufügen</button></td>
+                <td class="act"><button mat-stroked-button (click)="add()" [disabled]="busy() || !newName().trim()" i18n>Hinzufügen</button></td>
             </tr>
         </tbody>
     </table>

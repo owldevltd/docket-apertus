@@ -1,9 +1,27 @@
 <div class="bar">
-    <h1>Admin</h1>
+    <h1 i18n>Admin</h1>
     @if ( health(); as h ) {
-        <span class="muted">Bestand: {{ h.store }} · Modell: {{ h.model ? 'bereit' : 'kein Schlüssel' }} · Admin: {{ h.admin === 'token' ? 'mit Token' : 'offen' }}</span>
+        <span class="muted"><ng-container i18n>Bestand</ng-container>: {{ h.store }} · <ng-container i18n>Modell</ng-container>: @if ( h.model ) { <ng-container i18n>bereit</ng-container> } @else { <ng-container i18n>kein Schlüssel</ng-container> }
+            · @if ( h.admin === 'account' ) { <ng-container i18n>Konto</ng-container>: {{ account.user() || '–' }} } @else { <ng-container i18n>ohne Passwort, offen</ng-container> }</span>
     }
 </div>
+
+@if ( ready() && !account.user() ) {
+    <form class="signin card" (ngSubmit)="signIn()">
+        <h2 i18n>Anmelden</h2>
+        <p class="muted" i18n>Die Administration hat ein Konto. Was hier entschieden wird, steht unter seinem Namen.</p>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label i18n>Name</mat-label>
+            <input matInput name="user" autocomplete="username" [ngModel]="name()" (ngModelChange)="name.set( $event )">
+        </mat-form-field>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label i18n>Passwort</mat-label>
+            <input matInput name="password" type="password" autocomplete="current-password" [ngModel]="password()" (ngModelChange)="password.set( $event )">
+        </mat-form-field>
+        @if ( refused() ) { <div class="refused">{{ refused() }}</div> }
+        <button mat-flat-button type="submit" [disabled]="busy() || !name().trim() || !password()" i18n>Anmelden</button>
+    </form>
+} @else if ( account.user() ) {
 
 <div class="panel card">
     <nav class="drawer">
@@ -19,11 +37,17 @@
 
     <section class="content">
         @switch ( area() ) {
+            @case ( 'review' ) {
+                <app-affairs-list />
+            }
+            @case ( 'decisions' ) {
+                <app-decisions />
+            }
             @case ( 'runs' ) {
-                <h2>Läufe</h2>
+                <h2 i18n>Läufe</h2>
                 <table class="plain">
                     <thead>
-                        <tr><th>Wann</th><th>Dokument</th><th>Quelle</th><th>Stand</th><th class="num">Aufrufe</th><th>Geschäft</th><th>Zuletzt</th></tr>
+                        <tr><th i18n>Wann</th><th i18n>Dokument</th><th i18n>Quelle</th><th i18n>Stand</th><th class="num" i18n>Aufrufe</th><th i18n>Geschäft</th><th i18n>Zuletzt</th></tr>
                     </thead>
                     <tbody>
                         @for ( r of runs(); track r.id ) {
@@ -37,20 +61,20 @@
                                 <td class="lines">{{ lastLine( r ) }}</td>
                             </tr>
                         } @empty {
-                            <tr><td colspan="7" class="empty">Noch keine Läufe.</td></tr>
+                            <tr><td colspan="7" class="empty" i18n>Noch keine Läufe.</td></tr>
                         }
                     </tbody>
                 </table>
             }
             @case ( 'rules' ) {
-                <h2>Regeln</h2>
-                <p class="muted">Dieselbe Änderung zweimal am selben Feld schlägt eine Regel vor. Angewandt wird sie erst nach einem Ja;
+                <h2 i18n>Regeln</h2>
+                <p class="muted" i18n>Dieselbe Änderung zweimal am selben Feld schlägt eine Regel vor. Angewandt wird sie erst nach einem Ja;
                     jede Anwendung steht als Entscheidung „Regel“ und lässt sich einzeln zurücknehmen. Eine Regel, der eine
                     Entscheidung von Hand widerspricht, wird nicht vorgeschlagen.</p>
                 <div class="wide">
                 <table class="plain">
                     <thead>
-                        <tr><th>Regel</th><th>Feld</th><th>Was sie tut</th><th>Stand</th><th>Entscheide</th><th></th></tr>
+                        <tr><th i18n>Regel</th><th i18n>Feld</th><th i18n>Was sie tut</th><th i18n>Stand</th><th i18n>Entscheide</th><th></th></tr>
                     </thead>
                     <tbody>
                         @for ( r of ruleRows(); track r.id ) {
@@ -60,30 +84,30 @@
                                 <td>{{ ruleWords( r ) }}
                                     @if ( r.state === 'proposed' && r.reach ) {
                                         @if ( r.reach.count ) {
-                                            <div class="muted">träfe {{ r.reach.count }} {{ r.reach.count === 1 ? 'Wert' : 'Werte' }} in {{ r.reach.affairs }}
-                                                {{ r.reach.affairs === 1 ? 'Geschäft' : 'Geschäften' }}@for ( x of r.reach.examples.slice( 0, 2 ); track x.key + x.before ) { · „{{ x.before }}“ → „{{ x.after }}“ }</div>
+                                            <div class="muted"><ng-container i18n>träfe {r.reach.count, plural, =1 {1 Wert} other {{{r.reach.count}} Werte}} in
+                                                {r.reach.affairs, plural, =1 {1 Geschäft} other {{{r.reach.affairs}} Geschäften}}</ng-container>@for ( x of r.reach.examples.slice( 0, 2 ); track x.key + x.before ) { · „{{ x.before }}“ → „{{ x.after }}“ }</div>
                                         } @else {
-                                            <div class="muted">trifft im Bestand derzeit keinen weiteren Wert</div>
+                                            <div class="muted" i18n>trifft im Bestand derzeit keinen weiteren Wert</div>
                                         }
                                     }
                                 </td>
                                 <td><span class="chip" [class.running]="r.state === 'proposed'" [class.done]="r.state === 'active'">{{ words.RULE_STATE[ r.state || '' ] || r.state }}</span></td>
-                                <td>{{ r.count }} dafür · {{ r.against || 0 }} dagegen
+                                <td><ng-container i18n>{{ r.count }} dafür · {{ r.against || 0 }} dagegen</ng-container>
                                     @if ( r.applied || r.confirmed || r.withdrawn ) {
-                                        <div class="muted">{{ r.applied }} angewandt · {{ r.confirmed }} bestätigt · {{ r.withdrawn }} zurück</div>
+                                        <div class="muted" i18n>{{ r.applied }} angewandt · {{ r.confirmed }} bestätigt · {{ r.withdrawn }} zurück</div>
                                     }
                                 </td>
                                 <td class="act">
                                     @if ( r.state === 'proposed' ) {
-                                        <button mat-flat-button (click)="answer( r, true )" [disabled]="busy()">Annehmen</button>
-                                        <button mat-button (click)="answer( r, false )" [disabled]="busy()">Ablehnen</button>
+                                        <button mat-flat-button (click)="answer( r, true )" [disabled]="busy()" i18n>Annehmen</button>
+                                        <button mat-button (click)="answer( r, false )" [disabled]="busy()" i18n>Ablehnen</button>
                                     } @else if ( r.state === 'active' || r.state === 'off' ) {
                                         <mat-slide-toggle [checked]="r.active" (change)="toggle( r, $event.checked )" [disabled]="busy()" />
                                     }
                                 </td>
                             </tr>
                         } @empty {
-                            <tr><td colspan="6" class="empty">Noch keine Regeln.</td></tr>
+                            <tr><td colspan="6" class="empty" i18n>Noch keine Regeln.</td></tr>
                         }
                     </tbody>
                 </table>
@@ -93,18 +117,18 @@
                 <app-vocabulary />
             }
             @case ( 'definition' ) {
-                <h2>Definition</h2>
-                <p class="muted">Die Felder der Felderdatei: was ein Wert ist (die Art), welche Rolle er darunter hat und was
+                <h2 i18n>Definition</h2>
+                <p class="muted" i18n>Die Felder der Felderdatei: was ein Wert ist (die Art), welche Rolle er darunter hat und was
                     hinter der Art steht. Daneben, in wie vielen Dokumenten des Bestands ein Feld gefragt wurde. „Nie gefragt“
                     heisst: das Dokument wurde gelesen, bevor es das Feld gab – nicht, dass dort nichts steht. „Nachfragen“
                     stellt diesen Dokumenten nur die fehlende Frage, auf den gespeicherten Seiten; Entscheide bleiben.</p>
                 @if ( definition(); as d ) {
-                    <p class="muted">{{ d.documents }} {{ d.documents === 1 ? 'Dokument' : 'Dokumente' }} im Bestand · Stand der
+                    <p class="muted" i18n>{d.documents, plural, =1 {1 Dokument} other {{{d.documents}} Dokumente}} im Bestand · Stand der
                         Definition {{ d.version }}</p>
                     <div class="wide">
                     <table class="plain">
                         <thead>
-                            <tr><th>Feld</th><th>Art</th><th>Rolle</th><th>Dahinter</th><th class="num">Gefragt</th><th class="num">Nie gefragt</th><th></th></tr>
+                            <tr><th i18n>Feld</th><th i18n>Art</th><th i18n>Rolle</th><th i18n>Dahinter</th><th class="num" i18n>Gefragt</th><th class="num" i18n>Nie gefragt</th><th></th></tr>
                         </thead>
                         <tbody>
                             @for ( f of d.fields; track f.name ) {
@@ -116,13 +140,13 @@
                                     <td class="num">{{ f.asked }}</td>
                                     <td class="num">@if ( f.never ) { <span class="chip running">{{ f.never }}</span> } @else { – }</td>
                                     <td class="act">@if ( f.never && health()?.model ) {
-                                        <button mat-stroked-button (click)="askAgain( f.name )" [disabled]="busy()">Nachfragen</button>
+                                        <button mat-stroked-button (click)="askAgain( f.name )" [disabled]="busy()" i18n>Nachfragen</button>
                                     }</td>
                                 </tr>
                             }
                             @for ( g of d.gone; track g.name ) {
                                 <tr class="quiet">
-                                    <td>{{ g.name }}</td><td colspan="3">nicht mehr in der Felderdatei</td>
+                                    <td>{{ g.name }}</td><td colspan="3" i18n>nicht mehr in der Felderdatei</td>
                                     <td class="num">{{ g.asked }}</td><td class="num">–</td><td></td>
                                 </tr>
                             }
@@ -132,30 +156,30 @@
                 }
             }
             @case ( 'learnt' ) {
-                <h2>Zweite Meinung</h2>
-                <p class="muted">Was ohne das Modell gelernt wurde, um neben ihm zu stehen: wo der Wert eines Felds in den Dokumenten
+                <h2 i18n>Zweite Meinung</h2>
+                <p class="muted" i18n>Was ohne das Modell gelernt wurde, um neben ihm zu stehen: wo der Wert eines Felds in den Dokumenten
                     eines Parlaments üblicherweise steht (Lage), und ein kleines Netz, das einen Block an seinem Aussehen erkennt.
                     Beides wird an zurückgehaltenen Dokumenten ausgemessen; verwendet wird ein Weg nur, wo er öfter einig war als
                     uneinig. Gelernt wird mit <code>make learn</code>.</p>
                 @if ( learnt(); as l ) {
-                    <p class="muted">gelernt aus {{ l.documents }} {{ l.documents === 1 ? 'Dokument' : 'Dokumenten' }}</p>
+                    <p class="muted" i18n>gelernt aus {l.documents, plural, =1 {1 Dokument} other {{{l.documents}} Dokumenten}}</p>
                     <div class="wide">
                     <table class="plain">
                         <thead>
-                            <tr><th>Weg</th><th>Parlament</th><th>Feld</th><th class="num">Einig</th><th class="num">Uneinig</th><th>Verwendet</th></tr>
+                            <tr><th i18n>Weg</th><th i18n>Parlament</th><th i18n>Feld</th><th class="num" i18n>Einig</th><th class="num" i18n>Uneinig</th><th i18n>Verwendet</th></tr>
                         </thead>
                         <tbody>
                             @for ( w of l.ways; track w.way + w.parliament + w.field ) {
                                 <tr [class.quiet]="!w.use">
-                                    <td>{{ w.way === 'place' ? 'Lage' : 'Netz' }}</td>
-                                    <td>{{ w.parliament || 'alle' }}</td>
+                                    <td>@if ( w.way === 'place' ) { <ng-container i18n>Lage</ng-container> } @else { <ng-container i18n>Netz</ng-container> }</td>
+                                    <td>@if ( w.parliament ) { {{ w.parliament }} } @else { <ng-container i18n>alle</ng-container> }</td>
                                     <td>{{ words.LABELS[ w.field ] || w.field }}</td>
                                     <td class="num">{{ w.agree }}</td>
                                     <td class="num">{{ w.disagree }}</td>
-                                    <td>@if ( w.use ) { <span class="chip done">ja</span> } @else { nein }</td>
+                                    <td>@if ( w.use ) { <span class="chip done" i18n>ja</span> } @else { <ng-container i18n>nein</ng-container> }</td>
                                 </tr>
                             } @empty {
-                                <tr><td colspan="6" class="empty">Noch nichts gelernt.</td></tr>
+                                <tr><td colspan="6" class="empty" i18n>Noch nichts gelernt.</td></tr>
                             }
                         </tbody>
                     </table>
@@ -163,32 +187,26 @@
                 }
             }
             @case ( 'process' ) {
-                <h2>Dokument verarbeiten</h2>
-                <p class="muted">Ein PDF hochladen. Der Lauf geht durch die ganze Strecke und legt das Geschäft im Bestand
+                <h2 i18n>Dokument verarbeiten</h2>
+                <p class="muted" i18n>Ein PDF hochladen. Der Lauf geht durch die ganze Strecke und legt das Geschäft im Bestand
                     ab; ein vorhandenes Geschäft behält seine Entscheidungen. Wer das Parlament kennt, gibt es an; ohne
                     Angabe liest die Strecke es aus dem Dokument.</p>
                 <div class="row">
                     <input type="file" accept="application/pdf" (change)="chose( $event )">
                     <mat-form-field appearance="outline" subscriptSizing="dynamic" class="grow">
-                        <mat-label>Parlament</mat-label>
+                        <mat-label i18n>Parlament</mat-label>
                         <mat-select [value]="body()" (selectionChange)="body.set( $event.value )">
-                            <mat-option value="">aus dem Dokument lesen</mat-option>
+                            <mat-option value="" i18n>aus dem Dokument lesen</mat-option>
                             @for ( p of parliaments(); track p.key ) {
                                 <mat-option [value]="p.key">{{ p.name }}</mat-option>
                             }
                         </mat-select>
                     </mat-form-field>
-                    <button mat-flat-button (click)="upload()" [disabled]="busy()"><app-icon name="upload" /> Hochladen</button>
+                    <button mat-flat-button (click)="upload()" [disabled]="busy()"><app-icon name="upload" /> <ng-container i18n>Hochladen</ng-container></button>
                 </div>
-                <mat-checkbox [checked]="withModel()" (change)="withModel.set( $event.checked )">mit dem Modell (Scans lesen, Rest einordnen, Felder)</mat-checkbox>
-                <div class="row">
-                    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="grow">
-                        <mat-label>Admin-Token</mat-label>
-                        <input matInput type="password" [ngModel]="token()" (ngModelChange)="saveToken( $event )">
-                    </mat-form-field>
-                    <span class="muted">{{ health()?.admin === 'token' ? 'nötig' : 'nicht nötig' }}</span>
-                </div>
+                <mat-checkbox [checked]="withModel()" (change)="withModel.set( $event.checked )" i18n>mit dem Modell (Scans lesen, Rest einordnen, Felder)</mat-checkbox>
             }
         }
     </section>
 </div>
+}

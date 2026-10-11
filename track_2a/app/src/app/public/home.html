@@ -1,0 +1,180 @@
+<div class="home">
+    <aside>
+        <div class="card intro">
+            <div class="mark"><i></i>Docket</div>
+            <h2 i18n>Geschäfte aus Schweizer Parlamenten, aus ihren Dokumenten gelesen</h2>
+            <p i18n>Docket liest die PDF-Dokumente der Parlamente und legt jedes als Geschäft ab: mit Nummer, Titel, Art,
+                Beteiligten und Verlauf, und mit der Stelle im Dokument, an der jeder Wert steht.</p>
+            <p class="muted" i18n>{{ all().length }} Geschäfte aus {{ choices().bodies.length }} Parlamenten im Bestand.</p>
+        </div>
+    </aside>
+
+    <section>
+        <div class="card search">
+            <div class="tabs">
+                @for ( t of tabs; track t.id ) {
+                    <button type="button" [class.on]="tab() === t.id" (click)="tab.set( t.id )">
+                        <app-icon [name]="t.icon" />
+                        @switch ( t.id ) {
+                            @case ( 'affairs' ) { <span i18n>Geschäfte</span> }
+                            @case ( 'documents' ) { <span i18n>Dokumente</span> }
+                            @case ( 'persons' ) { <span i18n>Personen</span> }
+                            @case ( 'groups' ) { <span i18n>Gruppen</span> }
+                            @case ( 'meetings' ) { <span i18n>Sitzungen</span> }
+                            @case ( 'events' ) { <span i18n>Ereignisse</span> }
+                        }
+                    </button>
+                }
+            </div>
+            <div class="field">
+                <app-icon name="search" [size]="24" />
+                <input type="text" [value]="q()" (input)="q.set( valueOf( $event ) )" placeholder="Suchen" i18n-placeholder>
+                <button type="button" class="tune" [class.on]="filters()" (click)="filters.set( !filters() )" title="Filter" i18n-title>
+                    <app-icon name="tune" />
+                </button>
+                <button type="button" class="clear" (click)="clear()" title="Suche leeren" i18n-title><app-icon name="close" /></button>
+            </div>
+            <button type="button" class="more" (click)="filters.set( !filters() )">
+                @if ( filters() ) { <span i18n>Filter ausblenden</span> } @else { <span i18n>Filter anzeigen</span> }
+                @if ( filtered() ) { ({{ filtered() }}) }
+            </button>
+            @if ( filters() ) {
+                <div class="filters">
+                    <label><span i18n>Parlament</span>
+                        <select (change)="body.set( valueOf( $event ) )">
+                            <option value="" i18n>alle</option>
+                            @for ( o of choices().bodies; track o.value ) { <option [value]="o.value" [selected]="o.value === body()">{{ o.name }}</option> }
+                        </select>
+                    </label>
+                    <label><span i18n>Art</span>
+                        <select (change)="type.set( valueOf( $event ) )">
+                            <option value="" i18n>alle</option>
+                            @for ( o of choices().types; track o.value ) { <option [value]="o.value" [selected]="o.value === type()">{{ o.name }}</option> }
+                        </select>
+                    </label>
+                    <label><span i18n>Dokumenttyp</span>
+                        <select (change)="kind.set( valueOf( $event ) )">
+                            <option value="" i18n>alle</option>
+                            @for ( o of choices().kinds; track o.value ) { <option [value]="o.value" [selected]="o.value === kind()">{{ o.name }}</option> }
+                        </select>
+                    </label>
+                    <label><span i18n>Sprache</span>
+                        <select (change)="language.set( valueOf( $event ) )">
+                            <option value="" i18n>alle</option>
+                            @for ( o of choices().languages; track o.value ) { <option [value]="o.value" [selected]="o.value === language()">{{ o.name }}</option> }
+                        </select>
+                    </label>
+                </div>
+            }
+        </div>
+
+        <div class="card address">
+            <app-url-box [address]="address()" [count]="shown() + ' / ' + total()" [(json)]="json" />
+        </div>
+
+        @if ( error() ) {
+            <div class="empty">{{ error() }}</div>
+        } @else if ( json() ) {
+            <pre class="card raw">{{ raw() }}</pre>
+        } @else {
+            @switch ( tab() ) {
+                @case ( 'affairs' ) {
+                    @for ( r of affairs(); track r[ 'id' ] ) {
+                        <div class="result">
+                            <div class="icon"><app-icon name="affair" [size]="26" /></div>
+                            <div class="body">
+                                <a class="title" [routerLink]="[ '/affairs', r[ 'id' ] ]">{{ words.titleOf( r ) }}</a>
+                                <div class="meta">
+                                    <b i18n>Geschäft</b>
+                                    @if ( r[ 'number' ] ) { <span class="sep">|</span><span i18n>Nr.</span> {{ r[ 'number' ] }} }
+                                    @if ( r[ 'begin_date' ] ) { <span class="sep">|</span>{{ words.dayOf( r[ 'begin_date' ] ) }} }
+                                    @if ( words.typeOf( r ) ) { <span class="sep">|</span>{{ words.typeOf( r ) }} }
+                                </div>
+                            </div>
+                            <div class="side">
+                                @if ( r[ 'body_key' ] ) {
+                                    <div class="where"><span>{{ level( r ) }}</span><b>{{ bodyName( r ) }}</b></div>
+                                }
+                                <a class="zoom" [routerLink]="[ '/affairs', r[ 'id' ] ]" title="Ansehen" i18n-title><app-icon name="zoom" [size]="22" /></a>
+                            </div>
+                        </div>
+                    } @empty {
+                        <div class="empty" i18n>Nichts passt zur Suche.</div>
+                    }
+                }
+                @case ( 'documents' ) {
+                    @for ( x of documents(); track x.doc[ 'name' ] ) {
+                        <div class="result">
+                            <div class="icon"><app-icon name="document" [size]="26" /></div>
+                            <div class="body">
+                                <a class="title" [routerLink]="[ '/documents', x.doc[ 'name' ] ]">{{ x.doc[ 'name' ] }}</a>
+                                <div class="meta">
+                                    <b i18n>Dokument</b>
+                                    <span class="sep">|</span>{{ words.kindName( x.doc[ 'article-type' ] ) }}
+                                    @if ( x.doc[ 'language' ] ) { <span class="sep">|</span>{{ words.LANGUAGES[ x.doc[ 'language' ] ] || x.doc[ 'language' ] }} }
+                                    @if ( x.doc[ 'page-count' ] ) { <span class="sep">|</span>{{ x.doc[ 'page-count' ] }} <span i18n>S.</span> }
+                                    <span class="sep">|</span><a [routerLink]="[ '/affairs', x.affair[ 'id' ] ]">{{ words.titleOf( x.affair ) }}</a>
+                                </div>
+                            </div>
+                            <div class="side">
+                                @if ( x.affair[ 'body_key' ] ) {
+                                    <div class="where"><span>{{ level( x.affair ) }}</span><b>{{ bodyName( x.affair ) }}</b></div>
+                                }
+                                <a class="zoom" [routerLink]="[ '/documents', x.doc[ 'name' ] ]" title="Ansehen" i18n-title><app-icon name="zoom" [size]="22" /></a>
+                            </div>
+                        </div>
+                    } @empty {
+                        <div class="empty" i18n>Nichts passt zur Suche.</div>
+                    }
+                }
+                @case ( 'events' ) {
+                    @for ( e of events(); track $index ) {
+                        <div class="result">
+                            <div class="icon"><app-icon name="runs" [size]="26" /></div>
+                            <div class="body">
+                                <a class="title" [routerLink]="[ '/affairs', e[ 'affair_id' ] ]">{{ words.textIn( e[ 'title' ] ) || '–' }}</a>
+                                <div class="meta">
+                                    <b i18n>Ereignis</b>
+                                    @if ( e[ 'date' ] ) { <span class="sep">|</span>{{ words.dayOf( e[ 'date' ] ) }} }
+                                    <span class="sep">|</span><a [routerLink]="[ '/affairs', e[ 'affair_id' ] ]">{{ titleOfId( e[ 'affair_id' ] ) }}</a>
+                                </div>
+                            </div>
+                            <div class="side">
+                                @if ( e[ 'body_key' ] ) {
+                                    <div class="where"><span>{{ level( e ) }}</span><b>{{ bodyName( e ) }}</b></div>
+                                }
+                                <a class="zoom" [routerLink]="[ '/affairs', e[ 'affair_id' ] ]" title="Ansehen" i18n-title><app-icon name="zoom" [size]="22" /></a>
+                            </div>
+                        </div>
+                    } @empty {
+                        <div class="empty" i18n>Nichts passt zur Suche.</div>
+                    }
+                }
+                @default {
+                    @for ( n of named(); track n.name ) {
+                        <div class="result">
+                            <div class="icon"><app-icon [name]="tab() === 'persons' ? 'person' : tab() === 'groups' ? 'list' : 'fields'" [size]="26" /></div>
+                            <div class="body">
+                                <a class="title" [routerLink]="[ '/' + tab(), n.name ]">{{ n.name }}</a>
+                                <div class="meta">
+                                    @switch ( tab() ) {
+                                        @case ( 'persons' ) { <b i18n>Person</b> }
+                                        @case ( 'groups' ) { <b i18n>Gruppe</b> }
+                                        @default { <b i18n>Sitzung</b> }
+                                    }
+                                    @if ( n.note ) { <span class="sep">|</span>{{ tab() === 'groups' ? groupKind( n.note ) : n.note }} }
+                                    <span class="sep">|</span><span i18n>{n.affairs.length, plural, =1 {1 Geschäft} other {{{n.affairs.length}} Geschäfte}}</span>
+                                </div>
+                            </div>
+                            <div class="side">
+                                <a class="zoom" [routerLink]="[ '/' + tab(), n.name ]" title="Ansehen" i18n-title><app-icon name="zoom" [size]="22" /></a>
+                            </div>
+                        </div>
+                    } @empty {
+                        <div class="empty" i18n>Nichts passt zur Suche.</div>
+                    }
+                }
+            }
+        }
+    </section>
+</div>

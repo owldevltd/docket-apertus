@@ -197,14 +197,54 @@ already read are asked for it; reading the role of a person freely from the docu
 did worse than the field a name is asked under. One lock per affair guards the decisions; the
 contract is checked before anything is saved. The admin's runs (`jobs.py`) take an uploaded PDF, with the
 parliament it comes from where the person handing it in tells it, run one after the other, and stay on disk
-under `storage/runs/`. Nothing is fetched: what comes in is the PDF. An optional token guards the admin.
+under `storage/runs/`. Nothing is fetched: what comes in is the PDF. The administration has an account, see
+below.
 
 The app (`app/`, Angular with Angular Material) is built into `src/docket/app/` and served as static files.
-It shows the affairs as result cards, one affair with its page and every block framed, red where a person has
-to look, the values beside it with the three decisions, every decision taken, and the admin with the runs,
-the rules, the vocabulary, the definition, what the second opinion learnt, and the upload. The vocabulary shows one parliament at a time: its names, what
-each stands for, and where a person changed the stem. Node is needed for the build only: locally through `make app`, in the container in
+It has two levels. What a visitor sees follows OpenParlData's public app and changes nothing, and it is made
+of the affairs in the affair schema alone (`public.py`: `/api/records`, and the tables that follow from the
+records, those who take part, the groups, the meetings, the events): the start with
+the affairs as result cards, a search over title, number, type, parliament and document names, filters by
+parliament, type, kind of document and language, the address of what is shown and its JSON; an affair with
+its rows, those who take part by their role, its course and its documents, and the record itself in the
+affair schema; a document with what the record says of it, and its pages set from the blocks of the record
+(`public/sheet.ts`): every block with its text at its place on the page, in its font, size and colour, as the
+schema holds them (`x`, `y`, `width`, `height` at 300 dpi, `font`, `font-size`, `color`); a picture or a line
+is a grey field, since the record keeps its place and not the picture, and pointing at a block shows what
+the record says about it. No image of a page is used there. The record holds no paper size: a page is drawn
+as A4 upright at 300 dpi, larger where a block lies outside that. The entry of the document in the record is
+the JSON beside it.
+The administration holds everything that changes something: the review (the affairs with how many values
+are open, one affair with its page, red where a person has to look, the values beside it with the three
+decisions), every decision taken, the runs, the rules, the vocabulary, the definition, what the second
+opinion learnt, and the upload. It stands under `/admin` and is not linked from what a visitor sees. It has
+one account (`ADMIN_USER`, `ADMIN_PASSWORD`): with a password set, every route of the API that is not part of
+what a visitor reads needs the session of that account, reading as well; the session is made at `/api/login`
+and rides in a cookie the page cannot read; and every decision, every answer to a rule and every change of
+the vocabulary is by the account, whatever a request names. Without a password the administration is open,
+for a local run, and acts under the account's name. That one account and the open administration without a
+password were set by the assistant and are open. The vocabulary shows one parliament at a time: its names,
+what each stands for, and where a person changed the stem; and the standard names of a list, to which the
+administration can add one of its own, with its wording in the four languages, for names of parliaments to
+stand for. Node is needed for the build only: locally through `make app`, in the container in
 the first stage of the Docker image.
+
+Both levels come in German, French, Italian and English, by the localisation Angular brings itself: the app
+is written in German, its texts are taken out into `app/src/locale/messages.xlf`, and the build makes one
+bundle per language, each in a folder of its own (`/de/`, `/fr/`, `/it/`, `/en/`). The switch at the top
+right is a link to the same screen under the other folder; an address without a language goes on to the
+German one. The wordings stand side by side in `app/src/locale/words.json`, and `make translations` writes
+the files the build reads from it; `tests/translations.py` holds that no text is without one. The French,
+Italian and English wordings were set by the assistant and are open: no native speaker has read them yet.
+What a document prints stays in the language of the document; a standard name the record holds in four
+languages is shown in the language of the page.
+
+Everything a visitor is shown hangs on the `id` a record names itself by. A store can be older than the code
+that reads it, so the server gives every affair stored without its `id` the key it is stored under, and the
+parliament the run of its document noted, once at the start. One person, one group or one meeting is asked
+of the tables by its name (`/api/contributors?fullname=`, `/api/groups?name=`, `/api/meetings?conf-name=`)
+and comes with its rows alone; a type is found by any of its wordings, so a page in French can ask by the
+French standard name.
 
 ## Measuring
 
@@ -212,10 +252,12 @@ the first stage of the Docker image.
 text layer of the PDFs for the geometry and the text, the affairs of the API for the fields and the identity,
 a reading by hand for the kinds, and the contract for every record; it also runs the server, the decisions,
 the rules, the vocabulary, the register and the admin's queue on a file store. It forms the affairs of the
-shipped documents again from a stored run with the model and compares them with the stored affairs character
-by character, so that a change to the core cannot move a value unnoticed. `make test-store` runs the store's
+eight documents again from a stored run with the model and compares them with the stored affairs character
+by character, so that a change to the core cannot move a value unnoticed. The documents, their page references
+and their stored runs are not in the repository, because they name people: `data/documents/README.md` says where
+each comes from; without them `make test` runs the tests that need no document. `make test-store` runs the store's
 operations over Postgres as well, inside the running container, in a schema of its own. `make bench` runs the whole chain with the model over the
-eight shipped documents, about sixty calls, under five minutes, and keeps the raw exchange of every call.
+eight documents, about sixty calls, under five minutes, and keeps the raw exchange of every call.
 `docs/evidence.md` holds every number behind a decision, `results/` the committed runs.
 
 ## Running it
@@ -224,5 +266,5 @@ eight shipped documents, about sixty calls, under five minutes, and keeps the ra
 geometry takes about three seconds per page, the model is called over the network one call at a time with a
 pause, so a digital document of two pages takes about half a minute and a scanned page about one minute more
 for the reading. Memory peaked at 0.6 GB with one document in flight (the run of 8 October over the eight
-shipped documents). The model calls are the budget: four to six per document for the fields, one for the
+documents). The model calls are the budget: four to six per document for the fields, one for the
 sorting of the first pages, thirteen for a scanned page.

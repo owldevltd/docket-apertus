@@ -1,0 +1,84 @@
+@if ( error() ) {
+    <div class="empty">{{ error() }}</div>
+} @else if ( record(); as r ) {
+    <div class="item card">
+        <div class="top-row">
+            <a class="back" routerLink="/" title="Zur Liste" i18n-title><app-icon name="back" [size]="28" /></a>
+            <app-url-box [address]="address()" [(json)]="json" />
+        </div>
+        <div class="head">
+            <div class="icon"><app-icon name="affair" [size]="40" /></div>
+            <div class="text">
+                <h1>{{ title() }}</h1>
+                <div class="meta">
+                    <b i18n>Geschäft</b>
+                    @for ( m of meta(); track $index ) { <span class="sep">|</span>{{ m }} }
+                </div>
+            </div>
+            @if ( body(); as b ) {
+                <div class="where"><span>{{ level() }}</span><b>{{ b.name }}</b></div>
+            }
+        </div>
+        <div class="links">
+            <a href="#documents"><app-icon name="document" [size]="16" /> <ng-container i18n>Dokumente</ng-container> ({{ docs().length }})</a>
+            @if ( events().length ) { <a href="#events"><app-icon name="list" [size]="16" /> <ng-container i18n>Ereignisse</ng-container> ({{ events().length }})</a> }
+        </div>
+
+        @if ( json() ) {
+            <pre class="raw">{{ raw() }}</pre>
+        } @else {
+            <div class="rows">
+                @for ( r of rows(); track r.label + r.value ) {
+                    <div class="row"><b>{{ r.label }}</b><span class="pipe">|</span><span>{{ r.value }}</span></div>
+                }
+            </div>
+
+            @if ( roles().length ) {
+                <h2 i18n>Beteiligte</h2>
+                @for ( g of roles(); track g.role ) {
+                    <div class="role">
+                        <div class="name">{{ g.role }}</div>
+                        <div class="people">
+                            @for ( p of g.people; track $index ) {
+                                <div class="person">
+                                    <app-icon name="person" [size]="18" />
+                                    <a [routerLink]="[ '/persons', p.name ]">{{ p.name }}</a>
+                                    @if ( p.party ) { <a class="muted" [routerLink]="[ '/groups', p.party ]">{{ p.party }}</a> }
+                                    @if ( p.behalf ) { <span class="muted" i18n>im Namen von {{ p.behalf }}</span> }
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            }
+
+            @if ( events().length ) {
+                <h2 id="events" i18n>Ereignisse</h2>
+                <div class="rows">
+                    @for ( e of events(); track $index ) {
+                        <div class="row"><b>{{ e.date || '–' }}</b><span class="pipe">|</span><span>{{ e.title }}</span></div>
+                    }
+                </div>
+            }
+
+            <h2 id="documents" i18n>Dokumente</h2>
+            @for ( d of docs(); track d[ 'name' ] ) {
+                <div class="result">
+                    <div class="icon"><app-icon name="document" [size]="26" /></div>
+                    <div class="body">
+                        <a class="title" [routerLink]="[ '/documents', d[ 'name' ] ]">{{ d[ 'name' ] }}</a>
+                        <div class="meta">
+                            <b i18n>Dokument</b>
+                            <span class="sep">|</span>{{ words.kindName( d[ 'article-type' ] ) }}
+                            @if ( d[ 'language' ] ) { <span class="sep">|</span>{{ words.LANGUAGES[ d[ 'language' ] ] || d[ 'language' ] }} }
+                            @if ( d[ 'page-count' ] ) { <span class="sep">|</span>{{ d[ 'page-count' ] }} <span i18n>S.</span> }
+                        </div>
+                    </div>
+                    <div class="side">
+                        <a class="zoom" [routerLink]="[ '/documents', d[ 'name' ] ]" title="Ansehen" i18n-title><app-icon name="zoom" [size]="22" /></a>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+}

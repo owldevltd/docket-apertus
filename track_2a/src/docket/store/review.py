@@ -20,7 +20,7 @@ from docket.store.base import stamp
 DECISIONS = ("confirmed", "changed", "rejected")
 
 # keys of an entry that are not its value
-NOT_VALUES = {"source", "id", "role", "meta-name", "page-count", "format", "name", "body"}
+NOT_VALUES = {"source", "id", "role", "role_harmonized", "meta-name", "page-count", "format", "name", "body"}
 
 
 def sources_of(record: dict) -> list[dict]:

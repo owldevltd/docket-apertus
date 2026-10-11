@@ -1,24 +1,39 @@
 # Documents
 
-The documents the demo and the tests run on. Each folder holds the PDF, a `document.json` with name, body,
-language, origin and, where known, the affair it belongs to at OpenParlData, one JSON per page with the
-reference the tests measure against, and a stored run with the affair it became.
+The documents the demo and the tests run on are publications of Swiss parliaments. They are **not in this
+repository**, because they name people: the folders below keep only a `document.json` that says what the document is
+and where it comes from. Everything was taken from OpenParlData (API and file server, files.openparldata.ch, data under
+CC BY 4.0, "Source: OpenParlData.ch"); the documents remain the property of their publishers.
 
-| Folder | Body | Language | Pages | Text layer | What it is |
-|---|---|---|---:|---|---|
-| `nidau-m185/` | Nidau, municipality (BE) | de | 2 | yes | the kickoff example: a motion with cover sheet, request and reasoning |
-| `wettingen-115631/` | Wettingen, city (AG) | de | 2 | yes | a motion, running text under a two-line header |
-| `basel-137584/` | Basel-Stadt, canton | de | 1 | yes | a request for a cantonal initiative, dense text |
-| `zuerich-219587/` | Zürich, canton | de | 1 | yes | a parliamentary initiative, cantonal letterhead |
-| `aargau-scan/` | Aargau, canton | de | 1 | no | the Aargau request rendered and saved without a text layer: the path for scans, on a page whose text is known |
-| `neuchatel-grand-conseil/` | Neuchâtel, canton | fr | 1 | yes | a French document of the Grand Conseil, from the file server |
-| `ayent-6082/` | Ayent, municipality (VS) | fr | 4 | yes | from one of the eight bodies that hold documents but no affairs |
-| `lugano-5192/` | Lugano, city (TI) | it | 3 | yes | an Italian document of the city council, from the file server |
+| Folder | Body | Language | Pages | Text layer | What it is | Where it comes from |
+|---|---|---|---:|---|---|---|
+| `nidau-m185/` | Nidau, municipality (BE) | de | 2 | yes | the kickoff example: a motion with cover sheet, request and reasoning | affair 330555 of the OpenParlData API |
+| `wettingen-115631/` | Wettingen, city (AG) | de | 2 | yes | a motion, running text under a two-line header | affair 115631 of the API, the document linked there |
+| `basel-137584/` | Basel-Stadt, canton | de | 1 | yes | a request for a cantonal initiative, dense text | affair 137584 of the API, the document linked there |
+| `zuerich-219587/` | Zürich, canton | de | 1 | yes | a parliamentary initiative, cantonal letterhead | affair 219587 of the API, the document linked there |
+| `aargau-scan/` | Aargau, canton | de | 1 | no | the Aargau request rendered and saved without a text layer: the path for scans, on a page whose text is known | affair 217693 of the API, the page rendered and saved as an image-only PDF |
+| `neuchatel-grand-conseil/` | Neuchâtel, canton | fr | 1 | yes | a French document of the Grand Conseil | file server, `doc/NE/a4282b9a…` |
+| `ayent-6082/` | Ayent, municipality (VS) | fr | 4 | yes | from one of the eight bodies that hold documents but no affairs | file server, `doc/6082/bad53e67…` |
+| `lugano-5192/` | Lugano, city (TI) | it | 3 | yes | an Italian document of the city council | file server, `doc/5192/80d9295b…` |
 
-The documents are publications of the parliaments, taken from OpenParlData's API and file server
-(files.openparldata.ch, data under CC BY 4.0, "Source: OpenParlData.ch"); they remain the property of their
-publishers and are included as test material. The full set used for the measurements, 64 documents with 482
-pages, is listed in the evidence document and not redistributed here.
+The full reference of each is the `origin` in its `document.json`. The full set used for the measurements, 64 documents
+with 482 pages, is listed in the evidence document and not redistributed either.
+
+## Putting a document back
+
+Docket itself never fetches anything from OpenParlData. Whoever wants to run the tests or see the demo with these
+documents downloads them there and lays each PDF into its folder under the name `document.json` gives as `file`
+(`nidau-m185/nidau-m185.pdf`). `make reference` then writes the reference JSON of every page beside the PDF (needs
+poppler).
+
+Two more files belong to a document and are not in the repository either: `run.json`, what a run with the model left
+for it (its blocks, its identity, the answers for its fields), and `affair.json`, the affair formed from it. They hold
+the text and the names of the document. No target of this repository writes them; they travel with the local copy of
+the documents. The tests that compare against a stored run need them.
+
+Git ignores these four kinds of files in the folders, so a local copy stays local. With all of them in place
+`make test` runs every test; without the PDFs it runs the tests that need no document, and the server starts with an
+empty store until a PDF is handed in.
 
 ## The reference JSON
 

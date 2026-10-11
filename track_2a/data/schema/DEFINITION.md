@@ -44,6 +44,8 @@ Everything from OpenParlData stays with its name and form: the affair with `docs
 | Key | Content |
 | --- | --- |
 | `schema` | version of this definition, here `"0.8"` |
+| `id` | what the affair is called here: the key Docket forms for it from its parliament and its number (`nr-743-m185`), under the name OpenParlData has for an affair's id. A record names itself, so nothing beside it is needed to find or to link it |
+| `body_key` | the parliament the affair belongs to, by OpenParlData's key for it (`743`, `ZH`); told with the document or read from it, absent when neither |
 | `sources` | places for values whose own place carries no `source` (`number`, `title.de`, `type_name.de`, `begin_date`, `article-version`, `article-type`, `abstract.de`, `kwd-group.<n>`): per entry `path` (the way to the value, with dots), `doc`, `block`, `how`, `approve` |
 | `custom-meta` | printed header entries without a place of their own (file reference, department): `meta-name`, `meta-value` |
 | `related-article` | related affairs: `affair_id` or `number` |
@@ -242,6 +244,8 @@ The full example is what the pipeline delivered for the Nidau PDF on 6 October 2
 
 ## Changes
 
+- **Under the language of the document; the standard role** (11 October 2026): what a document prints, its title, its type, a party, an event, stands under the language the document is written in (`title.fr`), as OpenParlData's own answers have it; until then everything stood under `de`. A contributor carries `role_harmonized`, the standard role in four languages as OpenParlData names it, in place of a fixed German word under `role`: the role as the document words it is not read. The standard name of an event is not written: of 96 events read in the runs of 10 October none is worded as one of OpenParlData's 106 standard names. The contract itself unchanged.
+- **The record names itself and its parliament** (11 October 2026): `id` and `body_key`, two fields OpenParlData has, are filled in every record. Until then both stood beside the record, in the store; what a visitor reads is now made of the records alone (`docket.public`), the lists and the tables of those who take part, the groups, the meetings and the events included. The contract itself unchanged.
 - **The language of a document, and its summary in it** (11 October 2026): every document entry says its `language`, told by code (210 of 211 documents of known language right, one too short to tell). The summary is asked for in that language, named in the question, and stands under its key (`abstract.fr`); a field of the fields file says so with `own-language`. Asked "in the language of the document" without naming it, the model summed up the French and Italian documents in German. The contract itself unchanged.
 - **A summary keeps its place** (11 October 2026): a value the model words itself is no longer dropped when the block it names holds no word of it. Counted on 211 documents of the runs of 10 October: the model answered the summary for all, 84 had a place, 127 were dropped (it sums up French and Italian documents in German). The contract itself unchanged.
 - **The answer under its heading; the mapping** (11 October 2026): `response` is filled where a heading announces the answer, with `response-type` `answer`. New: `mapping.json` beside this definition and `docs/mapping.md`, the terms of the schema against OpenParlData and five standards. The contract itself unchanged.

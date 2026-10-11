@@ -1,13 +1,13 @@
 <div class="bar">
-    <h1>Entscheidungen</h1>
-    <span class="muted">{{ rows().length }} Entscheidungen</span>
+    <h1 i18n>Entscheidungen</h1>
+    <span class="muted" i18n>{{ rows().length }} Entscheidungen</span>
 </div>
 @if ( error() ) {
     <div class="empty">{{ error() }}</div>
 }
 <table class="plain">
     <thead>
-        <tr><th>Wann</th><th>Wer</th><th>Geschäft</th><th>Feld</th><th>Entscheid</th><th>Vorher</th><th>Nachher</th></tr>
+        <tr><th i18n>Wann</th><th i18n>Wer</th><th i18n>Geschäft</th><th i18n>Feld</th><th i18n>Entscheid</th><th i18n>Vorher</th><th i18n>Nachher</th></tr>
     </thead>
     <tbody>
         @for ( r of rows(); track $index ) {
@@ -21,7 +21,7 @@
                 <td>{{ r.after ?? '–' }}</td>
             </tr>
         } @empty {
-            <tr><td colspan="7" class="empty">Noch keine Entscheidungen.</td></tr>
+            <tr><td colspan="7" class="empty" i18n>Noch keine Entscheidungen.</td></tr>
         }
     </tbody>
 </table>

@@ -6,7 +6,8 @@ import { AffairSummary } from '../api/types';
 import { Icon } from '../shared/icon';
 import { kindName } from '../shared/words';
 
-// The affairs as result cards, the ones with open marks first; a switch keeps only those.
+// The review's list, within the administration: the affairs as result cards with how many values are open,
+// the ones with open marks first; a switch keeps only those. A card leads to the review of the affair.
 @Component( {
     selector: 'app-affairs-list',
     imports: [ RouterLink, MatCheckboxModule, Icon ],

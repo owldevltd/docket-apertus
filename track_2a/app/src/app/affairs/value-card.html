@@ -4,33 +4,33 @@
         @if ( e.open ) { <span class="mark">!</span> }
         <span class="label">{{ label() }}</span>
         <span class="how">{{ words.HOW[ e.how || '' ] || e.how }}</span>
-        <button class="where" (click)="jump.emit( e )">{{ docName() || 'Dokument ' + e.doc }} · {{ e.block }}</button>
+        <button class="where" (click)="jump.emit( e )">@if ( docName() ) { {{ docName() }} } @else { <ng-container i18n>Dokument</ng-container> {{ e.doc }} } · {{ e.block }}</button>
     </div>
     @for ( v of values(); track v.path ) {
         <div class="text">@if ( several() ) { <span class="leaf">{{ v.leaf }}:</span> }{{ v.value }}</div>
     }
     @if ( e.hint ) {
-        <div class="answer">Register: {{ e.hint }}</div>
+        <div class="answer"><ng-container i18n>Register</ng-container>: {{ e.hint }}</div>
     }
     @if ( modelDiffers() ) {
-        <div class="answer">Modell: {{ answer() }}</div>
+        <div class="answer"><ng-container i18n>Modell</ng-container>: {{ answer() }}</div>
     }
     @if ( e.review; as r ) {
         <div class="decided" [class.rejected]="r.decision === 'rejected'">
-            {{ words.DECISION[ r.decision ] }}@if ( r.decision === 'changed' && r.before !== undefined ) { von „{{ r.before }}“ }
-            @if ( r.by ) { · {{ r.by }} } · {{ r.at | stamp }}@if ( r.rule ) { · Regel {{ r.rule }} }
+            {{ words.DECISION[ r.decision ] }}@if ( r.decision === 'changed' && r.before !== undefined ) { <ng-container i18n>von „{{ r.before }}“</ng-container> }
+            @if ( r.by ) { · {{ r.by }} } · {{ r.at | stamp }}@if ( r.rule ) { · <ng-container i18n>Regel</ng-container> {{ r.rule }} }
         </div>
     }
     @if ( e.same?.count ) {
         <details class="same">
-            <summary>{{ e.same!.count }} weitere Dokumente mit demselben Muster</summary>
+            <summary i18n>{{ e.same!.count }} weitere Dokumente mit demselben Muster</summary>
             @for ( x of e.same!.examples; track x.key ) {
                 <div><a [routerLink]="[ '/affairs', x.key ]">{{ x.key }}</a> · {{ x.value }}</div>
             }
         </details>
     }
     <div class="acts">
-        <button mat-flat-button (click)="confirm()">Bestätigen</button>
+        <button mat-flat-button (click)="confirm()" i18n>Bestätigen</button>
         @if ( several() ) {
             <mat-form-field appearance="outline" subscriptSizing="dynamic" class="pick">
                 <mat-select [value]="path()" (valueChange)="pick( $event )">
@@ -39,9 +39,9 @@
             </mat-form-field>
         }
         <mat-form-field appearance="outline" subscriptSizing="dynamic" class="new">
-            <input matInput [ngModel]="after()" (ngModelChange)="after.set( $event )" placeholder="neuer Wert">
+            <input matInput [ngModel]="after()" (ngModelChange)="after.set( $event )" placeholder="neuer Wert" i18n-placeholder>
         </mat-form-field>
-        <button mat-stroked-button (click)="change()">Ändern</button>
-        <button mat-button (click)="reject()">Verwerfen</button>
+        <button mat-stroked-button (click)="change()" i18n>Ändern</button>
+        <button mat-button (click)="reject()" i18n>Verwerfen</button>
     </div>
 </div>

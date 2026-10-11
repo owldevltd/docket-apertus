@@ -43,19 +43,27 @@
       "title": "The affair",
       "rows": [
         {
-          "term": "the record",
-          "means": "one item of parliamentary business with its documents",
+          "term": "the record, `id`, `body_key`",
+          "means": "one item of parliamentary business with its documents: what it is called and whose it is",
           "keys": [],
           "openparldata": [
-            "affairs"
+            "affairs",
+            "affairs.id",
+            "affairs.body_key"
           ],
-          "jats": [],
+          "jats": [
+            "article-id"
+          ],
           "akoma-ntoso": [
-            "documentCollection"
+            "documentCollection",
+            "FRBRthis",
+            "FRBRauthor"
           ],
           "parla-clarin": [],
           "popolo": [
-            "motion"
+            "motion",
+            "motion.id",
+            "motion.organization_id"
           ],
           "docling": [],
           "notes": {
@@ -1391,13 +1399,13 @@
   ],
   "checked": {
     "on": "2026-10-11",
-    "names": 339,
+    "names": 343,
     "found": {
-      "openparldata": 47,
+      "openparldata": 48,
       "jats": 82,
-      "akoma-ntoso": 77,
+      "akoma-ntoso": 79,
       "parla-clarin": 69,
-      "popolo": 27,
+      "popolo": 28,
       "docling": 37
     }
   }

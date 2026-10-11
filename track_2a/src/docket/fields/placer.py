@@ -46,9 +46,8 @@ def fill(record: dict, doc: int, values: dict[str, list[dict]], fields: Fields, 
     for name, hits in values.items():
         f = fields.fields[name]
         spath = f.path
-        path = ["docs", "data", str(at), *spath[3:]] if spath[:3] == ["docs", "data", "[]"] else list(spath)
-        if f.own_language and language:
-            path[-1] = language
+        path = own_path(f, language)
+        path = ["docs", "data", str(at), *path[3:]] if spath[:3] == ["docs", "data", "[]"] else path
         list_at = path.index("[]") if "[]" in path else None
         rule = contract.part(spath) or {}
         if list_at is None and rule.get("type") == "array":
@@ -127,12 +126,27 @@ def fill(record: dict, doc: int, values: dict[str, list[dict]], fields: Fields, 
             for i, row in enumerate(new):
                 one = more[0] if len(more) == 1 else (more[i] if i < len(more) else None)
                 if one is not None:
-                    set_at(row, mf.path[list_at + 1:], day(one["value"]) if mf.form == "date" else one["value"])
+                    beside = own_path(mf, language)[list_at + 1:]
+                    set_at(row, beside, day(one["value"]) if mf.form == "date" else one["value"])
                     entry = [*into, str(len(rows) + i)]
-                    note(one, [*entry, "source"], [*entry, *mf.path[list_at + 1:]], made[i].get("n"))
+                    note(one, [*entry, "source"], [*entry, *beside], made[i].get("n"))
             notes[mate] = "taken, into the entries of the first field"
         set_at(out, into, [*rows, *new])
     return out, notes
+
+
+def read_at(record: dict, f: Field):
+    """The value of a field that stands once in a record; of a field that stands under the language of its
+    document, the one there is."""
+    if not f.own_language:
+        return get_at(record, f.path)
+    held = get_at(record, f.path[:-1])
+    return next((v for v in held.values() if v not in (None, "")), None) if isinstance(held, dict) else None
+
+
+def own_path(f: Field, language: str) -> list[str]:
+    """The path of a field in the record of a document in this language."""
+    return [*f.path[:-1], language] if f.own_language and language else list(f.path)
 
 
 def source(doc: int, hit: dict, f: Field, body: list[dict]) -> dict:

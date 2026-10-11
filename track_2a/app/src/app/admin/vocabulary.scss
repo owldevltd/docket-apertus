@@ -58,9 +58,14 @@ tr.add td {
     margin-right: 6px;
 }
 
-// the standard names have five columns: on a narrow screen they scroll inside their frame
+// the standard names have up to seven columns: on a narrow screen they scroll inside their frame
 .wide {
     overflow-x: auto;
+
+    // four wordings side by side in the row for a new standard name: narrower than a choice
+    .pick {
+        min-width: 110px;
+    }
 }
 
 // the names of a parliament on a narrow screen: one below the other, the choice in full width

@@ -43,16 +43,27 @@ GROUPS = [{"list": "groups", "body": "", "name": "kommission", "label": "Kommiss
            "standard": {"de": "Kommission", "fr": "Commission", "it": "Commissione", "en": "Committee"}}]
 
 
-def call(base: str, route: str, body: dict | None = None, token: str = "") -> tuple[int, object]:
+def call(base: str, route: str, body: dict | None = None, session: str = "") -> tuple[int, object]:
     data = json.dumps(body).encode("utf-8") if body is not None else None
     request = urllib.request.Request(base + route, data=data, method="POST" if data else "GET")
-    if token:
-        request.add_header("X-Token", token)
+    if session:
+        request.add_header("Cookie", session)
     try:
         with urllib.request.urlopen(request, timeout=10) as r:
             return r.status, json.loads(r.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
         return e.code, json.loads(e.read().decode("utf-8"))
+
+
+def sign_in(base: str, user: str = "admin", password: str = "secret") -> str:
+    """Signs in to the administration; the cookie of the session, empty when the server said no."""
+    data = json.dumps({"user": user, "password": password}).encode("utf-8")
+    try:
+        with urllib.request.urlopen(urllib.request.Request(base + "/api/login", data=data, method="POST"),
+                                    timeout=10) as r:
+            return (r.headers.get("Set-Cookie") or "").split(";")[0]
+    except urllib.error.HTTPError:
+        return ""
 
 
 def main() -> int:
@@ -183,30 +194,31 @@ def main() -> int:
         # the routes, and the name beside the id
         store.put_affair("nr-1", record, [{"name": "doc-a", "id": 1, "pages": 1}])
         store.put_fields("doc-a", {"identity": {"body": "X"}, "fields": {}})
-        secret = type(config)(**{**config.__dict__, "storage_dir": Path(tmp), "admin_token": "secret"})
+        secret = type(config)(**{**config.__dict__, "storage_dir": Path(tmp), "admin_password": "secret"})
         app = App(store, contract, secret, Jobs(secret))
         server = serve(app, 0, host="127.0.0.1")
         threading.Thread(target=server.serve_forever, daemon=True).start()
         base = f"http://127.0.0.1:{server.server_address[1]}"
         try:
-            status, affair = call(base, "/api/affairs/nr-1")
+            session = sign_in(base)
+            status, affair = call(base, "/api/affairs/nr-1", None, session)
             hints = [e.get("hint") for e in affair["sources"] if e["label"] == "contributors.person_id"]
             check(status == 200 and hints == ["Ignaz Pellaton (Les Verts)"] * 3,
                   f"beside the id stands who is meant: {hints[:1]}")
-            status, rows = call(base, "/api/register?body=X")
+            status, rows = call(base, "/api/register?body=X", None, session)
             check(status == 200 and len(rows) == len(store.get_register("X")),
                   f"the persons of a parliament are listed ({len(rows)})")
-            status, rows = call(base, "/api/register")
+            status, rows = call(base, "/api/register", None, session)
             check(status == 200 and sorted(r["key"] for r in rows) == ["brand katja", "neue person"],
                   "without a parliament: what the register learnt and what it still counts")
             body = {"body": "X", "key": "neue person"}
             status, answer = call(base, "/api/register", body)
-            check(status == 403, f"taking a row out without the token is refused: {answer.get('error')}")
-            status, answer = call(base, "/api/register", body, "secret")
+            check(status == 401, f"taking a row out without the account is refused: {answer.get('error')}")
+            status, answer = call(base, "/api/register", body, session)
             left = {r["key"] for r in store.get_register("X")}
             check(status == 200 and answer.get("removed") is True and "neue person" not in left,
-                  "with the token a candidate is taken out")
-            status, answer = call(base, "/api/register", {"body": "X", "key": "ignaz pellaton"}, "secret")
+                  "with the account a candidate is taken out")
+            status, answer = call(base, "/api/register", {"body": "X", "key": "ignaz pellaton"}, session)
             check(status == 409, f"a person of OpenParlData's list is not taken out: {answer.get('error')}")
         finally:
             server.shutdown()

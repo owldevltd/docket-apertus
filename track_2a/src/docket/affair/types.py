@@ -11,7 +11,7 @@ from __future__ import annotations
 import re
 
 from docket.fields.fields import Fields
-from docket.fields.placer import get_at, set_at
+from docket.fields.placer import get_at, read_at, set_at
 from docket.store.vocabulary import Vocabulary
 
 # an entry of the table counts only when this many affairs carry it and this share of them falls on one type
@@ -44,12 +44,13 @@ def harmonize(affair: dict, table: dict[str, dict], vocabulary: Vocabulary | Non
     is the label and where its standard name goes is said by the fields file: a field whose entity has a list
     of the vocabulary behind it and that names a place for the standard name. Without a fields file, the keys
     of OpenParlData."""
-    places = [(["type_name", "de"], ["type_harmonized"], "types")]
+    places = [(None, ["type_harmonized"], "types")]
     if fields is not None:
-        places = [(f.path, f.standard.split("."), f.list_name) for f in fields.fields.values()
+        places = [(f, f.standard.split("."), f.list_name) for f in fields.fields.values()
                   if f.lookup == "vocabulary" and f.standard and "[]" not in f.path]
-    for path, target, name_of_list in places:
-        label = get_at(affair, path)
+    for f, target, name_of_list in places:
+        # the label stands under the language of its document
+        label = read_at(affair, f) if f is not None else next(iter((affair.get("type_name") or {}).values()), None)
         if get_at(affair, target) or not label:
             continue
         # the table of the export knows the types alone

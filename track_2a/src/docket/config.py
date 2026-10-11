@@ -23,7 +23,8 @@ class Config:
     storage_dir: Path
     database_url: str = ""
     port: int = 8080
-    admin_token: str = ""
+    admin_user: str = "admin"
+    admin_password: str = ""
     root: Path = ROOT
 
 
@@ -49,5 +50,6 @@ def load_config() -> Config:
         storage_dir=Path(os.environ.get("STORAGE_DIR", ROOT / "storage")),
         database_url=os.environ.get("DATABASE_URL", ""),
         port=int(os.environ.get("PORT", "8080")),
-        admin_token=os.environ.get("ADMIN_TOKEN", ""),
+        admin_user=os.environ.get("ADMIN_USER", "admin").strip() or "admin",
+        admin_password=os.environ.get("ADMIN_PASSWORD", ""),
     )

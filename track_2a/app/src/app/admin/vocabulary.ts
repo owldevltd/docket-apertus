@@ -6,15 +6,15 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Api } from '../api/api';
 import { Parliament, VocabularyRow } from '../api/types';
-import { Who } from '../shared/who';
 import { LISTS, StampPipe } from '../shared/words';
 
 type ListName = VocabularyRow[ 'list' ];
 
 // The vocabulary in the admin: what a parliament calls a thing and the standard name it stands for. The stem
 // comes from OpenParlData, which calls it provisional, so every row can be changed here: a person sets
-// another standard for a name, adds a name the stem does not have, or takes that back. The server holds the
-// rows; the screen shows one list and one parliament at a time.
+// another standard for a name, adds a name the stem does not have, or takes that back; and adds a standard
+// name of the administration's own to a list, with its wording in the four languages, for names to stand
+// for. The server holds the rows; the screen shows one list and one parliament at a time.
 @Component( {
     selector: 'app-vocabulary',
     imports: [ FormsModule, MatButtonModule, MatFormFieldModule, MatSelectModule, StampPipe ],
@@ -23,7 +23,6 @@ type ListName = VocabularyRow[ 'list' ];
 } )
 export class VocabularyArea implements OnInit {
     private readonly api = inject( Api );
-    private readonly who = inject( Who );
     private readonly snack = inject( MatSnackBar );
 
     readonly rows = signal<VocabularyRow[]>( [] );
@@ -34,6 +33,8 @@ export class VocabularyArea implements OnInit {
     readonly busy = signal( false );
     readonly newName = signal( '' );
     readonly newStandard = signal( '' );
+    // a standard name of the administration's own: its wording in the four languages
+    readonly own = signal<Record<string, string>>( { de: '', fr: '', it: '', en: '' } );
     // counts the loads: a row is drawn anew after each, so a choice the server refused does not stay on screen
     readonly round = signal( 0 );
     readonly words = { LISTS };
@@ -94,11 +95,29 @@ export class VocabularyArea implements OnInit {
     }
 
     n( value: number ): string {
-        return value.toLocaleString( 'de-CH' );
+        return value.toLocaleString( ( document.documentElement.lang || 'de' ).slice( 0, 2 ) + '-CH' );
     }
 
     async change( row: VocabularyRow, standard: string ): Promise<void> {
-        await this.guard( ( by ) => this.api.setName( row, standard || null, by ) );
+        await this.guard( () => this.api.setName( row, standard || null ) );
+    }
+
+    word( language: string, value: string ): void {
+        this.own.update( ( held ) => ( { ...held, [ language ]: value } ) );
+    }
+
+    // a standard name the list does not have yet; German is its name, the other wordings may follow
+    async addStandard(): Promise<void> {
+        const o = this.own();
+        if ( !o[ 'de' ].trim() ) {
+            return;
+        }
+        const done = await this.guard( () => this.api.addStandard( this.list(), {
+            de: o[ 'de' ].trim(), fr: o[ 'fr' ].trim() || null, it: o[ 'it' ].trim() || null, en: o[ 'en' ].trim() || null,
+        } ) );
+        if ( done ) {
+            this.own.set( { de: '', fr: '', it: '', en: '' } );
+        }
     }
 
     async add(): Promise<void> {
@@ -107,7 +126,7 @@ export class VocabularyArea implements OnInit {
             return;
         }
         const row = { list: this.list(), body: this.body(), name };
-        const done = await this.guard( ( by ) => this.api.setName( row, this.newStandard() || null, by ) );
+        const done = await this.guard( () => this.api.setName( row, this.newStandard() || null ) );
         if ( done ) {
             this.newName.set( '' );
             this.newStandard.set( '' );
@@ -118,16 +137,13 @@ export class VocabularyArea implements OnInit {
         await this.guard( () => this.api.resetName( row ) );
     }
 
-    // a change carries who made it; the rows are read again afterwards, also when the server said no
-    private async guard( action: ( by: string ) => Promise<unknown> ): Promise<boolean> {
-        const by = this.who.require();
+    // a change is by the account that is signed in; the rows are read again afterwards, also when the server
+    // said no
+    private async guard( action: () => Promise<unknown> ): Promise<boolean> {
         this.busy.set( true );
         let done = false;
         try {
-            if ( !by ) {
-                throw new Error( 'Ohne Kürzel wird nichts geändert.' );
-            }
-            await action( by );
+            await action();
             done = true;
         } catch ( e ) {
             this.snack.open( ( e as Error ).message, 'OK', { duration: 6000 } );

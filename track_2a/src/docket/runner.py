@@ -256,8 +256,8 @@ def _process(pdf: Path, out: Path, client: Client | None, contract: Contract, kn
 
 
 def _printed_type(report: dict[str, dict], fields: Fields) -> str | None:
-    """The type the model read from the page (the field at type_name.de), when it stood on the page."""
-    name = next((n for n, f in fields.fields.items() if f.path == ["type_name", "de"]), None)
+    """The type the model read from the page (the field whose role is the type), when it stood on the page."""
+    name = fields.by_role().get("type")
     r = report.get(name or "", {})
     return r.get("value") if r.get("state") == "on the page" else None
 

@@ -47,6 +47,7 @@ def merge(documents: list[Document], fields: Fields, contract: Contract, types: 
           vocabulary: Vocabulary | None = None, placed: list[dict] | None = None,
           answers: Iterable[str] = ()) -> list[Affair]:
     """Groups the documents by key and builds one affair per group, in the order the keys first appear. The
+    record carries its key as `id` and the parliament, where it is known, as `body_key`. The
     type is harmonised through the names of the parliament the affair's documents tell, then through the
     table. With `placed`, where every numbered value went is noted there (docket.fields.placer.fill). With
     `answers`, the section names that announce one, the answer within a document stands as its `response`
@@ -58,7 +59,12 @@ def merge(documents: list[Document], fields: Fields, contract: Contract, types: 
     out = []
     for key, members in groups.items():
         members = sorted(members, key=lambda d: (d.date or "9", d.id))
-        record: dict = {"schema": SCHEMA}
+        parliament = next((d.parliament for d in members if d.parliament), "")
+        # what the affair is called and whose it is stands in the record itself, under the names OpenParlData
+        # has for it: the record is all anyone needs to show the affair
+        record: dict = {"schema": SCHEMA, "id": key}
+        if parliament:
+            record["body_key"] = parliament
         for d in members:
             language = language_of(d.body)
             record, _ = fill(record, d.id, d.values, fields, contract, d.body, placed, language)
@@ -75,7 +81,6 @@ def merge(documents: list[Document], fields: Fields, contract: Contract, types: 
                             entry["response"] = response
                     if d.kind and d.kind.get("kind") and "article-type" not in entry:
                         _place_kind(record, at, d, placed)
-        parliament = next((d.parliament for d in members if d.parliament), "")
         record = harmonize(record, types, vocabulary, parliament, fields)
         out.append(Affair(key, record, [d.id for d in members], contract.check(record)))
     return out

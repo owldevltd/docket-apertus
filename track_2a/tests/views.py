@@ -36,6 +36,16 @@ from docket.store.review import sources_of  # noqa: E402
 PLAIN = Path(__file__).resolve().parents[1] / "data" / "schema" / "plain"
 
 
+def known_person(config) -> dict:
+    """A row of the register for the first name the Zürich document carries, read from the affair stored beside
+    it: the test itself names nobody."""
+    record = json.loads((config.data_dir / "documents" / "zuerich-219587" / "affair.json").read_text(encoding="utf-8"))
+    label = record["contributors"]["data"][0]["fullname"]
+    first, last = label.split(" ", 1)
+    return {"body": "X", "key": label.lower(), "label": label, "first": first, "last": last, "ids": [4711],
+            "origin": "stem"}
+
+
 def read(record: dict, fields: Fields) -> dict[str, list]:
     """The values a record holds per field, read through its fields file: at the field's path, in a list from
     the entries that carry the fixed parts of the field's template."""
@@ -45,12 +55,20 @@ def read(record: dict, fields: Fields) -> dict[str, list]:
             at = f.path.index("[]")
             entries = [e for e in get_at(record, f.path[:at]) or []
                        if all(e.get(k) == v for k, v in f.fixed.items())]
-            found = [get_at(e, f.path[at + 1:]) for e in entries]
+            found = [held(e, f.path[at + 1:], f.own_language) for e in entries]
         else:
-            value = get_at(record, f.path)
+            value = held(record, f.path, f.own_language)
             found = value if isinstance(value, list) else [value]
         out[name] = [v for v in found if v is not None]
     return out
+
+
+def held(node: dict, path: list[str], own_language: bool):
+    """The value at a path; of a field that stands under the language of its document, the one there is."""
+    if not own_language:
+        return get_at(node, path)
+    under = get_at(node, path[:-1])
+    return next(iter(under.values()), None) if isinstance(under, dict) else None
 
 
 def keys_of(node) -> set[str]:
@@ -87,8 +105,7 @@ def main(argv: list[str]) -> int:
         config = type(base)(**{**base.__dict__, "storage_dir": Path(tmp) / "storage"})
         store = open_store(config)
         # a register that knows one of the names, so that an affair holds the id of a person
-        store.put_register([{"body": "X", "key": "karin stalder", "label": "Karin Stalder", "first": "Karin",
-                             "last": "Stalder", "ids": [4711], "origin": "stem"}])
+        store.put_register([known_person(base)])
         out = Path(tmp) / "out"
         out.mkdir()
         documents = []

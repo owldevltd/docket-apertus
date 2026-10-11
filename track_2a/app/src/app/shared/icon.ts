@@ -18,6 +18,9 @@ const PATHS: Record<string, string> = {
     list: 'M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01',
     fields: 'M4 5h7v6H4zM13 5h7v6h-7zM4 13h7v6H4zM13 13h7v6h-7z',
     menu: 'M4 7h16M4 12h16M4 17h16',
+    search: 'M10.5 4a6.5 6.5 0 1 1 0 13 6.5 6.5 0 0 1 0-13zm5 11.5L20 20',
+    copy: 'M9 9h10v11H9zM5 15V4h10',
+    tune: 'M4 7h9m4 0h3M4 17h3m4 0h9M15 5v4M9 15v4',
 };
 
 @Component( {

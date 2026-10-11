@@ -1,12 +1,20 @@
 <mat-toolbar class="top">
     <a class="wordmark" routerLink="/"><i></i>Docket</a>
     <nav class="areas">
-        <a routerLink="/" routerLinkActive="on" [routerLinkActiveOptions]="{ exact: true }">Geschäfte</a>
-        <a routerLink="/decisions" routerLinkActive="on">Entscheidungen</a>
-        <a routerLink="/admin" routerLinkActive="on">Admin</a>
+        <a routerLink="/" routerLinkActive="on" [routerLinkActiveOptions]="{ exact: true }" i18n>Geschäfte</a>
     </nav>
     <span class="spacer"></span>
-    <button mat-button class="who" (click)="rename()">{{ who.name() ? 'als ' + who.name() : 'Kürzel setzen' }}</button>
+    @if ( inAdmin() && account.user() ) {
+        <span class="who"><ng-container i18n>Admin</ng-container> · {{ account.user() }}</span>
+        @if ( account.needed() ) {
+            <button mat-button class="out" (click)="signOut()" i18n>Abmelden</button>
+        }
+    }
+    <nav class="languages" aria-label="Sprache" i18n-aria-label>
+        @for ( l of languages; track l ) {
+            <a [href]="'/' + l + path()" [class.on]="l === here" [attr.lang]="l">{{ l.toUpperCase() }}</a>
+        }
+    </nav>
 </mat-toolbar>
 <main>
     <router-outlet />

@@ -1,7 +1,7 @@
 <div class="bar small">
     <span class="pager">
         <button mat-icon-button (click)="turn( -1 )" [disabled]="page() <= 1"><app-icon name="back" /></button>
-        <span>Seite {{ page() }} von {{ pages() }}</span>
+        <span i18n>Seite {{ page() }} von {{ pages() }}</span>
         <button mat-icon-button (click)="turn( 1 )" [disabled]="page() >= pages()"><app-icon name="next" /></button>
     </span>
     <span class="legend">
@@ -23,7 +23,7 @@
 </div>
 @if ( focused(); as b ) {
     <div class="block-info">
-        <b>{{ b.id }}</b> · {{ b.type }}@if ( b.approve ) { · Lesung prüfen }
+        <b>{{ b.id }}</b> · {{ b.type }}@if ( b.approve ) { · <ng-container i18n>Lesung prüfen</ng-container> }
         <div class="text">{{ focusedText() }}</div>
     </div>
 }

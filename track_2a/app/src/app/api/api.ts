@@ -1,16 +1,42 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { Affair, AffairSummary, Decision, DecisionBody, Definition, DocumentView, FieldsReport, Health, Job, Learnt, Parliament, Rule, VocabularyRow } from './types';
+import {
+    Affair, AffairSummary, Decision, DecisionBody, Definition, DocumentView, FieldsReport, Health, Job, Learnt, Listed,
+    Parliament, Rec, Rule, Session, Standard, VocabularyRow,
+} from './types';
 
-// The one door to the server. Every call goes through here, so the admin token and the error text are in
+// The query string of a search, for a call and for the address a visitor can copy.
+export function queryOf( asked: Record<string, string> ): string {
+    const parts = Object.entries( asked ).filter( ( [ , v ] ) => v !== '' )
+        .map( ( [ k, v ] ) => encodeURIComponent( k ) + '=' + encodeURIComponent( v ) );
+    return parts.length ? '?' + parts.join( '&' ) : '';
+}
+
+// The one door to the server. Every call goes through here, so the error text is in
 // one place; the server's error message is what the user gets to see.
 @Injectable( { providedIn: 'root' } )
 export class Api {
     private readonly http = inject( HttpClient );
 
-    affairs(): Promise<AffairSummary[]> {
-        return this.get<AffairSummary[]>( 'affairs' );
+    // what a visitor reads: the affairs in the affair schema, narrowed by q, body_key, type, kind, language
+    records( asked: Record<string, string> = {} ): Promise<Listed> {
+        return this.get<Listed>( 'records' + queryOf( asked ) );
+    }
+
+    // one affair in the affair schema, whole
+    record( id: string ): Promise<Rec> {
+        return this.get<Rec>( 'records/' + encodeURIComponent( id ) );
+    }
+
+    // one of the tables that follow from the affairs: contributors, groups, meetings, events
+    table( name: string, asked: Record<string, string> = {} ): Promise<Listed> {
+        return this.get<Listed>( name + queryOf( asked ) );
+    }
+
+    // the review's list: the affairs with how many values are open, narrowed by q, body, type, kind, language
+    affairs( asked: Record<string, string> = {} ): Promise<AffairSummary[]> {
+        return this.get<AffairSummary[]>( 'affairs' + queryOf( asked ) );
     }
 
     affair( key: string ): Promise<Affair> {
@@ -52,7 +78,7 @@ export class Api {
     // the PDF goes as it is; the name, the model switch and the parliament ride in headers, so no multipart
     // is needed
     upload( file: File, model: boolean, body: string ): Promise<Job> {
-        let headers = this.headers().set( 'Content-Type', 'application/pdf' )
+        let headers = new HttpHeaders().set( 'Content-Type', 'application/pdf' )
             .set( 'X-Name', file.name ).set( 'X-Model', model ? '1' : '0' );
         if ( body ) {
             headers = headers.set( 'X-Body', body );
@@ -65,12 +91,12 @@ export class Api {
     }
 
     // a person's yes or no to a proposed rule; yes applies it to every value that fits
-    answerRule( id: string, accept: boolean, by: string ): Promise<Rule> {
-        return this.post<Rule>( 'rules/' + encodeURIComponent( id ) + '/answer', { accept, by } );
+    answerRule( id: string, accept: boolean ): Promise<Rule> {
+        return this.post<Rule>( 'rules/' + encodeURIComponent( id ) + '/answer', { accept } );
     }
 
-    switchRule( id: string, active: boolean, by: string ): Promise<Rule> {
-        return this.post<Rule>( 'rules/' + encodeURIComponent( id ), { active, by } );
+    switchRule( id: string, active: boolean ): Promise<Rule> {
+        return this.post<Rule>( 'rules/' + encodeURIComponent( id ), { active } );
     }
 
     definition(): Promise<Definition> {
@@ -95,29 +121,44 @@ export class Api {
     }
 
     // standard is one of the list's standard names, or null for a name that stands for none
-    setName( row: { list: string; body: string; name: string }, standard: string | null, by: string ): Promise<VocabularyRow> {
-        return this.post<VocabularyRow>( 'vocabulary', { list: row.list, body: row.body, name: row.name, standard, by } );
+    setName( row: { list: string; body: string; name: string }, standard: string | null ): Promise<VocabularyRow> {
+        return this.post<VocabularyRow>( 'vocabulary', { list: row.list, body: row.body, name: row.name, standard } );
+    }
+
+    // a standard name of the administration's own, with its wording in the four languages
+    addStandard( list: string, standard: Standard ): Promise<VocabularyRow> {
+        return this.post<VocabularyRow>( 'vocabulary', { list, standard } );
     }
 
     resetName( row: { list: string; body: string; name: string } ): Promise<VocabularyRow> {
         return this.post<VocabularyRow>( 'vocabulary', { list: row.list, body: row.body, name: row.name, reset: true } );
     }
 
+    // the account of the administration: whether there is one and who is signed in, signing in and out. The
+    // session itself is the server's, in a cookie the page cannot read
+    session(): Promise<Session> {
+        return this.get<Session>( 'session' );
+    }
+
+    login( user: string, password: string ): Promise<Session> {
+        return this.post<Session>( 'login', { user, password } );
+    }
+
+    logout(): Promise<Session> {
+        return this.post<Session>( 'logout', {} );
+    }
+
     private get<T>( route: string ): Promise<T> {
-        return firstValueFrom( this.http.get<T>( '/api/' + route, { headers: this.headers() } ) ).catch( fail );
+        return firstValueFrom( this.http.get<T>( '/api/' + route ) ).catch( fail );
     }
 
     private post<T>( route: string, body: unknown ): Promise<T> {
-        return firstValueFrom( this.http.post<T>( '/api/' + route, body, { headers: this.headers() } ) ).catch( fail );
-    }
-
-    private headers(): HttpHeaders {
-        const token = localStorage.getItem( 'docket.token' );
-        return token ? new HttpHeaders( { 'X-Token': token } ) : new HttpHeaders();
+        return firstValueFrom( this.http.post<T>( '/api/' + route, body ) ).catch( fail );
     }
 }
 
 function fail( error: any ): never {
-    const text = error?.error?.error || error?.message || 'Der Server antwortet nicht.';
-    throw new Error( text );
+    const text = error?.error?.error || error?.message || $localize`Der Server antwortet nicht.`;
+    // the status goes with it, so a screen can say in its own words that something is not there
+    throw Object.assign( new Error( text ), { status: Number( error?.status ?? 0 ) } );
 }

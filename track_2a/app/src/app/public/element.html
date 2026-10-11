@@ -1,0 +1,76 @@
+@if ( error() ) {
+    <div class="empty">{{ error() }}</div>
+} @else {
+    <div class="item card">
+        <div class="top-row">
+            <a class="back" routerLink="/" [queryParams]="{ tab: kind() }" title="Zur Liste" i18n-title><app-icon name="back" [size]="28" /></a>
+            <app-url-box [address]="address()" [(json)]="json" />
+        </div>
+        <div class="head">
+            <div class="icon"><app-icon [name]="spec().icon" [size]="40" /></div>
+            <div class="text">
+                <h1>{{ name() }}</h1>
+                <div class="meta">
+                    @switch ( kind() ) {
+                        @case ( 'persons' ) { <b i18n>Person</b> }
+                        @case ( 'groups' ) { <b i18n>Gruppe</b> }
+                        @default { <b i18n>Sitzung</b> }
+                    }
+                    @for ( n of notes(); track n ) { <span class="sep">|</span>{{ n }} }
+                </div>
+            </div>
+        </div>
+        <div class="links">
+            <a href="#affairs"><app-icon name="affair" [size]="16" /> <span i18n>Geschäfte</span> ({{ affairs().length }})</a>
+            <a href="#documents"><app-icon name="document" [size]="16" /> <span i18n>Dokumente</span> ({{ documents().length }})</a>
+        </div>
+
+        @if ( json() ) {
+            <pre class="raw">{{ raw() }}</pre>
+        } @else {
+            <h2 id="affairs" i18n>Geschäfte</h2>
+            @for ( r of affairs(); track r[ 'id' ] ) {
+                <div class="result">
+                    <div class="icon"><app-icon name="affair" [size]="26" /></div>
+                    <div class="body">
+                        <a class="title" [routerLink]="[ '/affairs', r[ 'id' ] ]">{{ words.titleOf( r ) }}</a>
+                        <div class="meta">
+                            <b i18n>Geschäft</b>
+                            @if ( r[ 'number' ] ) { <span class="sep">|</span><span i18n>Nr.</span> {{ r[ 'number' ] }} }
+                            @if ( r[ 'begin_date' ] ) { <span class="sep">|</span>{{ words.dayOf( r[ 'begin_date' ] ) }} }
+                            @if ( words.typeOf( r ) ) { <span class="sep">|</span>{{ words.typeOf( r ) }} }
+                        </div>
+                    </div>
+                    <div class="side">
+                        @if ( r[ 'body_key' ] ) {
+                            <div class="where"><span>{{ level( r ) }}</span><b>{{ bodyName( r ) }}</b></div>
+                        }
+                        <a class="zoom" [routerLink]="[ '/affairs', r[ 'id' ] ]" title="Ansehen" i18n-title><app-icon name="zoom" [size]="22" /></a>
+                    </div>
+                </div>
+            } @empty {
+                <div class="empty" i18n>Nichts gefunden.</div>
+            }
+
+            <h2 id="documents" i18n>Dokumente</h2>
+            @for ( x of documents(); track x.doc[ 'name' ] ) {
+                <div class="result">
+                    <div class="icon"><app-icon name="document" [size]="26" /></div>
+                    <div class="body">
+                        <a class="title" [routerLink]="[ '/documents', x.doc[ 'name' ] ]">{{ x.doc[ 'name' ] }}</a>
+                        <div class="meta">
+                            <b i18n>Dokument</b>
+                            <span class="sep">|</span>{{ words.kindName( x.doc[ 'article-type' ] ) }}
+                            @if ( x.doc[ 'language' ] ) { <span class="sep">|</span>{{ words.LANGUAGES[ x.doc[ 'language' ] ] || x.doc[ 'language' ] }} }
+                            @if ( x.doc[ 'page-count' ] ) { <span class="sep">|</span>{{ x.doc[ 'page-count' ] }} <span i18n>S.</span> }
+                            <span class="sep">|</span><a [routerLink]="[ '/affairs', x.affair[ 'id' ] ]">{{ words.titleOf( x.affair ) }}</a>
+                        </div>
+                    </div>
+                    <div class="side">
+                        <a class="zoom" [routerLink]="[ '/documents', x.doc[ 'name' ] ]" title="Ansehen" i18n-title><app-icon name="zoom" [size]="22" /></a>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+}

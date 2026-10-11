@@ -1,0 +1,213 @@
+// The start as on OpenParlData: a narrow column with the introduction, the wide one with the tabs, the search,
+// the address of what is shown and the result cards.
+.home {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 18px;
+    align-items: start;
+}
+
+.intro {
+    padding: 22px 24px;
+
+    .mark {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 22px;
+        font-weight: 700;
+        color: var( --opd-slate );
+        margin-bottom: 18px;
+
+        i {
+            width: 18px;
+            height: 18px;
+            border-radius: 5px;
+            background: var( --opd-accent );
+            display: inline-block;
+        }
+    }
+
+    h2 {
+        font-size: 17px;
+        line-height: 1.35;
+        margin: 0 0 12px;
+        color: var( --opd-slate );
+    }
+
+    p {
+        font-size: 14px;
+        margin: 0 0 10px;
+    }
+}
+
+.search {
+    padding: 16px;
+    margin-bottom: 14px;
+}
+
+.tabs {
+    display: flex;
+    background: var( --opd-accent );
+    border: 2px solid var( --opd-accent );
+    border-radius: 3px;
+    margin-bottom: 14px;
+
+    button {
+        flex: 1 1 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        padding: 9px 0 7px;
+        border: 0;
+        background: transparent;
+        color: #fff;
+        font: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+
+        &.on {
+            background: #fff;
+            color: var( --opd-dark );
+            border-radius: 2px;
+        }
+    }
+}
+
+.field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 2px solid var( --opd-accent );
+    border-radius: 3px;
+    padding-left: 10px;
+    color: var( --opd-accent );
+
+    input {
+        flex: 1;
+        min-width: 0;
+        height: 42px;
+        border: 0;
+        outline: none;
+        font: inherit;
+        font-size: 15px;
+        color: var( --opd-dark );
+        background: transparent;
+
+        &::placeholder {
+            font-style: italic;
+            color: var( --opd-grey );
+        }
+    }
+
+    button {
+        border: 0;
+        background: transparent;
+        color: var( --opd-slate );
+        cursor: pointer;
+        height: 42px;
+        width: 40px;
+
+        &.tune.on {
+            color: var( --opd-link );
+        }
+
+        &.clear {
+            background: #dfe6f5;
+            color: #fff;
+        }
+    }
+}
+
+.more {
+    display: block;
+    margin: 12px auto 0;
+    border: 0;
+    background: transparent;
+    color: var( --opd-link );
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.filters {
+    display: grid;
+    grid-template-columns: repeat( 4, 1fr );
+    gap: 12px;
+    margin-top: 12px;
+
+    label {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 12px;
+        color: var( --opd-slate );
+    }
+
+    select {
+        height: 34px;
+        border: 1px solid var( --opd-line );
+        border-radius: 3px;
+        background: #fff;
+        font: inherit;
+        font-size: 14px;
+        color: var( --opd-dark );
+        padding: 0 6px;
+    }
+}
+
+.address {
+    padding: 10px 16px;
+    margin-bottom: 14px;
+}
+
+.where {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 14px;
+    min-width: 96px;
+    text-align: center;
+
+    span {
+        font-size: 10px;
+        color: var( --opd-slate );
+    }
+
+    b {
+        font-size: 12px;
+        color: var( --opd-slate );
+    }
+}
+
+.raw {
+    padding: 14px 16px;
+    margin: 0;
+    font-size: 12px;
+    overflow: auto;
+    max-height: 70vh;
+}
+
+@media ( max-width: 900px ) {
+    .home {
+        grid-template-columns: 1fr;
+    }
+
+    .filters {
+        grid-template-columns: repeat( 2, 1fr );
+    }
+}
+
+// a title leads on without the look of a link, as on OpenParlData's cards
+.result .title {
+    display: block;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+

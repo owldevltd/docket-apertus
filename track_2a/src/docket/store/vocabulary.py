@@ -6,8 +6,9 @@ names of the events, the kinds of groups, and per parliament the names of the ro
 in an affair with the standard role. OpenParlData calls its harmonised types provisional, so the stem
 is not code and not a fixed file: it lies in the store and can be changed there. A person sets another
 standard for a name or adds a name the stem does not have; such a row says who and when, and keeps what the
-stem said, so the difference can be seen and taken back. A newer stem replaces every row nobody changed, and
-leaves the changed ones as they are.
+stem said, so the difference can be seen and taken back. A person can add a standard name to a list as well,
+with its wording in the four languages; names of parliaments can then stand for it like for one of the stem.
+A newer stem replaces every row nobody changed, and leaves the changed and the added ones as they are.
 
 A row: {list, body, name, label, standard, origin, fetched}. `list` is types, events, groups or roles; `body`
 is the parliament's key at OpenParlData, empty for the standard names themselves; `name` is the label in small
@@ -164,13 +165,38 @@ class Vocabulary:
         self.rows[key] = row
         return row
 
+    def add(self, name_of_list: str, wordings: dict, by: str) -> dict:
+        """A person adds a standard name to a list: its wording in German, and in French, Italian and English
+        where the person gives them. Returns the row to store; ValueError when the list is not known, the
+        German wording is missing, or the list already has a standard name by one of the wordings."""
+        if name_of_list not in LISTS:
+            raise ValueError(f"a standard name needs a list ({', '.join(LISTS)})")
+        standard = {lang: re.sub(r"\s+", " ", str(wordings.get(lang) or "")).strip() or None for lang in LANGUAGES}
+        if not standard["de"]:
+            raise ValueError("a standard name needs its German wording")
+        given = {key_of(v) for v in standard.values() if v}
+        for s in self.standards(name_of_list):
+            taken = given & {key_of(v) for v in [*(s.get("standard") or {}).values(), s.get("label"), s.get("key")] if v}
+            if taken:
+                raise ValueError(f"the list {name_of_list} already has the standard name {sorted(taken)[0]!r}")
+        row = {"list": name_of_list, "body": "", "name": key_of(standard["de"]), "label": standard["de"],
+               "standard": standard, "origin": "person", "by": by, "at": stamp()}
+        self.rows[_key(row)] = row
+        return row
+
     def reset(self, name_of_list: str, body: str, label: str) -> tuple[dict | None, dict | None]:
         """Takes a person's word back: the row says again what the stem said, or goes when the stem never had
-        it. Returns (the row to store, the row to drop), each None when there is nothing to do."""
+        it. Returns (the row to store, the row to drop), each None when there is nothing to do. A standard
+        name a person added goes only while no name of a parliament stands for it: ValueError otherwise."""
         key = (name_of_list, str(body), key_of(label))
         old = self.rows.get(key)
         if old is None or old.get("origin") != "person":
             return None, None
+        if key[1] == "":
+            held = [r["label"] for (kind, b, _), r in self.rows.items()
+                    if kind == name_of_list and b != "" and r.get("standard") == old.get("standard")]
+            if held:
+                raise ValueError(f"{len(held)} names of parliaments stand for it, the first is {held[0]!r}")
         if "stem" not in old:
             del self.rows[key]
             return None, old

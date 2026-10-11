@@ -25,6 +25,7 @@
   "title": {
     "de": {
       "name": "title",
+      "own-language": true,
       "entity": "text",
       "role": "title",
       "question": "Titel des Geschäfts",
@@ -35,6 +36,7 @@
   "type_name": {
     "de": {
       "name": "type",
+      "own-language": true,
       "entity": "category",
       "role": "type",
       "standard": "type_harmonized",
@@ -52,8 +54,11 @@
   "contributors": {
     "data": [
       {
-        "role": {
-          "de": "Urheber/in"
+        "role_harmonized": {
+          "de": "Urheber/in",
+          "fr": "Auteur",
+          "it": "Autore",
+          "en": "Author"
         },
         "fullname": {
           "name": "authors",
@@ -66,6 +71,7 @@
         "party": {
           "de": {
             "name": "party",
+            "own-language": true,
             "entity": "group",
             "question": "Partei oder Fraktion der Einreichenden",
             "form": "list"
@@ -79,8 +85,11 @@
         }
       },
       {
-        "role": {
-          "de": "Mitunterzeichner/in"
+        "role_harmonized": {
+          "de": "Mitunterzeichner/in",
+          "fr": "Cosignataire",
+          "it": "Cofirmatario",
+          "en": "Cosign"
         },
         "fullname": {
           "name": "cosigners",
@@ -184,6 +193,7 @@
         "title": {
           "de": {
             "name": "event",
+            "own-language": true,
             "entity": "event",
             "question": "im Dokument genannte Ereignisse mit Datum, was geschah (zum Beispiel \"Beantwortung im Stadtrat\"; bei mehreren durch Strichpunkt getrennt, in derselben Reihenfolge wie ereignisdatum)",
             "form": "list",

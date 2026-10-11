@@ -2,12 +2,12 @@
 
 How the terms of the affair schema (`data/schema/docket.json`, described in `data/schema/DEFINITION.md`) are called in OpenParlData and in the standards the challenge names: per term the elements or properties that hold the same thing there, by their names in the standard's own schema; an empty list where none was found. Which element answers a term is a reading of the schemas, set by the assistant on 11 October 2026, open. That every name exists in its schema is checked by `tools/mapping.py`; this page is written from `data/schema/mapping.json`.
 
-Checked on 2026-10-11: 339 names, all found in the schemas named below.
+Checked on 2026-10-11: 343 names, all found in the schemas named below.
 
 | Standard | Edition | How a name is written | Terms with a name there |
 | --- | --- | --- | ---: |
 | OpenParlData | the tables of its exports, as read on 10 October 2026 | table.field; a field per language is named in German (`title_de`) | 26 of 54 |
-| JATS | 1.3, Archiving, the XSD with MathML3 | element, `@attribute`, `element/@attribute` | 42 of 54 |
+| JATS | 1.3, Archiving, the XSD with MathML3 | element, `@attribute`, `element/@attribute` | 43 of 54 |
 | Akoma Ntoso | 3.0, akomantoso30.xsd of OASIS | element, `@attribute`, `element/@attribute` | 46 of 54 |
 | Parla-CLARIN | the TEI customisation, parla-clarin.xsd | element, `@attribute`, `element/@attribute` | 44 of 54 |
 | Popolo | the JSON schemas of the specification | class.property | 20 of 54 |
@@ -19,7 +19,7 @@ A dash means that nothing was found for the term in that schema.
 
 | Here | What it is | OpenParlData | JATS | Akoma Ntoso | Parla-CLARIN | Popolo | Docling |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| the record | one item of parliamentary business with its documents | `affairs` | – | `documentCollection` | – | `motion` | – |
+| the record, `id`, `body_key` | one item of parliamentary business with its documents: what it is called and whose it is | `affairs`, `affairs.id`, `affairs.body_key` | `article-id` | `documentCollection`, `FRBRthis`, `FRBRauthor` | – | `motion`, `motion.id`, `motion.organization_id` | – |
 | `schema` | the version of this definition | – | `article/@dtd-version` | – | – | – | `schema_name`, `version` |
 | `number` | the affair's number | `affairs.number` | `article-id` | `docNumber`, `FRBRnumber` | `idno` | `motion.identifier` | – |
 | `title` | the title, per language | `affairs.title_de` | `article-title`, `trans-title` | `docTitle` | `title` | – | `TitleItem` |
@@ -41,9 +41,9 @@ A dash means that nothing was found for the term in that schema.
 | `kwd-group` | printed keywords | – | `kwd-group`, `kwd` | `classification`, `keyword` | `keywords`, `term` | – | `KeywordsMetaField` |
 | values per language | one value per language of the parliament (`title.de`, `title.fr`) | `affairs.title_de`, `affairs.title_fr`, `affairs.title_it`, `affairs.title_rm` | `@lang`, `trans-title`, `trans-abstract` | `FRBRlanguage`, `@language` | `@lang`, `langUsage` | – | `LanguageMetaField` |
 
-- the record in JATS: describes one document; nothing stands above it.
-- the record in Akoma Ntoso: a collection of documents, chosen for any reason.
-- the record in Parla-CLARIN: describes one text or a corpus of them.
+- the record, `id`, `body_key` in JATS: describes one document; nothing stands above it.
+- the record, `id`, `body_key` in Akoma Ntoso: a collection of documents, chosen for any reason.
+- the record, `id`, `body_key` in Parla-CLARIN: describes one text or a corpus of them.
 - `title` in Popolo: a motion has its text, no title.
 - `type_name` in Akoma Ntoso: docType marks the word in the text; the twelve document types of the schema have none for a submission of a member.
 - `contributors.data[]` in Popolo: one creator per motion.

@@ -106,6 +106,10 @@ def run_server(port: int | None) -> int:
     config = load_config()
     server, app = start(config, port)
     print(f"docket serves on http://localhost:{server.server_address[1]} over the {app.store.kind} store")
+    # a store filled by an earlier version: its affairs get the id and the parliament a record names itself by
+    named = app.name_records()
+    if named:
+        print(f"{named} stored affairs were given their id and their parliament")
     # a clean checkout has nothing to show: the shipped documents then come from the runs stored beside them,
     # without the model, as a run in the queue while the server already answers
     if not app.store.list_affairs() and not app.jobs.list():

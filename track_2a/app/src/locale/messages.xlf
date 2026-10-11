@@ -1,0 +1,2377 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="de" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="5041354590769758251" datatype="html">
+        <source>Admin</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">2,3</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.html</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5018628783389659117" datatype="html">
+        <source>Bestand</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1673547830389838964" datatype="html">
+        <source>Modell</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/value-card.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="710548633339513650" datatype="html">
+        <source>bereit</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8299466233213976215" datatype="html">
+        <source>kein Schlüssel</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="118780343775674133" datatype="html">
+        <source>Konto</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6271614220396807898" datatype="html">
+        <source>ohne Passwort, offen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5181690192053543822" datatype="html">
+        <source>Anmelden</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">11,12</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">22,23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2268551535438069263" datatype="html">
+        <source>Die Administration hat ein Konto. Was hier entschieden wird, steht unter seinem Namen.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">12,13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8953033926734869941" datatype="html">
+        <source>Name</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/document-item.ts</context>
+          <context context-type="linenumber">48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6057821346666596338" datatype="html">
+        <source>Passwort</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4734638279153562108" datatype="html">
+        <source>Läufe</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">47,48</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.ts</context>
+          <context context-type="linenumber">71</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6038170147415206587" datatype="html">
+        <source>Wann</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/decisions/decisions.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5979549623650471307" datatype="html">
+        <source>Dokument</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/value-card.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/document-item.html</context>
+          <context context-type="linenumber">14,15</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/element.html</context>
+          <context context-type="linenumber">62,63</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">112,113</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/item.html</context>
+          <context context-type="linenumber">71,72</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2486410647914656664" datatype="html">
+        <source>Quelle</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="197680319909290273" datatype="html">
+        <source>Stand</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5927608594744144823" datatype="html">
+        <source>Aufrufe</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5622826095450342312" datatype="html">
+        <source>Geschäft</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/affair-view.html</context>
+          <context context-type="linenumber">10,11</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/affairs-list.html</context>
+          <context context-type="linenumber">17,18</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/decisions/decisions.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/document-item.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/element.html</context>
+          <context context-type="linenumber">38,39</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">88,89</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/item.html</context>
+          <context context-type="linenumber">14,15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4943430012393476722" datatype="html">
+        <source>Zuletzt</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">50,51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2344761718691110932" datatype="html">
+        <source>Noch keine Läufe.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">64,65</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="636159930865319203" datatype="html">
+        <source>Regeln</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">70,71</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.ts</context>
+          <context context-type="linenumber">72</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1124145969893846002" datatype="html">
+        <source>Dieselbe Änderung zweimal am selben Feld schlägt eine Regel vor. Angewandt wird sie erst nach einem Ja; jede Anwendung steht als Entscheidung „Regel“ und lässt sich einzeln zurücknehmen. Eine Regel, der eine Entscheidung von Hand widerspricht, wird nicht vorgeschlagen.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">71,73</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6198631914406419312" datatype="html">
+        <source>Regel</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/value-card.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="383220744180404331" datatype="html">
+        <source>Feld</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">131</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">169</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/decisions/decisions.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4028298542213869131" datatype="html">
+        <source>Was sie tut</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1064646723185072787" datatype="html">
+        <source>Entscheide</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8251789893001830847" datatype="html">
+        <source>träfe <x id="ICU" equiv-text="{r.reach.count, plural, =1 {1 Wert} other {{{r.reach.count}} Werte}}" xid="4643106278812390982"/> in <x id="ICU_1" equiv-text="{r.reach.affairs, plural, =1 {1 Geschäft} other {{{r.reach.affairs}} Geschäften}}" xid="990645275412104279"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">87,88</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3767977730504172061" datatype="html">
+        <source>{VAR_PLURAL, plural, =1 {1 Wert} other {<x id="INTERPOLATION"/> Werte}}</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">87,88</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4301005872477462250" datatype="html">
+        <source>{VAR_PLURAL, plural, =1 {1 Geschäft} other {<x id="INTERPOLATION"/> Geschäften}}</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">88</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/affair-view.html</context>
+          <context context-type="linenumber">28,29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7114639088301420507" datatype="html">
+        <source>trifft im Bestand derzeit keinen weiteren Wert</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">90,91</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7286599460285553906" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ r.count }}"/> dafür · <x id="INTERPOLATION_1" equiv-text="{{ r.against || 0 }}"/> dagegen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">95,96</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2330235580624229180" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ r.applied }}"/> angewandt · <x id="INTERPOLATION_1" equiv-text="{{ r.confirmed }}"/> bestätigt · <x id="INTERPOLATION_2" equiv-text="{{ r.withdrawn }}"/> zurück</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">97,98</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="744213355795759052" datatype="html">
+        <source>Annehmen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">102,103</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2365837054975067838" datatype="html">
+        <source>Ablehnen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">103,104</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7657738878254485080" datatype="html">
+        <source>Noch keine Regeln.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">110,111</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1626270852419683091" datatype="html">
+        <source>Definition</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">120,121</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.ts</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4373060850651776934" datatype="html">
+        <source>Die Felder der Felderdatei: was ein Wert ist (die Art), welche Rolle er darunter hat und was hinter der Art steht. Daneben, in wie vielen Dokumenten des Bestands ein Feld gefragt wurde. „Nie gefragt“ heisst: das Dokument wurde gelesen, bevor es das Feld gab – nicht, dass dort nichts steht. „Nachfragen“ stellt diesen Dokumenten nur die fehlende Frage, auf den gespeicherten Seiten; Entscheide bleiben.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">121,124</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5589065211427332111" datatype="html">
+        <source>{VAR_PLURAL, plural, =1 {1 Dokument} other {<x id="INTERPOLATION"/> Dokumente}}</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">126</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9212879120778027793" datatype="html">
+        <source><x id="ICU" equiv-text="{d.documents, plural, =1 {1 Dokument} other {{{d.documents}} Dokumente}}" xid="1015995936441599472"/> im Bestand · Stand der Definition <x id="INTERPOLATION_1" equiv-text="{{ d.version }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">126,128</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2857587999825290192" datatype="html">
+        <source>Art</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">131</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">49,50</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/item.ts</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6256762269565740405" datatype="html">
+        <source>Rolle</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">131</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7613007857169342373" datatype="html">
+        <source>Dahinter</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">131</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4505583505913382607" datatype="html">
+        <source>Gefragt</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">131</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3658986642606231247" datatype="html">
+        <source>Nie gefragt</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">131</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="791003104771588027" datatype="html">
+        <source>Nachfragen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">143,144</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3140072716809971003" datatype="html">
+        <source>nicht mehr in der Felderdatei</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">149,150</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6454246243913709008" datatype="html">
+        <source>Zweite Meinung</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">159,160</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.ts</context>
+          <context context-type="linenumber">75</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7750695581774658784" datatype="html">
+        <source>Was ohne das Modell gelernt wurde, um neben ihm zu stehen: wo der Wert eines Felds in den Dokumenten eines Parlaments üblicherweise steht (Lage), und ein kleines Netz, das einen Block an seinem Aussehen erkennt. Beides wird an zurückgehaltenen Dokumenten ausgemessen; verwendet wird ein Weg nur, wo er öfter einig war als uneinig. Gelernt wird mit <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>make learn<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/>.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">160,164</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5330060786612891361" datatype="html">
+        <source>gelernt aus <x id="ICU" equiv-text="{l.documents, plural, =1 {1 Dokument} other {{{l.documents}} Dokumenten}}" xid="6978310103050923003"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">165,166</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6596795681889445874" datatype="html">
+        <source>{VAR_PLURAL, plural, =1 {1 Dokument} other {<x id="INTERPOLATION"/> Dokumenten}}</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">165,166</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4008939736636983652" datatype="html">
+        <source>Weg</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">169</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3708151903844195764" datatype="html">
+        <source>Parlament</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">169</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">197</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">43,44</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="148348079952880397" datatype="html">
+        <source>Einig</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">169</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1716675682706716441" datatype="html">
+        <source>Uneinig</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">169</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2836355706569140716" datatype="html">
+        <source>Verwendet</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">169,170</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2165612325163755009" datatype="html">
+        <source>Lage</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">174</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2543009379302565000" datatype="html">
+        <source>Netz</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">174</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6485732294010189679" datatype="html">
+        <source>alle</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">175</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">45,46</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">51,52</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">57,58</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">63,64</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4817233116598431115" datatype="html">
+        <source>ja</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">179</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4259382508675693318" datatype="html">
+        <source>nein</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">179</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="247049230713920285" datatype="html">
+        <source>Noch nichts gelernt.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">182,183</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2935216726743971757" datatype="html">
+        <source>Dokument verarbeiten</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">190,191</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7466116307274611010" datatype="html">
+        <source>Ein PDF hochladen. Der Lauf geht durch die ganze Strecke und legt das Geschäft im Bestand ab; ein vorhandenes Geschäft behält seine Entscheidungen. Wer das Parlament kennt, gibt es an; ohne Angabe liest die Strecke es aus dem Dokument.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">191,193</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6202254523735929952" datatype="html">
+        <source>aus dem Dokument lesen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">199</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8603700948334752400" datatype="html">
+        <source>Hochladen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">205</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2731240633715391947" datatype="html">
+        <source>mit dem Modell (Scans lesen, Rest einordnen, Felder)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.html</context>
+          <context context-type="linenumber">207</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1539356813894688208" datatype="html">
+        <source>Prüfen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.ts</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/affairs-list.html</context>
+          <context context-type="linenumber">2,3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4568334312432980279" datatype="html">
+        <source>Entscheidungen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.ts</context>
+          <context context-type="linenumber">70</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/decisions/decisions.html</context>
+          <context context-type="linenumber">2,3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3336351234132481698" datatype="html">
+        <source>Vokabular</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.ts</context>
+          <context context-type="linenumber">73</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">1,2</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">110</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3067798860928442996" datatype="html">
+        <source>Verarbeiten</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.ts</context>
+          <context context-type="linenumber">76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2216008129027563249" datatype="html">
+        <source>Name oder Passwort stimmt nicht.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.ts</context>
+          <context context-type="linenumber">95</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5587304396105588703" datatype="html">
+        <source>Bitte ein PDF wählen.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.ts</context>
+          <context context-type="linenumber">149</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1898521714142729229" datatype="html">
+        <source>Nachfragen gestartet – der Lauf steht unter „Läufe“.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/admin.ts</context>
+          <context context-type="linenumber">163</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3036626772318634506" datatype="html">
+        <source>Was ein Parlament wie nennt und wofür der Name steht. Der Stamm kommt von OpenParlData und gilt dort als vorläufig; darum lässt sich jede Zeile von Hand ändern. Eine geänderte Zeile bleibt stehen, wenn ein neuerer Stamm kommt, zeigt daneben, was der Stamm sagt, und lässt sich zurücknehmen.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">2,4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5278178402274151992" datatype="html">
+        <source>Fehlt einer Liste ein Standardname, lässt er sich unter „Standardnamen der Liste“ anlegen; danach kann ein Name eines Parlaments für ihn stehen.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">5,7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9119657987315117391" datatype="html">
+        <source>Stamm vom <x id="INTERPOLATION" equiv-text="{{ fetched() | stamp: false }}"/> · <x id="INTERPOLATION_1" equiv-text="{{ n( named().length ) }}"/> Namen von <x id="INTERPOLATION_2" equiv-text="{{ n( bodyCount() ) }}"/> Parlamenten · <x id="INTERPOLATION_3" equiv-text="{{ n( byHand() ) }}"/> von Hand gesetzt</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">7,10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8396108165390443070" datatype="html">
+        <source>Liste</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1602732004521161373" datatype="html">
+        <source>Standardnamen der Liste (<x id="INTERPOLATION" equiv-text="{{ standards().length }}"/>)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">22,23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4861728879294924907" datatype="html">
+        <source>Standardname</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1737922296404517360" datatype="html">
+        <source>Französisch</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">67</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">67</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">190</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8600574173596179480" datatype="html">
+        <source>Italienisch</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">191</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8957931169022166336" datatype="html">
+        <source>Englisch</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">34,35</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">71</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">71</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">193</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2051756593145425209" datatype="html">
+        <source>Ereignisse bei OpenParlData</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">35,36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6734053631202693228" datatype="html">
+        <source>Wikidata</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">36,37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6731440922610233313" datatype="html">
+        <source>Herkunft</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">83</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9089241780758790557" datatype="html">
+        <source>von Hand</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">100</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">116</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5131292899713128569" datatype="html">
+        <source>Stamm</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">52,53</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">103</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">104</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">107,108</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">115</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7468458050327033628" datatype="html">
+        <source>Zurücknehmen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">57,58</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">112,113</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5530905509888303558" datatype="html">
+        <source>Der Bestand hat für diese Liste keinen Stamm.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">62,63</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8629570301680974701" datatype="html">
+        <source>Neuer Standardname (Deutsch)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">65</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">65</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="623302995999546215" datatype="html">
+        <source>Hinzufügen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">75</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">131</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6930557093765323255" datatype="html">
+        <source>Name im Parlament</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">83</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3158069936151385261" datatype="html">
+        <source>Steht für</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">83</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">91</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">123</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8260671956966412554" datatype="html">
+        <source>ohne Standardnamen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">92,93</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">104</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">124,125</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8469303522683389980" datatype="html">
+        <source>nicht im Stamm</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">102</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7525682139028892898" datatype="html">
+        <source>Für dieses Parlament steht in dieser Liste noch kein Name.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">117,118</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="789700160985403208" datatype="html">
+        <source>Neuer Name, wie das Parlament ihn führt</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">120</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4659791202161578819" datatype="html">
+        <source>Neuer Name</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/admin/vocabulary.html</context>
+          <context context-type="linenumber">120</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1980225119578129457" datatype="html">
+        <source>Zur Liste der Prüfung</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/affair-view.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5815069131857160972" datatype="html">
+        <source>Dokumenttyp</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/affair-view.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/document-item.ts</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">55,56</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4235898504074194583" datatype="html">
+        <source> <x id="INTERPOLATION" equiv-text="{{ a.counts.open }}"/> offen · <x id="INTERPOLATION_1" equiv-text="{{ a.counts.done }}"/> erledigt · <x id="INTERPOLATION_2" equiv-text="{{ a.counts.places }}"/> Fundstellen </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/affair-view.html</context>
+          <context context-type="linenumber">18,19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2218044175935715847" datatype="html">
+        <source>Dieselbe Änderung passt auf <x id="ICU" equiv-text="{reach.count, plural, =1 {1 weiteren Wert} other {{{reach.count}} weitere Werte}}" xid="3680402225480459113"/> in <x id="ICU_1" equiv-text="{reach.affairs, plural, =1 {1 Geschäft} other {{{reach.affairs}} Geschäften}}" xid="990645275412104279"/>.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/affair-view.html</context>
+          <context context-type="linenumber">27,29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6283736757470976390" datatype="html">
+        <source>{VAR_PLURAL, plural, =1 {1 weiteren Wert} other {<x id="INTERPOLATION"/> weitere Werte}}</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/affair-view.html</context>
+          <context context-type="linenumber">27,28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4116742295745239778" datatype="html">
+        <source>Soll ich die gleich mit geradeziehen?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/affair-view.html</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5190584831816729282" datatype="html">
+        <source>und <x id="INTERPOLATION" equiv-text="{{ p.reach!.count - p.reach!.examples.length }}"/> weitere</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/affair-view.html</context>
+          <context context-type="linenumber">36,37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1760871348301542353" datatype="html">
+        <source>Ja, geradeziehen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/affair-view.html</context>
+          <context context-type="linenumber">40,41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3584320673180799920" datatype="html">
+        <source>Nein, so nicht</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/affair-view.html</context>
+          <context context-type="linenumber">41,42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7402347105036782709" datatype="html">
+        <source>Später</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/affair-view.html</context>
+          <context context-type="linenumber">42,43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3161311643188741585" datatype="html">
+        <source>S.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/affair-view.html</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/element.html</context>
+          <context context-type="linenumber">65,66</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">115,116</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/item.html</context>
+          <context context-type="linenumber">74,75</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4421941993564329638" datatype="html">
+        <source>Sprache des Dokuments: <x id="INTERPOLATION" equiv-text="{{ language() }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/affair-view.html</context>
+          <context context-type="linenumber">59,60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7684627078237197059" datatype="html">
+        <source>Zur Antwort im Dokument springen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/affair-view.html</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3312435218696111267" datatype="html">
+        <source>Antwort im Dokument: <x id="INTERPOLATION" equiv-text="{{ r.title }}"/> (ab S. <x id="INTERPOLATION_1" equiv-text="{{ r.page }}"/>)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/affair-view.html</context>
+          <context context-type="linenumber">63,64</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2258687860820237829" datatype="html">
+        <source>Keine Werte mit Fundstelle.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/affair-view.html</context>
+          <context context-type="linenumber">76,77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5451273240435130434" datatype="html">
+        <source>1 Wert geändert.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/affair-view.ts</context>
+          <context context-type="linenumber">137</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="796381720969565196" datatype="html">
+        <source><x id="count" equiv-text="done.applied"/> Werte geändert.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/affair-view.ts</context>
+          <context context-type="linenumber">137</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1991580720084606992" datatype="html">
+        <source>nur mit offenen Vermerken</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/affairs-list.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8161732541667215425" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ shown().length }}"/> von <x id="INTERPOLATION_1" equiv-text="{{ affairs().length }}"/> Geschäften</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/affairs-list.html</context>
+          <context context-type="linenumber">4,7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7470334549517001222" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ a.counts.open }}"/> offen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/affairs-list.html</context>
+          <context context-type="linenumber">25,26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="321443137068039277" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ a.counts.done }}"/> erledigt</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/affairs-list.html</context>
+          <context context-type="linenumber">26,27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5240240292754228364" datatype="html">
+        <source>Geschäft prüfen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/affairs-list.html</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5262716273715448599" datatype="html">
+        <source>Keine Geschäfte im Bestand.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/affairs-list.html</context>
+          <context context-type="linenumber">33,34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7436030986381350662" datatype="html">
+        <source>Seite <x id="INTERPOLATION" equiv-text="{{ page() }}"/> von <x id="INTERPOLATION_1" equiv-text="{{ pages() }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/page-view.html</context>
+          <context context-type="linenumber">4,5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/document-item.html</context>
+          <context context-type="linenumber">42,43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="380496242866109805" datatype="html">
+        <source>Lesung prüfen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/page-view.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3301086086650990787" datatype="html">
+        <source>Register</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/value-card.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">111</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5609720951752548698" datatype="html">
+        <source>von „<x id="INTERPOLATION" equiv-text="{{ r.before }}"/>“</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/value-card.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2266512833298218776" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ e.same!.count }}"/> weitere Dokumente mit demselben Muster</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/value-card.html</context>
+          <context context-type="linenumber">26,27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6818809209641032132" datatype="html">
+        <source>Bestätigen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/value-card.html</context>
+          <context context-type="linenumber">33,34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="339133250097220691" datatype="html">
+        <source>neuer Wert</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/value-card.html</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3623322701115841953" datatype="html">
+        <source>Ändern</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/value-card.html</context>
+          <context context-type="linenumber">44,45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4080190836243530730" datatype="html">
+        <source>Verwerfen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/affairs/value-card.html</context>
+          <context context-type="linenumber">45,46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6704479708109022321" datatype="html">
+        <source>Der Server antwortet nicht.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/api/api.ts</context>
+          <context context-type="linenumber">161</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4658746640744384637" datatype="html">
+        <source>Geschäfte</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.html</context>
+          <context context-type="linenumber">4,5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/element.html</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/element.html</context>
+          <context context-type="linenumber">31,32</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">19,20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2361265238320887165" datatype="html">
+        <source>Abmelden</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.html</context>
+          <context context-type="linenumber">10,11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="51574765818008149" datatype="html">
+        <source>Sprache</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/document-item.ts</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">61,62</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6209993853526510411" datatype="html">
+        <source>Docket · Geschäfte</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.routes.ts</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4326319764722552551" datatype="html">
+        <source>Docket · Geschäft</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.routes.ts</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8643455678937705891" datatype="html">
+        <source>Docket · Dokument</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.routes.ts</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3117915572872910421" datatype="html">
+        <source>Docket · Person</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.routes.ts</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2799638998463839797" datatype="html">
+        <source>Docket · Gruppe</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.routes.ts</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2105014407039733325" datatype="html">
+        <source>Docket · Sitzung</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.routes.ts</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6513828578408795721" datatype="html">
+        <source>Docket · Admin</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.routes.ts</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1521462429636042277" datatype="html">
+        <source>Docket · Prüfen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.routes.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2222429827691429593" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ rows().length }}"/> Entscheidungen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/decisions/decisions.html</context>
+          <context context-type="linenumber">3,5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3020331308928151912" datatype="html">
+        <source>Wer</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/decisions/decisions.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7604426232472578406" datatype="html">
+        <source>Entscheid</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/decisions/decisions.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4954032092086206628" datatype="html">
+        <source>Vorher</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/decisions/decisions.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1161355438243189190" datatype="html">
+        <source>Nachher</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/decisions/decisions.html</context>
+          <context context-type="linenumber">10,11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2317920778973380719" datatype="html">
+        <source>Noch keine Entscheidungen.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/decisions/decisions.html</context>
+          <context context-type="linenumber">24,25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2415697269497687780" datatype="html">
+        <source>Zum Geschäft</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/document-item.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6999065748733579566" datatype="html">
+        <source>Antwort im Dokument</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/document-item.html</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1877900872803021069" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ r.title }}"/> (ab S. <x id="INTERPOLATION_1" equiv-text="{{ r.page }}"/>)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/document-item.html</context>
+          <context context-type="linenumber">35,36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="235619957920177805" datatype="html">
+        <source>Seiten</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/document-item.html</context>
+          <context context-type="linenumber">38,39</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/document-item.ts</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6091037759911866606" datatype="html">
+        <source>Seite zurück</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/document-item.html</context>
+          <context context-type="linenumber">41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="159531176707183207" datatype="html">
+        <source>Seite weiter</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/document-item.html</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3706325348541347819" datatype="html">
+        <source>Gesetzt aus den Blöcken des Datensatzes: jeder Text an seiner Stelle, in seiner Schrift, Grösse und Farbe. Ein Bild oder eine Linie der Seite ist ein graues Feld. Der Zeiger auf einem Block zeigt, was der Datensatz über ihn sagt.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/document-item.html</context>
+          <context context-type="linenumber">46,47</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3149627579814616439" datatype="html">
+        <source><x id="pages" equiv-text="this.pages()"/> S.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/document-item.ts</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7513076467032912668" datatype="html">
+        <source>Format</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/document-item.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6137928372252090213" datatype="html">
+        <source>Fassung</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/document-item.ts</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3506445946454018172" datatype="html">
+        <source>Sitzung</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/document-item.ts</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/element.html</context>
+          <context context-type="linenumber">17,18</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">163,164</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">47</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3929345763626963386" datatype="html">
+        <source>Zusammenfassung</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/document-item.ts</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4220537191485568025" datatype="html">
+        <source>Antwort</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/document-item.ts</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">75</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5587208963608207393" datatype="html">
+        <source>Dieses Dokument gibt es im Bestand nicht.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/document-item.ts</context>
+          <context context-type="linenumber">92</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6672916435220201136" datatype="html">
+        <source>Zur Liste</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/element.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/item.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4259420107141838090" datatype="html">
+        <source>Person</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/element.html</context>
+          <context context-type="linenumber">15,16</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">161,162</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">100</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6316142576317715035" datatype="html">
+        <source>Gruppe</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/element.html</context>
+          <context context-type="linenumber">16,17</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">162,163</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">101</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8986273476063523240" datatype="html">
+        <source>Dokumente</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/element.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/element.html</context>
+          <context context-type="linenumber">55,56</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">20,21</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/item.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/item.html</context>
+          <context context-type="linenumber">64,65</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3563503330091824066" datatype="html">
+        <source>Nr.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/element.html</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">89</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1446886440036094937" datatype="html">
+        <source>Ansehen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/element.html</context>
+          <context context-type="linenumber">48</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/element.html</context>
+          <context context-type="linenumber">70</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">98</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">123</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">146</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">170</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/item.html</context>
+          <context context-type="linenumber">78</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6861172189184864375" datatype="html">
+        <source>Nichts gefunden.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/element.html</context>
+          <context context-type="linenumber">52,53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6167617429676329730" datatype="html">
+        <source>Geschäfte aus Schweizer Parlamenten, aus ihren Dokumenten gelesen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">5,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2507495626294208530" datatype="html">
+        <source>Docket liest die PDF-Dokumente der Parlamente und legt jedes als Geschäft ab: mit Nummer, Titel, Art, Beteiligten und Verlauf, und mit der Stelle im Dokument, an der jeder Wert steht.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">6,7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4939257243854504097" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ all().length }}"/> Geschäfte aus <x id="INTERPOLATION_1" equiv-text="{{ choices().bodies.length }}"/> Parlamenten im Bestand.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">8,9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3759521503541035037" datatype="html">
+        <source>Personen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">21,22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5237581305659320382" datatype="html">
+        <source>Gruppen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">22,23</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">91</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2201584001652679774" datatype="html">
+        <source>Sitzungen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">23,24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3126316096937088166" datatype="html">
+        <source>Ereignisse</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">24,25</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/item.html</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/item.html</context>
+          <context context-type="linenumber">56,57</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">90</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8496502695397194982" datatype="html">
+        <source>Suchen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8829497237648100098" datatype="html">
+        <source>Filter</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7773598590001536104" datatype="html">
+        <source>Suche leeren</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4809608243319083464" datatype="html">
+        <source>Filter ausblenden</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4895285811662600916" datatype="html">
+        <source>Filter anzeigen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">38,39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4070969707272888959" datatype="html">
+        <source>Nichts passt zur Suche.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">102,103</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">127,128</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">150,151</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">174,175</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4026485668739566105" datatype="html">
+        <source>Ereignis</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">137,138</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">104</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3004375767815609063" datatype="html">
+        <source>{VAR_PLURAL, plural, =1 {1 Geschäft} other {<x id="INTERPOLATION"/> Geschäfte}}</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/home.html</context>
+          <context context-type="linenumber">166</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="114444165703731855" datatype="html">
+        <source>Beteiligte</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/item.html</context>
+          <context context-type="linenumber">37,38</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/item.ts</context>
+          <context context-type="linenumber">65</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4969256436299467319" datatype="html">
+        <source>im Namen von <x id="INTERPOLATION" equiv-text="{{ p.behalf }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/item.html</context>
+          <context context-type="linenumber">47,48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="513398601895918285" datatype="html">
+        <source>Nr. <x id="number" equiv-text="r[ &apos;number&apos; ]"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/item.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8040881171107393560" datatype="html">
+        <source>ID</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/item.ts</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3516494453193947151" datatype="html">
+        <source>Titel</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/item.ts</context>
+          <context context-type="linenumber">47</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="425361162900602537" datatype="html">
+        <source>Nummer</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/item.ts</context>
+          <context context-type="linenumber">48</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7542722704589838770" datatype="html">
+        <source>Beginn</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/item.ts</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6924239306046852365" datatype="html">
+        <source>Art (harmonisiert)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/item.ts</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8122746367568228179" datatype="html">
+        <source>Körperschaft</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/item.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">97</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3412267616822442618" datatype="html">
+        <source>Schlagwörter</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/item.ts</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7392214684914674615" datatype="html">
+        <source>Verwandte Geschäfte</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/item.ts</context>
+          <context context-type="linenumber">57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4065620961717380316" datatype="html">
+        <source>Verweise</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/item.ts</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7226164320468285569" datatype="html">
+        <source>Dieses Geschäft gibt es im Bestand nicht.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/item.ts</context>
+          <context context-type="linenumber">87</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8598886608217248074" datatype="html">
+        <source>URL:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/url-box.ts</context>
+          <context context-type="linenumber">11,12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7716222311196566316" datatype="html">
+        <source>Adresse kopieren</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/url-box.ts</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7913678223536081420" datatype="html">
+        <source>HTML</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/url-box.ts</context>
+          <context context-type="linenumber">17,18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2742664813202759813" datatype="html">
+        <source>JSON</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/public/url-box.ts</context>
+          <context context-type="linenumber">18,19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="935267939147271845" datatype="html">
+        <source>Datum</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">103</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2030503401874978337" datatype="html">
+        <source>Schlagwort</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="545666470414734190" datatype="html">
+        <source>Partei</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">167</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6865266125445002814" datatype="html">
+        <source>Im Namen von</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="298795131153446745" datatype="html">
+        <source>Person im Register</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3652431954673132441" datatype="html">
+        <source>Ereignisdatum</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="999671391483995408" datatype="html">
+        <source>Sitzungsdatum</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7712685943115690689" datatype="html">
+        <source>Sitzungsort</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3117198209975370515" datatype="html">
+        <source>Verwandtes Geschäft</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7036808586542431327" datatype="html">
+        <source>Verweis</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9198543921575211086" datatype="html">
+        <source>Einreichende</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2858343636621754233" datatype="html">
+        <source>Mitunterzeichnende</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8977699308095296824" datatype="html">
+        <source>Adressat</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">169</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="625064919933078273" datatype="html">
+        <source>Ort</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">102</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2827767023139813937" datatype="html">
+        <source>Gemeinwesen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6271862096725437239" datatype="html">
+        <source>Departement</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">170</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4681164375409315727" datatype="html">
+        <source>wörtlich</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5233730138755794259" datatype="html">
+        <source>abgeleitet</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">54</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8172470797163265214" datatype="html">
+        <source>vom Modell genannt</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7025013580283601857" datatype="html">
+        <source>vom Modell formuliert</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6415031137888209253" datatype="html">
+        <source>bestätigt</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9180672454583871286" datatype="html">
+        <source>geändert</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">61</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2779096114492459874" datatype="html">
+        <source>verworfen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5272128186418578464" datatype="html">
+        <source>wartend</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">66</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3212897670958599811" datatype="html">
+        <source>läuft</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">67</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6444046001809221626" datatype="html">
+        <source>erfolgreich</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">68</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5417781048106853142" datatype="html">
+        <source>fehlgeschlagen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2837893034694553539" datatype="html">
+        <source>Eingereichter Text</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2246171489497652635" datatype="html">
+        <source>Vorlage</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1045787404630068129" datatype="html">
+        <source>Protokoll</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8524119180689347903" datatype="html">
+        <source>Kommissionsbericht</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">78</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3091161005050278023" datatype="html">
+        <source>Erlass</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">79</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5465811785983594088" datatype="html">
+        <source>Beilage</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">80</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="334892401143754839" datatype="html">
+        <source>Typ offen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">84</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="655153362210818372" datatype="html">
+        <source>Arten</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">89</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="162351363143596670" datatype="html">
+        <source>Rollen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">92</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1365539317482717995" datatype="html">
+        <source>Kennung</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">98</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8729559752409102379" datatype="html">
+        <source>Kategorie</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">99</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6162693758764653365" datatype="html">
+        <source>Text</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">105</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="816543628063474232" datatype="html">
+        <source>Liste der Parlamente</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">109</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3465797907250926479" datatype="html">
+        <source>zählt</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">120</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6403552255669051556" datatype="html">
+        <source>vorgeschlagen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">121</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8766474537436839826" datatype="html">
+        <source>aktiv</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">122</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="210746365879359210" datatype="html">
+        <source>abgelehnt</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">123</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3462901892268569300" datatype="html">
+        <source>widersprochen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">124</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5055717612846127441" datatype="html">
+        <source>aus</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">125</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1498476642151821915" datatype="html">
+        <source><x id="value" equiv-text="p"/> am Anfang weg</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">132</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9047259949853338911" datatype="html">
+        <source><x id="value" equiv-text="p"/> am Ende weg</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">133</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1895603882569384435" datatype="html">
+        <source><x id="value" equiv-text="p"/> am Anfang dazu</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">134</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5266059796189845969" datatype="html">
+        <source><x id="value" equiv-text="p"/> am Ende dazu</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">135</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5809355022934840352" datatype="html">
+        <source>Buchstabe als Ziffer gelesen (<x id="value" equiv-text="rule.parameter"/>)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">136</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1932005003101359848" datatype="html">
+        <source>Schreibung <x id="value" equiv-text="p"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">137</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="100342409627816904" datatype="html">
+        <source><x id="value" equiv-text="p"/> wird „<x id="to" equiv-text="rule.to ?? &apos;&apos;"/>“</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">138</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4456365497275553859" datatype="html">
+        <source>der Wert ist, was im Dokument bei <x id="value" equiv-text="p"/> steht</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">139</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7410319491964695421" datatype="html">
+        <source>im Namen von</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">168</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5750332093463662545" datatype="html">
+        <source>Bund</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">175</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2814177817006064646" datatype="html">
+        <source>Kanton</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">176</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8611105092360342021" datatype="html">
+        <source>Stadt</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">177</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4313616582084769268" datatype="html">
+        <source>Gemeinde</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">178</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3313528406596871463" datatype="html">
+        <source>Deutsch</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">189</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8569738092882637832" datatype="html">
+        <source>Rätoromanisch</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/words.ts</context>
+          <context context-type="linenumber">192</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

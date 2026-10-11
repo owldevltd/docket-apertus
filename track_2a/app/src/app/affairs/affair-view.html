@@ -2,19 +2,19 @@
     <div class="empty">{{ error() }}</div>
 } @else if ( affair(); as a ) {
     <div class="head card">
-        <a class="back" routerLink="/"><app-icon name="back" [size]="28" /></a>
+        <a class="back" routerLink="/admin" title="Zur Liste der Prüfung" i18n-title><app-icon name="back" [size]="28" /></a>
         <div class="icon"><app-icon name="affair" [size]="34" /></div>
         <div class="text">
             <h1>{{ title() }}</h1>
             <div class="meta">
-                <b>Geschäft</b>
+                <b i18n>Geschäft</b>
                 @for ( m of meta(); track $index ) { <span class="sep">|</span>{{ m }} }
                 <span class="sep">|</span>{{ a.key }}
             </div>
         </div>
         <div class="state">
-            <span class="chip" [class.soft]="!kind()" [class.kind]="!!kind()" title="Dokumenttyp">{{ kindText() }}</span>
-            <span class="chip" [class.soft]="a.counts.open > 0" [class.done]="a.counts.open === 0 && a.counts.done > 0">
+            <span class="chip" [class.soft]="!kind()" [class.kind]="!!kind()" title="Dokumenttyp" i18n-title>{{ kindText() }}</span>
+            <span class="chip" [class.soft]="a.counts.open > 0" [class.done]="a.counts.open === 0 && a.counts.done > 0" i18n>
                 {{ a.counts.open }} offen · {{ a.counts.done }} erledigt · {{ a.counts.places }} Fundstellen
             </span>
         </div>
@@ -23,22 +23,23 @@
     @if ( proposal(); as p ) {
         <div class="proposal card">
             <div class="ask">
-                <b>Dieselbe Änderung passt auf {{ p.reach!.count }} {{ p.reach!.count === 1 ? 'weiteren Wert' : 'weitere Werte' }}
-                    in {{ p.reach!.affairs }} {{ p.reach!.affairs === 1 ? 'Geschäft' : 'Geschäften' }}.</b>
-                {{ fieldOf( p ) }}: {{ ruleWords( p ) }}. Soll ich die gleich mit geradeziehen?
+                @let reach = p.reach!;
+                <b i18n>Dieselbe Änderung passt auf {reach.count, plural, =1 {1 weiteren Wert} other {{{reach.count}} weitere Werte}}
+                    in {reach.affairs, plural, =1 {1 Geschäft} other {{{reach.affairs}} Geschäften}}.</b>
+                {{ fieldOf( p ) }}: {{ ruleWords( p ) }}. <ng-container i18n>Soll ich die gleich mit geradeziehen?</ng-container>
             </div>
             <ul>
                 @for ( x of p.reach!.examples; track x.key + x.before ) {
-                    <li><a [routerLink]="[ '/affairs', x.key ]">{{ x.key }}</a>: „{{ x.before }}“ → „{{ x.after }}“</li>
+                    <li><a [routerLink]="[ '/admin/review', x.key ]">{{ x.key }}</a>: „{{ x.before }}“ → „{{ x.after }}“</li>
                 }
                 @if ( p.reach!.count > p.reach!.examples.length ) {
-                    <li class="muted">und {{ p.reach!.count - p.reach!.examples.length }} weitere</li>
+                    <li class="muted" i18n>und {{ p.reach!.count - p.reach!.examples.length }} weitere</li>
                 }
             </ul>
             <div class="acts">
-                <button mat-flat-button (click)="answer( p, true )">Ja, geradeziehen</button>
-                <button mat-stroked-button (click)="answer( p, false )">Nein, so nicht</button>
-                <button mat-button (click)="proposal.set( null )">Später</button>
+                <button mat-flat-button (click)="answer( p, true )" i18n>Ja, geradeziehen</button>
+                <button mat-stroked-button (click)="answer( p, false )" i18n>Nein, so nicht</button>
+                <button mat-button (click)="proposal.set( null )" i18n>Später</button>
             </div>
         </div>
     }
@@ -48,18 +49,18 @@
             @if ( a.documents.length > 1 ) {
                 <mat-select class="doc" [value]="doc()" (valueChange)="selectDoc( $event )">
                     @for ( d of a.documents; track d.id; let i = $index ) {
-                        <mat-option [value]="i">{{ d.name }} ({{ d.pages }} S.)</mat-option>
+                        <mat-option [value]="i">{{ d.name }} ({{ d.pages }} <ng-container i18n>S.</ng-container>)</mat-option>
                     }
                 </mat-select>
             } @else {
                 <div class="doc-name muted">{{ current()?.name }}</div>
             }
             @if ( language() ) {
-                <div class="doc-name muted">Sprache des Dokuments: {{ language() }}</div>
+                <div class="doc-name muted" i18n>Sprache des Dokuments: {{ language() }}</div>
             }
             @for ( r of answers(); track r.block ) {
-                <button type="button" class="answer" (click)="show( r )" title="Zur Antwort im Dokument springen">
-                    Antwort im Dokument: {{ r.title || 'Antwort' }} (ab S. {{ r.page }})
+                <button type="button" class="answer" (click)="show( r )" title="Zur Antwort im Dokument springen" i18n-title>
+                    <ng-container i18n>Antwort im Dokument: {{ r.title }} (ab S. {{ r.page }})</ng-container>
                 </button>
             }
             @if ( current(); as d ) {
@@ -72,7 +73,7 @@
                 <app-value-card [entry]="s" [docName]="docName( s )" [answer]="answerOf( s )"
                     [focused]="focus() === s.block && s.doc === current()?.id" (decided)="decide( $event )" (jump)="jump( $event )" />
             } @empty {
-                <div class="empty">Keine Werte mit Fundstelle.</div>
+                <div class="empty" i18n>Keine Werte mit Fundstelle.</div>
             }
         </div>
     </div>

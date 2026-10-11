@@ -60,7 +60,8 @@
             "outputPath": {
               "base": "../src/docket/app",
               "browser": ""
-            }
+            },
+            "localize": true
           },
           "configurations": {
             "production": {
@@ -81,7 +82,10 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "localize": [
+                "de"
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -97,6 +101,14 @@
             }
           },
           "defaultConfiguration": "development"
+        }
+      },
+      "i18n": {
+        "sourceLocale": "de",
+        "locales": {
+          "fr": "src/locale/messages.fr.xlf",
+          "it": "src/locale/messages.it.xlf",
+          "en": "src/locale/messages.en.xlf"
         }
       }
     }

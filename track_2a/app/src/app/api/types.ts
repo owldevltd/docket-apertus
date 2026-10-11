@@ -7,13 +7,42 @@ export interface Counts {
     done: number;
 }
 
+// An affair, or a part of one, in the affair schema (data/schema/docket.json): what the public pages read.
+export type Rec = Record<string, any>;
+
+// An answer of the public part of the server: how many there are, how many fit, and the fitting ones.
+export interface Listed {
+    meta: { total: number; count: number };
+    data: Rec[];
+}
+
+// The parliament an affair belongs to, as the knowledge names it.
+export interface BodyInfo {
+    key: string;
+    name: string;
+    level: string;
+    parliament: string;
+}
+
+// A document of an affair as the lists show it.
+export interface Paper {
+    name: string;
+    id: number;
+    pages: number | null;
+    kind: string | null;
+    language: string | null;
+}
+
 export interface AffairSummary {
     key: string;
     number: string | null;
     title: string | null;
+    date: string | null;
     type: string | null;
+    body: BodyInfo | null;
     documents: string[];
     kinds: ( string | null )[];
+    papers: Paper[];
     counts: Counts;
     updated_at: string | null;
 }
@@ -65,6 +94,10 @@ export interface DocumentInfo {
 // answers within it with the block each begins at.
 export interface DocumentView {
     name: string;
+    // the affair the document belongs to and the number it has there
+    affair: string | null;
+    id: number | null;
+    pages: number | null;
     language: string;
     answers: { title: string; block: string; page: number }[];
     blocks: Block[];
@@ -97,6 +130,8 @@ export interface Head {
 export interface Affair {
     key: string;
     head: Head;
+    body: BodyInfo | null;
+    papers: Paper[];
     // the affair in the output format; the views read the values, the documents and the decisions beside it
     record: Record<string, any>;
     documents: DocumentInfo[];
@@ -127,7 +162,6 @@ export interface Decision {
 export interface DecisionBody {
     id: string;
     decision: 'confirmed' | 'changed' | 'rejected';
-    by: string;
     after?: string;
     path?: string;
 }
@@ -232,7 +266,7 @@ export interface Health {
     ok: boolean;
     store: string;
     model: boolean;
-    admin: 'token' | 'open';
+    admin: 'account' | 'open';
     at: string;
 }
 
@@ -274,4 +308,11 @@ export interface LearntWay {
 export interface Learnt {
     documents: number;
     ways: LearntWay[];
+}
+
+// whether the administration has an account (a password is set), and who is signed in; without an account
+// everyone acts under its name
+export interface Session {
+    account: boolean;
+    user: string | null;
 }

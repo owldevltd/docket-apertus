@@ -1,11 +1,14 @@
-import { Component, inject } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Component, LOCALE_ID, inject, signal } from '@angular/core';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
-import { Who } from './shared/who';
+import { Account } from './shared/account';
 
-// The frame: the dark top bar with the wordmark and the three areas, the reviewer's name at the right,
-// the screens below. The bar follows the one of OpenParlData's public app.
+// The frame: the dark top bar with the wordmark and the way back to the affairs; the screens below. The
+// administration is not linked from what a visitor sees, it stands under /admin; within it the name of the
+// account that is signed in stands at the right, with the way out. The bar follows the one of OpenParlData's
+// public app. The app is built once per language, each build under its own
+// folder, so the switch at the right is a link to the same screen under the other folder.
 @Component( {
     selector: 'app-root',
     imports: [ RouterOutlet, RouterLink, RouterLinkActive, MatToolbarModule, MatButtonModule ],
@@ -13,9 +16,24 @@ import { Who } from './shared/who';
     styleUrl: './app.scss',
 } )
 export class App {
-    readonly who = inject( Who );
+    readonly account = inject( Account );
+    private readonly router = inject( Router );
+    readonly inAdmin = signal( false );
+    readonly languages = [ 'de', 'fr', 'it', 'en' ];
+    readonly here = inject( LOCALE_ID ).slice( 0, 2 );
+    readonly path = signal( '/' );
 
-    rename(): void {
-        this.who.set( prompt( 'Kürzel für Entscheidungen', this.who.name() ) ?? this.who.name() );
+    constructor() {
+        this.router.events.subscribe( ( e ) => {
+            if ( e instanceof NavigationEnd ) {
+                this.inAdmin.set( e.urlAfterRedirects.startsWith( '/admin' ) );
+                this.path.set( e.urlAfterRedirects );
+            }
+        } );
+    }
+
+    async signOut(): Promise<void> {
+        await this.account.signOut().catch( () => undefined );
+        await this.router.navigateByUrl( '/admin' );
     }
 }

@@ -1,0 +1,56 @@
+// one page set from the blocks of the record: the page is the measure, every block sits at its share of it
+.page {
+    position: relative;
+    width: 100%;
+    container-type: inline-size;
+    overflow: hidden;
+    border: 1px solid var( --opd-line );
+    background: #fff;
+    color: #000;
+}
+
+.piece {
+    position: absolute;
+    box-sizing: border-box;
+    overflow: visible;
+    cursor: default;
+
+    &:hover {
+        outline: 1px solid var( --opd-link );
+        outline-offset: 2px;
+        z-index: 2;
+    }
+
+    // letters too light for the white of the page stood on a dark field
+    &.light {
+        background: var( --opd-dark );
+    }
+
+    // a picture or a line: the record keeps its place, not the picture
+    &.graphic {
+        background: #e3e7ee;
+    }
+}
+
+.pair,
+.cells {
+    display: flex;
+    gap: 1.2em;
+}
+
+.flow {
+    border: 1px solid var( --opd-line );
+    background: #fff;
+    padding: 24px 28px;
+    font-size: 14px;
+    line-height: 1.5;
+
+    .run {
+        margin-bottom: 10px;
+    }
+
+    .head {
+        font-weight: 700;
+        margin-top: 16px;
+    }
+}

@@ -1,5 +1,5 @@
 .PHONY: run fill test test-store bench bench-read reference knowledge vocabulary register rows learn mapping
-.PHONY: questions app
+.PHONY: questions app translations
 
 export PYTHONPATH := src
 
@@ -7,9 +7,11 @@ export PYTHONPATH := src
 EXPORT ?= affairs.ndjson.gz
 
 # Starts Postgres and the web server in Docker; the app is at http://localhost:8080. On a clean checkout the
-# store is empty: the server then forms the affairs of the shipped documents from the runs stored beside them
-# (data/documents/*/run.json), without the model and without a key; it takes about two minutes and shows under
-# the runs of the admin. With LLM_API_KEY set (in the shell or in .env), `make fill` runs them with the model.
+# store is empty and stays so until a PDF is handed in: the parliamentary documents are not in the repository
+# (data/documents/README.md). Where they lie in their folders with the runs stored beside them
+# (data/documents/*/run.json), the server forms their affairs from these, without the model and without a key;
+# it takes about two minutes and shows under the runs of the admin. With LLM_API_KEY set (in the shell or in
+# .env), `make fill` runs them with the model.
 run:
 	docker compose up --build
 
@@ -24,7 +26,20 @@ fill:
 # of another shape, fills an empty store with them as a clean checkout does, and answers the three questions
 # across the parliaments from it. No model call, no network; needs poppler to render the pages. Results and
 # control images land in storage/tests/.
+# The parliamentary documents are not in the repository (data/documents/README.md says where each comes from and
+# how to put them back). Without them only the tests that need no document run.
+DOCUMENTS := $(wildcard data/documents/*/*.pdf)
+
 test:
+ifeq ($(DOCUMENTS),)
+	@echo "No document under data/documents: only the tests that need none run. See data/documents/README.md."
+	python3 tests/rules.py
+	python3 tests/store.py
+	python3 tests/vocabulary.py
+	python3 tests/register.py
+	python3 tests/mapping.py
+	python3 tests/translations.py
+else
 	python3 -m docket analyze --out storage/tests/pages data/documents/*/*.pdf
 	python3 tests/sources.py --got=storage/tests/pages --out=storage/tests/sources.md data/documents/*
 	python3 tests/text.py --got=storage/tests/pages data/documents/*
@@ -50,6 +65,8 @@ test:
 	python3 tests/register.py
 	python3 tests/admin.py data/documents/neuchatel-grand-conseil/*.pdf
 	python3 tests/mapping.py
+	python3 tests/translations.py
+endif
 
 # The store's operations over Postgres as well, inside the running container (after `make run`). The test
 # works in a schema of its own and removes it at the end; the store in use is not touched.
@@ -71,11 +88,18 @@ bench-read:
 	@test -f .env || { echo "copy .env.example to .env and set LLM_API_KEY"; exit 1; }
 	python3 tests/read.py --out=storage/bench/read.md data/documents/nidau-m185 data/documents/zuerich-219587
 
-# Builds the browser app (Angular, in app/) into src/docket/app/, from where the Python server serves it.
-# Node is needed for this build only, never to run the server; the Docker build does the same in its first
-# stage. The built bundle is not committed.
+# Builds the browser app (Angular, in app/) into src/docket/app/, from where the Python server serves it:
+# once per language (de, fr, it, en), each build in a folder of its own. Node is needed for this build only,
+# never to run the server; the Docker build does the same in its first stage. The built bundle is not committed.
 app:
 	cd app && npm ci --no-audit --no-fund && npx ng build
+
+# Writes the translation files the build of the app reads (app/src/locale/messages.{fr,it,en}.xlf) from the
+# list of its texts in the four languages (app/src/locale/words.json), and lists the texts that have no
+# wording yet. After a text of the app has changed, take the texts out again first (needs Node):
+# cd app && npx ng extract-i18n --format xlf --output-path src/locale
+translations:
+	python3 tools/translations.py
 
 # Rebuilds the reference JSON beside the shipped documents from their text layer. A preparation step, its
 # results are committed; needs poppler (pdftoppm, pdftotext, pdftohtml).

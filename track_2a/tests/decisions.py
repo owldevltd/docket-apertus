@@ -37,6 +37,16 @@ from docket.store.rules import apply, shape  # noqa: E402
 RULE = {"id": "r-test", "field": "polity", "kind": "prefix-off", "parameter": "Kanton ", "state": "active"}
 
 
+def known_person(config) -> dict:
+    """A row of the register for the first name the Zürich document carries, read from the affair stored beside
+    it: the test itself names nobody."""
+    record = json.loads((config.data_dir / "documents" / "zuerich-219587" / "affair.json").read_text(encoding="utf-8"))
+    label = record["contributors"]["data"][0]["fullname"]
+    first, last = label.split(" ", 1)
+    return {"body": "X", "key": label.lower(), "label": label, "first": first, "last": last, "ids": [4711],
+            "origin": "stem"}
+
+
 def main(argv: list[str]) -> int:
     dirs = {d.name: d for d in (Path(a) for a in argv if not a.startswith("--")) if (d / "run.json").is_file()}
     if not dirs:
@@ -89,8 +99,7 @@ def main(argv: list[str]) -> int:
         name = "zuerich-219587"
         store = open_store(config)
         # a register that knows one of the names, so that the affair holds the id of a person
-        store.put_register([{"body": "X", "key": "karin stalder", "label": "Karin Stalder", "first": "Karin",
-                             "last": "Stalder", "ids": [4711], "origin": "stem"}])
+        store.put_register([known_person(base)])
         key = run(config, Path(tmp) / "out", [name], one_party=True, parliament="X")[name]
         app = App(store, contract, config, Jobs(config))
         before = store.get_affair(key)["record"]

@@ -28,7 +28,7 @@ from docket.store.rows import blocks_of_document, follow, kind_of, set_places, v
 from docket.store.vocabulary import Vocabulary
 
 # what Docket adds to a record beyond the values
-OWN = ("schema", "docs", "sources", "source")
+OWN = ("schema", "id", "body_key", "docs", "sources", "source")
 
 
 def view(store: Store, key: str, fields: Fields, contract: Contract, types: dict[str, dict],
