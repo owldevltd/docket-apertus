@@ -136,6 +136,7 @@ export function ruleWords( rule: Rule ): string {
         case 'digits': return 'Buchstabe als Ziffer gelesen (' + rule.parameter + ')';
         case 'spelling': return 'Schreibung ' + p;
         case 'value': return p + ' wird „' + ( rule.to ?? '' ) + '“';
+        case 'label': return 'der Wert ist, was im Dokument bei ' + p + ' steht';
         default: return rule.kind + ' ' + p;
     }
 }
@@ -160,6 +161,15 @@ export function blocksOf( body: Block[] | undefined ): Block[] {
     }
     return out;
 }
+
+// the languages a document can be told to be in, as the app names them
+export const LANGUAGES: Record<string, string> = {
+    'de': 'Deutsch',
+    'fr': 'Französisch',
+    'it': 'Italienisch',
+    'rm': 'Rätoromanisch',
+    'en': 'Englisch',
+};
 
 export function textOf( block: Block | undefined ): string {
     if ( !block ) {

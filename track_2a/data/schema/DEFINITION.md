@@ -55,15 +55,16 @@ Everything from OpenParlData stays with its name and form: the affair with `docs
 | Key | Content |
 | --- | --- |
 | `page-count` | number of pages |
+| `language` | the language the document is written in (`de`, `fr`, `it`, `rm`, `en`), under the name OpenParlData has for it; told by code from the document's own words, absent when none leads clearly |
 | `article-version` (dynamic) | the version as printed ("Fassung nach 2. Lesung") |
 | `article-type` (dynamic) | the kind of the document in the affair, its role rather than the affair's type: `submission` (the text handed in), `answer`, `bill`, `minutes`, `committee-report`, `act`, `attachment`. Set by code from the words of the first page (`data/knowledge/kinds.json`, the list grows with the knowledge), absent when none of them stands there; a person confirms it in the review. A run carries it into the affair's record with its place, like a value read from the document |
-| `abstract` (dynamic) | a summary, per language as OpenParlData has it (`{ "de": …, "fr": … }`); this covers `trans-abstract` too |
+| `abstract` (dynamic) | a summary, per language as OpenParlData has it (`{ "de": …, "fr": … }`); this covers `trans-abstract` too. The pipeline asks for it in the language of the document and lays it under that language |
 | `conference` (dynamic) | the session or meeting the document names: `conf-name`, `conf-date`, `conf-loc`. Only when the document is not already attached to an OpenParlData meeting (`meeting_id`) |
 | `journal-meta` (dynamic) | press and periodicals only: `journal-title`, `publisher-name`, `issn` |
 | `volume`, `issue`, `fpage`, `lpage` (dynamic) | periodicals only: volume, issue, first and last page |
 | `body` | the build-up of the document as a list of blocks |
 | `back` (dynamic) | what follows the text: appendices, footnotes, references |
-| `response` | an answer within the same document: `response-type`, `title`, `body` |
+| `response` | an answer within the same document: `response-type`, `title`, `body`. Set by code where a heading announces the answer ("Antwort des Gemeinderates", "Réponse du Conseil d'Etat", "Risposta del …"): what stands from that heading on, up to the next section with a known name or to the end, with the heading as `title`. The words that announce an answer are the same for every parliament (`data/knowledge/sections.json`, `response`) |
 
 **On a contributor** (per entry in `contributors`, in addition to the fields of OpenParlData)
 
@@ -112,6 +113,7 @@ The input is always the PDF alone; the affair arises from the document, in the f
 - A list (`contributors.data`, `custom-meta`, `related-article`, `related-object`): one entry per value with the fixed parts of the template (role, `meta-name`) and its place. A person already among the contributors is not created again.
 - Entries about the document (`conference`, `article-version`, `abstract`) go into its existing entry; the place wherever the contract provides a `source`.
 - A value counts when it stands literally on the page; otherwise with the block the model names (in the text image every block is preceded by its id). What has neither is dropped.
+- What the model words itself (a field marked `free`, the summary) stands nowhere on the page and need not share a word with a block: it keeps the block the model names, else the head of the document, as `composed` and with `approve`.
 
 ## Provenance
 
@@ -128,7 +130,7 @@ The review view shows, for a flagged value, how many further documents carry the
 ## Fields without a fixed list of values
 
 - `sec-type`: what a section is (in the example: `deckblatt`, `antrag`, `begruendung`, `beschlussentwurf`)
-- `response-type`: what kind of answer (in the example: `antwort`)
+- `response-type`: what kind of answer (the pipeline writes `answer`)
 - `meta-name` in `custom-meta`: header entries as printed (in the example: `Aktenzeichen`, `Ressort`)
 
 How the prior knowledge attaches here is not part of the contract. German first.
@@ -161,6 +163,10 @@ Why the journal block is in: the corpus also holds press and periodicals. The fi
 
 - Values in the middle of a sentence as a mark of their own ("ANFRAGE von … betreffend …"). The value stands in the header and points at the paragraph with `source`.
 - Rights and licence (`permissions`), funding, product details.
+
+## What the terms are called elsewhere
+
+`docs/mapping.md` names, for every key and block of this definition and for the controlled lists, what holds the same thing in OpenParlData, JATS, Akoma Ntoso, Parla-CLARIN, Popolo and Docling, by the names of their own schemas, and says where nothing was found. It is written from `mapping.json` beside this definition (`python3 tools/mapping.py`). Which element answers a term is a reading of the schemas; that every name exists in its schema is checked against the schema files (`python3 tools/mapping.py --standards <folder>`), and a test holds the file against the contract, so a key added here without a row there fails.
 
 ## Other contracts
 
@@ -236,6 +242,9 @@ The full example is what the pipeline delivered for the Nidau PDF on 6 October 2
 
 ## Changes
 
+- **The language of a document, and its summary in it** (11 October 2026): every document entry says its `language`, told by code (210 of 211 documents of known language right, one too short to tell). The summary is asked for in that language, named in the question, and stands under its key (`abstract.fr`); a field of the fields file says so with `own-language`. Asked "in the language of the document" without naming it, the model summed up the French and Italian documents in German. The contract itself unchanged.
+- **A summary keeps its place** (11 October 2026): a value the model words itself is no longer dropped when the block it names holds no word of it. Counted on 211 documents of the runs of 10 October: the model answered the summary for all, 84 had a place, 127 were dropped (it sums up French and Italian documents in German). The contract itself unchanged.
+- **The answer under its heading; the mapping** (11 October 2026): `response` is filled where a heading announces the answer, with `response-type` `answer`. New: `mapping.json` beside this definition and `docs/mapping.md`, the terms of the schema against OpenParlData and five standards. The contract itself unchanged.
 - **English field names** (10 October 2026): the fields of the fields file are named in English (`number`, `title`, `authors`, `polity` …) instead of German, and with them the `meta-name` of a value under `custom-meta` (`polity`, `place`, `parliament`, `department`, `addressee`). The questions put to the model stay German. The contract itself unchanged.
 - **A second contract** (10 October 2026): `plain/`, another shape for the same affair, filled from the same rows. This contract unchanged.
 - **Entity in the fields file** (10 October 2026): every field names what its value is (`entity`, with a `role` under it where needed), and where a lookup's result goes (`standard`, `id`). The contract itself unchanged.

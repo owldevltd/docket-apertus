@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { Affair, AffairSummary, Decision, DecisionBody, Definition, FieldsReport, Health, Job, Learnt, Parliament, Rule, VocabularyRow } from './types';
+import { Affair, AffairSummary, Decision, DecisionBody, Definition, DocumentView, FieldsReport, Health, Job, Learnt, Parliament, Rule, VocabularyRow } from './types';
 
 // The one door to the server. Every call goes through here, so the admin token and the error text are in
 // one place; the server's error message is what the user gets to see.
@@ -25,6 +25,10 @@ export class Api {
         return this.post<Affair>( 'affairs/' + encodeURIComponent( key ) + '/decisions', body );
     }
 
+    document( name: string ): Promise<DocumentView | null> {
+        return this.get<DocumentView>( 'documents/' + encodeURIComponent( name ) + '/blocks' ).catch( () => null );
+    }
+
     fields( name: string ): Promise<FieldsReport | null> {
         return this.get<FieldsReport>( 'documents/' + encodeURIComponent( name ) + '/fields' ).catch( () => null );
     }
@@ -45,15 +49,15 @@ export class Api {
         return this.get<Job>( 'runs/' + encodeURIComponent( id ) );
     }
 
-    // the PDF goes as it is; the name and the model switch ride in headers, so no multipart is needed
-    upload( file: File, model: boolean ): Promise<Job> {
-        const headers = this.headers().set( 'Content-Type', 'application/pdf' )
+    // the PDF goes as it is; the name, the model switch and the parliament ride in headers, so no multipart
+    // is needed
+    upload( file: File, model: boolean, body: string ): Promise<Job> {
+        let headers = this.headers().set( 'Content-Type', 'application/pdf' )
             .set( 'X-Name', file.name ).set( 'X-Model', model ? '1' : '0' );
+        if ( body ) {
+            headers = headers.set( 'X-Body', body );
+        }
         return firstValueFrom( this.http.post<Job>( '/api/runs', file, { headers } ) ).catch( fail );
-    }
-
-    fetchDocument( id: number, model: boolean ): Promise<Job> {
-        return this.post<Job>( 'runs', { document: id, model } );
     }
 
     rules(): Promise<Rule[]> {

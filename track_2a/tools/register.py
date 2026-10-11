@@ -4,12 +4,14 @@ there (docket.store.register).
 
     python3 tools/register.py [<persons.ndjson.gz> [<person_identities.ndjson.gz>]]
 
-Without files the two exports are fetched from OpenParlData's file server, one after the other with a pause.
-Taken are the id, the name, the parliament and the party. The export also holds addresses, telephone numbers
-and birthdays: none of that is read, and nothing is written into the repository; the persons go into the
-store only (files under the storage folder, or Postgres with DATABASE_URL). A person OpenParlData holds under
-several ids gets the primary one. Running it again with a newer export replaces what came from there and
-leaves what the register learnt.
+This is a preparation step, run once by hand by whoever sets an installation up; in operation Docket fetches
+nothing, what comes in are PDFs. The persons are the one list that is not shipped with the repository,
+because they are people: without files the two exports are fetched from OpenParlData's file server, one after
+the other with a pause. Taken are the id, the name, the parliament and the party. The export also holds
+addresses, telephone numbers and birthdays: none of that is read, and nothing is written into the repository;
+the persons go into the store only (files under the storage folder, or Postgres with DATABASE_URL). A person
+OpenParlData holds under several ids gets the primary one. Running it again with a newer export replaces what
+came from there and leaves what the register learnt.
 """
 
 from __future__ import annotations

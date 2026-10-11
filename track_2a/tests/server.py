@@ -78,6 +78,13 @@ def main(argv: list[str]) -> int:
         check(status == 200 and image[:8] == b"\x89PNG\r\n\x1a\n", f"page image of {name} served")
         status, _ = call(base, f"/api/documents/{name}/pages/99.png")
         check(status == 404, "a page that is not there is 404")
+        status, shown = call(base, f"/api/documents/{name}/blocks")
+        in_record = next(d for d in affair["record"]["docs"]["data"] if d["id"] == affair["documents"][0]["id"])
+        count = len(in_record["body"]) + sum(len(r["body"]) for r in in_record.get("response") or [])
+        check(status == 200 and len(shown["blocks"]) == count and shown["language"] == in_record.get("language", ""),
+              f"the blocks of {name} are served on their own: {count}, language {shown['language'] or 'none'}")
+        status, _ = call(base, "/api/documents/none/blocks")
+        check(status == 404, "the blocks of a document that is not there are 404")
         status, _ = call(base, "/api/affairs/no-such-key")
         check(status == 404, "an unknown affair is 404")
 

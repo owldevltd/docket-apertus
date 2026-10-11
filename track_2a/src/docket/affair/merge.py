@@ -3,10 +3,13 @@ with its place; then the harmonised type from the label, then the check against 
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 
 from docket.affair.types import harmonize
 from docket.affair.validator import Contract
+from docket.document.language import language_of
+from docket.document.response import lift
 from docket.fields.fields import Fields
 from docket.fields.placer import fill
 from docket.store.vocabulary import Vocabulary
@@ -41,10 +44,14 @@ class Affair:
 
 
 def merge(documents: list[Document], fields: Fields, contract: Contract, types: dict[str, dict],
-          vocabulary: Vocabulary | None = None, placed: list[dict] | None = None) -> list[Affair]:
+          vocabulary: Vocabulary | None = None, placed: list[dict] | None = None,
+          answers: Iterable[str] = ()) -> list[Affair]:
     """Groups the documents by key and builds one affair per group, in the order the keys first appear. The
     type is harmonised through the names of the parliament the affair's documents tell, then through the
-    table. With `placed`, where every numbered value went is noted there (docket.fields.placer.fill)."""
+    table. With `placed`, where every numbered value went is noted there (docket.fields.placer.fill). With
+    `answers`, the section names that announce one, the answer within a document stands as its `response`
+    beside its body (docket.document.response)."""
+    answers = list(answers)
     groups: dict[str, list[Document]] = {}
     for d in documents:
         groups.setdefault(d.key, []).append(d)
@@ -53,13 +60,19 @@ def merge(documents: list[Document], fields: Fields, contract: Contract, types: 
         members = sorted(members, key=lambda d: (d.date or "9", d.id))
         record: dict = {"schema": SCHEMA}
         for d in members:
-            record, _ = fill(record, d.id, d.values, fields, contract, d.body, placed)
+            language = language_of(d.body)
+            record, _ = fill(record, d.id, d.values, fields, contract, d.body, placed, language)
             for at, entry in enumerate(record["docs"]["data"]):
                 if entry.get("id") == d.id:
                     entry.setdefault("name", d.name)
                     entry.setdefault("format", FORMAT)
+                    if language:
+                        entry.setdefault("language", language)
                     entry.setdefault("page-count", d.pages)
-                    entry.setdefault("body", d.body)
+                    if "body" not in entry:
+                        entry["body"], response = lift(d.body, answers)
+                        if response:
+                            entry["response"] = response
                     if d.kind and d.kind.get("kind") and "article-type" not in entry:
                         _place_kind(record, at, d, placed)
         parliament = next((d.parliament for d in members if d.parliament), "")

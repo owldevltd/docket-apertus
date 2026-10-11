@@ -39,11 +39,12 @@ def main(argv: list[str]) -> int:
     drawn = None
     if "--drawn" in given:
         drawn = {d["name"]: d for d in json.loads(Path(given["--drawn"]).read_text(encoding="utf-8"))}
-    documents = collect(store, fields, drawn)
+    knowledge = load_knowledge(config)
+    documents = collect(store, fields, drawn, knowledge.forms)
     there = None
     if "--affairs" in given:
         there = held(Path(given["--affairs"]), Path(given["--contributors"]), documents)
-    text = markdown(answers(documents, fields, load_knowledge(config).bodies, there))
+    text = markdown(answers(documents, fields, knowledge.bodies, there))
     if "--out" in given:
         Path(given["--out"]).write_text(text, encoding="utf-8")
         print(f"{len(documents)} documents of the {store.kind} store, written to {given['--out']}")

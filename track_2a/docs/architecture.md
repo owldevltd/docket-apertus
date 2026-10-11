@@ -26,7 +26,8 @@ PDF ──pdftoppm──▶ page images ──▶ geometry ──▶ elements �
 | Sorting | `document/sorter.py`, `document/picture.py` | the rest of the first pages goes to the model as a text image, six elements per call, to be named one of eight kinds | yes |
 | Fields | `fields/` (`fields`, `filler`, `placer`) | the fields file asks the model six questions per call over the first pages and over the whole document; code takes an answer only with a place: literal in a block, derived from the named block, or cited with a word in it; composed values and cited ones carry `approve` | yes |
 | Kind | `document/kind.py` | the document's role in the affair from the words of its first page, by the list in `data/knowledge/kinds.json` | no |
-| Key | `affair/identity.py` | the affair number, normalised; checked against the number forms of the parliament, searched on the page by form, or a weak key from place, date and title; the parliament from the read names of polity and parliament, in any language | no |
+| Answer | `document/response.py` | where a heading announces the answer to a submission within the same document, what stands from there on becomes the `response` of the document beside its body, every block with its id and place; the words that announce an answer are prior knowledge for all parliaments alike, in German, French and Italian (`data/knowledge/sections.json`) | no |
+| Key | `affair/identity.py` | the parliament and the affair number: the part of the printed number that has one of the number forms of the parliament, searched on the page by form where the read one has none, or a weak key from place, date and title; the parliament as told with the document, else from the read names of polity and parliament, in any language | no |
 | Affair | `affair/merge.py`, `affair/types.py`, `affair/validator.py` | the documents of one key become one affair; the harmonised type comes from the label, through the names of the parliament in the vocabulary and else through the table of the export; the persons named are looked up in the register of the parliament (`affair/persons.py`); the record is checked against the contract by an own validator | no |
 | Store | `store/` (`files`, `postgres`, `rows`, `review`, `rules`, `vocabulary`, `register`) | the affair with its documents, the fields reports, the rows of the documents, the decisions, the vocabulary, the register of persons; reviews survive a new run over the same document | no |
 
@@ -136,7 +137,8 @@ asked under; reading the document's own word for it is tried and measured, not b
 
 The register (`store/register.py`) holds the persons of the parliaments. `tools/register.py` loads them from
 OpenParlData's exports into the store: id, name, parliament and party, nothing private, and nothing of it
-into the repository. A contributor a document names is looked up among the persons of that document's
+into the repository. It is the one list that is not shipped, because it holds people; the tool fetches it
+once, by hand, when an installation is set up. In operation Docket fetches nothing. A contributor a document names is looked up among the persons of that document's
 parliament only: exactly, in either order of first and last name and without a title, a party or a place
 behind it; by the last name alone; or with one character off. It counts as found when exactly one person
 fits. Then the entry gets that person's id, with a place in `sources`, and a person is asked to look where
@@ -176,7 +178,14 @@ be written to, not yet worked on in the app.
 the affairs with every value that has a place, the decisions, the rules, the vocabulary, the register, the runs of the admin, and for every
 open value the count of documents with the same pattern. Number, title, date and type for the list and the
 head of an affair are found by their role in the fields file and sent as such; the app does not read them
-from keys of the record. Every document keeps with its answers what it was asked, the names of the fields and
+from keys of the record. The review goes by the rows, not by the record (`store/entries.py`): the values it
+shows, how each got its place, whether a person should look and what a person decided are built from the rows
+of the affair's documents, and every value carries the id of its row. A decision names the value by that id;
+it is written at the row first, and the record that is stored is the one from before with the decisions of
+the rows laid onto it. The blocks of a document lie in the store on their own and are served per document.
+So the review does not hang on the shape of the output: with the stored record replaced by the same affair in
+the second contract, which has no room for places or blocks, it still shows every value and takes a decision
+(`tests/entries.py`). The affair schema stays the format a run writes. Every document keeps with its answers what it was asked, the names of the fields and
 a mark of the questions; the admin's area for the definition lists the fields with their entity, their role
 and what stands behind them, and counts over the store in how many documents a field was asked and in how
 many never, because the document was read before the field existed. That is told apart from a field that was
@@ -186,9 +195,9 @@ report, and its affair is formed anew from the reports with every decision kept.
 that is new therefore comes in as a field of the fields file with its entity and role, and the documents
 already read are asked for it; reading the role of a person freely from the document was tried three ways and
 did worse than the field a name is asked under. One lock per affair guards the decisions; the
-contract is checked before anything is saved. The admin's runs (`jobs.py`) take an uploaded PDF or a document
-of OpenParlData by its id, run one after the other, and stay on disk under `storage/runs/`. An optional token
-guards the admin.
+contract is checked before anything is saved. The admin's runs (`jobs.py`) take an uploaded PDF, with the
+parliament it comes from where the person handing it in tells it, run one after the other, and stay on disk
+under `storage/runs/`. Nothing is fetched: what comes in is the PDF. An optional token guards the admin.
 
 The app (`app/`, Angular with Angular Material) is built into `src/docket/app/` and served as static files.
 It shows the affairs as result cards, one affair with its page and every block framed, red where a person has

@@ -41,6 +41,7 @@ import time
 from docket.affair.merge import Document, merge
 from docket.affair.persons import person_places
 from docket.affair.validator import Contract
+from docket.document.response import whole
 from docket.fields.fields import Fields
 from docket.fields.placer import day, find_block, get_at, set_at
 from docket.store.base import Store
@@ -95,6 +96,13 @@ def rows_of(doc: str, report: dict[str, dict], fields: Fields, body: list[dict],
     return rows
 
 
+def blocks_of_document(store: Store, name: str, entry: dict | None = None) -> list[dict]:
+    """The blocks of a stored document in reading order: as the store keeps them, else from the document's
+    entry in the record of its affair (a store filled before the blocks were kept on their own)."""
+    blocks = store.get_blocks(name)
+    return blocks if blocks is not None else whole(entry)
+
+
 def kind_of(rows: list[dict]) -> dict | None:
     """What the rows of a document say it is, as the merging takes it: {kind, block, n}; None when they do
     not say."""
@@ -127,6 +135,24 @@ def set_places(rows: list[dict], affair: str, placed: list[dict]) -> None:
     for row in rows:
         row["affair"] = affair
         row["places"] = at.get(row["n"], [])
+
+
+def value_id(row: dict, place: dict) -> str:
+    """The id a value is known by in the review: its document and the number of its row, and where the row
+    sits in the entry of another or stands for an id, that as well ("doc#4", "doc#4:2", "doc#4/id"). It holds
+    whatever shape the record has; a new run numbers the rows anew."""
+    of = "" if place.get("of") is None else f":{place['of']}"
+    part = f"/{place['part']}" if place.get("part") else ""
+    return f"{row['doc']}#{row['n']}{of}{part}"
+
+
+def find_value(rows: list[dict], ident: str) -> tuple[dict, dict] | None:
+    """The row and its place for the id of a value; None when no row carries it."""
+    for row in rows:
+        for place in row.get("places") or []:
+            if value_id(row, place) == ident:
+                return row, place
+    return None
 
 
 def place_of(rows: list[dict], source: str, path: str) -> tuple[dict, dict] | None:
@@ -273,11 +299,14 @@ def fill_rows(store: Store, fields: Fields, contract: Contract, types: dict[str,
             became[name] = report.get("persons") or []
             # the kind only where the stored record holds it: an older run did not carry it into the affair
             kind = report.get("kind") if entry.get("article-type") else None
-            rows = rows_of(name, report["fields"], fields, entry.get("body") or [], kind)
+            blocks = blocks_of_document(store, name, entry)
+            if store.get_blocks(name) is None:
+                store.put_blocks(name, blocks)
+            rows = rows_of(name, report["fields"], fields, blocks, kind)
             values = values_from(rows, numbered=True)
             date = next((day(i["value"]) for i in values.get(date_field, [])), "")
             parliament = str((report.get("identity") or {}).get("body") or "")
-            documents.append(Document(document["id"], name, document.get("pages") or 1, entry.get("body") or [],
+            documents.append(Document(document["id"], name, document.get("pages") or 1, blocks,
                                       values, affair["key"], date, parliament, kind_of(rows)))
             rows_of_doc[document["id"]] = rows
         placed: list[dict] = []

@@ -23,11 +23,12 @@ MONTHS = [
 
 
 def fill(record: dict, doc: int, values: dict[str, list[dict]], fields: Fields, contract: Contract,
-         body: list[dict], placed: list[dict] | None = None) -> tuple[dict, dict[str, str]]:
+         body: list[dict], placed: list[dict] | None = None, language: str = "") -> tuple[dict, dict[str, str]]:
     """Builds the values into the record, `values` per field name: value, block, how. Returns the record and a
     note per field: taken, already in the record, differs from the record. With `placed`, every value that
     carries the number of its row ("n") is noted there with where it went: {doc, n, of, source, path}, `of`
-    being the row that made the list entry when the value went into the entry of another."""
+    being the row that made the list entry when the value went into the entry of another. `language` is the
+    language of the document: a field that is in the document's own language stands under its key."""
     out = json.loads(json.dumps(record))
 
     def note(hit: dict, source_path: list[str], value_path: list[str], of: int | None = None) -> None:
@@ -46,6 +47,8 @@ def fill(record: dict, doc: int, values: dict[str, list[dict]], fields: Fields, 
         f = fields.fields[name]
         spath = f.path
         path = ["docs", "data", str(at), *spath[3:]] if spath[:3] == ["docs", "data", "[]"] else list(spath)
+        if f.own_language and language:
+            path[-1] = language
         list_at = path.index("[]") if "[]" in path else None
         rule = contract.part(spath) or {}
         if list_at is None and rule.get("type") == "array":

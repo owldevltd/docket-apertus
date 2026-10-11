@@ -3,7 +3,9 @@ propose a rule and apply nothing; the proposal says how many values it would cha
 them, each with a review by "rule"; a person's no keeps the rule from being proposed again; a decision by hand
 that speaks against a rule takes the proposal away; the same value becoming the same value is a pattern of its
 own; a person's confirmation of a value a rule set is counted on the rule, and a switched-off rule applies
-nothing new.
+nothing new. And the label: two values a person set to what the document prints beside the same label propose
+that this field is what stands at that label; accepted, it holds for every document that prints the label with
+another value, and for none that does not print it or leaves its box empty.
 
     python3 tests/rules.py
 """
@@ -22,7 +24,7 @@ from docket.jobs import Jobs  # noqa: E402
 from docket.pipeline import load_contract  # noqa: E402
 from docket.store.files import FileStore  # noqa: E402
 from docket.store.review import sources_of  # noqa: E402
-from docket.store.rules import pattern  # noqa: E402
+from docket.store.rules import apply, labels, pattern, patterns  # noqa: E402
 
 PLACES = ["Kanton Zürich", "Kanton Bern", "Kanton Aargau", "Kanton Luzern", "Stadt Bern"]
 
@@ -36,6 +38,16 @@ def record_with(place: str) -> dict:
         "custom-meta": [{"meta-name": "polity", "meta-value": place,
                          "source": {"doc": 1, "block": "b1", "how": "cited", "approve": True}}],
     }
+
+
+def record_with_label(read: str, printed: str | None) -> dict:
+    """A record whose polity was read from a paragraph, while the document prints it with a label (or not)."""
+    record = record_with(read)
+    if printed is not None:
+        record["docs"]["data"][0]["body"].append(
+            {"id": "b2", "page": 1, "type": "def-list", "x": 0, "y": 20, "width": 10, "height": 10,
+             "items": [{"term": "Gemeinde:", "def": printed}]})
+    return record
 
 
 def main() -> int:
@@ -158,6 +170,52 @@ def main() -> int:
         status, rule = app.answer_rule(proposals[0]["id"], True, "test")
         check(status == 200 and value(store, 2)["value"] == "Antrag" and value(store, 3)["value"] == "Anzug",
               "accepted, it changes the equal value and no other")
+        jobs.stop()
+
+        # what a document prints with a label: the text beside it, the label itself where its box is ticked
+        head = [{"id": "b1", "type": "def-list", "items": [
+            {"term": "Vorstoss-Nr.:", "def": "M 185"}, {"term": "Richtlinienmotion", "def": "☒"},
+            {"term": "Dringlich", "def": "☐"}, {"term": "Eingereicht am", "def": "22.11.2018"}]}]
+        told = labels(head)
+        check(told == {"vorstoss-nr.": "M 185", "richtlinienmotion": "Richtlinienmotion",
+                       "eingereicht am": "22.11.2018"},
+              f"labels of a head: {told}")
+        kinds = [(p["kind"], p["parameter"]) for p in patterns("Motion", "Richtlinienmotion", told)]
+        check(("label", "richtlinienmotion") in kinds
+              and ("label", "vorstoss-nr.") in [(p["kind"], p["parameter"]) for p in patterns("nid 0.1", "m 185", told)]
+              and not [p for p in patterns("Motion", "Postulat", told) if p["kind"] == "label"],
+              "a change to what stands at a label, or to the label of a ticked box, carries that label")
+        rule = {"kind": "label", "parameter": "eingereicht am"}
+        check(apply(rule, "2018-11-21", told) == "2018-11-22" and apply(rule, "22. November 2018", told) is None
+              and apply({"kind": "label", "parameter": "dringlich"}, "x", told) is None
+              and apply(rule, "2018-11-21", {}) is None,
+              "a rule of a label gives the labelled value where it differs, a date as its day; nothing where the "
+              "box is empty or the label is not printed")
+
+        # two changes to what stands at the same label propose the label for the field
+        reads = [("Stadtrat", "Nidau"), ("Parlament", "Biel"), ("Rat", "Thun"), ("Bern", "Bern"), ("Kanzlei", None),
+                 ("Amt", "☐")]
+        store = FileStore(Path(tmp) / "label")
+        for i, (read, printed) in enumerate(reads):
+            store.put_affair(f"nr-{i}", record_with_label(read, printed), [{"name": f"doc-{i}", "id": 1, "pages": 1}])
+        jobs = Jobs(type(config)(**{**config.__dict__, "storage_dir": Path(tmp) / "label-runs"}))
+        app = App(store, contract, config, jobs)
+        _, answer = change(app, 0, "Nidau")
+        check(answer["proposals"] == [], "the first change to a labelled value proposes nothing")
+        _, answer = change(app, 1, "Biel")
+        found = [r for r in answer["proposals"] if r["kind"] == "label"]
+        check(len(found) == 1 and found[0]["parameter"] == "gemeinde" and found[0]["field"] == "polity"
+              and found[0]["reach"]["count"] == 1 and found[0]["reach"]["examples"][0]["after"] == "Thun",
+              "the second proposes the label for the field; it reaches the one document that prints another value "
+              "there")
+        status, rule = app.answer_rule(found[0]["id"], True, "test")
+        third, review = value(store, 2), value(store, 2)["review"] or {}
+        check(status == 200 and rule["applied"] == 1 and third["value"] == "Thun" and review.get("by") == "rule"
+              and review.get("rule") == rule["id"] and review.get("before") == "Rat",
+              "accepted, the value becomes what stands at the label, with a review by the rule")
+        check([value(store, i)["value"] for i in (3, 4, 5)] == ["Bern", "Kanzlei", "Amt"]
+              and all(value(store, i)["review"] is None for i in (3, 4, 5)),
+              "the same value, no label and an empty box are left alone")
         jobs.stop()
     return 1 if failed else 0
 

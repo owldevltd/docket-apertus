@@ -29,9 +29,15 @@ from docket.pipeline import (
     process_pages,
 )
 from docket.store import open_store
-from docket.store.review import carry_reviews
+from docket.store.base import stamp
+from docket.store.review import carry_reviews, label_of_path
 from docket.store.register import stop_words
-from docket.store.rows import adopt, carry_decisions, follow, kind_of, rows_of, set_matches, set_places, values_from
+from docket.store.rows import (
+    PLACED, adopt, blocks_of_document, carry_decisions, follow, kind_of, note_decision, rows_of, set_matches,
+    set_places, values_from,
+)
+from docket.store.rules import apply as apply_rule
+from docket.store.rules import labels
 from docket.store.vocabulary import Vocabulary
 
 
@@ -60,8 +66,10 @@ class RunResult:
 
 
 def run_affairs(files: list[Path], out: Path, config: Config, with_model: bool, merge_affairs: bool = True,
-                say: Callable[[str], None] = print) -> RunResult:
-    """Processes the PDFs into `out`; with merge_affairs the documents become affairs in the store."""
+                say: Callable[[str], None] = print, given: dict[str, str] | None = None) -> RunResult:
+    """Processes the PDFs into `out`; with merge_affairs the documents become affairs in the store. `given`
+    tells the parliament of a document by its name (the file without ".pdf"), where whoever hands it in knows
+    it; else the parliament is read from the document."""
     client = Client(config) if with_model else None
     contract = load_contract(config)
     knowledge = load_knowledge(config)
@@ -73,7 +81,7 @@ def run_affairs(files: list[Path], out: Path, config: Config, with_model: bool, 
         if not pdf.is_file() or pdf.suffix.lower() != ".pdf":
             say(f"not a PDF: {pdf}")
             continue
-        p = _process(pdf, out, client, contract, knowledge, fields)
+        p = _process(pdf, out, client, contract, knowledge, fields, (given or {}).get(pdf.stem, ""))
         kinds = ", ".join(f"{k} {v}" for k, v in sorted(p.report["blocks"].items(), key=lambda item: -item[1]))
         calls = f"  {p.calls} calls" if client else ""
         state = "valid" if not p.errors else f"{len(p.errors)} violations, first: {p.errors[0]}"
@@ -192,7 +200,7 @@ def ask_missing(config: Config, names: list[str] | None = None, limit: int | Non
                     else:
                         part = Fields(fields.task, {n: fields.fields[n] for n in missing}, fields.entities)
                         before = client.calls
-                        stub = {"docs": {"data": [{"id": 1, "body": entry.get("body") or []}]}}
+                        stub = {"docs": {"data": [{"id": 1, "body": blocks_of_document(store, name, entry)}]}}
                         _, filled = fill_document(stub, pages, first_pages(pages), part, contract, client, knowledge)
                         if filled["asked"]:
                             report["fields"].update(filled["fields"])
@@ -209,7 +217,7 @@ def ask_missing(config: Config, names: list[str] | None = None, limit: int | Non
                 values = values_of(report["fields"])
                 date = next((day(i["value"]) for i in values.get(date_field, [])), "")
                 documents.append(Document(document["id"], name, int(document.get("pages") or 1),
-                                          entry.get("body") or [], values, affair["key"], date,
+                                          blocks_of_document(store, name, entry), values, affair["key"], date,
                                           str((report.get("identity") or {}).get("body") or "")))
             if touched:
                 result.affairs.extend(_write_affairs(out, documents, fields, contract, knowledge, config, say))
@@ -224,7 +232,7 @@ def ask_missing(config: Config, names: list[str] | None = None, limit: int | Non
 
 
 def _process(pdf: Path, out: Path, client: Client | None, contract: Contract, knowledge: Knowledge,
-             fields: Fields) -> Processed:
+             fields: Fields, body: str = "") -> Processed:
     started = time.monotonic()
     before = client.calls if client else 0
     pages_dir = out / pdf.stem
@@ -241,7 +249,7 @@ def _process(pdf: Path, out: Path, client: Client | None, contract: Contract, kn
     (out / f"{pdf.stem}.json").write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     identity = None
     if client is not None:
-        identity = identify(filled["fields"], fields, pages, pdf.stem, knowledge)
+        identity = identify(filled["fields"], fields, pages, pdf.stem, knowledge, body)
         _write_fields(out, pdf.stem, record, pages, filled, fields, keep, identity, found)
     calls = client.calls - before if client else 0
     return Processed(pdf.stem, pages, record, report, filled, identity, errors, calls, time.monotonic() - started)
@@ -285,6 +293,34 @@ def _states(filled: dict) -> str:
     return f"fields {len(filled['fields'])}: " + ", ".join(f"{k} {v}" for k, v in sorted(states.items()))
 
 
+def _by_rules(rows: list[dict], rules: list[dict],
+              labelled: dict[str, dict[str, str]]) -> list[tuple[dict, dict, dict]]:
+    """Holds the active rules against the values nobody decided on yet and notes a change at the row where one
+    fits, with a review that names the rule. `labelled` is what every document prints with a label, by its
+    name. Returns row, decision and place of every change."""
+    active = [r for r in rules if r.get("active")]
+    out = []
+    for row in rows if active else []:
+        if row["state"] != PLACED or row.get("value") is None:
+            continue
+        for place in row.get("places") or []:
+            taken = any((d.get("of"), d.get("part", "")) == (place["of"], place["part"])
+                        for d in row.get("decisions") or [])
+            if place["part"] != "" or taken:
+                continue
+            for rule in active:
+                after = apply_rule(rule, str(row["value"]), labelled.get(row["doc"])) \
+                    if rule["field"] == row["field"] else None
+                if after is None:
+                    continue
+                review = {"at": stamp(), "decision": "changed", "by": "rule", "rule": rule["id"],
+                          "before": str(row["value"])}
+                note_decision(row, place, review, after)
+                out.append((row, row["decisions"][-1], place))
+                break
+    return out
+
+
 def _write_affairs(out: Path, documents: list[Document], fields: Fields, contract: Contract,
                    knowledge: Knowledge, config: Config, say: Callable[[str], None]) -> list[dict]:
     """One affair per key, as a file each, all in one NDJSON, and into the store with earlier reviews kept."""
@@ -299,6 +335,8 @@ def _write_affairs(out: Path, documents: list[Document], fields: Fields, contrac
     stop = stop_words(names)
     found: dict[str, list[dict]] = {}
     learnt = store.get_learnt()
+    rules = store.get_rules()
+    by_rule = 0
     # what was found in every document, one row per value; the values go into the merge with the number of
     # their row, so that it can note where each row sits in the record
     rows_of_doc: dict[int, list[dict]] = {}
@@ -318,7 +356,7 @@ def _write_affairs(out: Path, documents: list[Document], fields: Fields, contrac
                 second.apply(d.name, rows, d.body, d.parliament, fields, learnt, knowledge.forms, vocabulary)
             d.values = values_from(rows, numbered=True)
     placed: list[dict] = []
-    for affair in merge(documents, fields, contract, knowledge.types, vocabulary, placed):
+    for affair in merge(documents, fields, contract, knowledge.types, vocabulary, placed, knowledge.answers):
         safe = re.sub(r"[^\w.-]+", "_", affair.key)
         record = affair.record
         # who the named persons are, by the register of each document's parliament
@@ -349,8 +387,29 @@ def _write_affairs(out: Path, documents: list[Document], fields: Fields, contrac
             # by document, block and path, and taken into the rows
             record, carried = carry_reviews(earlier["record"], record)
             adopt(record, together)
+        # the rules people accepted hold for what a new run reads as well; one that would break the contract
+        # is not applied
+        labelled = {by_id[i].name: labels(blocks_of(by_id[i].body)) for i in affair.documents}
+        ruled = _by_rules(together, rules, labelled)
+        unruled = record
         record, followed = follow(record, together)
-        carried = max(carried, followed)
+        if ruled and len(contract.check(record)) > len(affair.errors):
+            for row, decision, _ in ruled:
+                row["decisions"].remove(decision)
+            record, followed = follow(unruled, together)
+            ruled = []
+        numbers = {by_id[i].name: i for i in affair.documents}
+        for row, decision, place in ruled:
+            review = decision["review"]
+            store.add_decision({
+                "affair": affair.key, "doc": numbers[row["doc"]], "block": row.get("block"), "path": place["path"],
+                "label": label_of_path(place["path"]), "field": row["field"], "how": row.get("how"),
+                "approve": bool(row.get("approve")), "decision": "changed", "before": review["before"],
+                "after": decision["value"], "by": "rule", "at": review["at"], "rule": review["rule"],
+            })
+            next(r for r in rules if r["id"] == review["rule"])["applied"] += 1
+        by_rule += len(ruled)
+        carried = max(carried, followed - len(ruled))
         text = json.dumps(record, ensure_ascii=False, indent=2) + "\n"
         (folder / f"{safe}.json").write_text(text, encoding="utf-8")
         lines.append(json.dumps(record, ensure_ascii=False))
@@ -369,6 +428,7 @@ def _write_affairs(out: Path, documents: list[Document], fields: Fields, contrac
             if i in rows_of_doc:
                 store.put_rows(name, rows_of_doc[i])
             store.put_pages(name, out / name)
+            store.put_blocks(name, by_id[i].body)
         state = "valid" if not affair.errors else f"{len(affair.errors)} violations, first: {affair.errors[0]}"
         count = len(affair.documents)
         kind = (record.get("type_harmonized") or {}).get("de") or "-"
@@ -380,5 +440,8 @@ def _write_affairs(out: Path, documents: list[Document], fields: Fields, contrac
             "valid": not affair.errors, "kept": carried,
         })
     (out / "affairs.ndjson").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    if by_rule:
+        store.put_rules(rules)
+        say(f"{by_rule} values set by rules people accepted")
     say(f"{len(lines)} affairs in the {store.kind} store")
     return summaries

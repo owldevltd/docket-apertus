@@ -6,6 +6,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
+import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Api } from '../api/api';
@@ -18,13 +19,13 @@ import { VocabularyArea } from './vocabulary';
 type Area = 'runs' | 'rules' | 'vocabulary' | 'definition' | 'learnt' | 'process';
 
 // The admin as in OpenParlData's panel: a drawer with the areas at the left, the area at the right. Runs
-// start here (a PDF, or a document of theirs by id) and are watched while they run; rules are seen here, a
+// start here (a PDF, with its parliament where the person knows it) and are watched while they run; rules are seen here, a
 // proposed one answered, an accepted one switched; the vocabulary is seen and changed in an area of its own
 // (vocabulary.ts); the definition shows the fields with what each is and in how many documents it was asked.
 @Component( {
     selector: 'app-admin',
     imports: [ FormsModule, RouterLink, MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule,
-        MatListModule, MatSlideToggleModule, Icon, StampPipe, VocabularyArea ],
+        MatListModule, MatSelectModule, MatSlideToggleModule, Icon, StampPipe, VocabularyArea ],
     templateUrl: './admin.html',
     styleUrl: './admin.scss',
 } )
@@ -41,7 +42,9 @@ export class Admin implements OnInit, OnDestroy {
     readonly definition = signal<Definition | null>( null );
     readonly learnt = signal<Learnt | null>( null );
     readonly file = signal<File | null>( null );
-    readonly docId = signal<number | null>( null );
+    // the parliament of the PDF, where the person knows it; empty: read from the document
+    readonly body = signal( '' );
+    readonly parliaments = signal<{ key: string; name: string }[]>( [] );
     readonly withModel = signal( true );
     readonly token = signal( localStorage.getItem( 'docket.token' ) || '' );
     readonly busy = signal( false );
@@ -63,6 +66,10 @@ export class Admin implements OnInit, OnDestroy {
 
     async ngOnInit(): Promise<void> {
         await this.refresh();
+        // the parliaments to choose from at an upload, by name
+        const known = await this.api.parliaments().catch( () => ( {} ) );
+        this.parliaments.set( Object.entries( known ).map( ( [ key, p ] ) => ( { key, name: p.name + ', ' + p.parliament } ) )
+            .sort( ( a, b ) => a.name.localeCompare( b.name ) ) );
         // a run takes a while; the list follows it without a reload
         this.timer = setInterval( () => { this.refresh().catch( () => undefined ); }, 4000 );
     }
@@ -108,21 +115,8 @@ export class Admin implements OnInit, OnDestroy {
             return;
         }
         await this.guard( async () => {
-            await this.api.upload( file, this.withModel() );
+            await this.api.upload( file, this.withModel(), this.body() );
             this.file.set( null );
-            this.area.set( 'runs' );
-        } );
-    }
-
-    async fetch(): Promise<void> {
-        const id = this.docId();
-        if ( !id ) {
-            this.snack.open( 'Bitte eine Kennung eingeben.', 'OK', { duration: 4000 } );
-            return;
-        }
-        await this.guard( async () => {
-            await this.api.fetchDocument( id, this.withModel() );
-            this.docId.set( null );
             this.area.set( 'runs' );
         } );
     }

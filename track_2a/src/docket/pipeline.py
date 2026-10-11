@@ -30,7 +30,8 @@ COVER = 0.1
 def load_knowledge(config: Config) -> Knowledge:
     """The section names, and what tools/knowledge.py built from the export where it lies."""
     folder = config.data_dir / "knowledge"
-    sections = json.loads((folder / "sections.json").read_text(encoding="utf-8"))["sections"]
+    names = json.loads((folder / "sections.json").read_text(encoding="utf-8"))
+    sections = names["sections"]
 
     def part(name: str, key: str) -> dict:
         path = folder / name
@@ -40,7 +41,8 @@ def load_knowledge(config: Config) -> Knowledge:
     forms = part("number-forms.json", "forms")
     bodies = part("bodies.json", "bodies")
     kinds = part("kinds.json", "kinds")
-    return Knowledge(sections, types=types, forms=forms, bodies=bodies, kinds=kinds)
+    return Knowledge(sections, types=types, forms=forms, bodies=bodies, kinds=kinds,
+                     answers=names.get("response") or [])
 
 
 def add_kind(record: dict, pages: list[dict], knowledge: Knowledge, printed_type: str | None = None) -> dict | None:
@@ -59,7 +61,8 @@ def add_kind(record: dict, pages: list[dict], knowledge: Knowledge, printed_type
     return found
 
 
-def identify(report: dict[str, dict], fields: Fields, pages: list[dict], name: str, knowledge: Knowledge) -> Identity:
+def identify(report: dict[str, dict], fields: Fields, pages: list[dict], name: str, knowledge: Knowledge,
+             body: str = "") -> Identity:
     """The key of a document from its placed values: per role (number, place, parliament, date, title) the
     first value with a place; the text of the first page for the search by form."""
     values: dict[str, str] = {}
@@ -67,8 +70,8 @@ def identify(report: dict[str, dict], fields: Fields, pages: list[dict], name: s
         items = [i for i in report.get(field_name, {}).get("items", []) if i.get("block") is not None]
         if items:
             values[role] = items[0]["value"]
-    text = " ".join(e.get("content") or "" for e in pages[0]["elements"]) if pages else ""
-    return make_key(values, name, text, knowledge.forms, knowledge.bodies)
+    text = "\n".join(e.get("content") or "" for e in pages[0]["elements"]) if pages else ""
+    return make_key(values, name, text, knowledge.forms, knowledge.bodies, body)
 
 
 def load_contract(config: Config) -> Contract:

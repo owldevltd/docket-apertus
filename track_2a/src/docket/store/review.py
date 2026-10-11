@@ -72,7 +72,7 @@ def _label(path: str | list[str]) -> str:
     """The field a value belongs to, the same across affairs: the path of the value without indexes and
     without the language ("contributors.data.2.party.de" to "contributors.party")."""
     parts = path.split(".") if isinstance(path, str) else list(path)
-    words = [p for p in parts if not p.isdigit() and p not in ("data", "de", "fr", "it")]
+    words = [p for p in parts if not p.isdigit() and p not in ("data", "de", "fr", "it", "rm", "en")]
     return ".".join(words)
 
 
@@ -112,6 +112,28 @@ def counts(record: dict) -> dict[str, int]:
     }
 
 
+def review_of(decision: str, by: str, before, after: str | None = None, rule: str | None = None,
+              at: str | None = None) -> dict:
+    """The review a decision leaves at a value: when, what, who, the rule it came from, and the value before
+    where the decision changes or rejects it. Raises ValueError when the decision is none of the three or a
+    change comes without the new value."""
+    if decision not in DECISIONS:
+        raise ValueError(f"decision must be one of {', '.join(DECISIONS)}")
+    review: dict = {"at": at or stamp(), "decision": decision}
+    if by:
+        review["by"] = by
+    if rule:
+        review["rule"] = rule
+    if decision == "changed":
+        if after is None or after == "":
+            raise ValueError("a change needs the new value")
+        if before is not None:
+            review["before"] = str(before)
+    elif decision == "rejected" and before is not None:
+        review["before"] = str(before)
+    return review
+
+
 def apply_decision(record: dict, source_path: str, decision: str, by: str, after: str | None = None,
                    value_path: str | None = None, rule: str | None = None, at: str | None = None) -> dict:
     """A copy of the record with the decision written at the source; raises ValueError when the source or
@@ -130,21 +152,9 @@ def apply_decision(record: dict, source_path: str, decision: str, by: str, after
         raise ValueError(f"{path} is not a value of the entry at {source_path}")
     if entry.get("values") is None and path != entry["path"]:
         raise ValueError(f"the source at {source_path} belongs to {entry['path']}, not {path}")
-    before = get_at(out, path.split("."))
-    review: dict = {"at": at or stamp(), "decision": decision}
-    if by:
-        review["by"] = by
-    if rule:
-        review["rule"] = rule
+    source["review"] = review_of(decision, by, get_at(out, path.split(".")), after, rule, at)
     if decision == "changed":
-        if after is None or after == "":
-            raise ValueError("a change needs the new value")
-        if before is not None:
-            review["before"] = str(before)
         set_at(out, path.split("."), after)
-    elif decision == "rejected" and before is not None:
-        review["before"] = str(before)
-    source["review"] = review
     return out
 
 

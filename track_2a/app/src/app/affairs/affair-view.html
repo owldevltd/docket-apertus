@@ -54,6 +54,14 @@
             } @else {
                 <div class="doc-name muted">{{ current()?.name }}</div>
             }
+            @if ( language() ) {
+                <div class="doc-name muted">Sprache des Dokuments: {{ language() }}</div>
+            }
+            @for ( r of answers(); track r.block ) {
+                <button type="button" class="answer" (click)="show( r )" title="Zur Antwort im Dokument springen">
+                    Antwort im Dokument: {{ r.title || 'Antwort' }} (ab S. {{ r.page }})
+                </button>
+            }
             @if ( current(); as d ) {
                 <app-page-view [name]="d.name" [pages]="d.pages" [blocks]="blocks()" [sources]="docSources()"
                     [image]="image()" [(page)]="page" [(focus)]="focus" />
@@ -62,7 +70,7 @@
         <div class="right">
             @for ( s of sorted(); track s.source ) {
                 <app-value-card [entry]="s" [docName]="docName( s )" [answer]="answerOf( s )"
-                    [focused]="focus() === s.block && s.doc === docRecord()?.id" (decided)="decide( $event )" (jump)="jump( $event )" />
+                    [focused]="focus() === s.block && s.doc === current()?.id" (decided)="decide( $event )" (jump)="jump( $event )" />
             } @empty {
                 <div class="empty">Keine Werte mit Fundstelle.</div>
             }

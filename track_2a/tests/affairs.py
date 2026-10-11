@@ -23,7 +23,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from docket.affair.identity import make_key, number  # noqa: E402
+from docket.affair.identity import key_of, make_key, number, number_in, own, search  # noqa: E402
 from docket.affair.merge import Document, merge  # noqa: E402
 from docket.affair.types import harmonized  # noqa: E402
 from docket.config import load_config  # noqa: E402
@@ -59,6 +59,31 @@ def main(argv: list[str]) -> int:
           "(18_INT_168, 18_MOT_030), the other forms are told as before")
     if not (apart and kept):
         return 1
+    # a prefix printed as a word of its own belongs to the number, when both together have the parliament's form
+    paired = (search("Vorstoss-Nr.: M 185 vom 22.11.2018", ["a999"]) == "M 185"
+              and search("am 185 Tagen, Seite S 12", ["a999"]) == ""
+              and search("M\n16. Parlamentarischer Vorstoss\nMotion M 185", ["a999", "a99"]) == "M 185"
+              and search("Nr. 15.5098.01 und M 185", ["99.9999.99", "a999"]) == "15.5098.01")
+    print(("ok   " if paired else "FAIL ") + "numbers: a prefix that stands as a word before the number is found "
+          "with it (M 185); small letters, a letter of another element and other forms are not")
+    if not paired:
+        return 1
+    # the number is the part that has a form of the parliament, all of it; the key names the parliament
+    told = [("BE", "2015.RRGR.1112", "nr-be-2015rrgr1112"), ("GE", "IUE 1395", "nr-ge-iue1395"),
+            ("GE", "M 1395", "nr-ge-m1395"), ("BS", "23.5448.01", "nr-bs-235448"), ("AG", "GR.19.196", "nr-ag-19196"),
+            ("ZH", "KR-Nr. 357/2018", "nr-zh-3572018"), ("743", "M 185", "nr-743-m185"), ("JU", "MO 11", "nr-ju-mo11")]
+    got = [key_of(body, number_in(printed, list(knowledge.forms.get(body, {})))) for body, printed, _ in told]
+    formed = got == [key for _, _, key in told] and own("BS", "23.5448") == "nr-bs-235448"
+    print(("ok   " if formed else "FAIL ") + "keys: the part of the number that has a form of the parliament counts "
+          "whole (Berne, Geneva, Jura), a document number, a label and a prefix that is none fall away (Basel, "
+          f"Zurich, Aargau), and the key names the parliament: {got if not formed else len(got)}")
+    known = make_key({"number": "M 185"}, "x", "", knowledge.forms, knowledge.bodies, "743")
+    unknown = make_key({"number": "M 185"}, "x", "", knowledge.forms, knowledge.bodies)
+    given = (known.key, known.body) == ("nr-743-m185", "743") and (unknown.key, unknown.body) == ("nr-185", "")
+    print(("ok   " if given else "FAIL ") + "keys: a parliament told with the document goes into the key; without one "
+          f"and with none read, the number stands alone ({known.key}, {unknown.key})")
+    if not (formed and given):
+        return 1
     stem = load_stem(config.data_dir / "knowledge" / "vocabulary.json")
     vocabulary = Vocabulary(stem_rows(stem) if stem else [])
     print(f"ok   vocabulary: {len(vocabulary.names('types'))} rows of the types, stem of "
@@ -88,11 +113,12 @@ def main(argv: list[str]) -> int:
             n += 1
         first = first_pages(pages) if pages else [1]
         body = record["docs"]["data"][0]["body"]
-        text = " ".join(e.get("content") or "" for e in pages[0]["elements"]) if pages else ""
+        text = "\n".join(e.get("content") or "" for e in pages[0]["elements"]) if pages else ""
         place = meta.get("body", {}).get("name") or ""
 
         # the key: from the API's number, and from the page by the parliament's form
-        api_key = "nr-" + number(str(affair["number"])) if affair.get("number") else ""
+        home = str((meta.get("body") or {}).get("key") or "")
+        api_key = own(home, str(affair["number"])) if affair.get("number") else ""
         identity = make_key({"place": place}, pdf.stem, text, knowledge.forms, knowledge.bodies)
         if api_key:
             known_key += 1
@@ -139,7 +165,7 @@ def main(argv: list[str]) -> int:
         again.date = twin.date
         again.parliament = twin.parliament
         documents.append(again)
-    affairs = merge(documents, fields, contract, knowledge.types, vocabulary)
+    affairs = merge(documents, fields, contract, knowledge.types, vocabulary, answers=knowledge.answers)
     for a in affairs:
         state = "valid" if not a.errors else f"{len(a.errors)} violations, first: {a.errors[0]}"
         if a.errors:

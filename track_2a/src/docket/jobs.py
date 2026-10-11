@@ -1,5 +1,5 @@
-"""The queue of runs behind the admin: an uploaded PDF or a document of OpenParlData goes in (or, on a clean
-checkout, the shipped documents with the runs stored beside them), one worker
+"""The queue of runs behind the admin: an uploaded PDF goes in (or, on a clean checkout, the shipped documents
+with the runs stored beside them), one worker
 takes the runs one after the other (the model is called one call at a time anyway), every run lands under
 storage/runs/<id>/ with its lines and its result, so it can be read after a restart."""
 
@@ -10,7 +10,6 @@ import queue
 import re
 import threading
 import time
-import urllib.request
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
@@ -18,9 +17,7 @@ from docket.config import Config
 from docket.runner import ask_missing, run_affairs, run_shipped
 from docket.store.base import stamp
 
-API = "https://api.openparldata.ch/v1"
 PDF_LIMIT = 64 * 1024 * 1024
-TIMEOUT = 60
 
 
 @dataclass
@@ -29,6 +26,7 @@ class Job:
     name: str
     source: str
     model: bool
+    body: str = ""
     state: str = "queued"
     created: str = field(default_factory=stamp)
     started: str | None = None
@@ -54,34 +52,15 @@ class Jobs:
 
     # ---- submitting
 
-    def submit_pdf(self, name: str, data: bytes, model: bool) -> Job:
-        """A PDF from an upload."""
+    def submit_pdf(self, name: str, data: bytes, model: bool, body: str = "") -> Job:
+        """A PDF from an upload; `body` is its parliament where the person who uploads it tells it."""
         if not data.startswith(b"%PDF"):
             raise ValueError("the upload is not a PDF")
         if len(data) > PDF_LIMIT:
             raise ValueError("the PDF is too large")
         job = self._new(_safe(name) or "upload", "upload", model)
-        (self.folder / job.id / f"{job.name}.pdf").write_bytes(data)
-        self._enqueue(job)
-        return job
-
-    def submit_document(self, doc_id: int, model: bool) -> Job:
-        """A document of OpenParlData by its id: the file comes from their file server."""
-        with urllib.request.urlopen(f"{API}/docs/{int(doc_id)}", timeout=TIMEOUT) as r:
-            answer = json.loads(r.read().decode("utf-8"))
-        doc = answer.get("data", answer)
-        url = doc.get("url_oparl") or doc.get("url")
-        if not url:
-            raise ValueError(f"document {doc_id} has no file")
-        name = _safe(str(doc.get("name") or f"doc-{doc_id}"))[:60] or f"doc-{doc_id}"
-        job = self._new(name, f"openparldata:{int(doc_id)}", model)
-        request = urllib.request.Request(url, headers={"User-Agent": "docket"})
-        with urllib.request.urlopen(request, timeout=TIMEOUT) as r:
-            data = r.read(PDF_LIMIT + 1)
-        if not data.startswith(b"%PDF") or len(data) > PDF_LIMIT:
-            job.state, job.error = "failed", "the file is not a PDF or too large"
-            self._save(job)
-            return job
+        job.body = body
+        self._save(job)
         (self.folder / job.id / f"{job.name}.pdf").write_bytes(data)
         self._enqueue(job)
         return job
@@ -143,7 +122,8 @@ class Jobs:
                     result = run_shipped(self.folder / job.id, self.config, say=job.lines.append)
                 else:
                     pdf = self.folder / job.id / f"{job.name}.pdf"
-                    result = run_affairs([pdf], self.folder / job.id, self.config, job.model, say=job.lines.append)
+                    result = run_affairs([pdf], self.folder / job.id, self.config, job.model, say=job.lines.append,
+                                         given={job.name: job.body})
                 job.affairs, job.documents, job.calls = result.affairs, result.documents, result.calls
                 job.state = "failed" if result.halted or result.failed else "done"
                 if result.halted:

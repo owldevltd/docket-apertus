@@ -36,6 +36,7 @@ from collections import Counter
 import numpy as np
 
 from docket.affair.identity import number, search
+from docket.document.response import whole
 from docket.fields.fields import Field, Fields
 from docket.fields.placer import block_text, blocks_of, day, plain, within
 from docket.store.base import Store
@@ -345,7 +346,9 @@ def from_store(store: Store) -> list[dict]:
         entries = {e.get("id"): e for e in (affair["record"].get("docs") or {}).get("data", [])}
         for document in affair["documents"]:
             rows = [r for r in store.get_rows(document["name"]) if r.get("affair") == affair["key"]]
-            body = (entries.get(document["id"]) or {}).get("body") or []
+            body = store.get_blocks(document["name"])
+            if body is None:
+                body = whole(entries.get(document["id"]))
             report = store.get_fields(document["name"]) or {}
             if rows and body:
                 out.append({"name": document["name"], "blocks": body, "rows": rows,

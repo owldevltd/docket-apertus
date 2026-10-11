@@ -164,18 +164,21 @@
             }
             @case ( 'process' ) {
                 <h2>Dokument verarbeiten</h2>
-                <p class="muted">Ein PDF hochladen oder die Kennung eines Dokuments bei OpenParlData eingeben. Der Lauf geht durch
-                    die ganze Strecke und legt das Geschäft im Bestand ab; ein vorhandenes Geschäft behält seine Entscheidungen.</p>
+                <p class="muted">Ein PDF hochladen. Der Lauf geht durch die ganze Strecke und legt das Geschäft im Bestand
+                    ab; ein vorhandenes Geschäft behält seine Entscheidungen. Wer das Parlament kennt, gibt es an; ohne
+                    Angabe liest die Strecke es aus dem Dokument.</p>
                 <div class="row">
                     <input type="file" accept="application/pdf" (change)="chose( $event )">
-                    <button mat-flat-button (click)="upload()" [disabled]="busy()"><app-icon name="upload" /> Hochladen</button>
-                </div>
-                <div class="row">
                     <mat-form-field appearance="outline" subscriptSizing="dynamic" class="grow">
-                        <mat-label>Dokument-Kennung bei OpenParlData</mat-label>
-                        <input matInput type="number" min="1" [ngModel]="docId()" (ngModelChange)="docId.set( $event )">
+                        <mat-label>Parlament</mat-label>
+                        <mat-select [value]="body()" (selectionChange)="body.set( $event.value )">
+                            <mat-option value="">aus dem Dokument lesen</mat-option>
+                            @for ( p of parliaments(); track p.key ) {
+                                <mat-option [value]="p.key">{{ p.name }}</mat-option>
+                            }
+                        </mat-select>
                     </mat-form-field>
-                    <button mat-stroked-button (click)="fetch()" [disabled]="busy()"><app-icon name="cloud" /> Von OpenParlData holen</button>
+                    <button mat-flat-button (click)="upload()" [disabled]="busy()"><app-icon name="upload" /> Hochladen</button>
                 </div>
                 <mat-checkbox [checked]="withModel()" (change)="withModel.set( $event.checked )">mit dem Modell (Scans lesen, Rest einordnen, Felder)</mat-checkbox>
                 <div class="row">

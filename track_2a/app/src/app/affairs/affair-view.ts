@@ -4,10 +4,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Api } from '../api/api';
-import { Affair, Block, DecisionBody, FieldsReport, Rule, SourceEntry } from '../api/types';
+import { Affair, Block, DecisionBody, DocumentView, FieldsReport, Rule, SourceEntry } from '../api/types';
 import { Icon } from '../shared/icon';
 import { Who } from '../shared/who';
-import { LABELS, blocksOf, kindName, ruleWords } from '../shared/words';
+import { LABELS, LANGUAGES, blocksOf, kindName, ruleWords } from '../shared/words';
 import { PageView } from './page-view';
 import { ValueCard } from './value-card';
 
@@ -35,23 +35,24 @@ export class AffairView implements OnInit {
     readonly page = signal( 1 );
     readonly focus = signal<string | null>( null );
     readonly reports = signal<Record<string, FieldsReport | null>>( {} );
+    // the documents as the store keeps them, by name: the page view does not read the affair's record
+    readonly views = signal<Record<string, DocumentView | null>>( {} );
 
-    readonly record = computed( () => this.affair()?.record || {} );
     readonly title = computed( () => this.affair()?.head?.title || this.key() );
     readonly meta = computed( () => {
         const head = this.affair()?.head;
         return [ head?.number, head?.date, head?.type ].filter( Boolean );
     } );
     readonly current = computed( () => this.affair()?.documents[ this.doc() ] );
-    readonly docRecord = computed( () => {
-        const d = this.current();
-        const docs: any[] = this.record()[ 'docs' ]?.data || [];
-        return docs.find( ( x ) => x.id === d?.id ) || docs[ this.doc() ];
-    } );
-    readonly blocks = computed<Block[]>( () => blocksOf( this.docRecord()?.body ) );
-    readonly kind = computed( () => this.docRecord()?.[ 'article-type' ] as string | undefined );
+    readonly view = computed( () => this.views()[ this.current()?.name || '' ] );
+    readonly blocks = computed<Block[]>( () => blocksOf( this.view()?.blocks ) );
+    readonly language = computed( () => LANGUAGES[ this.view()?.language || '' ] || '' );
+    // the answers within this document, each with the block it begins at
+    readonly answers = computed( () => this.view()?.answers || [] );
+    readonly docSources = computed( () => ( this.affair()?.sources || [] ).filter( ( s ) => s.doc === this.current()?.id ) );
+    // what the document is within the affair: a value like the others, shown in the head
+    readonly kind = computed( () => this.docSources().find( ( s ) => s.field === 'kind' || s.label === 'docs.article-type' )?.value as string | undefined );
     readonly kindText = computed( () => kindName( this.kind() ) );
-    readonly docSources = computed( () => ( this.affair()?.sources || [] ).filter( ( s ) => s.doc === this.docRecord()?.id ) );
     readonly sorted = computed( () => [ ...( this.affair()?.sources || [] ) ].sort( ( a, b ) => Number( b.open ) - Number( a.open ) ) );
     readonly image = computed( () => {
         const name = this.current()?.name || '';
@@ -63,9 +64,12 @@ export class AffairView implements OnInit {
             const affair = await this.api.affair( this.key() );
             this.affair.set( affair );
             const reports: Record<string, FieldsReport | null> = {};
+            const views: Record<string, DocumentView | null> = {};
             for ( const d of affair.documents ) {
+                views[ d.name ] = await this.api.document( d.name );
                 reports[ d.name ] = await this.api.fields( d.name );
             }
+            this.views.set( views );
             this.reports.set( reports );
         } catch ( e ) {
             this.error.set( ( e as Error ).message );
@@ -104,6 +108,11 @@ export class AffairView implements OnInit {
         }
         this.focus.set( s.block );
         document.querySelector( '.split' )?.scrollIntoView( { behavior: 'smooth', block: 'start' } );
+    }
+
+    show( answer: { block: string; page: number } ): void {
+        this.page.set( answer.page );
+        this.focus.set( answer.block );
     }
 
     async decide( body: DecisionBody ): Promise<void> {

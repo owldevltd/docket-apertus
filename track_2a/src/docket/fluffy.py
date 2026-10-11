@@ -90,6 +90,7 @@ def join_lines(elements: list[dict], px: float, section) -> list[dict]:
     for e in ordered:
         if out and _follows(out[-1], e, px, section) and not _marked(e, ordered, px):
             p = out[-1]
+            p["textLines"] = text_lines(p) + text_lines(e)
             p["content"] = hyphens(p["content"] + "\n" + e["content"])
             right = max(p["x"] + p["width"], e["x"] + e["width"])
             p["x"] = min(p["x"], e["x"])
@@ -104,6 +105,15 @@ def join_lines(elements: list[dict], px: float, section) -> list[dict]:
         if isinstance(e.get("content"), str):
             e["content"] = e["content"].replace("\n", " ")
     return out
+
+
+def text_lines(e: dict) -> list[dict]:
+    """The lines of a text element with their height on the page ({y, text}): the ones the text layer kept,
+    else the whole text as one line at the middle of the element."""
+    if e.get("textLines"):
+        return list(e["textLines"])
+    text = str(e.get("content") or "").replace("\n", " ").strip()
+    return [{"y": round(e["y"] + e["height"] / 2), "text": text}] if text else []
 
 
 def _follows(p: dict, e: dict, px: float, section) -> bool:

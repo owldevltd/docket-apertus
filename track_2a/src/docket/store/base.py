@@ -145,6 +145,18 @@ class Store:
             shutil.copyfile(file, target / file.name)
         return count
 
+    def put_blocks(self, name: str, blocks: list[dict]) -> None:
+        """Keeps the blocks of a document as the run built them, beside its pages: so a document can be shown
+        whatever shape the record of its affair has."""
+        target = self.folder / "pages" / safe_name(name)
+        target.mkdir(parents=True, exist_ok=True)
+        (target / f"{name}-blocks.json").write_text(json.dumps(blocks, ensure_ascii=False), encoding="utf-8")
+
+    def get_blocks(self, name: str) -> list[dict] | None:
+        """The blocks of a document in reading order; None when the store was filled before it kept them."""
+        path = self.folder / "pages" / safe_name(name) / f"{name}-blocks.json"
+        return json.loads(path.read_text(encoding="utf-8")) if path.is_file() else None
+
     def page_path(self, name: str, n: int) -> Path | None:
         path = self.folder / "pages" / safe_name(name) / f"{name}-s{n}.png"
         return path if path.is_file() else None

@@ -1,0 +1,1404 @@
+{
+  "about": "How the terms of the affair schema (`data/schema/docket.json`, described in `data/schema/DEFINITION.md`) are called in OpenParlData and in the standards the challenge names: per term the elements or properties that hold the same thing there, by their names in the standard's own schema; an empty list where none was found. Which element answers a term is a reading of the schemas, set by the assistant on 11 October 2026, open. That every name exists in its schema is checked by `tools/mapping.py`; this page is written from `data/schema/mapping.json`.",
+  "standards": [
+    {
+      "id": "openparldata",
+      "name": "OpenParlData",
+      "edition": "the tables of its exports, as read on 10 October 2026",
+      "names": "table.field; a field per language is named in German (`title_de`)"
+    },
+    {
+      "id": "jats",
+      "name": "JATS",
+      "edition": "1.3, Archiving, the XSD with MathML3",
+      "names": "element, `@attribute`, `element/@attribute`"
+    },
+    {
+      "id": "akoma-ntoso",
+      "name": "Akoma Ntoso",
+      "edition": "3.0, akomantoso30.xsd of OASIS",
+      "names": "element, `@attribute`, `element/@attribute`"
+    },
+    {
+      "id": "parla-clarin",
+      "name": "Parla-CLARIN",
+      "edition": "the TEI customisation, parla-clarin.xsd",
+      "names": "element, `@attribute`, `element/@attribute`"
+    },
+    {
+      "id": "popolo",
+      "name": "Popolo",
+      "edition": "the JSON schemas of the specification",
+      "names": "class.property"
+    },
+    {
+      "id": "docling",
+      "name": "Docling",
+      "edition": "DoclingDocument 1.10.0 of docling-core, its JSON Schema fetched on 11 October 2026",
+      "names": "Class, Class.property, `Class.property=value`, or a property of the document itself"
+    }
+  ],
+  "groups": [
+    {
+      "title": "The affair",
+      "rows": [
+        {
+          "term": "the record",
+          "means": "one item of parliamentary business with its documents",
+          "keys": [],
+          "openparldata": [
+            "affairs"
+          ],
+          "jats": [],
+          "akoma-ntoso": [
+            "documentCollection"
+          ],
+          "parla-clarin": [],
+          "popolo": [
+            "motion"
+          ],
+          "docling": [],
+          "notes": {
+            "jats": "describes one document; nothing stands above it",
+            "akoma-ntoso": "a collection of documents, chosen for any reason",
+            "parla-clarin": "describes one text or a corpus of them"
+          }
+        },
+        {
+          "term": "`schema`",
+          "means": "the version of this definition",
+          "keys": [
+            "schema"
+          ],
+          "openparldata": [],
+          "jats": [
+            "article/@dtd-version"
+          ],
+          "akoma-ntoso": [],
+          "parla-clarin": [],
+          "popolo": [],
+          "docling": [
+            "schema_name",
+            "version"
+          ]
+        },
+        {
+          "term": "`number`",
+          "means": "the affair's number",
+          "keys": [],
+          "openparldata": [
+            "affairs.number"
+          ],
+          "jats": [
+            "article-id"
+          ],
+          "akoma-ntoso": [
+            "docNumber",
+            "FRBRnumber"
+          ],
+          "parla-clarin": [
+            "idno"
+          ],
+          "popolo": [
+            "motion.identifier"
+          ],
+          "docling": []
+        },
+        {
+          "term": "`title`",
+          "means": "the title, per language",
+          "keys": [],
+          "openparldata": [
+            "affairs.title_de"
+          ],
+          "jats": [
+            "article-title",
+            "trans-title"
+          ],
+          "akoma-ntoso": [
+            "docTitle"
+          ],
+          "parla-clarin": [
+            "title"
+          ],
+          "popolo": [],
+          "docling": [
+            "TitleItem"
+          ],
+          "notes": {
+            "popolo": "a motion has its text, no title"
+          }
+        },
+        {
+          "term": "`type_name`",
+          "means": "the type as the document names it, and its standard name",
+          "keys": [],
+          "openparldata": [
+            "affairs.type_name_de",
+            "affairs.type_harmonized_de"
+          ],
+          "jats": [
+            "subj-group",
+            "subject"
+          ],
+          "akoma-ntoso": [
+            "docType",
+            "TLCConcept"
+          ],
+          "parla-clarin": [
+            "catRef",
+            "category"
+          ],
+          "popolo": [
+            "motion.classification"
+          ],
+          "docling": [],
+          "notes": {
+            "akoma-ntoso": "docType marks the word in the text; the twelve document types of the schema have none for a submission of a member"
+          }
+        },
+        {
+          "term": "`begin_date`",
+          "means": "the day the affair was handed in",
+          "keys": [],
+          "openparldata": [
+            "affairs.begin_date"
+          ],
+          "jats": [
+            "history",
+            "date"
+          ],
+          "akoma-ntoso": [
+            "docDate",
+            "FRBRdate"
+          ],
+          "parla-clarin": [
+            "date"
+          ],
+          "popolo": [
+            "motion.date"
+          ],
+          "docling": []
+        },
+        {
+          "term": "`contributors.data[]`",
+          "means": "who takes part: a person or a group, by name",
+          "keys": [
+            "contributors"
+          ],
+          "openparldata": [
+            "contributors.fullname",
+            "contributors.type"
+          ],
+          "jats": [
+            "contrib-group",
+            "contrib",
+            "string-name"
+          ],
+          "akoma-ntoso": [
+            "docProponent",
+            "TLCPerson"
+          ],
+          "parla-clarin": [
+            "person",
+            "persName"
+          ],
+          "popolo": [
+            "motion.creator_id",
+            "person"
+          ],
+          "docling": [],
+          "notes": {
+            "popolo": "one creator per motion"
+          }
+        },
+        {
+          "term": "`role`",
+          "means": "what the contributor is to the affair: author, co-signer",
+          "keys": [],
+          "openparldata": [
+            "contributors.role_de",
+            "contributors.role_harmonized"
+          ],
+          "jats": [
+            "role",
+            "contrib/@contrib-type"
+          ],
+          "akoma-ntoso": [
+            "TLCRole",
+            "role"
+          ],
+          "parla-clarin": [
+            "affiliation/@role"
+          ],
+          "popolo": [
+            "membership.role"
+          ],
+          "docling": [],
+          "notes": {
+            "parla-clarin": "the role within an organisation, not towards a text",
+            "popolo": "the role within an organisation"
+          }
+        },
+        {
+          "term": "`party`",
+          "means": "the party or parliamentary group of a contributor",
+          "keys": [],
+          "openparldata": [
+            "contributors.party_de",
+            "contributors.party_harmonized_de"
+          ],
+          "jats": [
+            "aff"
+          ],
+          "akoma-ntoso": [
+            "TLCOrganization",
+            "organization"
+          ],
+          "parla-clarin": [
+            "affiliation",
+            "org"
+          ],
+          "popolo": [
+            "organization",
+            "membership.organization_id"
+          ],
+          "docling": []
+        },
+        {
+          "term": "`person_id`",
+          "means": "the id of the person a printed name was told as",
+          "keys": [],
+          "openparldata": [
+            "contributors.person_id",
+            "persons.id"
+          ],
+          "jats": [
+            "contrib-id"
+          ],
+          "akoma-ntoso": [
+            "TLCPerson/@href"
+          ],
+          "parla-clarin": [
+            "person/@id"
+          ],
+          "popolo": [
+            "person.id",
+            "person.identifiers"
+          ],
+          "docling": []
+        },
+        {
+          "term": "`on-behalf-of`",
+          "means": "in whose name it was handed in",
+          "keys": [
+            "on-behalf-of"
+          ],
+          "openparldata": [],
+          "jats": [
+            "on-behalf-of"
+          ],
+          "akoma-ntoso": [],
+          "parla-clarin": [],
+          "popolo": [
+            "membership.on_behalf_of_id"
+          ],
+          "docling": []
+        },
+        {
+          "term": "`degrees`, `aff`, `address`, `email`, `author-comment`, `etal`",
+          "means": "further details of a person, as printed",
+          "keys": [
+            "degrees",
+            "aff",
+            "address",
+            "email",
+            "author-comment",
+            "etal"
+          ],
+          "openparldata": [
+            "persons.title",
+            "persons.email",
+            "persons.street"
+          ],
+          "jats": [
+            "degrees",
+            "aff",
+            "address",
+            "email",
+            "author-comment",
+            "etal"
+          ],
+          "akoma-ntoso": [],
+          "parla-clarin": [
+            "affiliation",
+            "occupation"
+          ],
+          "popolo": [
+            "person.honorific_prefix",
+            "person.email",
+            "person.contact_details"
+          ],
+          "docling": []
+        },
+        {
+          "term": "`events.data[]`",
+          "means": "the course of the affair: what happened, and when",
+          "keys": [
+            "events",
+            "data"
+          ],
+          "openparldata": [
+            "events.title_de",
+            "events.date",
+            "events.title_harmonized"
+          ],
+          "jats": [
+            "history",
+            "pub-history"
+          ],
+          "akoma-ntoso": [
+            "workflow",
+            "step",
+            "lifecycle",
+            "eventRef"
+          ],
+          "parla-clarin": [
+            "listEvent",
+            "event"
+          ],
+          "popolo": [],
+          "docling": [],
+          "notes": {
+            "jats": "the dates of a publication, not of a procedure",
+            "parla-clarin": "an event in the life of a person, a place or an organisation"
+          }
+        },
+        {
+          "term": "`custom-meta`",
+          "means": "a printed header entry without a place of its own: its name and its value",
+          "keys": [
+            "custom-meta",
+            "meta-name",
+            "meta-value"
+          ],
+          "openparldata": [],
+          "jats": [
+            "custom-meta-group",
+            "custom-meta",
+            "meta-name",
+            "meta-value"
+          ],
+          "akoma-ntoso": [
+            "proprietary"
+          ],
+          "parla-clarin": [],
+          "popolo": [],
+          "docling": []
+        },
+        {
+          "term": "`custom-meta` addressee",
+          "means": "whom the affair is addressed to",
+          "keys": [],
+          "openparldata": [
+            "bodies.executive_name"
+          ],
+          "jats": [],
+          "akoma-ntoso": [
+            "docAuthority"
+          ],
+          "parla-clarin": [],
+          "popolo": [
+            "motion.organization_id"
+          ],
+          "docling": [],
+          "notes": {
+            "openparldata": "the name of the executive of a body, not a field of the affair",
+            "popolo": "the organisation the motion is proposed in",
+            "akoma-ntoso": "the authority the document was submitted to"
+          }
+        },
+        {
+          "term": "`custom-meta` polity, parliament, place",
+          "means": "the polity and its parliament as printed, and the place of signing",
+          "keys": [],
+          "openparldata": [
+            "affairs.body_key",
+            "bodies.name",
+            "bodies.legislative_name"
+          ],
+          "jats": [],
+          "akoma-ntoso": [
+            "docJurisdiction",
+            "FRBRcountry",
+            "organization",
+            "location"
+          ],
+          "parla-clarin": [
+            "orgName",
+            "placeName"
+          ],
+          "popolo": [
+            "organization",
+            "area"
+          ],
+          "docling": []
+        },
+        {
+          "term": "`custom-meta` department",
+          "means": "the department in charge",
+          "keys": [],
+          "openparldata": [],
+          "jats": [],
+          "akoma-ntoso": [
+            "TLCOrganization"
+          ],
+          "parla-clarin": [
+            "org"
+          ],
+          "popolo": [
+            "organization"
+          ],
+          "docling": []
+        },
+        {
+          "term": "`related-article`",
+          "means": "another affair this one refers to",
+          "keys": [
+            "related-article",
+            "affair_id",
+            "number"
+          ],
+          "openparldata": [],
+          "jats": [
+            "related-article"
+          ],
+          "akoma-ntoso": [
+            "ref",
+            "documentRef"
+          ],
+          "parla-clarin": [
+            "ref",
+            "relatedItem"
+          ],
+          "popolo": [],
+          "docling": []
+        },
+        {
+          "term": "`related-object`",
+          "means": "an act, a plan or a report it refers to",
+          "keys": [
+            "related-object",
+            "uri"
+          ],
+          "openparldata": [],
+          "jats": [
+            "related-object"
+          ],
+          "akoma-ntoso": [
+            "ref"
+          ],
+          "parla-clarin": [
+            "bibl",
+            "ref"
+          ],
+          "popolo": [],
+          "docling": []
+        },
+        {
+          "term": "`kwd-group`",
+          "means": "printed keywords",
+          "keys": [
+            "kwd-group"
+          ],
+          "openparldata": [],
+          "jats": [
+            "kwd-group",
+            "kwd"
+          ],
+          "akoma-ntoso": [
+            "classification",
+            "keyword"
+          ],
+          "parla-clarin": [
+            "keywords",
+            "term"
+          ],
+          "popolo": [],
+          "docling": [
+            "KeywordsMetaField"
+          ]
+        },
+        {
+          "term": "values per language",
+          "means": "one value per language of the parliament (`title.de`, `title.fr`)",
+          "keys": [],
+          "openparldata": [
+            "affairs.title_de",
+            "affairs.title_fr",
+            "affairs.title_it",
+            "affairs.title_rm"
+          ],
+          "jats": [
+            "@lang",
+            "trans-title",
+            "trans-abstract"
+          ],
+          "akoma-ntoso": [
+            "FRBRlanguage",
+            "@language"
+          ],
+          "parla-clarin": [
+            "@lang",
+            "langUsage"
+          ],
+          "popolo": [],
+          "docling": [
+            "LanguageMetaField"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "The document",
+      "rows": [
+        {
+          "term": "`docs.data[]`",
+          "means": "one document of the affair: its name, its format, its language, its pages",
+          "keys": [
+            "docs",
+            "page-count"
+          ],
+          "openparldata": [
+            "docs.name",
+            "docs.url",
+            "docs.format",
+            "docs.language"
+          ],
+          "jats": [
+            "article",
+            "article/@lang",
+            "counts",
+            "page-count"
+          ],
+          "akoma-ntoso": [
+            "doc",
+            "FRBRManifestation",
+            "FRBRformat",
+            "FRBRlanguage"
+          ],
+          "parla-clarin": [
+            "TEI",
+            "TEI/@lang",
+            "extent"
+          ],
+          "popolo": [],
+          "docling": [
+            "name",
+            "origin",
+            "DocumentOrigin.mimetype",
+            "pages"
+          ]
+        },
+        {
+          "term": "`article-type`",
+          "means": "what the document is within the affair: the text handed in, the answer, the minutes",
+          "keys": [
+            "article-type"
+          ],
+          "openparldata": [
+            "docs.category_de",
+            "docs.category_harmonized"
+          ],
+          "jats": [
+            "article/@article-type"
+          ],
+          "akoma-ntoso": [
+            "doc/@name",
+            "bill",
+            "act",
+            "debateReport",
+            "statement",
+            "amendment"
+          ],
+          "parla-clarin": [
+            "catRef"
+          ],
+          "popolo": [],
+          "docling": [],
+          "notes": {
+            "openparldata": "free text per parliament; the harmonised list names papers of a meeting"
+          }
+        },
+        {
+          "term": "`article-version`",
+          "means": "the version as printed",
+          "keys": [
+            "article-version"
+          ],
+          "openparldata": [],
+          "jats": [
+            "article-version"
+          ],
+          "akoma-ntoso": [
+            "docStage",
+            "FRBRversionNumber"
+          ],
+          "parla-clarin": [
+            "edition"
+          ],
+          "popolo": [],
+          "docling": []
+        },
+        {
+          "term": "`abstract`",
+          "means": "a summary, per language",
+          "keys": [
+            "abstract"
+          ],
+          "openparldata": [],
+          "jats": [
+            "abstract",
+            "trans-abstract"
+          ],
+          "akoma-ntoso": [],
+          "parla-clarin": [
+            "abstract"
+          ],
+          "popolo": [],
+          "docling": [
+            "SummaryMetaField"
+          ]
+        },
+        {
+          "term": "`conference`",
+          "means": "the session or meeting the document names",
+          "keys": [
+            "conference",
+            "conf-name",
+            "conf-date",
+            "conf-loc"
+          ],
+          "openparldata": [
+            "meetings.name_de",
+            "meetings.begin_date",
+            "meetings.location"
+          ],
+          "jats": [
+            "conference",
+            "conf-name",
+            "conf-date",
+            "conf-loc"
+          ],
+          "akoma-ntoso": [
+            "session",
+            "legislature"
+          ],
+          "parla-clarin": [
+            "meeting"
+          ],
+          "popolo": [
+            "motion.legislative_session_id",
+            "event"
+          ],
+          "docling": []
+        },
+        {
+          "term": "`journal-meta`, `volume`, `issue`, `fpage`, `lpage`",
+          "means": "press and periodicals among the documents",
+          "keys": [
+            "journal-meta",
+            "journal-title",
+            "publisher-name",
+            "issn",
+            "volume",
+            "issue",
+            "fpage",
+            "lpage"
+          ],
+          "openparldata": [
+            "docs.news_id"
+          ],
+          "jats": [
+            "journal-meta",
+            "journal-title",
+            "publisher-name",
+            "issn",
+            "volume",
+            "issue",
+            "fpage",
+            "lpage"
+          ],
+          "akoma-ntoso": [
+            "publication"
+          ],
+          "parla-clarin": [
+            "bibl"
+          ],
+          "popolo": [],
+          "docling": []
+        },
+        {
+          "term": "`body`",
+          "means": "the build-up of the document, the text unabridged",
+          "keys": [
+            "body"
+          ],
+          "openparldata": [
+            "docs.text"
+          ],
+          "jats": [
+            "body"
+          ],
+          "akoma-ntoso": [
+            "mainBody",
+            "body"
+          ],
+          "parla-clarin": [
+            "text",
+            "body"
+          ],
+          "popolo": [
+            "motion.text"
+          ],
+          "docling": [
+            "body",
+            "texts"
+          ],
+          "notes": {
+            "openparldata": "the text as one field",
+            "popolo": "the text as one field"
+          }
+        },
+        {
+          "term": "`response`",
+          "means": "the answer within the same document",
+          "keys": [
+            "response",
+            "response-type"
+          ],
+          "openparldata": [],
+          "jats": [
+            "response",
+            "response/@response-type"
+          ],
+          "akoma-ntoso": [
+            "answer"
+          ],
+          "parla-clarin": [],
+          "popolo": [],
+          "docling": [],
+          "notes": {
+            "akoma-ntoso": "an answer to a question, as part of a debate",
+            "openparldata": "the answer is a file of its own at the same affair"
+          }
+        },
+        {
+          "term": "`back`",
+          "means": "what follows the text",
+          "keys": [
+            "back"
+          ],
+          "openparldata": [],
+          "jats": [
+            "back"
+          ],
+          "akoma-ntoso": [
+            "conclusions",
+            "attachments"
+          ],
+          "parla-clarin": [
+            "back"
+          ],
+          "popolo": [],
+          "docling": []
+        }
+      ]
+    },
+    {
+      "title": "The blocks",
+      "rows": [
+        {
+          "term": "`sec`",
+          "means": "a section with its heading",
+          "keys": [
+            "sec-type",
+            "title",
+            "content"
+          ],
+          "openparldata": [],
+          "jats": [
+            "sec",
+            "sec/@sec-type",
+            "title"
+          ],
+          "akoma-ntoso": [
+            "hcontainer",
+            "hcontainer/@name",
+            "heading"
+          ],
+          "parla-clarin": [
+            "div",
+            "div/@type",
+            "head"
+          ],
+          "popolo": [],
+          "docling": [
+            "SectionHeaderItem",
+            "GroupItem"
+          ]
+        },
+        {
+          "term": "`p`",
+          "means": "a paragraph",
+          "keys": [
+            "text"
+          ],
+          "openparldata": [],
+          "jats": [
+            "p"
+          ],
+          "akoma-ntoso": [
+            "p"
+          ],
+          "parla-clarin": [
+            "p"
+          ],
+          "popolo": [],
+          "docling": [
+            "TextItem"
+          ]
+        },
+        {
+          "term": "`list`",
+          "means": "a list, numbered questions",
+          "keys": [
+            "items"
+          ],
+          "openparldata": [],
+          "jats": [
+            "list",
+            "list-item"
+          ],
+          "akoma-ntoso": [
+            "blockList",
+            "item",
+            "ul",
+            "ol",
+            "li"
+          ],
+          "parla-clarin": [
+            "list",
+            "item"
+          ],
+          "popolo": [],
+          "docling": [
+            "ListGroup",
+            "ListItem"
+          ]
+        },
+        {
+          "term": "`def-list`",
+          "means": "label and value, as on a cover sheet",
+          "keys": [
+            "term",
+            "def"
+          ],
+          "openparldata": [],
+          "jats": [
+            "def-list",
+            "def-item",
+            "term",
+            "def"
+          ],
+          "akoma-ntoso": [],
+          "parla-clarin": [
+            "list",
+            "label",
+            "item"
+          ],
+          "popolo": [],
+          "docling": [
+            "KeyValueItem"
+          ]
+        },
+        {
+          "term": "`table-wrap`",
+          "means": "a table",
+          "keys": [
+            "rows"
+          ],
+          "openparldata": [],
+          "jats": [
+            "table-wrap",
+            "table"
+          ],
+          "akoma-ntoso": [
+            "table",
+            "tr",
+            "td"
+          ],
+          "parla-clarin": [
+            "table",
+            "row",
+            "cell"
+          ],
+          "popolo": [],
+          "docling": [
+            "TableItem",
+            "TableData",
+            "TableCell"
+          ]
+        },
+        {
+          "term": "`graphic`",
+          "means": "an image, a coat of arms, a plan",
+          "keys": [],
+          "openparldata": [],
+          "jats": [
+            "graphic"
+          ],
+          "akoma-ntoso": [
+            "img"
+          ],
+          "parla-clarin": [
+            "figure",
+            "graphic"
+          ],
+          "popolo": [],
+          "docling": [
+            "PictureItem"
+          ]
+        },
+        {
+          "term": "`sig-block`",
+          "means": "a signature",
+          "keys": [],
+          "openparldata": [],
+          "jats": [
+            "sig-block",
+            "sig"
+          ],
+          "akoma-ntoso": [
+            "signature"
+          ],
+          "parla-clarin": [],
+          "popolo": [],
+          "docling": []
+        },
+        {
+          "term": "`app`",
+          "means": "an appendix",
+          "keys": [],
+          "openparldata": [],
+          "jats": [
+            "app-group",
+            "app"
+          ],
+          "akoma-ntoso": [
+            "attachment"
+          ],
+          "parla-clarin": [
+            "back",
+            "div/@type"
+          ],
+          "popolo": [],
+          "docling": []
+        },
+        {
+          "term": "`fn`",
+          "means": "a footnote",
+          "keys": [
+            "label"
+          ],
+          "openparldata": [],
+          "jats": [
+            "fn-group",
+            "fn"
+          ],
+          "akoma-ntoso": [
+            "authorialNote"
+          ],
+          "parla-clarin": [
+            "note"
+          ],
+          "popolo": [],
+          "docling": [
+            "TextItem.label=footnote"
+          ]
+        },
+        {
+          "term": "`ref-list`",
+          "means": "a list of references",
+          "keys": [],
+          "openparldata": [],
+          "jats": [
+            "ref-list",
+            "ref"
+          ],
+          "akoma-ntoso": [],
+          "parla-clarin": [
+            "listBibl",
+            "bibl"
+          ],
+          "popolo": [],
+          "docling": [
+            "TextItem.label=reference"
+          ]
+        },
+        {
+          "term": "`notes`",
+          "means": "a note outside the flow of the text",
+          "keys": [],
+          "openparldata": [],
+          "jats": [
+            "notes"
+          ],
+          "akoma-ntoso": [
+            "notes",
+            "note"
+          ],
+          "parla-clarin": [
+            "note"
+          ],
+          "popolo": [],
+          "docling": [
+            "TextItem.content_layer=notes"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Where a value comes from",
+      "rows": [
+        {
+          "term": "`source`, `sources`",
+          "means": "the place of a value: the document and the block it was taken from",
+          "keys": [
+            "source",
+            "sources",
+            "path",
+            "doc",
+            "block"
+          ],
+          "openparldata": [],
+          "jats": [],
+          "akoma-ntoso": [
+            "eop"
+          ],
+          "parla-clarin": [
+            "facsimile",
+            "surface",
+            "zone",
+            "@facs",
+            "pb"
+          ],
+          "popolo": [
+            "motion.sources",
+            "link.url"
+          ],
+          "docling": [
+            "TextItem.prov",
+            "ProvenanceItem.page_no",
+            "ProvenanceItem.bbox",
+            "ProvenanceItem.charspan"
+          ],
+          "notes": {
+            "akoma-ntoso": "marks where the page breaks; the value stays marked where it stands in the text",
+            "popolo": "a link per object",
+            "docling": "the place of every item on its page; an item is text, not a value"
+          }
+        },
+        {
+          "term": "`id`, `page`, `x`, `y`, `width`, `height`",
+          "means": "the block: its id, its page and its box in the page image",
+          "keys": [
+            "id",
+            "page",
+            "x",
+            "y",
+            "width",
+            "height"
+          ],
+          "openparldata": [],
+          "jats": [
+            "@id"
+          ],
+          "akoma-ntoso": [
+            "@eId"
+          ],
+          "parla-clarin": [
+            "@id",
+            "zone/@ulx",
+            "zone/@uly",
+            "zone/@lrx",
+            "zone/@lry"
+          ],
+          "popolo": [],
+          "docling": [
+            "TextItem.self_ref",
+            "BoundingBox.l",
+            "BoundingBox.t",
+            "BoundingBox.r",
+            "BoundingBox.b",
+            "PageItem.size"
+          ]
+        },
+        {
+          "term": "`how`, `approve`",
+          "means": "how the value got its place, and whether a person should look",
+          "keys": [
+            "how",
+            "approve"
+          ],
+          "openparldata": [],
+          "jats": [],
+          "akoma-ntoso": [
+            "@status"
+          ],
+          "parla-clarin": [
+            "@cert",
+            "@resp",
+            "unclear",
+            "supplied"
+          ],
+          "popolo": [],
+          "docling": [],
+          "notes": {
+            "akoma-ntoso": "of a passage: editorial, incomplete, unknown and seven more"
+          }
+        },
+        {
+          "term": "`review`",
+          "means": "what a person decided about a value: when, who, the value before, the rule",
+          "keys": [
+            "review",
+            "at",
+            "decision",
+            "before",
+            "by",
+            "rule"
+          ],
+          "openparldata": [],
+          "jats": [],
+          "akoma-ntoso": [],
+          "parla-clarin": [
+            "revisionDesc",
+            "change",
+            "respStmt"
+          ],
+          "popolo": [],
+          "docling": [],
+          "notes": {
+            "parla-clarin": "the revision of the file, not of one value"
+          }
+        },
+        {
+          "term": "`isOCR`",
+          "means": "whether the text of a block comes from text recognition",
+          "keys": [
+            "isOCR"
+          ],
+          "openparldata": [],
+          "jats": [],
+          "akoma-ntoso": [],
+          "parla-clarin": [],
+          "popolo": [],
+          "docling": []
+        },
+        {
+          "term": "`font`, `font-size`, `color`",
+          "means": "how the block is set",
+          "keys": [
+            "font",
+            "font-size",
+            "color"
+          ],
+          "openparldata": [],
+          "jats": [
+            "styled-content",
+            "styled-content/@style"
+          ],
+          "akoma-ntoso": [
+            "@style",
+            "@class"
+          ],
+          "parla-clarin": [
+            "hi",
+            "@rend"
+          ],
+          "popolo": [],
+          "docling": [
+            "TextItem.formatting",
+            "Formatting"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "The controlled lists",
+      "rows": [
+        {
+          "term": "types of affairs",
+          "means": "`data/knowledge/vocabulary.json`, list `types`: what a parliament calls a type and the standard type it stands for",
+          "keys": [],
+          "openparldata": [
+            "affairs.type_harmonized_id",
+            "affairs.type_harmonized_wikidata_id"
+          ],
+          "jats": [
+            "subject",
+            "@vocab",
+            "@vocab-term"
+          ],
+          "akoma-ntoso": [
+            "TLCConcept"
+          ],
+          "parla-clarin": [
+            "taxonomy",
+            "category",
+            "catDesc"
+          ],
+          "popolo": [
+            "motion.classification"
+          ],
+          "docling": [],
+          "notes": {
+            "popolo": "a free text"
+          }
+        },
+        {
+          "term": "roles",
+          "means": "the same file, list `roles`: the standard roles and what every parliament calls them",
+          "keys": [],
+          "openparldata": [
+            "contributors.role_harmonized"
+          ],
+          "jats": [
+            "role",
+            "@vocab-term"
+          ],
+          "akoma-ntoso": [
+            "TLCRole"
+          ],
+          "parla-clarin": [
+            "affiliation/@role"
+          ],
+          "popolo": [
+            "membership.role",
+            "post.role"
+          ],
+          "docling": []
+        },
+        {
+          "term": "kinds of groups",
+          "means": "the same file, list `groups`",
+          "keys": [],
+          "openparldata": [
+            "groups.type_harmonized"
+          ],
+          "jats": [],
+          "akoma-ntoso": [
+            "TLCOrganization"
+          ],
+          "parla-clarin": [
+            "org/@type"
+          ],
+          "popolo": [
+            "organization.classification"
+          ],
+          "docling": []
+        },
+        {
+          "term": "names of events",
+          "means": "the same file, list `events`",
+          "keys": [],
+          "openparldata": [
+            "events.title_harmonized",
+            "events.title_harmonized_wikidata_id"
+          ],
+          "jats": [],
+          "akoma-ntoso": [
+            "TLCEvent"
+          ],
+          "parla-clarin": [
+            "event/@type"
+          ],
+          "popolo": [],
+          "docling": []
+        },
+        {
+          "term": "kinds of documents",
+          "means": "`data/knowledge/kinds.json`: seven kinds with the words that tell them",
+          "keys": [],
+          "openparldata": [
+            "docs.category_harmonized"
+          ],
+          "jats": [
+            "article/@article-type"
+          ],
+          "akoma-ntoso": [
+            "doc/@name"
+          ],
+          "parla-clarin": [
+            "taxonomy"
+          ],
+          "popolo": [],
+          "docling": []
+        },
+        {
+          "term": "–",
+          "means": "the state of an affair in its procedure: not a list here, the course stands in `events`",
+          "keys": [],
+          "openparldata": [
+            "affairs.state_name_de",
+            "affairs.state_name_harmonized_de"
+          ],
+          "jats": [],
+          "akoma-ntoso": [
+            "docStatus",
+            "docStage"
+          ],
+          "parla-clarin": [],
+          "popolo": [],
+          "docling": []
+        },
+        {
+          "term": "–",
+          "means": "the outcome of a decision: not a field here (tried as one on 11 October 2026, not taken in)",
+          "keys": [],
+          "openparldata": [
+            "votings.decision",
+            "votings.results_yes",
+            "votings.results_no"
+          ],
+          "jats": [],
+          "akoma-ntoso": [
+            "voting",
+            "outcome",
+            "count"
+          ],
+          "parla-clarin": [],
+          "popolo": [
+            "motion.result",
+            "vote_event.result",
+            "vote_event.counts"
+          ],
+          "docling": []
+        }
+      ]
+    }
+  ],
+  "checked": {
+    "on": "2026-10-11",
+    "names": 339,
+    "found": {
+      "openparldata": 47,
+      "jats": 82,
+      "akoma-ntoso": 77,
+      "parla-clarin": 69,
+      "popolo": 27,
+      "docling": 37
+    }
+  }
+}

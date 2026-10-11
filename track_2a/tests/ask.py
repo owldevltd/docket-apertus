@@ -6,6 +6,11 @@ the store kept, and the played answer names the date and its block. Checked: the
 report, among its rows and in the affair's record; the decision on the title is still there; the store counts
 no document as never asked for the date any more; a second asking sends nothing.
 
+And the place of what the model words itself: a summary keeps the block the model names though no word of it
+stands there, and the head of the document when the model names none; it is marked as composed and for a
+person to look at. A value that is read, not worded, still needs a word in the block it is said to come from.
+And the values of a list: a comma inside round brackets does not part a name from what stands behind it.
+
     python3 tests/ask.py --pages=<analyzed dir> <document dir> ...
 """
 
@@ -19,6 +24,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 import docket.fields.filler as filler  # noqa: E402
+from docket.fields.placer import source as place_of  # noqa: E402
 from docket.affair.merge import Document, values_of  # noqa: E402
 from docket.api import App  # noqa: E402
 from docket.config import load_config  # noqa: E402
@@ -103,6 +109,45 @@ def main(argv: list[str]) -> int:
         never = {f["name"]: f["never"] for f in app.definition()["fields"]}
         check(never["date"] == 0 and again.calls == 0 and not again.documents,
               "nothing is left to ask: a second asking sends nothing")
+
+    # the place of a summary: worded by the model, it shares no word with the page
+    body = stored["body"]
+    pages = list(range(1, stored["pages"] + 1))
+    worded = "Zzz qqq xxx."
+
+    def placed(field: str, cited: list[str]) -> tuple[dict, dict]:
+        report = {field: {"value": worded, "state": "not on the page", "items": []}}
+        values: dict = {}
+        step = filler._Run("", pages, len(pages), body, fields, contract, None, values, report, [], None)
+        step._place(field, fields.fields[field], worded, cited)
+        return report[field], values
+
+    head = next(b["id"] for b in body if b["type"] != "graphic")
+    named, values = placed("summary", ["b16"])
+    check(named["items"][0]["block"] == "b16" and named["state"] == "block from the model" and "summary" in values,
+          "a summary keeps the block the model names, though no word of it stands there")
+    alone, values = placed("summary", [])
+    check(alone["items"][0]["block"] == head and alone["items"][0]["how"] == "composed"
+          and alone["state"] == "at the head of the document" and "summary" in values,
+          f"a summary the model names no block for stands at the head of the document ({head})")
+    mark = place_of(1, values["summary"][0], fields.fields["summary"], body)
+    check(mark["how"] == "composed" and mark.get("approve") is True,
+          "in the record it is marked as composed and for a person to look at")
+    read, values = placed("addressee", ["b16"])
+    check(read["items"][0]["block"] is None and read["state"] == "not on the page" and not values,
+          "a value that is read, not worded, still needs a word in the block it is said to come from")
+    # the values of a list: a separator inside round brackets separates nothing
+    names = fields.fields["authors"]
+    split = [filler.items(names, v) for v in ("Muster (Bern, PS), Beispiel (Biel/Bienne, PS) (porte-parole)",
+                                             "A; B (x; y); C", "Meier, Müller", "a) eins, b) zwei")]
+    check(split == [["Muster (Bern, PS)", "Beispiel (Biel/Bienne, PS) (porte-parole)"], ["A", "B (x; y)", "C"],
+                    ["Meier", "Müller"], ["a) eins", "b) zwei"]],
+          "a name keeps what the document prints behind it in brackets; a comma there does not make two names")
+    runs = [json.loads((Path(a) / "run.json").read_text(encoding="utf-8")) for a in argv
+            if not a.startswith("--") and (Path(a) / "run.json").is_file()]
+    with_place = sum(1 for r in runs if any(i.get("block") for i in r["fields"]["summary"]["items"]))
+    check(with_place == len(runs),
+          f"{with_place} of the {len(runs)} shipped documents carry their summary with a place")
     return 1 if failed else 0
 
 

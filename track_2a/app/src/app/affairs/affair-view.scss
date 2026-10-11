@@ -73,6 +73,22 @@
     margin-bottom: 6px;
 }
 
+// the answer within the document: one line above the page that leads to where it begins
+.answer {
+    display: block;
+    width: 100%;
+    margin-bottom: 6px;
+    padding: 6px 10px;
+    border: 0;
+    border-left: 4px solid var( --opd-link );
+    background: var( --opd-ground );
+    color: inherit;
+    font: inherit;
+    font-size: 13px;
+    text-align: left;
+    cursor: pointer;
+}
+
 .right {
     display: flex;
     flex-direction: column;

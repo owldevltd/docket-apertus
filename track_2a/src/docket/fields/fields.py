@@ -40,6 +40,9 @@ class Field:
     when: list[str] = field(default_factory=list)
     free: bool = False
     block_text: bool = False
+    # the value is in the language of the document and stands under that language's key, not under the one
+    # the fields file happens to name ("abstract.fr" for a French document)
+    own_language: bool = False
     # what the value is, one of the entities: lookups, learning and questions over documents go by it, not by
     # the key the target JSON happens to use
     entity: str = "text"
@@ -144,6 +147,7 @@ def _walk(node, path: list[str], fixed: dict, template: str, fields: dict[str, F
             when=list(node.get("when", [])),
             free=bool(node.get("free", False)),
             block_text=bool(node.get("block-text", False)),
+            own_language=bool(node.get("own-language", False)),
             entity=str(node.get("entity", "text")),
             role=str(node.get("role", "")),
             standard=str(node.get("standard", "")),

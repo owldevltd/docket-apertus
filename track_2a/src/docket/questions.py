@@ -20,7 +20,8 @@ import json
 from pathlib import Path
 from statistics import mean, median
 
-from docket.affair.identity import number
+from docket.affair.identity import number_in
+from docket.fields.placer import plain
 from docket.fields.fields import Fields
 from docket.store.base import Store
 from docket.store.register import key_of
@@ -33,22 +34,26 @@ HELD_AS = ("author", "cosign", "co-signer")
 OWN_COLUMN = 5
 
 
-def collect(store: Store, fields: Fields, drawn: dict[str, dict] | None = None) -> list[dict]:
+def collect(store: Store, fields: Fields, drawn: dict[str, dict] | None = None,
+            forms: dict[str, dict[str, int]] | None = None) -> list[dict]:
     """One entry per stored document: its affair, its parliament, the persons named, its kind, the fields
     found on its pages. `drawn` tells by the name of a document its parliament and its affair at OpenParlData
-    ({body, affair}), where the documents came from there."""
+    ({body, affair}), where the documents were drawn from there; `forms` are the number forms of the
+    parliaments, by which the number of a document is told."""
     documents = []
     for affair in store.list_affairs():
         for d in affair["documents"]:
             rows = [r for r in store.get_rows(d["name"]) if r["state"] == PLACED]
             identity = (store.get_fields(d["name"]) or {}).get("identity") or {}
             source = (drawn or {}).get(d["name"]) or {}
+            body = str(source.get("body") or identity.get("body") or "")
+            read = next((str(r["value"]) for r in rows if r.get("role") == "number"), "")
             documents.append({
                 "affair": affair["key"], "name": d["name"], "theirs": source.get("affair"),
-                "body": str(source.get("body") or identity.get("body") or ""), "told": bool(identity.get("body")),
+                "body": body, "told": bool(identity.get("body")),
                 "persons": {key_of(r["value"]) for r in rows if r.get("role") in ROLES} - {""},
                 "kind": next((r["value"] for r in rows if r.get("about") == "document"), None),
-                "number": number(next((str(r["value"]) for r in rows if r.get("role") == "number"), "")),
+                "number": number_in(read, list((forms or {}).get(body, {}))),
                 "fields": {r["field"] for r in rows if r["field"] in fields.fields},
             })
     return documents
@@ -65,7 +70,7 @@ def held(affairs_export: Path, contributors_export: Path, documents: list[dict])
         with gzip.open(affairs_export, "rt", encoding="utf-8") as f:
             for line in f:
                 row = json.loads(line)
-                at = (str(row.get("body_key") or ""), number(str(row.get("number") or "")))
+                at = (str(row.get("body_key") or ""), plain(str(row.get("number") or "")))
                 if at[1] and at in by_number:
                     ids.setdefault(row["id"], by_number[at])
     persons: dict[str, set] = {key: set() for key in ids.values()}

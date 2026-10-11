@@ -107,7 +107,8 @@ def main(argv: list[str]) -> int:
         app = App(store, contract, config, Jobs(config))
 
         def both(key: str) -> tuple[dict, dict]:
-            return store.get_affair(key)["record"], view(store, key, plain_fields, plain_contract, knowledge.types)
+            again = view(store, key, plain_fields, plain_contract, knowledge.types, knowledge.answers)
+            return store.get_affair(key)["record"], again
 
         fit = same = clean = 0
         values = 0
@@ -162,7 +163,7 @@ def main(argv: list[str]) -> int:
         for name, k in sorted(keys.items()):
             stored = store.get_affair(k)["record"]
             if not any(e["label"] == "contributors.person_id" for e in sources_of(stored)):
-                own += view(store, k, fields, contract, knowledge.types) == stored
+                own += view(store, k, fields, contract, knowledge.types, knowledge.answers) == stored
         check(own == len(keys) - 1,
               f"{own} of {len(keys) - 1} stored records without a person's id are the rows laid into the first shape")
     return 1 if failed else 0

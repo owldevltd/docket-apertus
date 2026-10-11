@@ -11,17 +11,35 @@ from typing import Callable
 
 from docket.affair.validator import Contract
 from docket.config import Config
+from docket.document.bridge import Knowledge
+from docket.document.language import language_of
+from docket.document.response import lift, whole
 from docket.fields.fields import Fields, definition_of
-from docket.fields.placer import day, get_at
+from docket.fields.placer import blocks_of, day, find_block, get_at
 from docket.jobs import Jobs
-from docket.pipeline import load_field_file
+from docket.pipeline import load_field_file, load_knowledge
 from docket.store.base import Store, stamp
-from docket.store.review import apply_decision, counts, label_of, label_of_path, sources_of
-from docket.store.rows import PLACED, note_decision, place_of
-from docket.store.rules import Rules, apply, shape
+from docket.store.entries import counts_of, entries_of
+from docket.store.review import apply_decision, label_of, label_of_path, review_of
+from docket.store.rows import (
+    KIND, PLACED, blocks_of_document, find_value, follow, note_decision, place_of,
+)
+from docket.store.rules import Rules, apply, labels, shape
 from docket.store.vocabulary import Vocabulary
 
 SAME_EXAMPLES = 5
+
+
+# the label the kind of a document stands under in a record of the affair schema, for an affair without rows
+KIND_LABEL = "docs.article-type"
+
+
+class _Unfit(ValueError):
+    """A decision after which the record would no longer fit the contract, with what would not fit."""
+
+    def __init__(self, violations: list[str]):
+        super().__init__("the record would not fit the contract")
+        self.violations = violations
 
 
 class App:
@@ -33,6 +51,7 @@ class App:
         self.locks: dict[str, threading.Lock] = {}
         self._guard = threading.Lock()
         self._fields: Fields | None = None
+        self._knowledge: Knowledge | None = None
 
     def lock(self, key: str) -> threading.Lock:
         with self._guard:
@@ -44,6 +63,11 @@ class App:
         if self._fields is None:
             self._fields = load_field_file(self.config, self.contract)
         return self._fields
+
+    def knowledge(self) -> Knowledge:
+        if self._knowledge is None:
+            self._knowledge = load_knowledge(self.config)
+        return self._knowledge
 
     def head(self, record: dict) -> dict:
         """Number, title, date and type of an affair for the list and the head of its view: found by what the
@@ -103,22 +127,67 @@ class App:
         """Every value with a place in an affair, the values of one entry each on its own: the entry, the path
         of the value, the value, its field and its label. The field is the one of the fields file, taken from
         the row that sits there; without a row, from the label."""
-        rows = [r for d in a.get("documents", []) for r in self.store.get_rows(d["name"])
-                if r.get("affair") == a["key"]]
-        at = {(p["source"], p["path"]): r["field"] for r in rows for p in r.get("places") or [] if p["part"] == ""}
-        for e in sources_of(a["record"]):
+        at = {(p["source"], p["path"]): r["field"] for r in self._rows(a) for p in r.get("places") or []
+              if p["part"] == ""}
+        for e in self.entries(a):
             for path, value in (e.get("values") or {e["path"]: e["value"]}).items():
                 label = e["label"] if path == e["path"] else label_of_path(path)
                 yield e, path, value, at.get((e["source"], path)) or self._field_of(label), label
 
+    # ---- documents
+
+    def document(self, name: str) -> dict | None:
+        """One document as the page view shows it, whatever shape the record of its affair has: its blocks in
+        reading order, its language, and the answers within it with the block each begins at. None when the
+        store does not know the document."""
+        blocks = self.store.get_blocks(name)
+        if blocks is None:
+            # a store filled before the blocks were kept on their own: the record of the affair holds them
+            for a in self.store.list_affairs():
+                held = next((d for d in a.get("documents", []) if d["name"] == name), None)
+                if held is not None:
+                    entries = (a["record"].get("docs") or {}).get("data", [])
+                    blocks = whole(next((e for e in entries if e.get("id") == held["id"]), None))
+                    break
+        if blocks is None:
+            return None
+        _, answers = lift(blocks, self.knowledge().answers)
+        return {
+            "name": name,
+            "language": language_of(blocks),
+            "answers": [{"title": r["title"], "block": r["body"][0]["id"], "page": r["body"][0]["page"]}
+                        for r in answers if r["body"]],
+            "blocks": blocks,
+        }
+
     # ---- affairs
+
+    def _rows(self, a: dict) -> list[dict]:
+        """The rows of the documents of an affair that name it."""
+        return [r for d in a.get("documents", []) for r in self.store.get_rows(d["name"])
+                if r.get("affair") == a["key"]]
+
+    def entries(self, a: dict) -> list[dict]:
+        """The values of an affair as the review shows them: built from the rows of its documents, each with
+        the id of its row (docket.store.entries). What the record holds with a place and no row stands for
+        comes with it, the place as its id."""
+        numbers = {d["name"]: d["id"] for d in a.get("documents", [])}
+        in_record = {e.get("id"): e for e in (a["record"].get("docs") or {}).get("data") or []}
+        blocks: dict[str, list[dict]] = {}
+
+        def block_of(name: str, ident: str) -> dict | None:
+            if name not in blocks:
+                blocks[name] = blocks_of_document(self.store, name, in_record.get(numbers.get(name)))
+            return find_block(ident, blocks[name])
+
+        return entries_of(self._rows(a), numbers, self.fields(), block_of, a["record"])
 
     def affair(self, key: str) -> dict | None:
         data = self.store.get_affair(key)
         if data is None:
             return None
         record = data["record"]
-        sources = sources_of(record)
+        sources = self.entries(data)
         if any(e["open"] for e in sources):
             self._same(key, sources)
         self._hints(data, sources)
@@ -128,23 +197,25 @@ class App:
             "record": record,
             "documents": data.get("documents", []),
             "sources": sources,
-            "counts": counts(record),
+            "counts": counts_of(sources),
             "updated_at": data.get("updated_at"),
         }
 
     def summaries(self) -> list[dict]:
         out = []
         for a in self.store.list_affairs():
-            r = a["record"]
-            head = self.head(r)
+            head = self.head(a["record"])
+            entries = self.entries(a)
+            # what each document is within the affair: a value like the others, told by its field
+            kinds = {e["doc"]: e["value"] for e in entries if e.get("field") == KIND or e["label"] == KIND_LABEL}
             out.append({
                 "key": a["key"],
                 "number": head["number"],
                 "title": head["title"],
                 "type": head["type"],
                 "documents": [d.get("name") for d in a.get("documents", [])],
-                "kinds": [d.get("article-type") for d in (r.get("docs") or {}).get("data", [])],
-                "counts": counts(r),
+                "kinds": [kinds.get(d.get("id")) for d in a.get("documents", [])],
+                "counts": counts_of(entries),
                 "updated_at": a.get("updated_at"),
             })
         return sorted(out, key=lambda s: (-s["counts"]["open"], s["key"]))
@@ -202,7 +273,7 @@ class App:
         for a in self._affairs_with(wanted) if wanted else []:
             if a["key"] == key:
                 continue
-            for e in sources_of(a["record"]):
+            for e in self.entries(a):
                 others.append((a["key"], e))
         for e in sources:
             if not e["open"]:
@@ -221,46 +292,62 @@ class App:
             data = self.store.get_affair(key)
             if data is None:
                 return 404, {"error": "no such affair"}
-            source_path = str(body.get("source", ""))
-            earlier = next((e for e in sources_of(data["record"]) if e["source"] == source_path), None)
+            # the value is named by the id of its row; where it sits in the record, the row knows. A value no
+            # row stands for, and a caller from before the ids, names the place in the record itself
+            ident = str(body.get("id") or "")
+            known = find_value(self._rows(data), ident) if ident else None
+            source_path = known[1]["source"] if known else str(body.get("source") or ident)
+            earlier = next((e for e in self.entries(data) if e["source"] == source_path), None)
+            path = str((known[1]["path"] if known else body.get("path")) or (earlier or {}).get("path") or "")
             try:
-                record = apply_decision(
-                    data["record"], source_path, str(body.get("decision", "")),
-                    str(body.get("by", "")), body.get("after"), body.get("path"), body.get("rule"),
-                )
+                record = self._take(data, earlier, source_path, path, str(body.get("decision", "")),
+                                    str(body.get("by", "")), body.get("after"), body.get("rule"))
+            except _Unfit as e:
+                return 409, {"error": "the record would not fit the contract", "violations": e.violations[:5]}
             except ValueError as e:
                 return 400, {"error": str(e)}
-            errors = self.contract.check(record)
-            if errors:
-                return 409, {"error": "the record would not fit the contract", "violations": errors[:5]}
-            path = str(body.get("path") or (earlier or {}).get("path") or "")
-            self._to_row(data, source_path, path, record)
             self.store.save_record(key, record)
-            entry = next(e for e in sources_of(record) if e["source"] == source_path)
+            now = {**data, "record": record}
+            entry = next(e for e in self.entries(now) if e["source"] == source_path)
             # the field of the value that was decided on: an entry can hold several (a name and its party)
-            named = next(((f, lb) for e, p, _, f, lb in self._values({**data, "record": record})
+            named = next(((f, lb) for e, p, _, f, lb in self._values(now)
                           if e["source"] == source_path and p == path), (entry["label"], entry["label"]))
             self._log(key, entry, path, *named)
-            proposals = self._rules_after(key, entry, earlier, path, named[0])
+            proposals = self._rules_after(key, entry, earlier, path, named[0], now)
         return 200, {**(self.affair(key) or {}), "proposals": proposals}
 
-    def _to_row(self, data: dict, source_path: str, value_path: str, record: dict) -> bool:
-        """Writes the decision the record now shows at a source to the row whose value sits there, so that it
-        outlasts the record: a new run and a record of another shape take it from the row. False when no row
-        sits there (the affair has none, or the place is not a value read from a document)."""
-        for document in data.get("documents", []):
+    def _take(self, a: dict, entry: dict | None, source: str, path: str, decision: str, by: str, after,
+              rule: str | None) -> dict:
+        """One decision on one value of an affair. Where a row stands for the value, the decision is written at
+        the row and the record is the stored one with the decisions of the rows laid onto it: the row is what
+        outlasts the record, a new run and a record of another shape take the decision from it. A value no row
+        stands for is decided in the record itself. Returns the record as it then is, not yet saved; the row
+        is stored. Raises ValueError when the decision or the place is not right, and when the record would no
+        longer fit the contract."""
+        for document in a.get("documents", []):
             rows = self.store.get_rows(document["name"])
-            hit = place_of(rows, source_path, value_path)
+            hit = place_of(rows, source, path)
             # only the rows that name this affair are its own
-            if hit is None or hit[0].get("affair") != data["key"]:
+            if hit is None or hit[0].get("affair") != a["key"]:
                 continue
             row, place = hit
-            review = get_at(record, source_path.split("."))["review"]
-            value = get_at(record, value_path.split(".")) if review["decision"] == "changed" else None
-            note_decision(row, place, review, value)
+            if entry is None:
+                raise ValueError(f"no value for the source at {source}")
+            review = review_of(decision, by, self._value_at(entry, path), after, rule)
+            note_decision(row, place, review, after if decision == "changed" else None)
+            others = [r for r in self._rows(a) if r["doc"] != document["name"]]
+            record = follow(a["record"], [*[r for r in rows if r.get("affair") == a["key"]], *others])[0]
+            # a record in which the value has no place stays as it is; what the decision changes must fit
+            errors = self.contract.check(record) if record != a["record"] else []
+            if errors:
+                raise _Unfit(errors)
             self.store.put_rows(document["name"], rows)
-            return True
-        return False
+            return record
+        record = apply_decision(a["record"], source, decision, by, after, path or None, rule)
+        errors = self.contract.check(record)
+        if errors:
+            raise _Unfit(errors)
+        return record
 
     @staticmethod
     def _value_at(entry: dict, path: str):
@@ -277,7 +364,16 @@ class App:
             "by": review.get("by"), "at": review["at"], "rule": review.get("rule"),
         })
 
-    def _rules_after(self, key: str, entry: dict, earlier: dict | None, path: str, field: str) -> list[dict]:
+    def _labelled(self, a: dict) -> dict[str, dict[str, str]]:
+        """What every document of an affair prints with a label, by the number the document has in the
+        affair: from the blocks the store keeps for it, else from its entry in the record."""
+        entries = {e.get("id"): e for e in (a["record"].get("docs") or {}).get("data") or []}
+        known = {d["id"]: d["name"] for d in a.get("documents") or []}
+        return {str(i): labels(blocks_of(blocks_of_document(self.store, known.get(i, ""), entries.get(i))))
+                for i in {*entries, *known}}
+
+    def _rules_after(self, key: str, entry: dict, earlier: dict | None, path: str, field: str,
+                     a: dict) -> list[dict]:
         """Counts a decision by hand for the learning: on the rule it took back or confirmed, against the rules
         it contradicts, on the patterns its change carries. It counts for the field of the value that was
         decided on. Returns the rules that stand proposed for this field and would change something, the one
@@ -286,6 +382,7 @@ class App:
         if review.get("by") == "rule":
             return []
         rules = Rules(self.store.get_rules())
+        labelled = self._labelled(a).get(str(entry["doc"]))
         changed = False
         # a person confirms or takes back what a rule had set
         if earlier and earlier.get("review") and earlier["review"].get("rule"):
@@ -295,9 +392,10 @@ class App:
         value = None if now is None else str(now)
         before = review.get("before") if review["decision"] == "changed" else value
         if review["decision"] in ("confirmed", "changed") and before is not None:
-            changed = rules.speak_against(field, before, value, review["decision"]) or changed
+            changed = rules.speak_against(field, before, value, review["decision"], labelled) or changed
         if review["decision"] == "changed" and "before" in review and value is not None:
-            changed = bool(rules.note(field, review["before"], value, key, review.get("by", ""))) or changed
+            noted = rules.note(field, review["before"], value, key, review.get("by", ""), labelled)
+            changed = bool(noted) or changed
         if changed:
             self.store.put_rules(rules.rows)
         return self._proposals(rules, field)
@@ -306,16 +404,25 @@ class App:
         out = [{**r, "reach": self._reach(r)} for r in rules.proposed(field)]
         return sorted((r for r in out if r["reach"]["count"]), key=lambda r: -r["reach"]["count"])
 
+    @staticmethod
+    def _fits(rule: dict) -> Callable[[str], bool]:
+        """Which values of its field a rule can touch at all, to find the affairs worth reading: a rule of a
+        label can touch any, since it hangs on the document and not on the value."""
+        if rule["kind"] == "label":
+            return lambda value: True
+        return lambda value: apply(rule, value) is not None
+
     def _reach(self, rule: dict) -> dict:
         """What a rule would change in the store: how many values in how many affairs, with examples. The same
         values _apply_rule changes: of the rule's field, without a review, fitting the rule."""
         count, affairs, examples = 0, set(), []
-        for a in self._affairs_with([(rule["field"], lambda v: apply(rule, v) is not None)]):
+        for a in self._affairs_with([(rule["field"], self._fits(rule))]):
+            labelled = self._labelled(a) if rule["kind"] == "label" else {}
             for e, _, value, field, label in self._values(a):
                 # a rule from before the fields were named carries the label
                 if rule["field"] not in (field, label) or e["review"] is not None or value is None:
                     continue
-                after = apply(rule, str(value))
+                after = apply(rule, str(value), labelled.get(str(e["doc"])))
                 if after is None:
                     continue
                 count += 1
@@ -328,26 +435,24 @@ class App:
         """Changes every value of the rule's field in the store that fits and has no review yet; returns the
         count. Every change carries a review by "rule" with the rule's id."""
         count = 0
-        for a in self._affairs_with([(rule["field"], lambda v: apply(rule, v) is not None)]):
+        for a in self._affairs_with([(rule["field"], self._fits(rule))]):
             record = a["record"]
+            labelled = self._labelled(a) if rule["kind"] == "label" else {}
             touched = False
             for e, path, value, field, label in list(self._values(a)):
                 if rule["field"] not in (field, label) or e["review"] is not None or value is None:
                     continue
-                after = apply(rule, str(value))
+                after = apply(rule, str(value), labelled.get(str(e["doc"])))
                 if after is None:
                     continue
                 try:
-                    changed = apply_decision(record, e["source"], "changed", "rule", after, path, rule["id"])
+                    record = self._take({**a, "record": record}, e, e["source"], path, "changed", "rule", after,
+                                        rule["id"])
                 except ValueError:
                     continue
-                if self.contract.check(changed):
-                    continue
-                record = changed
                 touched = True
                 count += 1
-                self._to_row(a, e["source"], path, record)
-                done = next(x for x in sources_of(record) if x["source"] == e["source"])
+                done = next(x for x in self.entries({**a, "record": record}) if x["source"] == e["source"])
                 self._log(a["key"], done, path, field, label)
             if touched:
                 self.store.save_record(a["key"], record)
@@ -445,18 +550,15 @@ class App:
     def allowed(self, token: str | None) -> bool:
         return not self.config.admin_token or token == self.config.admin_token
 
-    def run_pdf(self, name: str, data: bytes, model: bool | None) -> tuple[int, dict]:
+    def run_pdf(self, name: str, data: bytes, model: bool | None, body: str = "") -> tuple[int, dict]:
+        """Queues a run over an uploaded PDF. `body` is the key of its parliament where the person tells it;
+        only PDFs come in, nothing is fetched from anywhere."""
+        if body and body not in load_knowledge(self.config).bodies:
+            return 400, {"error": "no such parliament"}
         try:
-            job = self.jobs.submit_pdf(name, data, self._model(model))
+            job = self.jobs.submit_pdf(name, data, self._model(model), body)
         except ValueError as e:
             return 400, {"error": str(e)}
-        return 202, self.jobs.get(job.id) or {}
-
-    def run_document(self, doc_id: int, model: bool | None) -> tuple[int, dict]:
-        try:
-            job = self.jobs.submit_document(doc_id, self._model(model))
-        except (ValueError, OSError) as e:
-            return 400, {"error": f"OpenParlData: {e}"}
         return 202, self.jobs.get(job.id) or {}
 
     def ask_again(self, name: str | None) -> tuple[int, dict]:

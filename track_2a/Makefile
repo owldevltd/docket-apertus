@@ -1,4 +1,4 @@
-.PHONY: run fill test test-store bench bench-read reference knowledge vocabulary register rows learn
+.PHONY: run fill test test-store bench bench-read reference knowledge vocabulary register rows learn mapping
 .PHONY: questions app
 
 export PYTHONPATH := src
@@ -33,8 +33,11 @@ test:
 	python3 tests/kinds.py --pages=storage/tests/pages --documents=storage/tests/documents --out=storage/tests/kinds.md data/documents/*
 	python3 tests/affairs.py --pages=storage/tests/pages --documents=storage/tests/documents --out=storage/tests/affairs.md --store=storage/tests/store data/documents/*
 	python3 tests/baseline.py data/documents/*
+	python3 tests/response.py data/documents/*
+	python3 tests/language.py data/documents/*
 	python3 tests/rows.py data/documents/*
 	python3 tests/decisions.py data/documents/*
+	python3 tests/entries.py --pages=storage/tests/pages
 	python3 tests/views.py data/documents/*
 	python3 tests/second.py data/documents/*
 	python3 tests/ask.py --pages=storage/tests/pages data/documents/*
@@ -46,6 +49,7 @@ test:
 	python3 tests/vocabulary.py
 	python3 tests/register.py
 	python3 tests/admin.py data/documents/neuchatel-grand-conseil/*.pdf
+	python3 tests/mapping.py
 
 # The store's operations over Postgres as well, inside the running container (after `make run`). The test
 # works in a schema of its own and removes it at the end; the store in use is not touched.
@@ -97,7 +101,8 @@ vocabulary:
 # role are read from a row. The result is committed with the rest of the stem.
 
 # Loads the persons of the parliaments from OpenParlData's exports into the store, so printed names can be told
-# as persons: two files, fetched one after the other. Only id, name, parliament and party are taken; nothing of
+# as persons: two files, fetched one after the other. A preparation step, run once by hand; the persons are the
+# one list not shipped here, because they are people. Only id, name, parliament and party are taken; nothing of
 # it is written into the repository. Inside the running container: docker compose exec docket python3
 # tools/register.py. Run again with a newer export, it keeps what the register learnt.
 register:
@@ -124,3 +129,9 @@ learn:
 # tools/questions.py. Inside the running container: docker compose exec docket python3 tools/questions.py.
 questions:
 	python3 tools/questions.py
+
+# Writes docs/mapping.md from data/schema/mapping.json: what every term of the schema is called in
+# OpenParlData, JATS, Akoma Ntoso, Parla-CLARIN, Popolo and Docling. With STANDARDS=<folder> every name is held
+# against the schemas of the standards first; they are not part of this repository, see tools/mapping.py.
+mapping:
+	python3 tools/mapping.py $(if $(STANDARDS),--standards $(STANDARDS))

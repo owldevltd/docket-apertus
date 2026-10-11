@@ -9,6 +9,7 @@ small router; what it answers with is in api.py.
                                                   with the rules the decision leaves proposed (proposals)
     GET  /api/decisions                           every decision in the store
     GET  /api/documents/<name>/fields             the fields report of a document (the model's answers)
+    GET  /api/documents/<name>/blocks             its blocks in reading order, its language, the answers in it
     GET  /api/documents/<name>/pages/<n>          the page's elements
     GET  /api/documents/<name>/pages/<n>.png      the page image
     GET  /api/rules                               the rules learnt from decisions; a proposed one with its reach
@@ -28,8 +29,8 @@ small router; what it answers with is in api.py.
     POST /api/register                            {body, key} takes a learnt person or a candidate out (admin)
     GET  /api/runs                                the runs of the admin, newest first
     GET  /api/runs/<id>                           one run with all its lines
-    POST /api/runs                                a PDF (Content-Type application/pdf, X-Name) or
-                                                  {document: <OpenParlData doc id>}, {model?} (admin)
+    POST /api/runs                                a PDF (Content-Type application/pdf, X-Name; X-Model 1 or 0;
+                                                  X-Body the key of its parliament, where known) (admin)
 """
 
 from __future__ import annotations
@@ -108,6 +109,10 @@ class Handler(BaseHTTPRequestHandler):
         if m and method == "GET":
             report = app.store.get_fields(m.group(1))
             return (200, report) if report is not None else (404, {"error": "no such document"})
+        m = re.fullmatch(r"documents/([^/]+)/blocks", route)
+        if m and method == "GET":
+            document = app.document(m.group(1))
+            return (200, document) if document is not None else (404, {"error": "no such document"})
         m = re.fullmatch(r"documents/([^/]+)/pages/(\d+)(\.png)?", route)
         if m and method == "GET":
             return self._page(app, m.group(1), int(m.group(2)), bool(m.group(3)))
@@ -185,20 +190,11 @@ class Handler(BaseHTTPRequestHandler):
         raw = self._raw_body()
         if raw is None:
             return 413, {"error": "the body is too large"}
-        if kind == "application/pdf":
-            model = self.headers.get("X-Model")
-            return app.run_pdf(self.headers.get("X-Name") or "upload.pdf", raw, None if model is None else model == "1")
-        try:
-            body = json.loads(raw.decode("utf-8")) if raw else {}
-        except (UnicodeDecodeError, json.JSONDecodeError):
-            return 400, {"error": "a JSON object or a PDF is expected"}
-        if not isinstance(body, dict) or "document" not in body:
-            return 400, {"error": "a JSON object with document, or a PDF, is expected"}
-        try:
-            doc_id = int(body["document"])
-        except (TypeError, ValueError):
-            return 400, {"error": "document must be the id of a document at OpenParlData"}
-        return app.run_document(doc_id, body.get("model"))
+        if kind != "application/pdf":
+            return 400, {"error": "a PDF is expected"}
+        model = self.headers.get("X-Model")
+        return app.run_pdf(self.headers.get("X-Name") or "upload.pdf", raw, None if model is None else model == "1",
+                           (self.headers.get("X-Body") or "").strip())
 
     def _raw_body(self) -> bytes | None:
         length = int(self.headers.get("Content-Length") or 0)

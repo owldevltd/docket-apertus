@@ -9,7 +9,8 @@ from __future__ import annotations
 
 import re
 
-from docket.fluffy import join_lines
+from docket.document.response import fold
+from docket.fluffy import join_lines, text_lines
 
 # from this multiple of the base font a text is a heading
 HEAD = 1.3
@@ -62,8 +63,11 @@ class Knowledge:
 
     def __init__(self, sections: dict[str, int], values: dict[str, dict[str, int]] | None = None,
                  types: dict[str, dict] | None = None, forms: dict[str, dict[str, int]] | None = None,
-                 bodies: dict[str, dict] | None = None, kinds: list[dict] | None = None):
+                 bodies: dict[str, dict] | None = None, kinds: list[dict] | None = None,
+                 answers: list[str] | None = None):
         self.sections = dict(sections)
+        # the section names that announce the answer to a submission within the same document
+        self.answers = list(answers or [])
         self.values = {name: dict(seen) for name, seen in (values or {}).items()}
         # from the export of OpenParlData: the harmonised type per label, the number forms per parliament, and
         # the names of the parliaments (tools/knowledge.py)
@@ -82,12 +86,14 @@ class Knowledge:
                 seen[v] = seen.get(v, 0) + 1
 
     def section(self, text: str) -> str | None:
-        """The section name a short line begins with ("Begründung:", "2. Antrag der Kommission" → antrag)."""
-        t = re.sub(r"^[\d.IVXA-Z]+[.)]\s+|\s*[:.]+$", "", text.strip()).strip().lower()
+        """The section name a short line begins with ("Begründung:", "2. Antrag der Kommission" → antrag),
+        without regard to accents ("REPONSE DU CONSEIL D'ETAT" → réponse)."""
+        t = fold(re.sub(r"^[\d.IVXA-Z]+[.)]\s+|\s*[:.]+$", "", text.strip()).strip())
         if not t or len(t.split()) > NAME_WORDS:
             return None
         for name in self.sections:
-            if t == name or t.startswith(name + " "):
+            n = fold(name)
+            if t == n or t.startswith(n + " "):
                 return name
         return None
 
@@ -120,8 +126,10 @@ def build_blocks(pages: list[dict], knowledge: Knowledge) -> tuple[list[dict], l
         page["elements"] = elements
         base = base_size(elements)
         tables, used = _tables(elements, base * px)
+        columns, more = _columns(elements, used, base, px)
+        used = used | more
         pairs, more = _pairs(elements, used, base, px)
-        found = tables + pairs
+        found = tables + columns + pairs
         used = used | more
         for i, e in enumerate(elements):
             if i in used or e["type"] == "line":
@@ -270,6 +278,51 @@ def _tables(elements: list[dict], size: float) -> tuple[list[dict], set[int]]:
         block["rows"] = [[" ".join(cell) for cell in row] for row in cells]
         blocks.append(block)
     return blocks, used
+
+
+def _columns(elements: list[dict], used: set[int], base: float, px: float) -> tuple[list[dict], set[int]]:
+    """A column of labels with the column of values beside it, as forms print their head: every line of the
+    left element is a label with a colon, and each line of the right one belongs to the label at its height.
+    They become one list of labelled values. Read as two paragraphs, the lines are lost: which value stands
+    for which label, where one name ends and the next begins, which label has the ticked box."""
+    size = base * px
+    blocks: list[dict] = []
+    taken: set[int] = set()
+    for i, left in enumerate(elements):
+        labels = text_lines(left) if left["type"] == "text" else []
+        if i in used or i in taken or len(labels) < 2:
+            continue
+        if not all(t["text"].endswith(":") and len(t["text"]) <= TERM and re.search(r"[^\W\d_]", t["text"])
+                   for t in labels):
+            continue
+        edge = left["x"] + left["width"]
+        right = None
+        for j, e in enumerate(elements):
+            if j == i or j in used or j in taken or e["type"] != "text" or not e.get("content"):
+                continue
+            # the values of a form stand in one column, the labels before them are of unequal length: twice as
+            # far as beside a single label still counts
+            if e["x"] < edge - 0.5 * size or e["x"] > edge + 2 * BESIDE * size:
+                continue
+            if e["y"] > left["y"] + left["height"] or e["y"] + e["height"] < left["y"]:
+                continue
+            if right is None or e["x"] < elements[right]["x"]:
+                right = j
+        if right is None:
+            continue
+        e = elements[right]
+        values: list[list[str]] = [[] for _ in labels]
+        for line in text_lines(e):
+            # the last label that stands at this height or above it
+            at = max((k for k, t in enumerate(labels) if t["y"] <= line["y"] + 0.5 * size), default=0)
+            values[at].append(line["text"])
+        taken.update((i, right))
+        box = {"x": min(left["x"], e["x"]), "y": min(left["y"], e["y"])}
+        box["width"] = max(edge, e["x"] + e["width"]) - box["x"]
+        box["height"] = max(left["y"] + left["height"], e["y"] + e["height"]) - box["y"]
+        items = [{"term": t["text"].rstrip(":").strip(), "def": "\n".join(v)} for t, v in zip(labels, values)]
+        blocks.append({"type": "def-list", **box, **_flags([left, e]), **_face(e), "items": items})
+    return blocks, taken
 
 
 def _pairs(elements: list[dict], used: set[int], base: float, px: float) -> tuple[list[dict], set[int]]:

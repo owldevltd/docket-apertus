@@ -42,6 +42,11 @@ def run(name: str, open_again, check) -> None:
     except KeyError:
         check(True, f"{name}: the record of an unknown affair is refused")
     check(store.get_affair("nr-none") is None, f"{name}: an unknown affair is none")
+    blocks = [{"id": "b1", "type": "p", "page": 1, "text": "Ä"},
+              {"id": "b2", "type": "sec", "page": 1, "content": []}]
+    store.put_blocks("a", blocks)
+    check(store.get_blocks("a") == blocks and store.get_blocks("b") is None,
+          f"{name}: the blocks of a document are kept on their own, none where it never got them")
 
     store.put_fields("a", {"fields": {"title": {"state": "placed"}}})
     check(store.get_fields("a") == {"fields": {"title": {"state": "placed"}}} and store.get_fields("b") is None,

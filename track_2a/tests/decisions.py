@@ -7,7 +7,8 @@ read left untouched; the record before any decision, made to follow the rows, is
 a new run over the same documents, with the reviews taken out of the stored record, brings them all back from
 the rows; a store whose rows are written anew takes the reviews from its records. A rule applied to many values
 is written to their rows as well, and the affairs a rule would reach are the same asked of the rows as counted
-over every record.
+over every record. A rule people accepted holds for what a later run reads: a value the rule fits is changed by
+it at its row, once, with a review that names the rule.
 
     python3 tests/decisions.py <document dir> ...
 """
@@ -24,13 +25,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from docket.affair.merge import Document, values_of  # noqa: E402
 from docket.api import App  # noqa: E402
 from docket.config import load_config  # noqa: E402
-from docket.fields.placer import day, get_at  # noqa: E402
+from docket.fields.placer import blocks_of, day, get_at  # noqa: E402
 from docket.jobs import Jobs  # noqa: E402
 from docket.pipeline import load_contract, load_field_file, load_knowledge  # noqa: E402
 from docket.runner import _write_affairs  # noqa: E402
 from docket.store import open_store  # noqa: E402
 from docket.store.review import sources_of  # noqa: E402
-from docket.store.rows import fill_rows, follow  # noqa: E402
+from docket.store.rows import fill_rows, find_value, follow  # noqa: E402
 from docket.store.rules import apply, shape  # noqa: E402
 
 RULE = {"id": "r-test", "field": "polity", "kind": "prefix-off", "parameter": "Kanton ", "state": "active"}
@@ -53,9 +54,11 @@ def main(argv: list[str]) -> int:
     fields = load_field_file(base, contract)
     knowledge = load_knowledge(base)
 
-    def run(config, out: Path, names: list[str], one_party: bool = False, parliament: str = "") -> dict[str, str]:
+    def run(config, out: Path, names: list[str], one_party: bool = False, parliament: str = "",
+            printed: tuple[str, str] | None = None) -> dict[str, str]:
         """Forms the affairs of these documents from their stored runs; returns the affair's key per document.
-        With `parliament` the documents count as that parliament's, whatever the run told."""
+        With `parliament` the documents count as that parliament's, whatever the run told; with `printed` the
+        first labelled list of every document prints this label with this value as well."""
         out.mkdir(exist_ok=True)
         documents = []
         for name in names:
@@ -63,6 +66,9 @@ def main(argv: list[str]) -> int:
             if one_party:
                 # one party for all the names: a single read value that goes into several entries
                 stored["fields"]["party"]["items"] = stored["fields"]["party"]["items"][:1]
+            if printed:
+                listed = next(b for b in blocks_of(stored["body"]) if b["type"] == "def-list")
+                listed["items"].append({"term": printed[0], "def": printed[1]})
             report = {"identity": stored["identity"], "kind": stored.get("kind"), "fields": stored["fields"]}
             (out / f"{name}-fields.json").write_text(json.dumps(report, ensure_ascii=False), encoding="utf-8")
             values = values_of(stored["fields"])
@@ -104,14 +110,28 @@ def main(argv: list[str]) -> int:
         check(len(party_rows) == 1 and len(party_rows[0]["places"]) == len(people) > 1,
               f"{name}: one read party sits in the entries of {len(people)} names")
 
+        # what the app is shown: every value with the id of its row, which names it in a decision
+        shown = {e["source"]: e for e in app.affair(key)["sources"]}
+        ids = [i for e in shown.values() for i in (e.get("ids") or {e["path"]: e["id"]}).values()]
+        found = [find_value(rows, i) for i in ids]
+        check(len(set(ids)) == len(ids) and all(h is not None for h in found)
+              and all(e.get("field") for e in shown.values()),
+              f"{name}: each of the {len(ids)} values shown carries the id of its row and the field it was read under")
         asked = [
-            {"source": entries["title"]["source"], "decision": "changed", "by": "test", "after": "Ein neuer Titel"},
-            {"source": second["source"], "path": party_path, "decision": "changed", "by": "test", "after": "GLP"},
-            {"source": second["source"], "decision": "confirmed", "by": "test"},
+            {"id": shown[entries["title"]["source"]]["id"], "decision": "changed", "by": "test",
+             "after": "Ein neuer Titel"},
+            {"id": shown[second["source"]]["ids"][party_path], "decision": "changed", "by": "test", "after": "GLP"},
+            {"id": shown[second["source"]]["id"], "decision": "confirmed", "by": "test"},
+            # the place in the record still names a value, as before the ids
             {"source": entries["polity"]["source"], "decision": "rejected", "by": "test"},
-            {"source": told["source"], "decision": "rejected", "by": "test"},
+            {"id": shown[told["source"]]["id"], "decision": "rejected", "by": "test"},
         ]
-        check(all(app.decide(key, body)[0] == 200 for body in asked), f"{name}: five decisions taken")
+        check(shown[told["source"]]["id"].endswith("/id") and ":" in shown[second["source"]]["ids"][party_path],
+              f"{name}: the id of a person and a party in the entry of a name are told apart from the row's own value")
+        check(all(app.decide(key, body)[0] == 200 for body in asked),
+              f"{name}: five decisions taken, four by the id of the row and one by the place in the record")
+        status, answer = app.decide(key, {"id": name + "#99999", "decision": "confirmed", "by": "test"})
+        check(status == 400, f"{name}: an id no row carries is refused")
         counted = [(r["field"], r["kind"], r["parameter"]) for r in store.get_rules()]
         logged = [(d["field"], d["before"], d["after"]) for d in store.list_decisions(key)]
         check(("party", "value", "Grüne") in counted and not any(f.startswith("contributors") for f, _, _ in counted)
@@ -206,6 +226,34 @@ def main(argv: list[str]) -> int:
                    for d in r.get("decisions") or [] if d["review"].get("rule") == RULE["id"]]
         check(applied == count and len(by_rule) == count and all(not v.startswith("Kanton ") for _, v in by_rule),
               f"a rule applied to {applied} values is written to their rows")
+
+    # a rule people accepted holds for what a later run reads: the number is what stands at a label
+    with tempfile.TemporaryDirectory() as tmp:
+        config = type(base)(**{**base.__dict__, "storage_dir": Path(tmp) / "storage"})
+        name = "nidau-m185"
+        store = open_store(config)
+        store.put_rules([{"id": "r-0001", "field": "number", "kind": "label", "parameter": "vorstoss-nr.",
+                          "count": 2, "against": 0, "confirmed": 0, "withdrawn": 0, "applied": 0, "active": True,
+                          "state": "active", "since": None, "examples": []}])
+        read = json.loads((dirs[name] / "run.json").read_text(encoding="utf-8"))["fields"]["number"]["items"][0]
+        key = run(config, Path(tmp) / "out", [name], printed=("Vorstoss-Nr.:", "M 185"))[name]
+        record = store.get_affair(key)["record"]
+        entry = next(e for e in sources_of(record) if e["label"] == "number")
+        review = entry["review"] or {}
+        logged = [d for d in store.list_decisions(key) if d.get("rule") == "r-0001"]
+        check(entry["value"] == "M 185" and review.get("by") == "rule" and review.get("rule") == "r-0001"
+              and review.get("before") == read["value"] and len(logged) == 1 and logged[0]["after"] == "M 185"
+              and store.get_rules()[0]["applied"] == 1,
+              f"{name}: the run reads {read['value']!r}, the accepted rule sets what stands at the label, M 185, "
+              f"and it is logged")
+        kept = next(r for r in store.get_rows(name) if r["field"] == "number" and r["state"] == "placed")
+        check(kept["value"] == read["value"] and len(kept.get("decisions") or []) == 1,
+              f"{name}: the row keeps the value as read and holds the rule's decision")
+        run(config, Path(tmp) / "out", [name], printed=("Vorstoss-Nr.:", "M 185"))
+        again = next(e for e in sources_of(store.get_affair(key)["record"]) if e["label"] == "number")
+        check(again["value"] == "M 185" and store.get_rules()[0]["applied"] == 1
+              and len([d for d in store.list_decisions(key) if d.get("rule") == "r-0001"]) == 1,
+              f"{name}: a further run applies it no second time")
     return 1 if failed else 0
 
 

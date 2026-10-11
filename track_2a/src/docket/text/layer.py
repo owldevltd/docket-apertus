@@ -48,6 +48,7 @@ def fill_text_layer(pdf: str | Path, n: int, page: dict) -> bool:
 
     elements = page["elements"]
     text: list[list[str]] = [[] for _ in elements]
+    rows: list[list[list]] = [[] for _ in elements]
     last_y: list[float | None] = [None] * len(elements)
     for x, y, t in words:
         best = None
@@ -59,12 +60,20 @@ def fill_text_layer(pdf: str | Path, n: int, page: dict) -> bool:
         if best is not None:
             # a jump down is a line end; there the hyphens are healed
             previous = last_y[best]
-            text[best].append(("\n" if previous is not None and y - previous > 0.6 * LINE * DPI / 72 else "") + t)
+            jump = previous is not None and y - previous > 0.6 * LINE * DPI / 72
+            text[best].append(("\n" if jump else "") + t)
+            if jump or not rows[best]:
+                rows[best].append([y, []])
+            rows[best][-1][1].append(t)
             last_y[best] = y
 
     fonts = _fonts(pdf, n, page["width"])
     for i, e in enumerate(elements):
         e["content"] = hyphens(re.sub(r" ?\n ?", "\n", " ".join(text[i])))
+        # the lines stay beside the joined text where there are several: a column of labels and the column of
+        # values beside it can only be told apart line by line
+        if len(rows[i]) > 1:
+            e["textLines"] = [{"y": round(y), "text": " ".join(words)} for y, words in rows[i]]
         if e["type"] == "unknown" and e["content"]:
             e["type"] = "text"
         if not e["content"]:

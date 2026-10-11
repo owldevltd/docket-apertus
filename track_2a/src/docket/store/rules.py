@@ -12,18 +12,28 @@ suffix-off, prefix-on, suffix-on, digits (a letter read for a digit), spelling (
 value becomes the same value ("Standesinitiative" to "Antrag"), whatever else the change is. A person can
 switch an accepted rule off and on by hand. When a rule stops being active nothing is turned back, only nothing
 new is applied.
+
+And label (11 October 2026): the value a person set stands in the document beside a printed label ("Vorstoss-
+Nr.: M 185"), or is the label of a ticked box. Such a rule reads: the value of this field is what stands at
+that label. Which label belongs to which field is written nowhere in the code; it is learnt from what people
+correct, like every other rule. Unlike the others it does not turn one value into another by its form, it
+needs the document: `labelled` is what the document prints with a label (see labels).
 """
 
 from __future__ import annotations
 
 import re
 
+from docket.fields.placer import day, plain
 from docket.store.base import stamp
 
 # a rule is proposed from this many changes by hand
 PROPOSE_AT = 2
 DIGITS = {"o": "0", "O": "0", "l": "1", "I": "1", "i": "1", "s": "5", "S": "5", "B": "8"}
 EXAMPLES = 3
+# how a ticked box and an empty one stand in a text layer
+TICKED = ("☒", "☑", "x", "X")
+UNTICKED = ("☐", "□", "")
 
 
 def pattern(before: str, after: str) -> dict | None:
@@ -54,8 +64,38 @@ def pattern(before: str, after: str) -> dict | None:
     return None
 
 
-def patterns(before: str, after: str) -> list[dict]:
-    """Every pattern a change carries: the one of its form, when it has one, and the value itself."""
+def label_key(term: str) -> str:
+    """A printed label as it is compared: small letters, single spaces, without its colon."""
+    return re.sub(r"\s+", " ", str(term or "").strip().rstrip(":").strip().lower())
+
+
+def labels(blocks: list[dict]) -> dict[str, str]:
+    """What a document prints with a label, by the label: the text beside it; for a ticked box the label
+    itself, since the tick says that the label holds. A box left empty tells nothing, and of a label printed
+    twice the first counts. `blocks` are the blocks of a document, the ones inside sections too."""
+    out: dict[str, str] = {}
+    for block in blocks:
+        for item in block.get("items") or []:
+            if not isinstance(item, dict) or not item.get("term"):
+                continue
+            key, value = label_key(item["term"]), " ".join(str(item.get("def") or "").split())
+            if value in TICKED:
+                value = str(item["term"]).strip().rstrip(":").strip()
+            elif value in UNTICKED:
+                continue
+            if key and key not in out:
+                out[key] = value
+    return out
+
+
+def _same(a: str, b: str) -> bool:
+    """Whether two values say the same: the same day, or the same letters and digits."""
+    return bool(plain(a)) and (plain(a) == plain(b) or (day(a) != "" and day(a) == day(b)))
+
+
+def patterns(before: str, after: str, labelled: dict[str, str] | None = None) -> list[dict]:
+    """Every pattern a change carries: the one of its form, when it has one, the value itself, and every
+    label of the document beside which the new value stands."""
     if before == after or not before or not after:
         return []
     found = pattern(before, after)
@@ -63,12 +103,20 @@ def patterns(before: str, after: str) -> list[dict]:
     # a change of spelling is the same value already; anything else also counts as this value becoming that one
     if found is None or found["kind"] != "spelling":
         out.append({"kind": "value", "parameter": before, "to": after})
+    out += [{"kind": "label", "parameter": key} for key, value in (labelled or {}).items() if _same(value, after)]
     return out
 
 
-def apply(rule: dict, value: str) -> str | None:
-    """The value after the rule, or None when the rule does not fit it."""
+def apply(rule: dict, value: str, labelled: dict[str, str] | None = None) -> str | None:
+    """The value after the rule, or None when the rule does not fit it. A rule of a label fits where the
+    document prints that label with another value than this one."""
     kind, p = rule["kind"], rule["parameter"]
+    if kind == "label":
+        told = (labelled or {}).get(p)
+        if not told or _same(told, value):
+            return None
+        # a date stands in a record as its day, however it is printed
+        return day(told) if day(value) and day(told) else told
     if kind == "value":
         return rule.get("to") if value == p and rule.get("to") not in (None, value) else None
     if kind == "prefix-off":
@@ -116,10 +164,12 @@ class Rules:
     def __init__(self, rows: list[dict]):
         self.rows = list(rows)
 
-    def note(self, field: str, before: str, after: str, affair: str, by: str) -> list[dict]:
-        """Counts a person's change on every pattern it carries; returns the rules it counted on."""
+    def note(self, field: str, before: str, after: str, affair: str, by: str,
+             labelled: dict[str, str] | None = None) -> list[dict]:
+        """Counts a person's change on every pattern it carries; returns the rules it counted on. `labelled`
+        is what the document of the value prints with a label."""
         counted = []
-        for p in patterns(before, after):
+        for p in patterns(before, after, labelled):
             rule = next((r for r in self.rows if r["field"] == field and r["kind"] == p["kind"]
                          and r["parameter"] == p["parameter"] and r.get("to") == p.get("to")), None)
             if rule is None:
@@ -138,7 +188,8 @@ class Rules:
             counted.append(rule)
         return counted
 
-    def speak_against(self, field: str, before: str, after: str | None, decision: str) -> bool:
+    def speak_against(self, field: str, before: str, after: str | None, decision: str,
+                      labelled: dict[str, str] | None = None) -> bool:
         """A decision by hand held against the rules of its field that are not active yet: a person confirmed
         a value a rule would change, or changed it into something else than the rule would. Such a rule is
         not proposed. Returns whether a rule was touched."""
@@ -146,10 +197,10 @@ class Rules:
         for rule in self.rows:
             if rule["field"] != field or rule.get("active"):
                 continue
-            would = apply(rule, before)
+            would = apply(rule, before, labelled)
             if would is None:
                 continue
-            if decision == "confirmed" or (decision == "changed" and after != would):
+            if decision == "confirmed" or (decision == "changed" and not _same(str(after), would)):
                 rule["against"] = rule.get("against", 0) + 1
                 rule["state"] = state_of(rule)
                 touched = True

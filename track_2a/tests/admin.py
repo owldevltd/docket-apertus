@@ -66,13 +66,15 @@ def main(argv: list[str]) -> int:
             status, answer = call(base, "/api/runs", data, {"Content-Type": "application/pdf", "X-Name": pdf.name})
             check(status == 403, f"a run without the token is refused: {answer.get('error')}")
             headers = {"Content-Type": "application/pdf", "X-Name": pdf.name, "X-Model": "0", "X-Token": "secret"}
-            status, job = call(base, "/api/runs", data, headers)
-            queued = status == 202 and job["state"] in ("queued", "running")
-            check(queued, f"the upload is queued as run {job.get('id')}")
+            status, job = call(base, "/api/runs", data, {**headers, "X-Body": "NE"})
+            queued = status == 202 and job["state"] in ("queued", "running") and job["body"] == "NE"
+            check(queued, f"the upload is queued as run {job.get('id')}, with the parliament told for it")
             status, answer = call(base, "/api/runs", b"not a pdf", headers)
             check(status == 400, f"an upload that is no PDF is refused: {answer.get('error')}")
-            status, answer = call(base, "/api/runs", json.dumps({"document": "x"}).encode(), {"X-Token": "secret"})
-            check(status == 400, f"a document id that is no number is refused: {answer.get('error')}")
+            status, answer = call(base, "/api/runs", json.dumps({"document": 1}).encode(), {"X-Token": "secret"})
+            check(status == 400, f"only a PDF comes in, nothing is fetched by an id: {answer.get('error')}")
+            status, answer = call(base, "/api/runs", data, {**headers, "X-Body": "no-such"})
+            check(status == 400, f"a parliament that is not known is refused: {answer.get('error')}")
             started = time.monotonic()
             while time.monotonic() - started < WAIT:
                 status, job = call(base, f"/api/runs/{job['id']}")

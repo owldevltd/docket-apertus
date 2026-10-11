@@ -33,6 +33,12 @@ export interface Same {
 
 // a value with a place: the path of its source object and of the value, and what people decided
 export interface SourceEntry {
+    // the id of the value's row in the store; a decision names the value by it. For an entry with several
+    // values, `ids` holds the id of each by its path
+    id: string;
+    ids?: Record<string, string>;
+    // the field of the fields file the value was read under
+    field?: string;
     source: string;
     path: string;
     label: string;
@@ -53,6 +59,15 @@ export interface DocumentInfo {
     name: string;
     id: number;
     pages: number;
+}
+
+// One document as the page view shows it, from the store: its blocks in reading order, its language, and the
+// answers within it with the block each begins at.
+export interface DocumentView {
+    name: string;
+    language: string;
+    answers: { title: string; block: string; page: number }[];
+    blocks: Block[];
 }
 
 export interface Block {
@@ -82,6 +97,7 @@ export interface Head {
 export interface Affair {
     key: string;
     head: Head;
+    // the affair in the output format; the views read the values, the documents and the decisions beside it
     record: Record<string, any>;
     documents: DocumentInfo[];
     sources: SourceEntry[];
@@ -107,8 +123,9 @@ export interface Decision {
     rule: string | null;
 }
 
+// A decision names its value by the id of the value's row in the store, whatever shape the record has.
 export interface DecisionBody {
-    source: string;
+    id: string;
     decision: 'confirmed' | 'changed' | 'rejected';
     by: string;
     after?: string;

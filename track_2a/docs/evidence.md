@@ -18,6 +18,7 @@ the OpenParlData API, or the frozen implementation the port is held against.
 | 04.10. | What kind of documents? | 48 PDFs from 48 bodies, one each | 33 born digital, 8 scans with a text layer, 7 scans without; German 27, French 11, Italian 2; only 14 of 48 are a motion or its answer, the rest minutes, bills, attachments, reports | one input path for all; the pipeline must tell a scan from a digital page by itself |
 | 04.10. | How far is the harmonisation? | `type_name` and `type_harmonized`, `state_name_harmonized` in the export | 464 source labels (439 after merging language forms) onto 18 harmonised types with Wikidata IDs; the harmonised state is empty for 325 321 of 325 599 affairs, the 278 set ones sit in four bodies; 44 labels carry more than one harmonised type ("Bericht und Antrag": 6 290 government business, 1 087 none, 199 report, …) | the type mapping is not a function of the label alone; the state is where a common schema is still open |
 | 05.10. | How fast do new labels run dry? | the export in three orders (by time, shuffled with seed 20261004, body by body) | shuffled: after 1 000 affairs 122 labels seen and 92.1 % of the rest carry a seen label, after 5 000 239 and 98.8 %; by time 14 and 32.8 % after 1 000; body by body 307 and 81.9 % after 200 000; label per body 1 159 distinct, 95.9 % after 5 000; states 463 distinct, 94.8 % after 1 000 | the vocabulary of labels is small enough for a table; the vocabulary of states is not the same across bodies |
+| 10.10. | Is there a document of the federal level to read? | the export, counted on 11 October: 69 678 of the 325 600 affairs belong to the federal parliament, 45 444 of them a motion, a postulate, an interpellation, a question or a parliamentary initiative; 16 such affairs drawn through the API, and 100 of the 52 465 federal documents asked | none of the 16 affairs has a document, their text is held as text (`texts`); the federal documents hang on other affairs and are mostly references to the Federal Gazette, 2 of the 100 were PDFs | no federal document in the samples: four municipalities and towns and four cantons among the shipped ones, 58 bodies in the draw of 10 October |
 
 ## 2 Geometry: the page without a model
 
@@ -153,3 +154,47 @@ affairs export of OpenParlData and its API on 8 October 2026: 381 type labels wi
 number forms of 88 parliaments, the names of 97 parliaments with affairs or documents. `vocabulary.json`
 there is the stem `tools/vocabulary.py` read from OpenParlData's admin panel on 10 October 2026: 1 488 rows,
 the names of the parliaments for their affair types and the standard names of types, events and groups.
+
+## 10 What a document costs the model
+
+| Date | Question | Setup | Finding | Decided |
+|---|---|---|---|---|
+| 11.10. | What does one document cost at the model? (counted, no model call) | the stored exchanges of the runs of 10 October: 203 documents, 1 445 calls, every one answered with status 200, the token counts as the endpoint reports them | a document with a text layer (194 documents): 6 calls in the median, 7 507 tokens in and 436 out (mean 9 096 and 452), 5 s of the endpoint's time. A document with pages read by the model (9 documents, 29 pages): 28 calls, 36 389 tokens in and 1 632 out, 33 s. A call for fields takes 1 679 tokens in and 90 out on average, a call that reads a page 1 456 and 73 | – |
+| 11.10. | What would that be on one CPU? (computed, not measured) | time = tokens in / speed of reading + tokens out / speed of writing, with the means of a document with a text layer; the speeds are cases set by the assistant, open, nothing was measured on such a machine | at 10 and 1 tokens a second 22.7 minutes a document (63 a day); at 30 and 3: 7.6 minutes (190); at 100 and 10: 2.3 minutes (635); at 300 and 30: 0.8 minutes (1 904). Eight billion weights take about 16 GB at 16 bits each, 8 GB at 8, 4 GB at 4. Whether reading page images runs on a CPU, and how well a smaller build of the model reads, was not tried | open: to be measured on the machine it shall run on |
+
+## 11 The six measures over the number of documents
+
+The project lead noted six measures for the question whether the order of types settles before it outgrows the
+model: novelty, merge and split rate, human correction rate, mapping stability, context pressure, coverage of
+the published types. Counted on 11 October 2026 without a model call on two sets: (A) the 325 600 affairs of
+OpenParlData's export, 324 999 of them dated, ordered by date in ten equal parts of 32 499, each with the name
+its parliament gives its type and the harmonised type OpenParlData holds for it; (B) the 211 documents of the
+runs of 10 October in the order they were read (the gold sample in German, French and Italian, then Basel-Stadt,
+Vaud, Ticino, then the shipped ones), in steps of 30. How each measure is counted here was set by the
+assistant and is open.
+
+| Measure | Counted as | Finding | Decided |
+|---|---|---|---|
+| Novelty | (A) a type is new when this parliament carries this name for the first time. (B) new is what stood in no document before: the type as read, a heading, a label before a value | (A) new names per part: 158, 185, 223, 128, 130, 89, 76, 63, 50, 35, that is 4.9 per 1 000 affairs in the first part and 1.1 in the last; 1 137 names per parliament and 378 different names at the end. (B) new types read per step: 10, 5, 1, 2, 3, 2, 5 (28 at the end); new headings 66, 28, 10, 85, 95, 2, 12 (299); new labels 51, 22, 7, 23, 14, 8, 9 (135). The steps follow the parliaments: Vaud begins in the fourth | – |
+| Merge and split rate | (A) every new name of a parliament is a change to the order: merged when OpenParlData holds it under one of its harmonised types, without a place when it has none, split when the same name stands for different harmonised types in different parliaments | merged per part: 143, 174, 172, 106, 117, 82, 67, 53, 44, 29; without a place: 15, 11, 51, 22, 13, 7, 9, 10, 6, 6; names newly split per part: 3, 6, 2, 7, 7, 4, 2, 4, 6, 2, 43 at the end | – |
+| Human correction rate | decisions of people on values, in the stores of the runs | none: nobody has decided on values in the app yet, so there is no course over the documents | – |
+| Mapping stability | (A) a name of a parliament is established when at least ten affairs carry it and OpenParlData gives it a harmonised type; stable when all its affairs carry the same | 735 established names, 6 of them with more than one harmonised type over their affairs (of all 1 029 names with a harmonised type: 8) | – |
+| Context pressure | (B) what a call for fields shows the model | at most six questions a call (437 of 955 calls with six, 206 with five, 257 with a single one asked again); 1 211 tokens in at the median, nine of ten up to 3 474, the largest 20 403. The order of types, 1 928 rows of the vocabulary, is never shown to the model: code maps the read label onto the harmonised type | – |
+| Coverage of the published types | (A) affairs OpenParlData gives one of its harmonised types. (B) the type the pipeline read in the document, brought to a harmonised type through the names of the parliament and else the table, beside what OpenParlData holds for the same affair | (A) 270 445 of 325 600 affairs (83.1 %), per part between 80.1 % and 87.7 %. (B) the type was read in 144 of 211 documents; 137 of them fall onto a harmonised type; OpenParlData holds a type for 143, for 132 the same | – |
+
+## 12 The language of a document and of its summary
+
+| Date | Question | Setup | Finding | Decided |
+|---|---|---|---|---|
+| 11.10. | Can code tell the language of a document? (no model call) | the small words of a language that no other of the languages shares (`document/language.py`), on the 211 documents of the runs of 10 October whose language is known from the parliament they come from, and the eight shipped ones | 210 of 211 right, none wrong; one document of three blocks holds too few words to tell | every document entry says its `language` |
+| 11.10. | Why did summaries go missing? (no model call) | the summary in the reports of the same 211 documents | the model answered it for all 211; 84 had a place, 127 were dropped because the block the model named holds no word of the summary: it summed up French and Italian documents in German | what the model words itself keeps the block it names, else the head of the document, marked as composed and for a person to look at |
+| 11.10. | Does the model write the summary in the language of the document? | seven shipped documents with a text layer asked the summary again, 7 calls; then the three that are not German with the language named in the question, 3 calls | asked "in the language of the document": all seven in German, the two French and the Italian one too. With the language named ("auf Französisch (en français)"): all three in their language | the question names the language the code has told; the summary stands under that language |
+
+## 13 What belongs together, in one answer
+
+| Date | Question | Setup | Finding | Decided |
+|---|---|---|---|---|
+| 11.10. | How often does the party stand beside the right name today? (no model call) | the runs of 10 October: submitters and parties are two lists, paired by their order; held against the persons OpenParlData holds for the same affair, 197 documents | 524 names read, 228 found among the persons of the affair; where both hold a party: 36 the same, 25 another (among them another name for the same party, and pairs that went wrong: 15 names with 7 parties, names torn at a comma inside brackets); 152 with a party only at OpenParlData | – |
+| 11.10. | Does the model pair them itself when asked for it? | 65 documents (the gold draft and the six with unlike counts), one call with two questions over the whole document, 106 calls: every submitter "Name (Partei, Ort)", every event "was geschah: TT.MM.JJJJ" | worse than the two lists: for 39 of 65 documents no answer in the asked form came back; names in 26 documents instead of 59, 184 names instead of 247, 22 parties the same instead of 31; 20 dates of the reference instead of 33; the form's own words came back as values ("Partei, Ort", "Ort nicht angegeben") | not built: the two lists stay |
+| 11.10. | What does a comma inside brackets do to a name? (no model call) | the stored answers for submitters and co-signers of the same runs, split as before and with a separator inside round brackets separating nothing | values torn at a bracket: 7 to 1 among 561 submitters, 9 to 1 among 1 223 co-signers; nothing else changes | a separator inside round brackets separates nothing |
+

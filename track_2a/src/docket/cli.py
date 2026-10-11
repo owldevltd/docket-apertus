@@ -66,6 +66,8 @@ def main(argv: list[str] | None = None) -> int:
         command.add_argument("--out", required=True, help="directory for the results")
         if name in ("document", "affairs"):
             command.add_argument("--model", action="store_true", help="use the model for scans, the rest, the fields")
+            command.add_argument("--body", default="", help="the key of the parliament all these files are of")
+            command.add_argument("--drawn", default=None, help="a JSON list of {name, body}: the parliament per file")
         command.add_argument("files", nargs="+", help="PDF files, or page images as PPM/PGM")
     web = commands.add_parser("serve", help="the web server over the store")
     web.add_argument("--port", type=int, default=None, help="port, default PORT or 8080")
@@ -91,7 +93,12 @@ def main(argv: list[str] | None = None) -> int:
               f"formed anew")
         return 2 if result.halted else 0
     if args.command in ("document", "affairs"):
-        return run_documents(Path(args.out), [Path(f) for f in args.files], args.model, args.command == "affairs")
+        files = [Path(f) for f in args.files]
+        given = {f.stem: args.body for f in files} if args.body else {}
+        if args.drawn:
+            listed = json.loads(Path(args.drawn).read_text(encoding="utf-8"))
+            given.update({str(d["name"]): str(d["body"]) for d in listed if d.get("body")})
+        return run_documents(Path(args.out), files, args.model, args.command == "affairs", given)
     return run(args.command, Path(args.out), [Path(f) for f in args.files])
 
 
@@ -119,11 +126,11 @@ def run_view(fields_file: Path, contract_file: Path, out: Path) -> int:
     contract = Contract.load(contract_file)
     fields = load_fields(fields_file, contract)
     store = open_store(config)
-    types = load_knowledge(config).types
+    knowledge = load_knowledge(config)
     out.mkdir(parents=True, exist_ok=True)
     count = failed = 0
     for affair in store.list_affairs():
-        record = view(store, affair["key"], fields, contract, types)
+        record = view(store, affair["key"], fields, contract, knowledge.types, knowledge.answers)
         if record is None:
             print(f"{affair['key']}: no rows, left out")
             continue
@@ -138,12 +145,14 @@ def run_view(fields_file: Path, contract_file: Path, out: Path) -> int:
     return 1 if failed else 0
 
 
-def run_documents(out: Path, files: list[Path], with_model: bool, affairs: bool) -> int:
+def run_documents(out: Path, files: list[Path], with_model: bool, affairs: bool,
+                  given: dict[str, str] | None = None) -> int:
+    """The documents (and affairs) of these PDFs; `given` tells the parliament of a file by its name."""
     config = load_config()
     if with_model and not config.api_key:
         print("no LLM_API_KEY: copy .env.example to .env and fill it in", file=sys.stderr)
         return 1
-    result = run_affairs(files, out, config, with_model, merge_affairs=affairs)
+    result = run_affairs(files, out, config, with_model, merge_affairs=affairs, given=given)
     if result.halted:
         return 2
     return 1 if result.failed else 0

@@ -6,7 +6,15 @@
     "blocks": "Jeder Textblock beginnt mit seiner Kennung in eckigen Klammern, zum Beispiel [b12].",
     "task": "Lies daraus ab:",
     "missing": "Steht etwas nicht auf der Seite, schreibe dafür einen Strich (-). Erfinde nichts.",
-    "form": "Antworte mit genau einer Zeile je Angabe, in der Form \"name: wert [Kennung des Blocks, aus dem der Wert stammt]\", ohne weiteren Text."
+    "form": "Antworte mit genau einer Zeile je Angabe, in der Form \"name: wert [Kennung des Blocks, aus dem der Wert stammt]\", ohne weiteren Text.",
+    "languages": {
+      "": "in der Sprache des Dokuments",
+      "de": "auf Deutsch",
+      "fr": "auf Französisch (en français)",
+      "it": "auf Italienisch (in italiano)",
+      "rm": "auf Rätoromanisch (en rumantsch)",
+      "en": "auf Englisch (in English)"
+    }
   },
   "number": {
     "name": "number",
@@ -212,7 +220,8 @@
           "de": {
             "name": "summary",
             "entity": "text",
-            "question": "eine Zusammenfassung des ganzen Dokuments in höchstens drei Sätzen",
+            "question": "eine Zusammenfassung des ganzen Dokuments in höchstens drei Sätzen, geschrieben {sprache}",
+            "own-language": true,
             "dynamic": true,
             "pages": "all",
             "free": true

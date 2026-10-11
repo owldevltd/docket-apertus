@@ -17,20 +17,22 @@ cannot ask for what was never read.
 from __future__ import annotations
 
 import copy
+from collections.abc import Iterable
 
 from docket.affair.merge import Document, merge
 from docket.affair.validator import Contract
 from docket.fields.fields import Fields, has_room
 from docket.fields.placer import day, get_at, set_at
 from docket.store.base import Store
-from docket.store.rows import follow, kind_of, set_places, values_from
+from docket.store.rows import blocks_of_document, follow, kind_of, set_places, values_from
 from docket.store.vocabulary import Vocabulary
 
 # what Docket adds to a record beyond the values
 OWN = ("schema", "docs", "sources", "source")
 
 
-def view(store: Store, key: str, fields: Fields, contract: Contract, types: dict[str, dict]) -> dict | None:
+def view(store: Store, key: str, fields: Fields, contract: Contract, types: dict[str, dict],
+         answers: Iterable[str] = ()) -> dict | None:
     """The stored affair laid into the shape of this fields file and contract; None when the affair is not
     there or its documents have no rows."""
     data = store.get_affair(key)
@@ -47,14 +49,15 @@ def view(store: Store, key: str, fields: Fields, contract: Contract, types: dict
         values = {n: hits for n, hits in values_from(mine, numbered=True).items() if n in fields.fields}
         date = next((day(i["value"]) for i in values.get(date_field, [])), "")
         report = store.get_fields(document["name"]) or {}
-        body = (entries.get(document["id"]) or {}).get("body") or []
+        body = blocks_of_document(store, document["name"], entries.get(document["id"]))
         documents.append(Document(document["id"], document["name"], document.get("pages") or 1, body, values, key,
                                   date, str((report.get("identity") or {}).get("body") or ""), kind_of(mine)))
         rows[document["id"]] = mine
     if not documents:
         return None
     placed: list[dict] = []
-    record = merge(documents, fields, contract, types, Vocabulary(store.get_vocabulary()), placed)[0].record
+    vocabulary = Vocabulary(store.get_vocabulary())
+    record = merge(documents, fields, contract, types, vocabulary, placed, answers)[0].record
     together = []
     for d in documents:
         set_places(rows[d.id], key, [p for p in placed if p["doc"] == d.id])

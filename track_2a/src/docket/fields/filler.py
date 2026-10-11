@@ -17,6 +17,7 @@ from pathlib import Path
 
 from docket.affair.validator import Contract
 from docket.document.bridge import Knowledge
+from docket.document.language import language_of
 from docket.document.picture import text_image
 from docket.fields.fields import Field, Fields
 from docket.fields.placer import (
@@ -165,15 +166,19 @@ def _one(pages: list[dict], body: list[dict], n: int) -> str:
 
 
 def prompt(names: list[str], text: str, which: list[int], total: int, fields: Fields,
-           contract: Contract) -> str:
+           contract: Contract, language: str = "") -> str:
     """The task for a few fields and the text image of the pages: per field its question and the contract's
-    rule for its place."""
+    rule for its place. A question that names the language of the answer ("{sprache}") gets the language of
+    the document, in the words the task holds for it; the model answers in the language of the task
+    otherwise."""
+    task = fields.task
+    spoken = task.get("languages") or {}
     lines = []
     for name in names:
         f = fields.fields[name]
         excerpt = contract.part(f.path) or {"type": "string"}
-        lines.append(f"- {name}: {f.question} — Vorgabe: " + json.dumps(excerpt, ensure_ascii=False))
-    task = fields.task
+        question = f.question.replace("{sprache}", spoken.get(language) or spoken.get("") or "")
+        lines.append(f"- {name}: {question} — Vorgabe: " + json.dumps(excerpt, ensure_ascii=False))
     if len(which) == 1:
         intro = task["intro"].replace("{seite}", str(which[0])).replace("{seiten}", str(total))
     else:
@@ -245,11 +250,20 @@ def check(f: Field, value: str) -> str:
 
 def items(f: Field, value: str) -> list[str]:
     """The values of a field: per entry one for a list, else the value itself. Asked for is the semicolon;
-    without one the model mostly separates with a comma."""
+    without one the model mostly separates with a comma. A separator inside round brackets separates nothing:
+    "Muster (Bern, PS)" is one name with what the document prints behind it."""
     if f.form != "list":
         return [value.strip()]
     separator = ";" if ";" in value else ","
-    return [v.strip() for v in value.split(separator) if v.strip()]
+    out, depth, one = [], 0, ""
+    for char in value:
+        depth += 1 if char == "(" else (-1 if char == ")" and depth else 0)
+        if char == separator and not depth:
+            out.append(one)
+            one = ""
+        else:
+            one += char
+    return [v.strip() for v in [*out, one] if v.strip()]
 
 
 class _Run:
@@ -259,13 +273,14 @@ class _Run:
                  contract: Contract, client: Client, values: dict, report: dict, asked: list,
                  log: Path | None):
         self.text, self.which, self.total, self.body = text, which, total, body
+        self.language = language_of(body)
         self.fields, self.contract, self.client = fields, contract, client
         self.values, self.report, self.asked, self.log = values, report, asked, log
 
     def round(self, names: list[str]) -> bool:
         """One call for a few fields: ask, read the lines, check the values and look for them on the page.
         False when no answer came."""
-        text = prompt(names, self.text, self.which, self.total, self.fields, self.contract)
+        text = prompt(names, self.text, self.which, self.total, self.fields, self.contract, self.language)
         answer = ask(self.client, text, room=room(len(names)), log=self.log, tag="fields " + ",".join(names))
         tokens = (answer.usage or {}).get("prompt_tokens") if answer else None
         self.asked.append({"names": names, "tokens": tokens, "answer": answer.text if answer else None})
@@ -287,17 +302,24 @@ class _Run:
         return True
 
     def _place(self, name: str, f: Field, item: str, cited: list[str]) -> None:
-        """Literal on the page counts; else the block the model names, with the share of its words there."""
+        """Literal on the page counts; else the block the model names, with the share of its words there. What
+        the model words itself (a free field, the summary) stands nowhere on the page: it keeps the block the
+        model names, else the head of the pages asked, and a person looks at it in any case."""
         block = locate(item, self.body, self.which)
         how = "literal" if block is not None else ("cited" if cited else None)
         block = block or (cited[0] if cited else None)
         share = None
         if how == "cited":
             share = overlap(item, block_text(find_block(block, self.body, self.which)))
-            # a named block in which (nearly) no word of the value stands is no place
-            if share <= OVERLAP:
+            # a named block in which (nearly) no word of the value stands is no place; a summary need not share
+            # a word with it (the model sums up a French document in German)
+            if share <= OVERLAP and not f.free:
                 how = "named block without coverage"
                 block = None
+        if block is None and f.free:
+            asked = [c for c in blocks_of(self.body) if c["page"] in self.which and c["type"] != "graphic"]
+            block = asked[0]["id"] if asked else None
+            how = "composed"
         text = block_text(find_block(block, self.body, self.which)).strip() if how == "cited" else ""
         # for the title the text of the named block counts when every word of the answer stands in it and
         # the block is no paragraph
@@ -315,4 +337,5 @@ class _Run:
         if block is not None:
             self.values.setdefault(name, []).append({"value": item, "block": block, "how": how})
             on_page = self.report[name]["state"] == "on the page" or how in ("literal", "derived")
-            self.report[name]["state"] = "on the page" if on_page else "block from the model"
+            away = "at the head of the document" if how == "composed" else "block from the model"
+            self.report[name]["state"] = "on the page" if on_page else away

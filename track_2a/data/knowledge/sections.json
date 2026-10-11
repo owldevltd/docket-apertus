@@ -1,5 +1,5 @@
 {
-    "about": "Section names that open a section of a parliamentary document, lower case, as printed at the start of a short line; the number is how often each was found. Built from the working set on 6 October 2026; grows with every find.",
+    "about": "Section names that open a section of a parliamentary document, lower case, as printed at the start of a short line; the number is how often each was found. Built from the working set on 6 October 2026; grows with every find. The names under response announce the answer to a submission within the same document, in German, French and Italian; they hold for every parliament alike, and what stands under such a heading becomes the response of the document. Set on 11 October 2026 by the assistant, open; a name added here counts from the next run on.",
     "sections": {
         "begründung": 63,
         "text": 41,
@@ -15,6 +15,15 @@
         "stellungnahme": 0,
         "fazit": 0,
         "vorbemerkung": 0,
-        "würdigung": 0
-    }
+        "würdigung": 0,
+        "beantwortung": 0,
+        "réponse": 0,
+        "risposta": 0
+    },
+    "response": [
+        "antwort",
+        "beantwortung",
+        "réponse",
+        "risposta"
+    ]
 }
