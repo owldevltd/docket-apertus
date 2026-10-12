@@ -1,0 +1,53 @@
+{
+  "at": "2026-10-08T15:38:14",
+  "tag": "sort page 1",
+  "model": "swiss-ai/Apertus-v1.5-8B",
+  "temperature": 0,
+  "room": 200,
+  "prompt": "Unten steht Seite 1 eines Dokuments aus einem Schweizer Parlament als Text, ungefähr so angeordnet wie auf dem Papier. [Bild] steht für ein Bild, einen Stempel oder eine Unterschrift. 4 Stellen sind mit [1] bis [4] markiert.\n\n-----\n                                           [1] CONSIGLIO COMUNALE\n\n                                  In conformità dell'art. 49 cpv. 3 LOC il\n                                  Presidente del Consiglio Comunale di Lugano\n                                                    [2] a v v i\n                                                    s a\n                                      che il Consiglio Comunale è\n                                      convocato per la II.a seduta\n                                      ordinaria autunnale lunedì 17\n                                      dicembre 2001, alle ore 20.00\n                                                       [3] e\n                                 (riserva) martedì 18 dicembre 2001, alle ore\n                                 20.00 nella sala del C.C. a Palazzo Civico\n\n               [4] TRATTANDE\n\n                 1.  Approvazione verbale del Consiglio Comunale della seduta del 2 ottobre\n                    2001.\n\n                 2.  Sostituzione dell'On. Antonio Parini con l'On. Livio Delmenico nella Commissione\n                    Speciale ROD\n\n                 2.  Interpellanze e\n                    mozioni.\n\n                 3.  Richieste per la concessione dell'attinenza comunale\n                    luganese. Rapporti della Commissione delle Petizioni.\n\n                 4.  Discussione generale\n                    sull'Aeroporto.\n\n                 5.  MMN. 5706 Concernente la chiusura del conto investimento del MMN. 4103,\n                    relativo\n                    a di verse opere di miglioria delle infrastrutture dell'aeroporto di\n                    Lugano-Agno. Rapporto della Commissione della Gestione.\n\n                 6.  Conti Consuntivi 1999 e 2000 - Capitolo\n                    Aeroporto Rapporto della Commissione della\n                    Gestione.\n\n                 7.  MMN. 5842 Concernente: . la politica della Città di\n                    Lugano a riguardo delle fusioni; . la prima\n                    proposta di aggregazione: Gandria. Rapporto della\n                    Commissione Speciale.\n-----\n\nSage für jede markierte Stelle, was sie ist. Zur Wahl:\n- Überschrift: Titel des Dokuments oder eines Abschnitts\n- Absatz: ein Satz oder Fliesstext\n- Aufzählungspunkt: ein Punkt einer Liste\n- Bezeichnung: ein Feldname wie \"Datum:\" oder \"Eingereicht von:\", mit oder ohne Wert dahinter\n- Angabe: ein einzelner Wert wie eine Nummer, ein Datum, ein Ort oder ein Name, der zum Kopf des Dokuments gehört\n- Unterschrift: Name oder Amt von jemandem, der das Dokument unterschreibt\n- Seitenrand: Seitenzahl, Briefkopf, Absender oder Fusszeile\n- Fussnote: Anmerkung am Seitenende\n\nAntworte mit genau einer Zeile je Stelle, in der Form \"1: Überschrift\", ohne weiteren Text.",
+  "image": 0,
+  "ms": 512,
+  "http": 200,
+  "error": null,
+  "answer": {
+    "id": "chatcmpl-d02e68c1-92d3-4eff-b3f0-45f67218aec5",
+    "object": "chat.completion",
+    "created": 1791473896,
+    "model": "swiss-ai/Apertus-v1.5-8B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "1: Überschrift\n2: Unterschrift\n3: Angabe\n4: Aufzählungspunkt",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": 68,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.23.1rc1.dev1029+ga601a9d99-2d880180",
+    "usage": {
+      "prompt_tokens": 746,
+      "total_tokens": 768,
+      "completion_tokens": 22,
+      "prompt_tokens_details": {
+        "cached_tokens": 96,
+        "multimodal_tokens": null
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "metrics": null
+  }
+}

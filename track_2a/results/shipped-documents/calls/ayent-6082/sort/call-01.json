@@ -1,0 +1,53 @@
+{
+  "at": "2026-10-08T15:37:15",
+  "tag": "sort page 1",
+  "model": "swiss-ai/Apertus-v1.5-8B",
+  "temperature": 0,
+  "room": 200,
+  "prompt": "Unten steht Seite 1 eines Dokuments aus einem Schweizer Parlament als Text, ungefähr so angeordnet wie auf dem Papier. [Bild] steht für ein Bild, einen Stempel oder eine Unterschrift. 2 Stellen sind mit [1] bis [2] markiert.\n\n-----\n             [1] Séance du\n             28.03.2024\n\n             Délivrance d'une autorisation d'exploiter Conformément à la loi du 8 avril 2004 sur\n             l'hébergement, la restauration et le commerce de détail de boissons alcoolisées (LHR), le\n             CC délivre une autorisation d'exploiter à Mme Josiane Tavel pour la cabane des\n             Audannes.\n\n             Combat de reines : soutien financier Le syndicat d’élevage de la Race d’Hérens de la\n             commune d’Ayent, la caisse d’assurance du bétail d’Ayent ainsi que les Laiteries Réunies\n             (Ayent-Arbaz-Grimisuat) organisent un combat de reines les 13 et 14 avril 2024 sur notre\n             commune.\n\n             Le CC accepte de soutenir cette manifestation par le financement d'une sonnette de Fr.\n             900.00. Demande de scolarisation intercommunale Une famille domiciliée à Grimisuat\n             s'installera dans notre commune en août 2024. Leur construction a pris du retard. Leur\n             fils de 4 ans va débuter la 1H en août prochain et les parents demandent si la commune\n             d'Ayent accepte directement leur enfant à l'école sur Ayent à la rentrée scolaire.\n\n             Pour faciliter l'adaptation de l'enfant, le CC donne une réponse favorable à\n             cette demande. Personnel communal M. Cyril Bornand a démissionné de son poste\n             de chargé de sécurité.\n\n             La commune a reçu 15 candidatures pour ce poste. La commission ad hoc de recrutement\n             était composée de 3 membres de la commission intercommunale de sécurité, Albert Dutoit\n             pour Arbaz, Armand Genoud pour Grimisuat et Cédric Bovet pour Ayent, président de\n             cette commission.\n\n             Sur préavis de cette commission, le CC décide l'engagement de M. Norbert Gremaud, [year of birth],\n             domicilié à Ayent pour un taux d'activité de 100 %. L'entrée en fonction est fixée au\n             08.04.2024. Les conseils communaux d'Arbaz et de Grimisuat ont également validé ce choix.\n\n             Musée des bisses : demande de soutien Le CC prend connaissance d'une demande soutien du\n             Musée des Bisses pour un projet de documentaire sur l'avenir des bisses.\n\n             Ce documentaire de 52 minutes est coproduit par IDIP Film à Genève et réalisé par Yvan\n             Monod (ancien RTS). Il a été tourné en grande partie sur la commune d'Ayent. Des images\n             ont été filmées également sur le glacier de la Plaine Morte, dans le Haut-Valais\n             (Ausserberg et Naters), dans la Raspille, à Crans-Montana, sur les nouveaux bisses\n             d'Anniviers.\n\n             Ce documentaire est destiné tout d'abord à être diffusé à la RTS, puis dans les festivals\n             de films et finalement, dans les communes partenaires. Le CC décide de soutenir ce projet\n             à hauteur de Fr. 10'000.00.\n\n             Engagements enseignants Suite à une démission et un départ à la retraite ainsi qu’à la\n             décision du département de l’enseignement de diminuer les périodes des enseignants, une\n             annonce a été publiée dans le bulletin officiel début mars.\n\n             [2] Le CC préavise favorablement les engagements\n             suivants :\n\n                   Aline Mottet, Arbaz : 1-2H / 5H à\n                    Ayent Yan Lou, Bramois : 5H à Ayent\n-----\n\nSage für jede markierte Stelle, was sie ist. Zur Wahl:\n- Überschrift: Titel des Dokuments oder eines Abschnitts\n- Absatz: ein Satz oder Fliesstext\n- Aufzählungspunkt: ein Punkt einer Liste\n- Bezeichnung: ein Feldname wie \"Datum:\" oder \"Eingereicht von:\", mit oder ohne Wert dahinter\n- Angabe: ein einzelner Wert wie eine Nummer, ein Datum, ein Ort oder ein Name, der zum Kopf des Dokuments gehört\n- Unterschrift: Name oder Amt von jemandem, der das Dokument unterschreibt\n- Seitenrand: Seitenzahl, Briefkopf, Absender oder Fusszeile\n- Fussnote: Anmerkung am Seitenende\n\nAntworte mit genau einer Zeile je Stelle, in der Form \"1: Überschrift\", ohne weiteren Text.",
+  "image": 0,
+  "ms": 499,
+  "http": 200,
+  "error": null,
+  "answer": {
+    "id": "chatcmpl-c5666961-2a75-4b7e-872e-562aa19db783",
+    "object": "chat.completion",
+    "created": 1791473837,
+    "model": "swiss-ai/Apertus-v1.5-8B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "1: Überschrift\n2: Aufzählungspunkt",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": 68,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.23.1rc1.dev1029+ga601a9d99-2d880180",
+    "usage": {
+      "prompt_tokens": 1117,
+      "total_tokens": 1129,
+      "completion_tokens": 12,
+      "prompt_tokens_details": {
+        "cached_tokens": 96,
+        "multimodal_tokens": null
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "metrics": null
+  }
+}

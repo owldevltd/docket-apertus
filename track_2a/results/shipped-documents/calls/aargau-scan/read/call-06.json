@@ -1,0 +1,55 @@
+{
+  "at": "2026-10-08T15:36:11",
+  "tag": "read strip",
+  "model": "swiss-ai/Apertus-v1.5-8B",
+  "temperature": 0,
+  "room": 400,
+  "prompt": "Das Bild zeigt 1 Textblöcke aus einem Dokument untereinander, jeder mit der roten Kennung [block_1] darüber. Schreibe den Text jedes Blocks exakt ab, Zeichen für Zeichen, ohne die rote Kennung, ohne Kästchen und Kreise; steht kein Text im Block, schreibe \"\". Antworte mit genau einer Zeile je Block, in der Form \"block_1: <Text>\", ohne weiteren Text.",
+  "image": 42072,
+  "ms": 769,
+  "http": 200,
+  "error": null,
+  "answer": {
+    "id": "chatcmpl-2761f466-30c3-4512-a6f3-9cf7774f1c6a",
+    "object": "chat.completion",
+    "created": 1791473773,
+    "model": "swiss-ai/Apertus-v1.5-8B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "block_1: Oberaufsicht über den Vollzug des Nachrichtendienstgesetzes (NDG) (§ 20b GO)",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": 68,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.23.1rc1.dev1029+ga601a9d99-2d880180",
+    "usage": {
+      "prompt_tokens": 795,
+      "total_tokens": 824,
+      "completion_tokens": 29,
+      "prompt_tokens_details": {
+        "cached_tokens": 32,
+        "multimodal_tokens": {
+          "image": 638
+        }
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "metrics": null
+  }
+}

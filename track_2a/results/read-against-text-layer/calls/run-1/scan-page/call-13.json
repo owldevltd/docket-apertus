@@ -1,0 +1,55 @@
+{
+  "at": "2026-10-08T10:47:42",
+  "tag": "read single",
+  "model": "swiss-ai/Apertus-v1.5-8B",
+  "temperature": 0,
+  "room": 400,
+  "prompt": "Das Bild ist ein Ausschnitt aus einem Dokument. Darin ist ein Textblock mit rotem Rahmen und der Kennung [block_1] markiert. Schreibe den Text jedes Blocks exakt ab, Zeichen für Zeichen, ohne die rote Kennung, ohne Kästchen und Kreise; steht kein Text im Block, schreibe \"\". Antworte mit genau einer Zeile je Block, in der Form \"block_1: <Text>\", ohne weiteren Text.",
+  "image": 73097,
+  "ms": 1013,
+  "http": 200,
+  "error": null,
+  "answer": {
+    "id": "chatcmpl-00a8f421-8382-4319-811d-3752bbfba109",
+    "object": "chat.completion",
+    "created": 1791456464,
+    "model": "swiss-ai/Apertus-v1.5-8B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "block_1: Zusätzlich wird dem Büro des Grossen Rats beantragt, das Kommissionsreglement, welches die Zuständigkeit und Aufgaben der grossrätlichen Kommissionen regelt, zu ergänzen. Unter",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": 68,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.23.1rc1.dev1029+ga601a9d99-2d880180",
+    "usage": {
+      "prompt_tokens": 720,
+      "total_tokens": 765,
+      "completion_tokens": 45,
+      "prompt_tokens_details": {
+        "cached_tokens": 32,
+        "multimodal_tokens": {
+          "image": 559
+        }
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "metrics": null
+  }
+}

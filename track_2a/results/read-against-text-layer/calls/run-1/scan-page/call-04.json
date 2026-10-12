@@ -1,0 +1,55 @@
+{
+  "at": "2026-10-08T10:47:07",
+  "tag": "read strip",
+  "model": "swiss-ai/Apertus-v1.5-8B",
+  "temperature": 0,
+  "room": 1200,
+  "prompt": "Das Bild zeigt 3 Textblöcke aus einem Dokument untereinander, jeder mit der roten Kennung [block_1] bis [block_3] darüber. Schreibe den Text jedes Blocks exakt ab, Zeichen für Zeichen, ohne die rote Kennung, ohne Kästchen und Kreise; steht kein Text im Block, schreibe \"\". Antworte mit genau einer Zeile je Block, in der Form \"block_1: <Text>\", ohne weiteren Text.",
+  "image": 375540,
+  "ms": 4144,
+  "http": 200,
+  "error": null,
+  "answer": {
+    "id": "chatcmpl-535c2592-8dbe-46d0-98e2-a74de499f1b6",
+    "object": "chat.completion",
+    "created": 1791456430,
+    "model": "swiss-ai/Apertus-v1.5-8B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "block_1: Das Büro des Grossen Rats hat die Wahrnehmung der Oberaufsicht über die kantonale Dienstaufsicht in Bezug auf den Nachrichtendienst der Kommission SIK zugewiesen.\nblock_2: Anlässlich einer Konferenz der Geschäftsprüfungsdelegation des Bundes am 26. Februar 2019 hat sich eine Vertretung der Kommission SIK in Bern über die Aufgaben dieser Oberaufsicht informieren lassen. An ihrer Sitzung vom 15. März 2019 hat die Kommission SIK den Beschluss gefasst, diese Oberaufsicht gemäss Art. 81. Abs. 2 NDG offiziell wahrzunehmen. Damit verbunden sind besondere Anforderungen in Bezug auf die Sicherheit und die Kontinuität der Aufsicht. Die Kommission SIK hat hierfür an der Sitzung vom 9. Mai 2019 eine Subkommission gebildet. Es handelt sich nicht nur um eine politische Aufgabe, sondern um eine politische Oberaufsichtsfunktion. Diese erstreckt sich sowohl über die kantonale Vollzugsorgane als auch über die kantonale Dienstaufsichtssorgane.\nblock_3:",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": 68,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.23.1rc1.dev1029+ga601a9d99-2d880180",
+    "usage": {
+      "prompt_tokens": 3014,
+      "total_tokens": 3258,
+      "completion_tokens": 244,
+      "prompt_tokens_details": {
+        "cached_tokens": 32,
+        "multimodal_tokens": {
+          "image": 2851
+        }
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "metrics": null
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "at": "2026-10-08T10:49:37",
+  "tag": "read single",
+  "model": "swiss-ai/Apertus-v1.5-8B",
+  "temperature": 0,
+  "room": 400,
+  "prompt": "Das Bild ist ein Ausschnitt aus einem Dokument. Darin ist ein Textblock mit rotem Rahmen und der Kennung [block_1] markiert. Schreibe den Text jedes Blocks exakt ab, Zeichen für Zeichen, ohne die rote Kennung, ohne Kästchen und Kreise; steht kein Text im Block, schreibe \"\". Antworte mit genau einer Zeile je Block, in der Form \"block_1: <Text>\", ohne weiteren Text.",
+  "image": 113804,
+  "ms": 1537,
+  "http": 200,
+  "error": null,
+  "answer": {
+    "id": "chatcmpl-13b54246-a924-4469-a6e2-6665393eb2e7",
+    "object": "chat.completion",
+    "created": 1791456579,
+    "model": "swiss-ai/Apertus-v1.5-8B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "block_1: Gemäss Artikel 43 Abs. 3 des Asylgesetzes können die Kantone beim Eidg. Justiz- und Polizeidepartement und dem Volkswirtschaftsdepartement eine Ermächtigung beantragen, unter besonderen Umständen eine Verlängerung der Arbeitsbewilligung für Asylsuchende mit Negativentscheid zu erlassen. Jeder einzelne Antrag durchläuft danach zuerst das kantonale Migrationsamt und anschließend zwei Bundesämter. Das Vorgehen ist damit unnötig aufwändig und sendet auch ein schlechtes Signal in Richtung Arbeitgebende aus.",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": 68,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.23.1rc1.dev1029+ga601a9d99-2d880180",
+    "usage": {
+      "prompt_tokens": 1338,
+      "total_tokens": 1464,
+      "completion_tokens": 126,
+      "prompt_tokens_details": {
+        "cached_tokens": 32,
+        "multimodal_tokens": {
+          "image": 1177
+        }
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "metrics": null
+  }
+}

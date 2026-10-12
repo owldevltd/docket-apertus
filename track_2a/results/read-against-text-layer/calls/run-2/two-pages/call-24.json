@@ -1,0 +1,55 @@
+{
+  "at": "2026-10-08T11:07:24",
+  "tag": "read strip",
+  "model": "swiss-ai/Apertus-v1.5-8B",
+  "temperature": 0,
+  "room": 1200,
+  "prompt": "Das Bild zeigt 3 Textblöcke aus einem Dokument untereinander, jeder mit der roten Kennung [block_1] bis [block_3] darüber. Schreibe den Text jedes Blocks exakt ab, Zeichen für Zeichen, ohne die rote Kennung, ohne Kästchen und Kreise; steht kein Text im Block, schreibe \"\". Antworte mit genau einer Zeile je Block, in der Form \"block_1: <Text>\", ohne weiteren Text.",
+  "image": 176408,
+  "ms": 3712,
+  "http": 200,
+  "error": null,
+  "answer": {
+    "id": "chatcmpl-c0a19609-ace0-4f1c-a598-668859f40d86",
+    "object": "chat.completion",
+    "created": 1791457647,
+    "model": "swiss-ai/Apertus-v1.5-8B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "block_1: Aus wirtschaftlicher und gesellschaftlicher Sicht ist zu begrüßen, dass vorläufig Aufgenommenene (Ausweis F) und Asylsuchende (Ausweis N) einer Erwerbstätigkeit nachgehen. Die Arbeitgebenden haben ein grosses Interesse daran, dass diese Arbeitsverhältnisse bei positivem Verlauf langfristig bestehen können.\n\nblock_2: Wenn ein Asylantrag durch einen rechtskräftigen Entscheid abgelehnt wird, erlischt die Bewilligung zur Ausübung einer Erwerbstätigkeit mit Ablauf der Frist, die dem Antragsteller für die Ausreise aus dem Land (Ausreisezeitraum) gesetzt wurde. Das trifft auch zu bei Aufhebung des Status F. Bei vielen Betroffenen erstreckt sich bis zum Zeitpunkt der tatsächlichen Ausreise dann aber sehr viel Zeit, insbesondre wenn kein Rückkehrnahmeabkommen mit dem Herkunftsstand besteht.\n\nblock_3:",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": 68,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.23.1rc1.dev1029+ga601a9d99-2d880180",
+    "usage": {
+      "prompt_tokens": 2856,
+      "total_tokens": 3046,
+      "completion_tokens": 190,
+      "prompt_tokens_details": {
+        "cached_tokens": 2848,
+        "multimodal_tokens": {
+          "image": 2693
+        }
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "metrics": null
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "at": "2026-10-08T15:40:07",
+  "tag": "fields fassung",
+  "model": "swiss-ai/Apertus-v1.5-8B",
+  "temperature": 0,
+  "room": 400,
+  "prompt": "Unten steht eine Seite eines Dokuments aus einem Schweizer Parlament als Text, ungefähr so angeordnet wie auf dem Papier. [Bild] steht für ein Bild, einen Stempel oder eine Unterschrift. Es ist Seite 1 von 1. Jeder Textblock beginnt mit seiner Kennung in eckigen Klammern, zum Beispiel [b12].\n\n-----\n              [b1] Zürich und Winterthur, 26.\n              November 2018\n                                                                             [b2] KR-Nr.\n                                                                             357/2018\n\n             [b3] PARLAMENTARISCHE INITIATIVE   [b4] von Karin Stalder (Grüne, Zürich), Silvia\n                                                Moser (SP, Zürich) und Person 3\n                                                (EVP, Winterthur)\n\n             [b5]                               [b6] Standesinitiative zur Kompetenzübertragung an\n             betreffend                         Kantone für Arbeitsbewilligungsverlängerung von\n                                                Asylsuchenden mit Negativentscheid\n\n             [b7] Gestützt auf Artikel 160 Abs. 1 der Bundesverfassung reicht der Kanton Zürich\n             eine Standesinitiative mit folgendem Wortlaut ein: Die Bundesversammlung wird\n             beauftragt, die Kompetenz zur Verlängerung der Arbeitsbewilligung von Asylsuchenden\n             mit Negativentscheid ohne Möglichkeit der sofortigen Rückführung auf Ersuchen der\n             Arbeitgebenden über die übliche Frist hinaus bis zur effektiven Ausreise neu an die\n             Kantone zu übergeben.\n\n             [b10]                                                  [b8] Karin Stalder                 [b9]\n             Begründung:                                            Person 15 Brigitta              357/2018\n                                                                    Gerber Fehr\n\n             [b11] Aus wirtschaftlicher und gesellschaftlicher Sicht ist zu begrüssen, dass\n             Vorläufig Aufgenommene (Ausweis F) und Asylsuchende (Ausweis N) einer\n             Erwerbstätigkeit nachgehen. Die Arbeitgebenden haben ein grosses Interesse daran,\n             dass diese Arbeitsverhältnisse bei positivem Verlauf langfristig bestehen können.\n\n             [b12] Wenn ein Asylantrag durch einen rechtskräftigen Entscheid abgelehnt wird,\n             erlischt die Bewilligung zur Ausübung einer Erwerbstätigkeit mit Ablauf der Frist,\n             die dem Antragsteller für die Ausreise aus dem Land (Ausreisezeitraum) gesetzt\n             wurde. Das trifft auch zu bei Aufhebung des Status F. Bei vielen Betroffenen\n             verstreicht bis zum Zeitpunkt der tatsächlichen Ausreise dann aber sehr viel Zeit,\n             insbesondere wenn kein Rückübernahmeabkommen mit dem Herkunftsland besteht.\n\n             [b13] Deshalb sollten die Arbeitgebenden mit wenig Aufwand beantragen können, ein\n             bestehendes Arbeitsverhältnis weiterzuführen bis zur tatsächlichen Ausreise. So\n             können sie gut eingearbeitete Beschäftigte behalten. Zudem verbessert jede\n             Arbeitstätigkeit auch die wirtschaftlichen Perspektiven der Betroffenen bei der\n             späteren Rückkehr in ihre Herkunftsländer und es tauchen weniger Menschen in die\n             Illegalität ab.\n\n             [b14] Gemäss Artikel 43 Abs. 3 des Asylgesetzes können die Kantone beim Eidg.\n             Justiz- und Polizeidepartement und dem Volkswirtschaftsdepartement eine\n             Ermächtigung beantragen, unter besonderen Umständen eine Verlängerung der\n             Arbeitsbewilligung für Asylsuchende mit Negativentscheid zu erlassen. Jeder\n             einzelne Antrag durchläuft demnach zuerst das kantonale Migrationsamt und\n             anschliessend zwei Bundesämter. Das Vorgehen ist damit unnötig aufwändig und\n             sendet auch ein schlechtes Signal in Richtung Arbeitgebende aus.\n\n             [b15] Sinnvollerweise sollen die Abläufe vereinfacht und die Kompetenz zur\n             Verlängerung der Arbeitsbewilligungen in den beschriebenen Fällen den Kantonen\n             übergeben werden.\n-----\n\nLies daraus ab:\n- fassung: Fassung des Dokuments, wie gedruckt (zum Beispiel \"Fassung nach 2. Lesung\") — Vorgabe: {\"type\": \"string\", \"description\": \"the version, as printed\", \"dynamic\": true}\n\nSteht etwas nicht auf der Seite, schreibe dafür einen Strich (-). Erfinde nichts. Antworte mit genau einer Zeile je Angabe, in der Form \"name: wert [Kennung des Blocks, aus dem der Wert stammt]\", ohne weiteren Text.",
+  "image": 0,
+  "ms": 451,
+  "http": 200,
+  "error": null,
+  "answer": {
+    "id": "chatcmpl-ec9721cd-c3f1-44f8-a60d-6ca2220dec6c",
+    "object": "chat.completion",
+    "created": 1791474009,
+    "model": "swiss-ai/Apertus-v1.5-8B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "fassung: Fassung nach Standesinitiative [b3]",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": 68,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.23.1rc1.dev1029+ga601a9d99-2d880180",
+    "usage": {
+      "prompt_tokens": 1043,
+      "total_tokens": 1056,
+      "completion_tokens": 13,
+      "prompt_tokens_details": {
+        "cached_tokens": 928,
+        "multimodal_tokens": null
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "metrics": null
+  }
+}

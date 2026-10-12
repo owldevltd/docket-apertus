@@ -1,0 +1,55 @@
+{
+  "at": "2026-10-08T10:48:38",
+  "tag": "read single",
+  "model": "swiss-ai/Apertus-v1.5-8B",
+  "temperature": 0,
+  "room": 400,
+  "prompt": "Das Bild ist ein Ausschnitt aus einem Dokument. Darin ist ein Textblock mit rotem Rahmen und der Kennung [block_1] markiert. Schreibe den Text jedes Blocks exakt ab, Zeichen für Zeichen, ohne die rote Kennung, ohne Kästchen und Kreise; steht kein Text im Block, schreibe \"\". Antworte mit genau einer Zeile je Block, in der Form \"block_1: <Text>\", ohne weiteren Text.",
+  "image": 13417,
+  "ms": 669,
+  "http": 200,
+  "error": null,
+  "answer": {
+    "id": "chatcmpl-93c3add7-df60-4d31-a95c-dc7940d62469",
+    "object": "chat.completion",
+    "created": 1791456520,
+    "model": "swiss-ai/Apertus-v1.5-8B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "block_1: 22.11.2018 Lüthold Katrin, SP Kern Edith, Grüne",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": 68,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.23.1rc1.dev1029+ga601a9d99-2d880180",
+    "usage": {
+      "prompt_tokens": 588,
+      "total_tokens": 617,
+      "completion_tokens": 29,
+      "prompt_tokens_details": {
+        "cached_tokens": 32,
+        "multimodal_tokens": {
+          "image": 427
+        }
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "metrics": null
+  }
+}

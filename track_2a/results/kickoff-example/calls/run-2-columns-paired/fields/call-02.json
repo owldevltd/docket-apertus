@@ -1,0 +1,53 @@
+{
+  "at": "2026-10-10T22:10:43",
+  "tag": "fields on-behalf-of,addressee,place,parliament,polity,department",
+  "model": "swiss-ai/Apertus-v1.5-8B",
+  "temperature": 0,
+  "room": 400,
+  "prompt": "Unten steht eine Seite eines Dokuments aus einem Schweizer Parlament als Text, ungefähr so angeordnet wie auf dem Papier. [Bild] steht für ein Bild, einen Stempel oder eine Unterschrift. Es ist Seite 1 von 2. Jeder Textblock beginnt mit seiner Kennung in eckigen Klammern, zum Beispiel [b12].\n\n-----\n      [b1]                             [Bild]\n      STADTRAT\n                                                                                             [b4] M\n\n                  [b5] 16. Parlamentarischer Vorstoss\n\n                  Vorstossart:            Motion M 185\n                  Vorstoss-Nr.:           ☒ 21.03.2019\n                  Richtlinienmotion:\n                  Beantwortung im\n                  Stadtrat:\n\n                  Eingereicht             22.11.2018\n                  am:                     Lüthold\n                  Eingereicht             Katrin, SP Kern\n                  von:                    Edith, Grüne\n\n                  Mitunterzeichnende:     Brunner Beatrice, Dörig Manuel, Eicher Thomas, Kägi\n                                          Noah, Kägi Nora, Kunz Véronique, Meier-Nussbaum\n                                          Ursina, Rochat Sophie, Roth Marcel,\n                                          Suter-Sommer Carla\n\n                  Beschluss.              18.02.2019\n                  Gemeinderat:            nid 0.1.6.2\n                  Aktenzeichen:           / 2\n                  Ressort: Antrag         Präsidiales\n                  Gemeinderat:            Ablehnung\n\n                  [b10] Aufnahme von\n                  Bootsflüchtlingen\n\n                  [b11] Antrag\n                  [b12] Der Gemeinderat wird gebeten, sich beim Bund dafür einzusetzen, dass\n                  vermehrt Bootsflüchtlinge aus dem Mittelmeer in der Schweiz Aufnahme finden.\n                  Dabei soll eine klare Haltung kommuniziert werden, dass Seenotrettung nicht\n                  wie bis anhin kriminalisiert wird. Im Jahr 2018 haben bereits 1500 Menschen im\n                  Mittelmeer den Tod gefunden (Stand 4.8.2018) Nidau soll sich dabei in die\n                  Reihe von Städten wie Palermo, Berlin, Barcelona, Kiel, Amsterdam, Stockholm\n                  und Neapel stellen um den Bootsflüchtigen Schutz zu bieten.\n\n                  [b13]\n                  Begründung\n                  [b14] Das Versprechen Europas die Menschenrechte einzuhalten, wird täglich\n                  gebrochen. Die aktuelle europäische Asylpolitik dient nicht mehr primär dem\n                  Schutz von Flüchtlingen als vielmehr dem Schutz der Grenzen. Trotz anhaltender\n                  Konflikte in Ländern wie Syrien, Afghanistan, dem Südsudan, Jemen, Myanmar\n                  oder Somalia und weltweit steigender Flüchtlingszahlen finden schon jetzt\n                  immer weniger Flüchtlinge in Europa Schutz. Schutzsuchende müssen aber Zugang\n                  haben zu einem fairen und rechtsstaatlichen Verfahren in Europa. Statt\n                  nationaler Alleingänge an den Grenzen und in den Häfen bedarf es einer\n                  solidarischen Aufnahme, bei der den Staaten an den südlichen Aussengrenzen\n                  nicht die alleinige Verantwortung für die Asylsuchenden zugeschoben wird. Die\n                  dramatisch zugespitzte Situation am Mittelmeer erfordert unsere Solidarität\n                  und endlich wirksame Schritte, um Menschen aus Seenot zu retten und ihre\n                  Ausschiffung in den nächsten europäischen Hafen zu ermöglichen. Danach sollen\n                  sie in verschiedenen Staaten Aufnahme finden. Wenn selbst wohlhabende Nationen\n                  ihre Grenzen für Flüchtlinge verschliessen, werden andere Staaten diesem\n                  Beispiel folgen. Es soll eine verantwortungsvolle Politik der sicheren\n                  Fluchtrouten und offenen Häfen in Europa angestrebt und aktiv unterstützt\n                  werden.\n-----\n\nLies daraus ab:\n- on-behalf-of: in wessen Namen eingereicht wurde (Fraktion, Kommission), falls angegeben — Vorgabe: {\"type\": \"string\", \"dynamic\": true}\n- addressee: an wen es gerichtet ist — Vorgabe: {\"type\": \"string\"}\n- place: Ort, an dem es eingereicht wurde — Vorgabe: {\"type\": \"string\"}\n- parliament: Name des Parlaments oder Rats, so wie er auf der Seite steht — Vorgabe: {\"type\": \"string\"}\n- polity: Gemeinde, Stadt oder Kanton, so wie es auf der Seite steht — Vorgabe: {\"type\": \"string\"}\n- department: zuständiges Departement, zuständige Direktion oder zuständiges Ressort — Vorgabe: {\"type\": \"string\"}\n\nSteht etwas nicht auf der Seite, schreibe dafür einen Strich (-). Erfinde nichts. Antworte mit genau einer Zeile je Angabe, in der Form \"name: wert [Kennung des Blocks, aus dem der Wert stammt]\", ohne weiteren Text.",
+  "image": 0,
+  "ms": 821,
+  "http": 200,
+  "error": null,
+  "answer": {
+    "id": "chatcmpl-bea36e74-e048-4169-b6b6-3e0a449222a9",
+    "object": "chat.completion",
+    "created": 1791670245,
+    "model": "swiss-ai/Apertus-v1.5-8B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "on-behalf-of: SP Kern, Grüne [b5]\naddressee: Gemeinderat [b4]\nplace: Lüthold [b5]\nparliament: Parlamentarischer Vorstoss [b5]\npolity: Nidau [b11]",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": 68,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.23.1rc1.dev1029+ga601a9d99-2d880180",
+    "usage": {
+      "prompt_tokens": 1101,
+      "total_tokens": 1160,
+      "completion_tokens": 59,
+      "prompt_tokens_details": {
+        "cached_tokens": 864,
+        "multimodal_tokens": null
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "metrics": null
+  }
+}

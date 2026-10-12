@@ -1,0 +1,53 @@
+{
+  "at": "2026-10-08T15:36:46",
+  "tag": "fields im-namen-von,adressat,ort,parlament,gemeinwesen,fassung",
+  "model": "swiss-ai/Apertus-v1.5-8B",
+  "temperature": 0,
+  "room": 400,
+  "prompt": "Unten steht eine Seite eines Dokuments aus einem Schweizer Parlament als Text, ungefähr so angeordnet wie auf dem Papier. [Bild] steht für ein Bild, einen Stempel oder eine Unterschrift. Es ist Seite 1 von 1. Jeder Textblock beginnt mit seiner Kennung in eckigen Klammern, zum Beispiel [b12].\n\n-----\n                 [b1] KANTON\n                 AARGAU\n\n                 [b2] GROSSER\n                 RAT\n\n                                                                                           [b3]\n                                                                                           GR.19.196\n\n                 [b4]\n                 VORSTOSS\n\n                 [b5] Antrag auf Direktbeschluss der Person 12\n                 (Sprecherin Mara Rieder, Suhr) vom 25. Juni 2019 betreffend Aufnahme eines neuen\n                 Paragraphen 20b zur Zuständigkeit der Subkommission Oberaufsicht\n                 Nachrichtendienst in die Geschäftsordnung (GO)\n\n                 [b6] Text:\n\n                 [b7] Der folgende neue § 20b soll in die Geschäftsordnung (GO)\n                 aufgenommen werden:\n\n                 [b8] Die Kommission für öffentliche Sicherheit (Sik) ist für die Überaufsicht\n                 über den Vollzug des Nachrichten­dienstgesetzes (NDG) im Kanton Aargau zuständig;\n                 sie bildet dazu eine besondere Subkom-\n                 [b9]\n                 mission.\n\n                 [b10] Das Büro des Grossen Rats hat die Wahrnehmung der Oberaufsicht über die\n                 kantonale Dienstaufsicht in Bezug auf den Nachrichtendienst der Kommission SIK\n                 zugewiesen. Das Büro des Grossen Rats hat die Wahrnehmung der Oberaufsicht über\n                 die kantonale Dienstaufsicht in Bezug auf den Nachrichtendienst der Kommission\n                 SIK zugewiesen.\n\n                 [b11] Anlässlich einer Konferenz der Geschäftsprüfungselegation des Bundes am 26.\n                 Februar 2019 hat sich eine Vertretung der Kommission SIK in Bern über die Aufgaben\n                 dieser Obersicht informieren lassen. An ihrer Sitzung vom 15. März 2019 hat die\n                 Kommission SIK den Beschluss gefasst, diese Obersicht gemäß Art. 81, Abs. 2 NÖG\n                 offiziell wahrzunehmen. Damit verbunden sind besondere Anforderungen in Bezug auf\n                 die Sicherheit und die Kontinuität der Aufsicht. Die Kommission SIK hat hierfür an\n                 der Sitzung vom 9. Mai 2019 eine Subkommission gebildet. Es handelt sich nicht nur\n                 um eine politische Aufgabe, sondern um eine politische Obersichtsfunktion. Diese\n                 erstreckt sich sowohl über die kantonalen Vollzugsorgane als auch über die\n                 kantonalen Dienstaufsichtsgremien.\n\n                 [b12] Damit diese neue Zuständigkeit oder Verantwortung auch gegen außen\n                 transparent ersichtlich und politisch legitimiert ist, beantragt die Kommission\n                 SIK mit einem Antrag auf Direktbeschluss die Aufnahme dieser Zuständigkeit in die\n                 Geschäftsordnung (GO). Gemäss Kantonsverfassung ist der Grosse Rat die oberste\n                 Aufsicht führende Behörde des Kantons. Deshalb soll die Zuweisung dieser Aufgabe\n                 an die neu gewählte Subkommission durch den Grossen Rat erfolgen.\n\n                 [b13] Zusätzlich wird dem Büro des Grossen Rats beantragt, das\n                 Kommissionsreglement, welches die Zuständigkeit und Aufgaben der grossrätlichen\n                 Kommissionen regelt, zu ergänzen. Unter E 'Kommission für öffentliche Sicherheit'\n                 soll ergänzt werden:\n\n                  [b14] Oberaufsicht über den Vollzug des Nachrichtendienstgesetzes\n                  (NDG) (§ 20b GO)\n-----\n\nLies daraus ab:\n- im-namen-von: in wessen Namen eingereicht wurde (Fraktion, Kommission), falls angegeben — Vorgabe: {\"type\": \"string\", \"dynamic\": true}\n- adressat: an wen es gerichtet ist — Vorgabe: {\"type\": \"string\"}\n- ort: Ort, an dem es eingereicht wurde — Vorgabe: {\"type\": \"string\"}\n- parlament: Name des Parlaments oder Rats, so wie er auf der Seite steht — Vorgabe: {\"type\": \"string\"}\n- gemeinwesen: Gemeinde, Stadt oder Kanton, so wie es auf der Seite steht — Vorgabe: {\"type\": \"string\"}\n- fassung: Fassung des Dokuments, wie gedruckt (zum Beispiel \"Fassung nach 2. Lesung\") — Vorgabe: {\"type\": \"string\", \"description\": \"the version, as printed\", \"dynamic\": true}\n\nSteht etwas nicht auf der Seite, schreibe dafür einen Strich (-). Erfinde nichts. Antworte mit genau einer Zeile je Angabe, in der Form \"name: wert [Kennung des Blocks, aus dem der Wert stammt]\", ohne weiteren Text.",
+  "image": 0,
+  "ms": 699,
+  "http": 200,
+  "error": null,
+  "answer": {
+    "id": "chatcmpl-6ba8710e-b03b-4edc-9941-e3d90a876bbe",
+    "object": "chat.completion",
+    "created": 1791473808,
+    "model": "swiss-ai/Apertus-v1.5-8B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "im-namen-von: Person 12 [b5]\nadressat: Grosser Rat [b4]\nort: nicht angegeben (-)\nparlament: Grosser Rat [b4]\ngemeinwesen: Kanton Aargau [b1]\nfassung: nicht angegeben (-)",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": 68,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.23.1rc1.dev1029+ga601a9d99-2d880180",
+    "usage": {
+      "prompt_tokens": 1127,
+      "total_tokens": 1192,
+      "completion_tokens": 65,
+      "prompt_tokens_details": {
+        "cached_tokens": 864,
+        "multimodal_tokens": null
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "metrics": null
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "at": "2026-10-08T15:39:09",
+  "tag": "fields zusammenfassung",
+  "model": "swiss-ai/Apertus-v1.5-8B",
+  "temperature": 0,
+  "room": 400,
+  "prompt": "Unten steht ein Dokument aus einem Schweizer Parlament als Text, 2 von 2 Seiten, jede beginnt mit einer Zeile \"===== Seite n =====\", ungefähr so angeordnet wie auf dem Papier. [Bild] steht für ein Bild, einen Stempel oder eine Unterschrift. Jeder Textblock beginnt mit seiner Kennung in eckigen Klammern, zum Beispiel [b12].\n\n-----\n===== Seite 1 =====\n      [b1]                             [Bild]\n      STADTRAT\n                                                                                             [b4] M\n\n                  [b5] 16. Parlamentarischer Vorstoss\n\n                  [b7] Vorstossart:       [b6] Motion\n                  Vorstoss-Nr.:           M 185 ☒\n                  Richtlinienmotion:      21.03.2019\n                  Beantwortung im\n                  Stadtrat:\n\n                  [b8]                    [b9] 22.11.2018\n                  Eingereicht             Lüthold\n                  am:                     Katrin, SP Kern\n                  Eingereicht             Edith, Grüne\n                  von:\n\n                  Mitunterzeichnende:     Brunner Beatrice, Dörig Manuel, Eicher Thomas, Kägi\n                                          Noah, Kägi Nora, Kunz Véronique, Meier-Nussbaum\n                                          Ursina, Rochat Sophie, Roth Marcel,\n                                          Suter-Sommer Carla\n\n                  [b11] Beschluss.        [b12]\n                  Gemeinderat:            18.02.2019\n                  Aktenzeichen:           nid 0.1.6.2\n                  Ressort: Antrag         / 2\n                  Gemeinderat:            Präsidiales\n                                          Ablehnung\n\n                  [b13] Aufnahme von\n                  Bootsflüchtlingen\n\n                  [b14] Antrag\n                  [b15] Der Gemeinderat wird gebeten, sich beim Bund dafür einzusetzen, dass\n                  vermehrt Bootsflüchtlinge aus dem Mittelmeer in der Schweiz Aufnahme finden.\n                  Dabei soll eine klare Haltung kommuniziert werden, dass Seenotrettung nicht\n                  wie bis anhin kriminalisiert wird. Im Jahr 2018 haben bereits 1500 Menschen im\n                  Mittelmeer den Tod gefunden (Stand 4.8.2018) Nidau soll sich dabei in die\n                  Reihe von Städten wie Palermo, Berlin, Barcelona, Kiel, Amsterdam, Stockholm\n                  und Neapel stellen um den Bootsflüchtigen Schutz zu bieten.\n\n                  [b16]\n                  Begründung\n                  [b17] Das Versprechen Europas die Menschenrechte einzuhalten, wird täglich\n                  gebrochen. Die aktuelle europäische Asylpolitik dient nicht mehr primär dem\n                  Schutz von Flüchtlingen als vielmehr dem Schutz der Grenzen. Trotz anhaltender\n                  Konflikte in Ländern wie Syrien, Afghanistan, dem Südsudan, Jemen, Myanmar\n                  oder Somalia und weltweit steigender Flüchtlingszahlen finden schon jetzt\n                  immer weniger Flüchtlinge in Europa Schutz. Schutzsuchende müssen aber Zugang\n                  haben zu einem fairen und rechtsstaatlichen Verfahren in Europa. Statt\n                  nationaler Alleingänge an den Grenzen und in den Häfen bedarf es einer\n                  solidarischen Aufnahme, bei der den Staaten an den südlichen Aussengrenzen\n                  nicht die alleinige Verantwortung für die Asylsuchenden zugeschoben wird. Die\n                  dramatisch zugespitzte Situation am Mittelmeer erfordert unsere Solidarität\n                  und endlich wirksame Schritte, um Menschen aus Seenot zu retten und ihre\n                  Ausschiffung in den nächsten europäischen Hafen zu ermöglichen. Danach sollen\n                  sie in verschiedenen Staaten Aufnahme finden. Wenn selbst wohlhabende Nationen\n                  ihre Grenzen für Flüchtlinge verschliessen, werden andere Staaten diesem\n                  Beispiel folgen. Es soll eine verantwortungsvolle Politik der sicheren\n                  Fluchtrouten und offenen Häfen in Europa angestrebt und aktiv unterstützt\n                  werden.\n\n===== Seite 2 =====\n                                                                                                [b18] 2\n\n                  [b19] Antwort des\n                  Gemeinderates\n\n                  [b20] Die Zusammenarbeit mit den Exekutiven anderer Gemeinden, des Kantons und\n                  des Bundes ist eine Aufgabe des Gemeinderats. Der Inhalt der vorliegenden\n                  Motion betrifft somit einen Bereich, der in der Zuständigkeit des Gemeinderats\n                  liegt. Der Motion kommt deshalb der Charakter einer Richtlinie zu. Sollte die\n                  Motion erheblich erklärt werden, ist sie für den Gemeinderat nicht bindend. Er\n                  hat bei Richtlinienmotionen einen relativ grossen Spielraum hinsichtlich des\n                  Grads der Zielerreichung, der einzusetzenden Mittel und der weiteren\n                  Modalitäten bei der Erfüllung des Auftrags. Zudem bleibt die\n                  Entscheidverantwortung bei ihm.\n\n                  [b21] Das Anliegen der Motionärinnen und Motionäre, dass die Menschenrechte in\n                  der Asylpolitik eingehalten werden, ist ein berechtigtes. Die Schweiz hat sich\n                  immer wieder an internationalen Resettlement - Programmen beteiligt. Der\n                  Bundesrat hat im September 2013 beschlossen, im Rahmen eines\n                  Resettlement-Programms des UNO-Hochkommissariats für Flüchtlinge (UNHCR)\n                  besonders verletzliche Flüchtlinge in Gruppen aufzunehmen. Im März 2015 und\n                  Dezember 2016 hat der Bundesrat beschlossen, dieses Engagement in enger\n                  Zusammenarbeit mit dem UNHCR fortzusetzen. Der Kanton Bern hat sich\n                  seinerseits an den Bemühungen des Bundes anteilmässig beteiligt. Eine stetige\n                  Resettlement-Politik des Bundes im internationalen Kontext bringt der Schweiz\n                  aussenpolitische Vorteile in der Zusammenarbeit mit den europäischen Staaten,\n                  stärkt das Dublin-System und ist gleichzeitig ein wichtiger Ausdruck von\n                  Solidarität mit den Zufluchtsstaaten der Flüchtlinge.\n\n                  [b22] Die Kompetenzen für die Aussenpolitik und die Zusammenarbeit mit\n                  Drittstaaten liegen vollumfänglich beim Bund. Die Kompetenzen für die Asyl- und\n                  Flüchtlingspolitik liegen bei Bund und Kantonen. Die Gemeinden leisten ihren\n                  Beitrag im Rahmen der kantonalen Vorgaben. Der Gemeinderat sieht sich aus\n                  kommunaler Sicht nicht legitimiert, darüber hinaus besondere Interessen\n                  vertreten zu können.\n\n                  [b23]\n                  Beschlussentwurf\n                  Ablehnung\n-----\n\nLies daraus ab:\n- zusammenfassung: eine Zusammenfassung des ganzen Dokuments in höchstens drei Sätzen — Vorgabe: {\"type\": \"string\"}\n\nSteht etwas nicht auf der Seite, schreibe dafür einen Strich (-). Erfinde nichts. Antworte mit genau einer Zeile je Angabe, in der Form \"name: wert [Kennung des Blocks, aus dem der Wert stammt]\", ohne weiteren Text.",
+  "image": 0,
+  "ms": 1015,
+  "http": 200,
+  "error": null,
+  "answer": {
+    "id": "chatcmpl-07f53099-7396-4190-b25d-151f49f71092",
+    "object": "chat.completion",
+    "created": 1791473951,
+    "model": "swiss-ai/Apertus-v1.5-8B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Zusammenfassung: Der Stadtrat von Nidau hat eine Richtlinienmotion zur Aufnahme von Bootsflüchtlingen aus dem Mittelmeer abgelehnt, da die Zuständigkeit für Aussenpolitik und Asylpolitik beim Bund liegt. Die Motion forderte eine stärkere Seenotrettung und Solidarität mit Zufluchtsstaaten, was jedoch als kommunale Aufgabe nicht anerkannt wurde. Der Gemeinderat betont die Notwendigkeit einer koordinierten europäischen Flüchtlingspolitik. name: wert [b14], [b19], [b22]",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": 68,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.23.1rc1.dev1029+ga601a9d99-2d880180",
+    "usage": {
+      "prompt_tokens": 1548,
+      "total_tokens": 1663,
+      "completion_tokens": 115,
+      "prompt_tokens_details": {
+        "cached_tokens": 1440,
+        "multimodal_tokens": null
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "metrics": null
+  }
+}

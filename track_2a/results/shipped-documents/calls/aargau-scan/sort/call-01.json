@@ -1,0 +1,53 @@
+{
+  "at": "2026-10-08T15:36:41",
+  "tag": "sort page 1",
+  "model": "swiss-ai/Apertus-v1.5-8B",
+  "temperature": 0,
+  "room": 200,
+  "prompt": "Unten steht Seite 1 eines Dokuments aus einem Schweizer Parlament als Text, ungefähr so angeordnet wie auf dem Papier. [Bild] steht für ein Bild, einen Stempel oder eine Unterschrift. 6 Stellen sind mit [1] bis [6] markiert.\n\n-----\n                 KANTON AARGAU\n\n                 [1] GROSSER\n                 RAT\n\n                                                                                           [2]\n                                                                                           GR.19.196\n\n                 [3] VORSTOSS\n\n                 Antrag auf Direktbeschluss der Person 12\n                 (Sprecherin Mara Rieder, Suhr) vom 25. Juni 2019 betreffend Aufnahme eines neuen\n                 Paragraphen 20b zur Zuständigkeit der Subkommission Oberaufsicht\n                 Nachrichtendienst in die Geschäftsordnung (GO)\n\n                 Text:\n\n                 [4] Der folgende neue § 20b soll in die Geschäftsordnung (GO)\n                 aufgenommen werden:\n\n                 Die Kommission für öffentliche Sicherheit (Sik) ist für die Überaufsicht über den\n                 Vollzug des Nachrichten­dienstgesetzes (NDG) im Kanton Aargau zuständig; sie\n                 bildet dazu eine besondere Subkom-\n                 [5] mission.\n\n                 Das Büro des Grossen Rats hat die Wahrnehmung der Oberaufsicht über die\n                 kantonale Dienstaufsicht in Bezug auf den Nachrichtendienst der Kommission SIK\n                 zugewiesen. Das Büro des Grossen Rats hat die Wahrnehmung der Oberaufsicht über\n                 die kantonale Dienstaufsicht in Bezug auf den Nachrichtendienst der Kommission\n                 SIK zugewiesen.\n\n                 Anlässlich einer Konferenz der Geschäftsprüfungselegation des Bundes am 26.\n                 Februar 2019 hat sich eine Vertretung der Kommission SIK in Bern über die Aufgaben\n                 dieser Obersicht informieren lassen. An ihrer Sitzung vom 15. März 2019 hat die\n                 Kommission SIK den Beschluss gefasst, diese Obersicht gemäß Art. 81, Abs. 2 NÖG\n                 offiziell wahrzunehmen. Damit verbunden sind besondere Anforderungen in Bezug auf\n                 die Sicherheit und die Kontinuität der Aufsicht. Die Kommission SIK hat hierfür an\n                 der Sitzung vom 9. Mai 2019 eine Subkommission gebildet. Es handelt sich nicht nur\n                 um eine politische Aufgabe, sondern um eine politische Obersichtsfunktion. Diese\n                 erstreckt sich sowohl über die kantonalen Vollzugsorgane als auch über die\n                 kantonalen Dienstaufsichtsgremien.\n\n                 Damit diese neue Zuständigkeit oder Verantwortung auch gegen außen transparent\n                 ersichtlich und politisch legitimiert ist, beantragt die Kommission SIK mit einem\n                 Antrag auf Direktbeschluss die Aufnahme dieser Zuständigkeit in die\n                 Geschäftsordnung (GO). Gemäss Kantonsverfassung ist der Grosse Rat die oberste\n                 Aufsicht führende Behörde des Kantons. Deshalb soll die Zuweisung dieser Aufgabe\n                 an die neu gewählte Subkommission durch den Grossen Rat erfolgen.\n\n                 Zusätzlich wird dem Büro des Grossen Rats beantragt, das Kommissionsreglement,\n                 welches die Zuständigkeit und Aufgaben der grossrätlichen Kommissionen regelt, zu\n                 ergänzen. Unter E 'Kommission für öffentliche Sicherheit' soll ergänzt werden:\n\n                  [6] Oberaufsicht über den Vollzug des Nachrichtendienstgesetzes\n                  (NDG) (§ 20b GO)\n-----\n\nSage für jede markierte Stelle, was sie ist. Zur Wahl:\n- Überschrift: Titel des Dokuments oder eines Abschnitts\n- Absatz: ein Satz oder Fliesstext\n- Aufzählungspunkt: ein Punkt einer Liste\n- Bezeichnung: ein Feldname wie \"Datum:\" oder \"Eingereicht von:\", mit oder ohne Wert dahinter\n- Angabe: ein einzelner Wert wie eine Nummer, ein Datum, ein Ort oder ein Name, der zum Kopf des Dokuments gehört\n- Unterschrift: Name oder Amt von jemandem, der das Dokument unterschreibt\n- Seitenrand: Seitenzahl, Briefkopf, Absender oder Fusszeile\n- Fussnote: Anmerkung am Seitenende\n\nAntworte mit genau einer Zeile je Stelle, in der Form \"1: Überschrift\", ohne weiteren Text.",
+  "image": 0,
+  "ms": 556,
+  "http": 200,
+  "error": null,
+  "answer": {
+    "id": "chatcmpl-24ebb85e-d8d6-48a9-94b4-5afa7b933854",
+    "object": "chat.completion",
+    "created": 1791473802,
+    "model": "swiss-ai/Apertus-v1.5-8B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "1: Überschrift\n2: Angabe\n3: Überschrift\n4: Aufzählungspunkt\n5: Aufzählungspunkt\n6: Bezeichnung",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": 68,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.23.1rc1.dev1029+ga601a9d99-2d880180",
+    "usage": {
+      "prompt_tokens": 994,
+      "total_tokens": 1027,
+      "completion_tokens": 33,
+      "prompt_tokens_details": {
+        "cached_tokens": 32,
+        "multimodal_tokens": null
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "metrics": null
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "at": "2026-10-08T10:46:59",
+  "tag": "read strip",
+  "model": "swiss-ai/Apertus-v1.5-8B",
+  "temperature": 0,
+  "room": 1200,
+  "prompt": "Das Bild zeigt 3 Textblöcke aus einem Dokument untereinander, jeder mit der roten Kennung [block_1] bis [block_3] darüber. Schreibe den Text jedes Blocks exakt ab, Zeichen für Zeichen, ohne die rote Kennung, ohne Kästchen und Kreise; steht kein Text im Block, schreibe \"\". Antworte mit genau einer Zeile je Block, in der Form \"block_1: <Text>\", ohne weiteren Text.",
+  "image": 129247,
+  "ms": 1531,
+  "http": 200,
+  "error": null,
+  "answer": {
+    "id": "chatcmpl-5391b12d-ea71-48af-81eb-d70f132c6822",
+    "object": "chat.completion",
+    "created": 1791456421,
+    "model": "swiss-ai/Apertus-v1.5-8B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "block_1: VORSTOSS\nblock_2: Antrag auf Direktbeschluss der Person 12 (Sprecherin Mara Riedler, Suhr) vom 23. Juni 2019 betreffend Aufnahme eines neuen Paragraphen 20b zur Zuständigkeit der Subkommission Oberaufsicht Nachrichtendienst in die Geschäftsordnung (GO)\nblock_3: Text:",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": 68,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.23.1rc1.dev1029+ga601a9d99-2d880180",
+    "usage": {
+      "prompt_tokens": 2066,
+      "total_tokens": 2160,
+      "completion_tokens": 94,
+      "prompt_tokens_details": {
+        "cached_tokens": 32,
+        "multimodal_tokens": {
+          "image": 1903
+        }
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "metrics": null
+  }
+}

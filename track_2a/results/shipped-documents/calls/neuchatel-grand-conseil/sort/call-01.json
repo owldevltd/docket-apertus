@@ -1,0 +1,53 @@
+{
+  "at": "2026-10-08T15:38:36",
+  "tag": "sort page 1",
+  "model": "swiss-ai/Apertus-v1.5-8B",
+  "temperature": 0,
+  "room": 200,
+  "prompt": "Unten steht Seite 1 eines Dokuments aus einem Schweizer Parlament als Text, ungefähr so angeordnet wie auf dem Papier. [Bild] steht für ein Bild, einen Stempel oder eine Unterschrift. 3 Stellen sind mit [1] bis [3] markiert.\n\n-----\n                                                                                                [1] DSAS\n\n                    [2] 17                                                                    [3] 09.326\n                    février 2009\n\n                    Question Person 7 Les bons\n                    élèves sont quelquefois punis aussi!\n                    Dans le contexte de l'application de la nouvelle loi d'organisation des services\n                    sociaux intercommunaux et son fameux \"pot commun\" qui prend en compte les frais\n                    de gestion des services sociaux intercommunaux, des surprises étonnantes se\n                    révèlent maintenant!\n                    Le Val-de-Ruz a fait preuve de pionnier dans le domaine du regroupement des\n                    services sociaux intercommunaux, à l'époque. Si au début les frais de gestion de\n                    ces services sociaux étaient assumés uniquement par les communes, maintenant un\n                    pot commun a été constitué et le moins que l'on puisse dire... c'est que toutes\n                    les communes, respectivement les regroupements constitués de communes ne sont pas\n                    logés à la même enseigne!\n                    En effet, si les villes sortent admirablement bien leur épingles du jeu, les\n                    régions suburbaines, en particulier le Val-de-Ruz et l'Entre-deux-lacs, subissent\n                    une véritable \"correction\" et font partie des gros contributeurs (7 francs par\n                    habitant et par année de contribution au pot commun pour le Valde-Ruz).\n                    Dans notre région, nous pensions naïvement que la péréquation intercommunale\n                    réglait justement cette problématique du déséquilibre financier entre les\n                    communes centres et les autres, de ce fait, nous ne comprenons pas que certaines\n                    régions doivent faire face à une situation pas acceptable dans un domaine comme\n                    les services sociaux intercommunaux!\n                    Il est évident qu'au vu des distorsions observées, alors que les charges\n                    administratives sont calculées au plus mince dans les régions, alors que les\n                    déséquilibres financiers, centres urbains – régions suburbaines devraient être\n                    réglés par l'application de la péréquation, nous avons de la peine à le\n                    comprendre.\n                    En remerciant par avance le Conseil d'Etat pour la réponse qu'il apportera à\n                    cette problématique liée à un grave déséquilibre qui, une fois n'est pas coutume\n                    dans notre canton, ne se situe pas dans une logique haut-bas! Cosignataires:\n                    Person 10 et Person 11.\n-----\n\nSage für jede markierte Stelle, was sie ist. Zur Wahl:\n- Überschrift: Titel des Dokuments oder eines Abschnitts\n- Absatz: ein Satz oder Fliesstext\n- Aufzählungspunkt: ein Punkt einer Liste\n- Bezeichnung: ein Feldname wie \"Datum:\" oder \"Eingereicht von:\", mit oder ohne Wert dahinter\n- Angabe: ein einzelner Wert wie eine Nummer, ein Datum, ein Ort oder ein Name, der zum Kopf des Dokuments gehört\n- Unterschrift: Name oder Amt von jemandem, der das Dokument unterschreibt\n- Seitenrand: Seitenzahl, Briefkopf, Absender oder Fusszeile\n- Fussnote: Anmerkung am Seitenende\n\nAntworte mit genau einer Zeile je Stelle, in der Form \"1: Überschrift\", ohne weiteren Text.",
+  "image": 0,
+  "ms": 459,
+  "http": 200,
+  "error": null,
+  "answer": {
+    "id": "chatcmpl-f6323cee-cd04-42fd-b61c-a5d5f4443455",
+    "object": "chat.completion",
+    "created": 1791473918,
+    "model": "swiss-ai/Apertus-v1.5-8B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "1: Bezeichnung\n2: Aufzählungspunkt\n3: Angabe",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": 68,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.23.1rc1.dev1029+ga601a9d99-2d880180",
+    "usage": {
+      "prompt_tokens": 811,
+      "total_tokens": 826,
+      "completion_tokens": 15,
+      "prompt_tokens_details": {
+        "cached_tokens": 96,
+        "multimodal_tokens": null
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "metrics": null
+  }
+}

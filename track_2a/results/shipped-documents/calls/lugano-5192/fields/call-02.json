@@ -1,0 +1,53 @@
+{
+  "at": "2026-10-08T15:38:19",
+  "tag": "fields im-namen-von,adressat,ort,parlament,gemeinwesen",
+  "model": "swiss-ai/Apertus-v1.5-8B",
+  "temperature": 0,
+  "room": 400,
+  "prompt": "Unten steht eine Seite eines Dokuments aus einem Schweizer Parlament als Text, ungefähr so angeordnet wie auf dem Papier. [Bild] steht für ein Bild, einen Stempel oder eine Unterschrift. Es ist Seite 1 von 3. Jeder Textblock beginnt mit seiner Kennung in eckigen Klammern, zum Beispiel [b12].\n\n-----\n                                           [b1] CONSIGLIO COMUNALE\n\n                                  [b2] In conformità dell'art. 49 cpv. 3 LOC\n                                  il Presidente del Consiglio Comunale di\n                                  Lugano\n                                                    [b3] a v v i\n                                                    s a\n                                      [b4] che il Consiglio Comunale è\n                                      convocato per la II.a seduta\n                                      ordinaria autunnale lunedì 17\n                                      dicembre 2001, alle ore 20.00\n                                                       [b5] e\n                                 [b6] (riserva) martedì 18 dicembre 2001, alle\n                                 ore 20.00 nella sala del C.C. a Palazzo Civico\n\n               [b7] TRATTANDE\n\n                 1.  Approvazione verbale del Consiglio Comunale della seduta del 2 ottobre\n                    2001.\n\n                 2.  Sostituzione dell'On. Antonio Parini con l'On. Livio Delmenico nella Commissione\n                    Speciale ROD\n\n                 2.  Interpellanze e\n                    mozioni.\n\n                 3.  Richieste per la concessione dell'attinenza comunale\n                    luganese. Rapporti della Commissione delle Petizioni.\n\n                 4.  Discussione generale\n                    sull'Aeroporto.\n\n                 5.  MMN. 5706 Concernente la chiusura del conto investimento del MMN. 4103,\n                    relativo\n                    [b9] a di verse opere di miglioria delle infrastrutture dell'aeroporto\n                    di Lugano-Agno. Rapporto della Commissione della Gestione.\n\n                 6.  Conti Consuntivi 1999 e 2000 - Capitolo\n                    Aeroporto Rapporto della Commissione della\n                    Gestione.\n\n                 7.  MMN. 5842 Concernente: . la politica della Città di\n                    Lugano a riguardo delle fusioni; . la prima\n                    proposta di aggregazione: Gandria. Rapporto della\n                    Commissione Speciale.\n-----\n\nLies daraus ab:\n- im-namen-von: in wessen Namen eingereicht wurde (Fraktion, Kommission), falls angegeben — Vorgabe: {\"type\": \"string\", \"dynamic\": true}\n- adressat: an wen es gerichtet ist — Vorgabe: {\"type\": \"string\"}\n- ort: Ort, an dem es eingereicht wurde — Vorgabe: {\"type\": \"string\"}\n- parlament: Name des Parlaments oder Rats, so wie er auf der Seite steht — Vorgabe: {\"type\": \"string\"}\n- gemeinwesen: Gemeinde, Stadt oder Kanton, so wie es auf der Seite steht — Vorgabe: {\"type\": \"string\"}\n\nSteht etwas nicht auf der Seite, schreibe dafür einen Strich (-). Erfinde nichts. Antworte mit genau einer Zeile je Angabe, in der Form \"name: wert [Kennung des Blocks, aus dem der Wert stammt]\", ohne weiteren Text.",
+  "image": 0,
+  "ms": 688,
+  "http": 200,
+  "error": null,
+  "answer": {
+    "id": "chatcmpl-38417f64-ccc8-409e-9fae-8f4d67896dec",
+    "object": "chat.completion",
+    "created": 1791473901,
+    "model": "swiss-ai/Apertus-v1.5-8B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "im-namen-von: Consiglio Comunale [b1]\nadressat: Consiglio Comunale di Lugano [b2]\nort: Lugano [b3]\nparlament: CONSIGLIO COMUNALE [b1]\ngemeinwesen: Lugano [b3]",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": 68,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.23.1rc1.dev1029+ga601a9d99-2d880180",
+    "usage": {
+      "prompt_tokens": 803,
+      "total_tokens": 866,
+      "completion_tokens": 63,
+      "prompt_tokens_details": {
+        "cached_tokens": 608,
+        "multimodal_tokens": null
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "metrics": null
+  }
+}

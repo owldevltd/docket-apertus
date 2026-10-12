@@ -1,0 +1,55 @@
+{
+  "at": "2026-10-08T10:48:52",
+  "tag": "read strip",
+  "model": "swiss-ai/Apertus-v1.5-8B",
+  "temperature": 0,
+  "room": 1200,
+  "prompt": "Das Bild zeigt 3 Textblöcke aus einem Dokument untereinander, jeder mit der roten Kennung [block_1] bis [block_3] darüber. Schreibe den Text jedes Blocks exakt ab, Zeichen für Zeichen, ohne die rote Kennung, ohne Kästchen und Kreise; steht kein Text im Block, schreibe \"\". Antworte mit genau einer Zeile je Block, in der Form \"block_1: <Text>\", ohne weiteren Text.",
+  "image": 26157,
+  "ms": 969,
+  "http": 200,
+  "error": null,
+  "answer": {
+    "id": "chatcmpl-be8d0c7f-7316-4bdb-b65a-d089edcc8da8",
+    "object": "chat.completion",
+    "created": 1791456534,
+    "model": "swiss-ai/Apertus-v1.5-8B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "block_1: Zürich und Winterthur, 26. November 2018\nblock_2: KR-Nr. 357/2018\nblock_3: PARLAMENTARISCHE INITIATIVE",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": 68,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.23.1rc1.dev1029+ga601a9d99-2d880180",
+    "usage": {
+      "prompt_tokens": 1790,
+      "total_tokens": 1843,
+      "completion_tokens": 53,
+      "prompt_tokens_details": {
+        "cached_tokens": 32,
+        "multimodal_tokens": {
+          "image": 1627
+        }
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "metrics": null
+  }
+}

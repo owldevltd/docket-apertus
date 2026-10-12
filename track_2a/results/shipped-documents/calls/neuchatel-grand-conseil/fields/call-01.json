@@ -1,0 +1,53 @@
+{
+  "at": "2026-10-08T15:38:38",
+  "tag": "fields nummer,titel,art,datum,einreichende,partei",
+  "model": "swiss-ai/Apertus-v1.5-8B",
+  "temperature": 0,
+  "room": 400,
+  "prompt": "Unten steht eine Seite eines Dokuments aus einem Schweizer Parlament als Text, ungefähr so angeordnet wie auf dem Papier. [Bild] steht für ein Bild, einen Stempel oder eine Unterschrift. Es ist Seite 1 von 1. Jeder Textblock beginnt mit seiner Kennung in eckigen Klammern, zum Beispiel [b12].\n\n-----\n                                                                                                [b1] DSAS\n\n                    [b2] 17                                                                   [b3] 09.326\n                    février 2009\n\n                    [b4] Question Person 7 Les\n                    bons élèves sont quelquefois punis aussi!\n                    [b5] Dans le contexte de l'application de la nouvelle loi d'organisation des\n                    services sociaux intercommunaux et son fameux \"pot commun\" qui prend en compte\n                    les frais de gestion des services sociaux intercommunaux, des surprises\n                    étonnantes se révèlent maintenant!\n                    [b6] Le Val-de-Ruz a fait preuve de pionnier dans le domaine du regroupement des\n                    services sociaux intercommunaux, à l'époque. Si au début les frais de gestion de\n                    ces services sociaux étaient assumés uniquement par les communes, maintenant un\n                    pot commun a été constitué et le moins que l'on puisse dire... c'est que toutes\n                    les communes, respectivement les regroupements constitués de communes ne sont pas\n                    logés à la même enseigne!\n                    [b7] En effet, si les villes sortent admirablement bien leur épingles du jeu, les\n                    régions suburbaines, en particulier le Val-de-Ruz et l'Entre-deux-lacs, subissent\n                    une véritable \"correction\" et font partie des gros contributeurs (7 francs par\n                    habitant et par année de contribution au pot commun pour le Valde-Ruz).\n                    [b8] Dans notre région, nous pensions naïvement que la péréquation intercommunale\n                    réglait justement cette problématique du déséquilibre financier entre les\n                    communes centres et les autres, de ce fait, nous ne comprenons pas que certaines\n                    régions doivent faire face à une situation pas acceptable dans un domaine comme\n                    les services sociaux intercommunaux!\n                    [b9] Il est évident qu'au vu des distorsions observées, alors que les charges\n                    administratives sont calculées au plus mince dans les régions, alors que les\n                    déséquilibres financiers, centres urbains – régions suburbaines devraient être\n                    réglés par l'application de la péréquation, nous avons de la peine à le\n                    comprendre.\n                    [b10] En remerciant par avance le Conseil d'Etat pour la réponse qu'il apportera\n                    à cette problématique liée à un grave déséquilibre qui, une fois n'est pas\n                    coutume dans notre canton, ne se situe pas dans une logique haut-bas!\n                    Cosignataires: Person 10 et Person 11.\n-----\n\nLies daraus ab:\n- nummer: Geschäftsnummer oder Aktenzeichen des Geschäfts — Vorgabe: {\"type\": \"string\"}\n- titel: Titel des Geschäfts — Vorgabe: {\"type\": \"string\"}\n- art: Art des Geschäfts, so wie das Dokument sie nennt (zum Beispiel Motion, Postulat, Interpellation, Anfrage) — Vorgabe: {\"type\": \"string\"}\n- datum: Datum, an dem das Geschäft eingereicht wurde, als TT.MM.JJJJ — Vorgabe: {\"type\": \"string\"}\n- einreichende: wer das Geschäft eingereicht hat (bei mehreren durch Strichpunkt getrennt) — Vorgabe: {\"type\": \"string\"}\n- partei: Partei oder Fraktion der Einreichenden — Vorgabe: {\"type\": \"string\"}\n\nSteht etwas nicht auf der Seite, schreibe dafür einen Strich (-). Erfinde nichts. Antworte mit genau einer Zeile je Angabe, in der Form \"name: wert [Kennung des Blocks, aus dem der Wert stammt]\", ohne weiteren Text.",
+  "image": 0,
+  "ms": 768,
+  "http": 200,
+  "error": null,
+  "answer": {
+    "id": "chatcmpl-6d9cd73d-92c8-4bdd-a5b8-88490ef203c6",
+    "object": "chat.completion",
+    "created": 1791473920,
+    "model": "swiss-ai/Apertus-v1.5-8B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "nummer: DSAS [b1]\ntitel: Keine Angabe [b1]\nart: Frage [b4]\ndatum: 09.02.2009 [b2]\neinreichende: Person 7 [b4]\npartei: Keine Angabe [b1]",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": 68,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.23.1rc1.dev1029+ga601a9d99-2d880180",
+    "usage": {
+      "prompt_tokens": 904,
+      "total_tokens": 971,
+      "completion_tokens": 67,
+      "prompt_tokens_details": {
+        "cached_tokens": 128,
+        "multimodal_tokens": null
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "metrics": null
+  }
+}

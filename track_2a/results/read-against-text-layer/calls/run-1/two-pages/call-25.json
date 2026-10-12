@@ -1,0 +1,55 @@
+{
+  "at": "2026-10-08T10:49:07",
+  "tag": "read strip",
+  "model": "swiss-ai/Apertus-v1.5-8B",
+  "temperature": 0,
+  "room": 1200,
+  "prompt": "Das Bild zeigt 3 Textblöcke aus einem Dokument untereinander, jeder mit der roten Kennung [block_1] bis [block_3] darüber. Schreibe den Text jedes Blocks exakt ab, Zeichen für Zeichen, ohne die rote Kennung, ohne Kästchen und Kreise; steht kein Text im Block, schreibe \"\". Antworte mit genau einer Zeile je Block, in der Form \"block_1: <Text>\", ohne weiteren Text.",
+  "image": 239164,
+  "ms": 3190,
+  "http": 200,
+  "error": null,
+  "answer": {
+    "id": "chatcmpl-b38ab75f-423f-46f8-9730-e64fa6813030",
+    "object": "chat.completion",
+    "created": 1791456550,
+    "model": "swiss-ai/Apertus-v1.5-8B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "block_1: Deshalb sollten die Arbeitgebenden mit wenig Aufwand beantragen können, ein bestehendes Arbeitsverhältnis weiterzuführen bis zur fälschlichen Ausreise. So können sie gut eingearbeitete Beschäftigte behalten. Zudem verbessert jede Arbeitsstättigkeit auch die wirtschaftlichen Perspektiven der Betroffenen bei der späteren Rückkehr in ihre Herkunftsländer und es tauchen weniger Menschen in die Illegalität ab.\n\nblock_2: Gemäss Artikel 43 Abs. 3 des Asylgesetzes können die Kantone beim Eidg. Justiz- und Polizeidepartement und dem Volkswirtschaftsdepartement eine Ermächtigung beantragen, unter besonderen Umständen eine Verlängerung der Arbeitsbewilligung für Asylsuchende mit Negativentscheid zu erlassen. Jeder einzelne Antrag durchläuft danach zuerst das kantonale Migrationsamt und anschließend zwei Bundesämter. Das Vorgehen ist damit unnötig aufwendig und sendet auch ein schlechtes Signal in Richtung Arbeitgebende aus.\n\nblock_3: Sinyolereweise sollen die Abläufe vereinfacht und die Kompetenz zur Verlängerung der Arbeitsbewilligungen in den beschriebenen Fällen den Kantonen übergeben werden.",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": 68,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.23.1rc1.dev1029+ga601a9d99-2d880180",
+    "usage": {
+      "prompt_tokens": 3251,
+      "total_tokens": 3505,
+      "completion_tokens": 254,
+      "prompt_tokens_details": {
+        "cached_tokens": 32,
+        "multimodal_tokens": {
+          "image": 3088
+        }
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "metrics": null
+  }
+}

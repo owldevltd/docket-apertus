@@ -1,0 +1,53 @@
+{
+  "at": "2026-10-08T15:37:18",
+  "tag": "fields nummer,titel,art,datum,einreichende,partei",
+  "model": "swiss-ai/Apertus-v1.5-8B",
+  "temperature": 0,
+  "room": 400,
+  "prompt": "Unten steht eine Seite eines Dokuments aus einem Schweizer Parlament als Text, ungefähr so angeordnet wie auf dem Papier. [Bild] steht für ein Bild, einen Stempel oder eine Unterschrift. Es ist Seite 1 von 4. Jeder Textblock beginnt mit seiner Kennung in eckigen Klammern, zum Beispiel [b12].\n\n-----\n             [b1] Séance du\n             28.03.2024\n\n             [b2] Délivrance d'une autorisation d'exploiter Conformément à la loi du 8 avril 2004 sur\n             l'hébergement, la restauration et le commerce de détail de boissons alcoolisées (LHR), le\n             CC délivre une autorisation d'exploiter à Mme Josiane Tavel pour la cabane des\n             Audannes.\n\n             [b3] Combat de reines : soutien financier Le syndicat d’élevage de la Race d’Hérens de la\n             commune d’Ayent, la caisse d’assurance du bétail d’Ayent ainsi que les Laiteries Réunies\n             (Ayent-Arbaz-Grimisuat) organisent un combat de reines les 13 et 14 avril 2024 sur notre\n             commune.\n\n             [b4] Le CC accepte de soutenir cette manifestation par le financement d'une sonnette de\n             Fr. 900.00. Demande de scolarisation intercommunale Une famille domiciliée à Grimisuat\n             s'installera dans notre commune en août 2024. Leur construction a pris du retard. Leur\n             fils de 4 ans va débuter la 1H en août prochain et les parents demandent si la commune\n             d'Ayent accepte directement leur enfant à l'école sur Ayent à la rentrée scolaire.\n\n             [b5] Pour faciliter l'adaptation de l'enfant, le CC donne une réponse favorable à\n             cette demande. Personnel communal M. Cyril Bornand a démissionné de son poste\n             de chargé de sécurité.\n\n             [b6] La commune a reçu 15 candidatures pour ce poste. La commission ad hoc de recrutement\n             était composée de 3 membres de la commission intercommunale de sécurité, Albert Dutoit\n             pour Arbaz, Armand Genoud pour Grimisuat et Cédric Bovet pour Ayent, président de\n             cette commission.\n\n             [b7] Sur préavis de cette commission, le CC décide l'engagement de M. Norbert Gremaud,\n             [year of birth], domicilié à Ayent pour un taux d'activité de 100 %. L'entrée en fonction est fixée\n             au 08.04.2024. Les conseils communaux d'Arbaz et de Grimisuat ont également validé ce\n             choix.\n\n             [b8] Musée des bisses : demande de soutien Le CC prend connaissance d'une demande soutien\n             du Musée des Bisses pour un projet de documentaire sur l'avenir des bisses.\n\n             [b9] Ce documentaire de 52 minutes est coproduit par IDIP Film à Genève et réalisé par\n             Yvan Monod (ancien RTS). Il a été tourné en grande partie sur la commune d'Ayent. Des\n             images ont été filmées également sur le glacier de la Plaine Morte, dans le Haut-Valais\n             (Ausserberg et Naters), dans la Raspille, à Crans-Montana, sur les nouveaux bisses\n             d'Anniviers.\n\n             [b10] Ce documentaire est destiné tout d'abord à être diffusé à la RTS, puis dans les\n             festivals de films et finalement, dans les communes partenaires. Le CC décide de soutenir\n             ce projet à hauteur de Fr. 10'000.00.\n\n             [b11] Engagements enseignants Suite à une démission et un départ à la retraite ainsi qu’à\n             la décision du département de l’enseignement de diminuer les périodes des enseignants,\n             une annonce a été publiée dans le bulletin officiel début mars.\n\n             [b12] Le CC préavise favorablement les engagements\n             suivants :\n\n                [b14]    [b13] Aline Mottet, Arbaz : 1-2H /\n                    5H à Ayent Yan Lou, Bramois : 5H à\n                    Ayent\n-----\n\nLies daraus ab:\n- nummer: Geschäftsnummer oder Aktenzeichen des Geschäfts — Vorgabe: {\"type\": \"string\"}\n- titel: Titel des Geschäfts — Vorgabe: {\"type\": \"string\"}\n- art: Art des Geschäfts, so wie das Dokument sie nennt (zum Beispiel Motion, Postulat, Interpellation, Anfrage) — Vorgabe: {\"type\": \"string\"}\n- datum: Datum, an dem das Geschäft eingereicht wurde, als TT.MM.JJJJ — Vorgabe: {\"type\": \"string\"}\n- einreichende: wer das Geschäft eingereicht hat (bei mehreren durch Strichpunkt getrennt) — Vorgabe: {\"type\": \"string\"}\n- partei: Partei oder Fraktion der Einreichenden — Vorgabe: {\"type\": \"string\"}\n\nSteht etwas nicht auf der Seite, schreibe dafür einen Strich (-). Erfinde nichts. Antworte mit genau einer Zeile je Angabe, in der Form \"name: wert [Kennung des Blocks, aus dem der Wert stammt]\", ohne weiteren Text.",
+  "image": 0,
+  "ms": 1072,
+  "http": 200,
+  "error": null,
+  "answer": {
+    "id": "chatcmpl-b5e4ff51-378c-4fba-9bb4-9b4d57957902",
+    "object": "chat.completion",
+    "created": 1791473839,
+    "model": "swiss-ai/Apertus-v1.5-8B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Geschäftsnummer: - [b1]\nTitel: Autorisation d'exploiter, soutien financier, scolarisation intercommunale, engagement personnel, soutien au Musée des bisses [b1-b10]\nArt: Verschiedene Geschäfte (Autorisation, Unterstützung, Scolarisation, Personal, Kultur) [b1-b10]\nDatum: 28.03.2024 [b1]\nEinreichende: Conseil communal d'Ayent [b1-b10]\nPartei: Conseil communal d'Ayent [b1-b10]",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": 68,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.23.1rc1.dev1029+ga601a9d99-2d880180",
+    "usage": {
+      "prompt_tokens": 1235,
+      "total_tokens": 1362,
+      "completion_tokens": 127,
+      "prompt_tokens_details": {
+        "cached_tokens": 96,
+        "multimodal_tokens": null
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "metrics": null
+  }
+}

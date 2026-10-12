@@ -1,0 +1,53 @@
+{
+  "at": "2026-10-08T15:37:54",
+  "tag": "fields mitunterzeichnende,verwandt,verweis,schlagwoerter,ereignis,ereignisdatum",
+  "model": "swiss-ai/Apertus-v1.5-8B",
+  "temperature": 0,
+  "room": 400,
+  "prompt": "Unten steht eine Seite eines Dokuments aus einem Schweizer Parlament als Text, ungefähr so angeordnet wie auf dem Papier. [Bild] steht für ein Bild, einen Stempel oder eine Unterschrift. Es ist Seite 1 von 1. Jeder Textblock beginnt mit seiner Kennung in eckigen Klammern, zum Beispiel [b12].\n\n-----\n              [b1] Antrag auf Einreichung einer Standesinitiative zur                [b2]\n              Einführung einer nationalen Elternzeit                                 23.5448.01\n\n              [b3] Eine nationale Elternzeit mit flexibler Aufteilung und flexiblen Bezug ist\n              elementar für die Gleichstellung von Mann und Frau, verbessert die Vereinbarkeit\n              von Familie und Erwerbstätigkeit, wirkt sich positiv auf die Entwicklung des\n              Kindes aus und ist gleichzeitig volkswirtschaftlich sinnvoll. Die wachsende\n              Vielfalt an Familienmodellen, Lebensformen und Vorstellungen zur Aufteilung von\n              bezahlter und unbezahlter Arbeit steht in der Schweiz einem nicht mehr\n              zeitgemässen System gegenüber, das auf Rahmenbedingungen des letzten Jahrhunderts\n              basiert. Ein vierzehnwöchiger Mutterschaftsurlaub und ein zweiwöchiger\n              Vaterschaftsurlaub entsprechen nicht dem heutigen Verständnis von\n              Chancengleichheit. Dies zementiert alte Rollenbilder. Eltern sollen individuelle\n              Gestaltungsmöglichkeiten offen stehen, wenn es um den Start ins Leben mit einem\n              neuen Familienmitglied geht. Beide Elternteile sollen sowohl die Möglichkeit\n              haben, bei der Erziehung ihres Kindes mitzuwirken, als auch nach der Geburt eines\n              Kindes möglichst einfach wieder in den Beruf einsteigen zu können.\n              [b4] Das Ungleichgewicht im Verhältnis vom Mutter- zum Vaterschaftsurlaub ist\n              gegenwärtig enorm: 87.5 Prozent ist für die Mutter und 12.5 Prozent für den Vater\n              vorgesehen. Diese Aufteilung kann einen langfristigen Einfluss auf die Aufteilung\n              von Haus-, Familien- und Erwerbsarbeit innerhalb der Familie haben sowie einer der\n              Gründe für die Lohnungleichheit zwischen Männer und Frauen darstellen. Durch die\n              Einführung einer angemessenen Elternzeit kann die Erwerbsquote von Frauen\n              gesteigert und die Benachteiligung von Frauen auf dem Arbeitsmarkt, insbesondere\n              bei Einstellungs- und Beförderungsentscheidungen, verringert werden. Eine stärkere\n              Beteiligung der Frauen am Arbeitsmarkt verbessert ihre finanzielle Unabhängigkeit\n              und Rentenleistungen und ist zudem eine gute Massnahme gegen den wachsenden\n              Fachkräftemangel in der Schweiz. Derzeit bleibt ein grosses Potenzial ungenutzt,\n              weil notwendige Reformen beim Thema Elternzeit blockiert sind. Die\n              Nichterwerbstätigkeit von teuer ausgebildeten Fachkräften stellt einen\n              volkswirtschaftlichen Verlust dar. Eine Verbesserung der Rahmenbedingungen für\n              berufstätige Eltern ist auch ein nachhaltiges Mittel, um die Wirtschaft mit\n              Fachkräften zu stärken. Die Schweiz hinkt betreffend Elternzeit im internationalen\n              Vergleich hinterher. Eltern stehen in unseren Nachbarländern und anderen\n              europäischen Staaten nach der Geburt eines Kindes mehr bezahlte Zeit zur\n              Verfügung. Will die Schweiz international mithalten und dem Fachkräftemangel\n              entgegenwirken, dann muss sie in eine moderne Familienpolitik investieren. Die\n              Elternzeit hat in der Schweiz bislang aber einen schweren Stand. Zahlreiche\n              Vorschläge sind im Parlament oder auf kantonaler Ebene gescheitert. Was die\n              bisherigen Vorschläge gemeinsam haben: Sie fordern konkrete Wochenvorgaben, welche\n              einen meist extremen Ausbau der Elternzeit bedeuten würden. So hat beispielsweise\n              auch die Eidgenössische Kommission für Familienfragen (EKFF) kürzlich eine\n              Elternzeit von 38 Wochen gefordert. Dies würde mehr als eine Verdopplung der\n              aktuellen 16 Wochen für Mutter- und Vaterschaftsurlaub bedeuten. Wenig\n              überraschend zeigten sich Wirtschaftskreise kritisch gegenüber dem Vorschlag; er\n              sei aufgebläht und zu teuer. Es ist Zeit für eine mehrheitsfähige nationale\n              Lösung. Damit die Elternzeit eine Mehrheit findet, braucht es eine\n              gesamtschweizerische Lösung, die finanzierbar und pragmatisch ist und von der\n              Wirtschaft getragen wird. Mit dieser Standesinitiative soll das nationale\n              Parlament dazu aufgefordert werden, sich diesem wichtigen Thema zu widmen. Es\n              sollen verschiedene Lösungen einer Elternzeit in Bezug auf ihre Chancen und\n              Machbarkeit (Kosten, Auswirkungen auf Unternehmen etc.) geprüft werden, um\n              schliesslich die beste - und vor allem auch mehrheitsfähige - Lösung weiter in den\n              politischen Prozess zu bringen. Die finale Zielsetzungen ist die Einführung einer\n              angemessenen nationalen Elternzeit. Der Regierungsrat wird daher beauftragt, im\n              Namen des Kantons Basel-Stadt bei der Bundesversammlung gestützt auf Art. 160 Abs.\n              1 der Bundesverfassung eine Standesinitiative einzureichen, die von den\n              eidgenössischen Räten verlangt, einen Entwurf für einen Erlass der\n              Bundesversammlung auszuarbeiten für die Einführung einer nationalen Elternzeit,\n              die folgende Bedingungen erfüllt: 1. Die Elternzeit beträgt insgesamt mindestens\n              20 Wochen. 2. Der fixe Anteil der Mutter darf nicht kürzer sein als die aktuellen\n              14 Wochen Mutterschaftsurlaub. 3. Der fixe Anteil des Vaters soll mindestens 20\n              Prozent der gesamten Elternzeit betragen. 4. Beide Elternteile sollen Anteile der\n              Elternzeit flexibel beziehen können. Person 2, Person 9,\n              Person 4, Person 1, Person 16, Person 8,\n              Person 5, Person 6\n-----\n\nLies daraus ab:\n- mitunterzeichnende: wer mitunterzeichnet hat (bei mehreren durch Strichpunkt getrennt) — Vorgabe: {\"type\": \"string\"}\n- verwandt: Nummern anderer Geschäfte, auf die verwiesen wird (durch Strichpunkt getrennt) — Vorgabe: {\"type\": \"string\"}\n- verweis: Erlasse, Pläne oder Berichte, auf die verwiesen wird (durch Strichpunkt getrennt) — Vorgabe: {\"type\": \"string\"}\n- schlagwoerter: gedruckte Schlagwörter, falls welche angegeben sind (durch Strichpunkt getrennt) — Vorgabe: {\"type\": \"array\", \"items\": {\"type\": \"string\"}, \"dynamic\": true}\n- ereignis: im Dokument genannte Ereignisse mit Datum, was geschah (zum Beispiel \"Beantwortung im Stadtrat\"; bei mehreren durch Strichpunkt getrennt, in derselben Reihenfolge wie ereignisdatum) — Vorgabe: {\"type\": \"string\"}\n- ereignisdatum: die Daten dieser Ereignisse, als TT.MM.JJJJ, durch Strichpunkt getrennt — Vorgabe: {\"type\": \"string\"}\n\nSteht etwas nicht auf der Seite, schreibe dafür einen Strich (-). Erfinde nichts. Antworte mit genau einer Zeile je Angabe, in der Form \"name: wert [Kennung des Blocks, aus dem der Wert stammt]\", ohne weiteren Text.",
+  "image": 0,
+  "ms": 862,
+  "http": 200,
+  "error": null,
+  "answer": {
+    "id": "chatcmpl-5dd03283-f0ce-46fa-bcec-5ba17df18213",
+    "object": "chat.completion",
+    "created": 1791473875,
+    "model": "swiss-ai/Apertus-v1.5-8B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "mitunterzeichnende: Person 2, Person 9, Person 4, Person 1, Person 16, Person 8, Person 5, Person 6 [b4]\nverwandt: -\nverweis: -\nschlagwoerter: -\nereignis: -\nereignisdatum: -",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": 68,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.23.1rc1.dev1029+ga601a9d99-2d880180",
+    "usage": {
+      "prompt_tokens": 1655,
+      "total_tokens": 1737,
+      "completion_tokens": 82,
+      "prompt_tokens_details": {
+        "cached_tokens": 1344,
+        "multimodal_tokens": null
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "metrics": null
+  }
+}

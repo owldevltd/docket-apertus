@@ -1,0 +1,55 @@
+{
+  "at": "2026-10-08T11:07:53",
+  "tag": "read single",
+  "model": "swiss-ai/Apertus-v1.5-8B",
+  "temperature": 0,
+  "room": 400,
+  "prompt": "Das Bild ist ein Ausschnitt aus einem Dokument. Darin ist ein Textblock mit rotem Rahmen und der Kennung [block_1] markiert. Schreibe den Text jedes Blocks exakt ab, Zeichen für Zeichen, ohne die rote Kennung, ohne Kästchen und Kreise; steht kein Text im Block, schreibe \"\". Antworte mit genau einer Zeile je Block, in der Form \"block_1: <Text>\", ohne weiteren Text.",
+  "image": 99930,
+  "ms": 1398,
+  "http": 200,
+  "error": null,
+  "answer": {
+    "id": "chatcmpl-9cba7d51-dca7-40c1-8b34-8e0d6346ef40",
+    "object": "chat.completion",
+    "created": 1791457674,
+    "model": "swiss-ai/Apertus-v1.5-8B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "block_1: Wenn ein Asylantrag durch einen rechtskräftigen Entscheid abgelehnt wird, erlässt die Bewilligung zur Ausübung einer Erwerbstätigkeit mit Ablauf der Frist, die dem Antragsteller für die Reise aus dem Land (Auszreisezeitraum) gesetzt wurde. Das trifft auch zu bei Aufhebung des Status F. Bei vielen Betroffenen erstreckt sich bis zum Zeitpunkt der tatsächlichen Ausreise dann aber sehr viel Zeit, insbesondere wenn kein Rückübernahmeabkommen mit dem Herkunftsland besteht.",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": 68,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.23.1rc1.dev1029+ga601a9d99-2d880180",
+    "usage": {
+      "prompt_tokens": 1353,
+      "total_tokens": 1466,
+      "completion_tokens": 113,
+      "prompt_tokens_details": {
+        "cached_tokens": 32,
+        "multimodal_tokens": {
+          "image": 1192
+        }
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "metrics": null
+  }
+}

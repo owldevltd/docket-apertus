@@ -1,0 +1,55 @@
+{
+  "at": "2026-10-08T10:47:33",
+  "tag": "read single",
+  "model": "swiss-ai/Apertus-v1.5-8B",
+  "temperature": 0,
+  "room": 400,
+  "prompt": "Das Bild ist ein Ausschnitt aus einem Dokument. Darin ist ein Textblock mit rotem Rahmen und der Kennung [block_1] markiert. Schreibe den Text jedes Blocks exakt ab, Zeichen für Zeichen, ohne die rote Kennung, ohne Kästchen und Kreise; steht kein Text im Block, schreibe \"\". Antworte mit genau einer Zeile je Block, in der Form \"block_1: <Text>\", ohne weiteren Text.",
+  "image": 295229,
+  "ms": 3184,
+  "http": 200,
+  "error": null,
+  "answer": {
+    "id": "chatcmpl-0c9921ed-2a40-4808-976b-83430c83cf28",
+    "object": "chat.completion",
+    "created": 1791456456,
+    "model": "swiss-ai/Apertus-v1.5-8B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "block_1: Anlässlich einer Konferenz der Geschäftsprüfungselegation des Bundes am 26. Februar 2019 hat sich eine Vertretung der Kommission SIK in Bern über die Aufgaben dieser Obersicht informieren lassen. An ihrer Sitzung vom 15. März 2019 hat die Kommission SIK den Beschluss gefasst, diese Obersicht gemäß Art. 81, Abs. 2 NÖG offiziell wahrzunehmen. Damit verbunden sind besondere Anforderungen in Bezug auf die Sicherheit und die Kontinuität der Aufsicht. Die Kommission SIK hat hierfür an der Sitzung vom 9. Mai 2019 eine Subkommission gebildet. Es handelt sich nicht nur um eine politische Aufgabe, sondern um eine politische Obersichtsfunktion. Diese erstreckt sich sowohl über die kantonalen Vollzugsorgane als auch über die kantonalen Dienstaufsichtsgremien.",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": 68,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.23.1rc1.dev1029+ga601a9d99-2d880180",
+    "usage": {
+      "prompt_tokens": 1827,
+      "total_tokens": 2025,
+      "completion_tokens": 198,
+      "prompt_tokens_details": {
+        "cached_tokens": 32,
+        "multimodal_tokens": {
+          "image": 1666
+        }
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "metrics": null
+  }
+}

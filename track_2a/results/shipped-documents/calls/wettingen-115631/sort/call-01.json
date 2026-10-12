@@ -1,0 +1,53 @@
+{
+  "at": "2026-10-08T15:39:21",
+  "tag": "sort page 1",
+  "model": "swiss-ai/Apertus-v1.5-8B",
+  "temperature": 0,
+  "room": 200,
+  "prompt": "Unten steht Seite 1 eines Dokuments aus einem Schweizer Parlament als Text, ungefähr so angeordnet wie auf dem Papier. [Bild] steht für ein Bild, einen Stempel oder eine Unterschrift. 3 Stellen sind mit [1] bis [3] markiert.\n\n-----\n             [1] Einwohnerrat Wettingen                                            [2]\n                                                                                   2017-0683\n\n             [3] Motion Muster Hans, CVP, vom 22. Juni 2017 betreffend eMobilität\n             Wettingen\n\n             Auf Parkplätzen im öffentlichen Raum - wie beim Sport und Erholungszentrum Tägerhard,\n             Rathaus, Zentrumsplatz, Bahnhof, Einkaufszentren - sollen privilegierte Ladestandorte\n             für Elektrofahrzeuge entstehen. Der Gemeinderat erlässt die entsprechenden\n             Verordnungen, welche die Schaffung solcher Ladeplätze ermöglicht und fördert.\n\n             Er fördert die Ladeinfrastruktur auf öffentlichem Grund, treibt die Elektrifizierung\n             des Individualverkehrs voran und stärkt so die Elektromobilität auf dem\n             Gemeindegebiet. Der Miteinbezug des EWW Wettingen oder der Aargauischen\n             Elektrizitätswerke AG ist zu prüfen und zu begrüssen.\n\n             Die Installation und der Betrieb dieser Ladeinfrastrukturen soll für die Gemeinde\n             ohne Kostenfolge erfolgen und durch bestehende Ladeinfrastruktur Anbieter (Bsp.:\n             AEW, Alpiq, Energie360, Greenmotion, Group E) finanziert werden. Die Abrechnung\n             erfolgt durch die Verbraucher.\n\n             Begründung:\n\n             Elektromobilität beginnt sich in der Schweiz klar zu formieren. Für die nächsten\n             Jahre sind neue elektromobile Fahrzeugmodelle und lnfrastrukturlösungen angekündigt.\n             Zusätzlich werden neue Mobilitätsdienstleistungen (car sharing und pooling)\n             angestammte Geschäftsmodelle ergänzen oder verdrängen. Die Zukunftsstudie\n             ,,Elektromobilität Schweiz 2030\" der Zürcher Hochschule für angewandte Wissenschaften\n             stellt fest, dass auch elektromobile Klein- und Leichtmobilität (eVelo, eMotorrad,\n             sowie andere 1-2 Rad Fahrzeuge) als ökonomische und nachhaltige Mobilitätsvariante\n             zunehmend an Bedeutung gewinnen werden.\n\n             ln der Energiestrategie 2050 des Bundes geht auch der Bundesrat davon aus, dass der\n             elektrisch motorisierte Individualverkehr (e-MlV) eine zunehmend wichtigere Rolle\n             spielen wird. Die Elektromobilität soll auf dem Einsatz erneuerbarer Energien\n             basieren und einen wesentlichen Beitrag zur Reduktion des Verbrauchs fossiler\n             Energien im Verkehr leisten. Auch setzt sich der Bund für die Vorbildfunktion beim\n             Einsatz von Elektrofahrzeugen ein, sowie fördert die Verbesserung der\n             Rahmenbedingungen für die Elektromobilität.\n\n             Der Verband Swiss eMobilty unterstütz dabei aktiv die Vernetzung, bzw. fördert\n             Ladeinfrastrukturen (EVite). Diese unterstützen zukünftige Szenarien wie\n             ,,Sleep&Charge\", ,,Shop&Charge\" und,,Work&Charge\" in öffentlichen und\n             halböffentlichen Räumen.\n\n             Die Neuzulassungen von Elektroautos in der Schweiz nehmen weiterhin stark zu und die\n             Transformation zum elektrisierten Individualverkehr hat begonnen. Nebst dem Erreichen\n             der Klimaziele ergibt sich aus der Elektrifizierung des Individualverkehrs eine\n             Reduktion der volkswirtschaftlichen Kosten durch die Minderung von Feinstaub- und\n             Lärmemissionen. Dies führt zudem zu einer verbesserten Standortqualität, insbesondere\n             im städtischen Raum. Die Elektromobilität trägt auch essentiell zum vom Bund\n             geforderten Abbau der Abhängigkeit von fossilen Treibstoffen bei.\n-----\n\nSage für jede markierte Stelle, was sie ist. Zur Wahl:\n- Überschrift: Titel des Dokuments oder eines Abschnitts\n- Absatz: ein Satz oder Fliesstext\n- Aufzählungspunkt: ein Punkt einer Liste\n- Bezeichnung: ein Feldname wie \"Datum:\" oder \"Eingereicht von:\", mit oder ohne Wert dahinter\n- Angabe: ein einzelner Wert wie eine Nummer, ein Datum, ein Ort oder ein Name, der zum Kopf des Dokuments gehört\n- Unterschrift: Name oder Amt von jemandem, der das Dokument unterschreibt\n- Seitenrand: Seitenzahl, Briefkopf, Absender oder Fusszeile\n- Fussnote: Anmerkung am Seitenende\n\nAntworte mit genau einer Zeile je Stelle, in der Form \"1: Überschrift\", ohne weiteren Text.",
+  "image": 0,
+  "ms": 433,
+  "http": 200,
+  "error": null,
+  "answer": {
+    "id": "chatcmpl-b6204ee7-a09f-4297-a0e4-90cb3d6b4aec",
+    "object": "chat.completion",
+    "created": 1791473963,
+    "model": "swiss-ai/Apertus-v1.5-8B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "1: Bezeichnung\n2: Seitenrand\n3: Überschrift",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": 68,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.23.1rc1.dev1029+ga601a9d99-2d880180",
+    "usage": {
+      "prompt_tokens": 1094,
+      "total_tokens": 1109,
+      "completion_tokens": 15,
+      "prompt_tokens_details": {
+        "cached_tokens": 96,
+        "multimodal_tokens": null
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "metrics": null
+  }
+}

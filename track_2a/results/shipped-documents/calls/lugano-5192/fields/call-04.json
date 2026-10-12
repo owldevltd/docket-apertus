@@ -1,0 +1,53 @@
+{
+  "at": "2026-10-08T15:38:25",
+  "tag": "fields mitunterzeichnende,verwandt,verweis,schlagwoerter,ereignis,ereignisdatum",
+  "model": "swiss-ai/Apertus-v1.5-8B",
+  "temperature": 0,
+  "room": 400,
+  "prompt": "Unten steht ein Dokument aus einem Schweizer Parlament als Text, 3 von 3 Seiten, jede beginnt mit einer Zeile \"===== Seite n =====\", ungefähr so angeordnet wie auf dem Papier. [Bild] steht für ein Bild, einen Stempel oder eine Unterschrift. Jeder Textblock beginnt mit seiner Kennung in eckigen Klammern, zum Beispiel [b12].\n\n-----\n===== Seite 1 =====\n                                           [b1] CONSIGLIO COMUNALE\n\n                                  [b2] In conformità dell'art. 49 cpv. 3 LOC\n                                  il Presidente del Consiglio Comunale di\n                                  Lugano\n                                                    [b3] a v v i\n                                                    s a\n                                      [b4] che il Consiglio Comunale è\n                                      convocato per la II.a seduta\n                                      ordinaria autunnale lunedì 17\n                                      dicembre 2001, alle ore 20.00\n                                                       [b5] e\n                                 [b6] (riserva) martedì 18 dicembre 2001, alle\n                                 ore 20.00 nella sala del C.C. a Palazzo Civico\n\n               [b7] TRATTANDE\n\n                 1.  Approvazione verbale del Consiglio Comunale della seduta del 2 ottobre\n                    2001.\n\n                 2.  Sostituzione dell'On. Antonio Parini con l'On. Livio Delmenico nella Commissione\n                    Speciale ROD\n\n                 2.  Interpellanze e\n                    mozioni.\n\n                 3.  Richieste per la concessione dell'attinenza comunale\n                    luganese. Rapporti della Commissione delle Petizioni.\n\n                 4.  Discussione generale\n                    sull'Aeroporto.\n\n                 5.  MMN. 5706 Concernente la chiusura del conto investimento del MMN. 4103,\n                    relativo\n                    [b9] a di verse opere di miglioria delle infrastrutture dell'aeroporto\n                    di Lugano-Agno. Rapporto della Commissione della Gestione.\n\n                 6.  Conti Consuntivi 1999 e 2000 - Capitolo\n                    Aeroporto Rapporto della Commissione della\n                    Gestione.\n\n                 7.  MMN. 5842 Concernente: . la politica della Città di\n                    Lugano a riguardo delle fusioni; . la prima\n                    proposta di aggregazione: Gandria. Rapporto della\n                    Commissione Speciale.\n\n===== Seite 2 =====\n                 8.  MMN. 5863 concernete la revisione (art. 99, 41, 72 e 72 bis) del Regolamento\n                    Comunale (RCom) a dipendenza di modifiche della Legge organica comunale (LOC)\n                    e della Legge di applicazione e complemento del CCS (LAC). Rapporto della\n                    Commissione delle Petizioni.\n\n                 9.  Eventuali.\n\n                                                              [b11] IL PRESIDENTE DEL\n                                                              C.C. Person 14\n\n               [b12] Lugano, 6\n               dicembre 2001\n               Centro inf.: 101.0\n               Ris. mun.\n               06.12.2001\n\n               [b13] INTERPELLANZE ALL'ORDINE DEL GIORNO DEL CONSIGLIO COMUNALE DEL 18 DICEMBRE\n               2001\n\n               [b15] I  -  2947  [b14] del 14 novembre 2001, degli On.li Gianluca Riva (PLR), Alfio\n                           Pedretti (PLR), Renato Galli (PLR), Arnoldo Canonica (PLR), Giulia\n                           Molteni Borella (PLR), Dario Egloff (PLR), circa il problema dello\n                           spaccio di droga in Città da parte dei richiedenti d'asilo. Risponde\n                           On. Balmelli.\n\n               [b18] I  -  2948  [b17] del 28 novembre 2001, dell'On. Amalia Delcò (LdT), inerente\n                           al carovita riconosciuto ai dipendenti comunali per l'anno 2002.\n                           Risponde On. Sindaco.\n\n               [b21] I  -  2950  [b20] del 4 dicembre 2001, dell'On. Ettore Albertoni (PPD), intesa a\n                           sapere se è stata prevista una decorazione natalizia su tutta la\n                           Città (rioni inclusi). Risponde On. Gino Bottinelli.\n\n               [b24] I  [b25] 2951  [b23] del 7 dicembre 2001, dell'On. Pia Lepori (PLR), chiedente\n                           la posa di un sistema di sbarramento più solido ed elegante al Centro\n                           La Piazzetta di Loreto. Risponde On. Balmelli.\n\n               [b28] I  -  2952  [b27] del 7 dicembre 2001, degli On.li Pietro Soldini (PPD) e Elvio\n                           Stocker (PLR) sulla Cassa Pensioni solida garantita dall'ente pubblico\n                           al 100% sotto\n\n===== Seite 3 =====\n                           [b30] assedio\n                           pretestuoso?\n                           Risponde On.\n                           Sindaco.\n\n               [b32] I  -  2953  [b31] del 10 dicembre 2001, dell'On. Ugo Mariotti (UDC), inerente\n                           all'analisi e all'esame per le pratiche di naturalizzazione. Risponde\n                           On. Sindaco.\n\n               [b35] I  -  2954  [b34] del 13 dicembre 2001, dell'On. Fausto Ghezzi (LdT), intesa a\n                           sapere se il Municipio non ritiene di dover puntualizzare la\n                           posizione dell'Arch. Marzio Bonetti in merito ai mandati a lui affidati.\n                           Risponde On. Bottinelli.\n\n               [b37] Lugano, 18\n               dicembre 2001\n-----\n\nLies daraus ab:\n- mitunterzeichnende: wer mitunterzeichnet hat (bei mehreren durch Strichpunkt getrennt) — Vorgabe: {\"type\": \"string\"}\n- verwandt: Nummern anderer Geschäfte, auf die verwiesen wird (durch Strichpunkt getrennt) — Vorgabe: {\"type\": \"string\"}\n- verweis: Erlasse, Pläne oder Berichte, auf die verwiesen wird (durch Strichpunkt getrennt) — Vorgabe: {\"type\": \"string\"}\n- schlagwoerter: gedruckte Schlagwörter, falls welche angegeben sind (durch Strichpunkt getrennt) — Vorgabe: {\"type\": \"array\", \"items\": {\"type\": \"string\"}, \"dynamic\": true}\n- ereignis: im Dokument genannte Ereignisse mit Datum, was geschah (zum Beispiel \"Beantwortung im Stadtrat\"; bei mehreren durch Strichpunkt getrennt, in derselben Reihenfolge wie ereignisdatum) — Vorgabe: {\"type\": \"string\"}\n- ereignisdatum: die Daten dieser Ereignisse, als TT.MM.JJJJ, durch Strichpunkt getrennt — Vorgabe: {\"type\": \"string\"}\n\nSteht etwas nicht auf der Seite, schreibe dafür einen Strich (-). Erfinde nichts. Antworte mit genau einer Zeile je Angabe, in der Form \"name: wert [Kennung des Blocks, aus dem der Wert stammt]\", ohne weiteren Text.",
+  "image": 0,
+  "ms": 1540,
+  "http": 200,
+  "error": null,
+  "answer": {
+    "id": "chatcmpl-0f8387ac-2a28-4c99-81e3-5cd60b95eca8",
+    "object": "chat.completion",
+    "created": 1791473906,
+    "model": "swiss-ai/Apertus-v1.5-8B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "mitunterzeichnende: Person 14 [b11]\nverwandt: -\nverweis: Rapporto della Commissione della Gestione, Rapporto della Commissione Speciale, Rapporto della Commissione delle Petizioni [b9, b18, b28]\nschlagwoerter: -\nereignis: Beantwortung der Interpellanzen [b15, b18, b21, b24, b28, b31, b32, b35]\nereignisdatum: 14.11.2001, 28.11.2001, 4.12.2001, 7.12.2001, 10.12.2001, 13.12.2001, 18.12.2001",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": 68,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.23.1rc1.dev1029+ga601a9d99-2d880180",
+    "usage": {
+      "prompt_tokens": 1816,
+      "total_tokens": 2016,
+      "completion_tokens": 200,
+      "prompt_tokens_details": {
+        "cached_tokens": 64,
+        "multimodal_tokens": null
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "metrics": null
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "at": "2026-10-08T11:06:27",
+  "tag": "read strip",
+  "model": "swiss-ai/Apertus-v1.5-8B",
+  "temperature": 0,
+  "room": 1200,
+  "prompt": "Das Bild zeigt 3 Textblöcke aus einem Dokument untereinander, jeder mit der roten Kennung [block_1] bis [block_3] darüber. Schreibe den Text jedes Blocks exakt ab, Zeichen für Zeichen, ohne die rote Kennung, ohne Kästchen und Kreise; steht kein Text im Block, schreibe \"\". Antworte mit genau einer Zeile je Block, in der Form \"block_1: <Text>\", ohne weiteren Text.",
+  "image": 53685,
+  "ms": 1006,
+  "http": 200,
+  "error": null,
+  "answer": {
+    "id": "chatcmpl-0f0cb8d3-b907-4244-90dd-bf2d44cdafaf",
+    "object": "chat.completion",
+    "created": 1791457589,
+    "model": "swiss-ai/Apertus-v1.5-8B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "block_1: Der Gemeinderat wird gebeten, sich beim Bund dafür einzusetzen, dass vermehrt\nblock_2: Bootsflüchtlinge aus dem Mittelmeer in der Schweiz Aufnahme finden. Dabei soll eine klare\nblock_3: Haltung kommuniziert werden, dass Seenotrettung nicht wie bis anhin kriminalisiert wird. Im",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": 68,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.23.1rc1.dev1029+ga601a9d99-2d880180",
+    "usage": {
+      "prompt_tokens": 1592,
+      "total_tokens": 1665,
+      "completion_tokens": 73,
+      "prompt_tokens_details": {
+        "cached_tokens": 1568,
+        "multimodal_tokens": {
+          "image": 1429
+        }
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "metrics": null
+  }
+}
