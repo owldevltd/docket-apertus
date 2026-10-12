@@ -1,0 +1,1167 @@
+run,document,call,kind,ms,status,tokens_in,tokens_out
+pace before,aargau-scan,1,read,963,200,1028,36
+pace before,aargau-scan,2,read,1516,200,2066,94
+pace before,aargau-scan,3,read,1338,200,1750,82
+pace before,aargau-scan,4,read,4236,200,3014,244
+pace before,aargau-scan,5,read,2851,200,2461,161
+pace before,aargau-scan,6,read,868,200,795,29
+pace before,aargau-scan,7,read,877,200,532,12
+pace before,aargau-scan,8,read,1344,200,1116,77
+pace before,aargau-scan,9,read,1198,200,720,49
+pace before,aargau-scan,10,read,1043,200,720,42
+pace before,aargau-scan,11,read,2999,200,1827,199
+pace before,aargau-scan,12,read,1858,200,1274,101
+pace before,aargau-scan,13,read,950,200,720,44
+pace before,aargau-scan,14,sort,635,200,995,33
+pace before,aargau-scan,15,fields,796,200,1100,82
+pace before,aargau-scan,16,fields,725,200,1125,63
+pace before,aargau-scan,17,fields,1367,200,1168,167
+pace before,aargau-scan,18,fields,1004,200,1042,117
+pace before,ayent-6082,1,sort,517,200,1117,12
+pace before,ayent-6082,2,fields,1084,200,1232,112
+pace before,ayent-6082,3,fields,629,200,1208,54
+pace before,ayent-6082,4,fields,1394,200,3361,139
+pace before,ayent-6082,5,fields,1002,200,3172,105
+pace before,basel-137584,1,sort,411,200,1500,6
+pace before,basel-137584,2,fields,1019,200,1575,112
+pace before,basel-137584,3,fields,998,200,1600,100
+pace before,basel-137584,4,fields,948,200,1643,91
+pace before,basel-137584,5,fields,850,200,1517,79
+pace before,basel-137584,6,fields,451,200,1487,17
+pace before,de-110125-290923,1,read,973,200,1650,38
+pace before,de-110125-290923,2,read,901,200,1934,59
+pace before,de-110125-290923,3,read,1853,200,2777,150
+pace before,de-110125-290923,4,read,763,200,1592,36
+pace before,de-110125-290923,5,read,1161,200,2303,76
+pace before,de-110125-290923,6,read,598,200,1866,18
+pace before,de-110125-290923,7,read,625,200,1847,27
+pace before,de-110125-290923,8,read,443,200,445,17
+pace before,de-110125-290923,9,read,383,200,444,5
+pace before,de-110125-290923,10,read,566,200,768,21
+pace before,de-110125-290923,11,read,619,200,824,36
+pace before,de-110125-290923,12,read,1297,200,1274,97
+pace before,de-110125-290923,13,read,838,200,958,44
+pace before,de-110125-290923,14,read,727,200,799,36
+pace before,de-110125-290923,15,read,795,200,878,35
+pace before,de-110125-290923,16,read,578,200,568,10
+pace before,de-110125-290923,17,sort,473,200,695,22
+pace before,de-110125-290923,18,fields,789,200,803,78
+pace before,de-110125-290923,19,fields,623,200,779,51
+pace before,de-110125-290923,20,fields,494,200,663,16
+pace before,de-110125-290923,21,fields,735,200,871,69
+pace before,de-110125-290923,22,fields,927,200,677,100
+pace before,de-131265-201856,1,sort,565,200,964,30
+pace before,de-131265-201856,2,fields,1211,200,1054,150
+pace before,de-131265-201856,3,fields,666,200,1079,59
+pace before,de-131265-201856,4,fields,809,200,914,85
+pace before,de-131265-201856,5,fields,1112,200,1122,134
+pace before,de-131265-201856,6,fields,882,200,928,100
+pace before,de-131744-91472,1,sort,705,200,730,49
+pace before,de-131744-91472,2,fields,916,200,810,95
+pace before,de-131744-91472,3,fields,655,200,786,48
+pace before,de-131744-91472,4,fields,603,200,878,45
+pace before,de-131744-91472,5,fields,973,200,684,106
+pace before,de-14682-127632,1,sort,869,200,1072,44
+pace before,de-14682-127632,2,fields,818,200,1159,86
+pace before,de-14682-127632,3,fields,533,200,1135,35
+pace before,de-14682-127632,4,fields,907,200,1950,82
+pace before,de-14682-127632,5,fields,1048,200,1824,119
+pace before,de-14682-127632,6,fields,593,200,1794,42
+pace before,de-166516-512909,1,sort,452,200,1000,11
+pace before,de-166516-512909,2,fields,1648,200,1087,139
+pace before,de-166516-512909,3,fields,1391,200,1063,52
+pace before,de-166516-512909,4,fields,1405,200,1155,173
+pace before,de-166516-512909,5,fields,1494,200,961,161
+pace before,de-172362-374214,1,sort,2052,200,1188,30
+pace before,de-172362-374214,2,sort,622,200,1177,20
+pace before,de-172362-374214,3,fields,1013,200,1298,93
+pace before,de-172362-374214,4,fields,1358,200,1274,50
+pace before,de-172362-374214,5,fields,2077,200,3362,143
+pace before,de-172362-374214,6,fields,1340,200,3168,120
+pace before,de-199704-450858,1,sort,979,200,943,50
+pace before,de-199704-450858,2,fields,1873,200,1046,98
+pace before,de-199704-450858,3,fields,1364,200,1071,61
+pace before,de-199704-450858,4,fields,1735,200,5247,115
+pace before,de-199704-450858,5,fields,1165,200,5121,84
+pace before,de-199704-450858,6,fields,1321,200,5091,44
+pace before,de-2163-529377,1,sort,1600,200,820,27
+pace before,de-2163-529377,2,sort,1627,200,820,29
+pace before,de-2163-529377,3,sort,1219,200,821,31
+pace before,de-2163-529377,4,fields,3348,200,973,114
+pace before,de-2163-529377,5,fields,1488,200,949,54
+pace before,de-2163-529377,6,fields,1154,200,1745,79
+pace before,de-2163-529377,7,fields,2093,200,1551,154
+pace before,de-275893-373913,1,fields,1478,200,926,148
+pace before,de-275893-373913,2,fields,756,200,902,58
+pace before,de-275893-373913,3,fields,1328,200,994,94
+pace before,de-275893-373913,4,fields,3664,200,868,121
+pace before,de-275893-373913,5,fields,26838,200,838,40
+pace before,de-334368-898761,1,sort,2556,200,708,49
+pace before,de-334368-898761,2,sort,5960,200,707,35
+pace before,de-334368-898761,3,sort,1865,200,707,36
+pace before,de-334368-898761,4,sort,1025,200,694,14
+pace before,de-334368-898761,5,fields,2408,200,860,138
+pace before,de-334368-898761,6,fields,1078,200,836,50
+pace before,de-334368-898761,7,fields,865,200,742,9
+pace before,de-334368-898761,8,fields,1441,200,1483,84
+pace before,de-334368-898761,9,fields,1931,200,1289,124
+pace before,de-4580-331243,1,sort,560,200,1067,21
+pace before,de-4580-331243,2,fields,1175,200,1198,69
+pace before,de-4580-331243,3,fields,1174,200,1174,50
+pace before,de-4580-331243,4,fields,1758,200,3278,171
+pace before,de-4580-331243,5,fields,2434,200,3152,133
+pace before,de-62937-162381,1,sort,513,200,1202,26
+pace before,de-62937-162381,2,fields,848,200,1300,85
+pace before,de-62937-162381,3,fields,631,200,1276,53
+pace before,de-62937-162381,4,fields,1195,200,2784,120
+pace before,de-62937-162381,5,fields,1131,200,2658,125
+pace before,de-78822-371819,1,sort,1214,200,1273,133
+pace before,de-78822-371819,2,fields,1036,200,1359,107
+pace before,de-78822-371819,3,fields,1099,200,1364,53
+pace before,de-78822-371819,4,fields,493,200,1239,14
+pace before,de-78822-371819,5,fields,1781,200,3563,216
+pace before,de-78822-371819,6,fields,1176,200,3369,120
+pace before,de-82138-108661,1,sort,576,200,880,14
+pace before,de-82138-108661,2,fields,890,200,969,90
+pace before,de-82138-108661,3,fields,783,200,945,66
+pace before,de-82138-108661,4,fields,2015,200,7988,219
+pace before,de-82138-108661,5,fields,1850,200,7794,191
+pace before,de-95143-62994,1,sort,509,200,984,23
+pace before,de-95143-62994,2,fields,924,200,1079,98
+pace before,de-95143-62994,3,fields,702,200,1084,62
+pace before,de-95143-62994,4,fields,417,200,952,10
+pace before,de-95143-62994,5,fields,981,200,1147,81
+pace before,de-95143-62994,6,fields,926,200,953,96
+pace before,fr-128335-248323,1,sort,621,200,992,30
+pace before,fr-128335-248323,2,sort,641,200,993,31
+pace before,fr-128335-248323,3,sort,960,200,981,86
+pace before,fr-128335-248323,4,fields,1080,200,1141,106
+pace before,fr-128335-248323,5,fields,1552,200,1166,73
+pace before,fr-128335-248323,6,fields,4113,200,2415,123
+pace before,fr-128335-248323,7,fields,1515,200,2226,174
+pace before,fr-179784-45379,1,sort,385,200,831,6
+pace before,fr-179784-45379,2,fields,592,200,931,41
+pace before,fr-179784-45379,3,fields,598,200,907,46
+pace before,fr-179784-45379,4,fields,873,200,1598,67
+pace before,fr-179784-45379,5,fields,1238,200,1409,113
+pace before,fr-224002-553774,1,sort,694,200,1166,18
+pace before,fr-224002-553774,2,fields,1409,200,1276,101
+pace before,fr-224002-553774,3,fields,923,200,1252,58
+pace before,fr-224002-553774,4,fields,3227,200,3844,400
+pace before,fr-224002-553774,5,fields,2296,200,3655,125
+pace before,fr-224002-553774,6,fields,1420,200,3815,105
+pace before,fr-225722-478813,1,sort,450,200,1028,16
+pace before,fr-225722-478813,2,fields,1007,200,1122,96
+pace before,fr-225722-478813,3,fields,785,200,1098,53
+pace before,fr-225722-478813,4,fields,2074,200,3328,190
+pace before,fr-225722-478813,5,fields,2800,200,3139,207
+pace before,fr-236892-502080,1,sort,714,200,1132,21
+pace before,fr-236892-502080,2,fields,761,200,1216,73
+pace before,fr-236892-502080,3,fields,764,200,1192,55
+pace before,fr-236892-502080,4,fields,718,200,1166,40
+pace before,fr-236892-502080,5,fields,1891,200,4618,82
+pace before,fr-236892-502080,6,fields,1992,200,4429,141
+pace before,fr-237543-503547,1,sort,416,200,1045,12
+pace before,fr-237543-503547,2,fields,1120,200,1136,102
+pace before,fr-237543-503547,3,fields,1175,200,1112,56
+pace before,fr-237543-503547,4,fields,1771,200,4419,106
+pace before,fr-237543-503547,5,fields,10051,200,4230,116
+pace before,fr-253931-575744,1,read,2514,200,2145,23
+pace before,fr-253931-575744,2,read,1043,200,2303,36
+pace before,fr-253931-575744,3,sort,540,200,868,14
+pace before,fr-253931-575744,4,fields,892,200,966,50
+pace before,fr-253931-575744,5,fields,726,200,942,51
+pace before,fr-253931-575744,6,fields,1332,200,1129,124
+pace before,fr-253931-575744,7,fields,2896,200,940,400
+pace before,fr-282668-655129,1,sort,499,200,509,20
+pace before,fr-282668-655129,2,fields,792,200,604,41
+pace before,fr-282668-655129,3,fields,702,200,580,52
+pace before,fr-282668-655129,4,fields,495,200,464,26
+pace before,fr-282668-655129,5,fields,882,200,672,71
+pace before,fr-282668-655129,6,fields,989,200,483,98
+pace before,fr-30121-397925,1,sort,615,200,745,6
+pace before,fr-30121-397925,2,fields,1535,200,827,139
+pace before,fr-30121-397925,3,fields,966,200,803,57
+pace before,fr-30121-397925,4,fields,1138,200,2750,55
+pace before,fr-30121-397925,5,fields,874,200,2561,77
+pace before,fr-31556-298816,1,sort,417,200,1000,5
+pace before,fr-31556-298816,2,fields,1771,200,1104,163
+pace before,fr-31556-298816,3,fields,2749,200,1080,108
+pace before,fr-31556-298816,4,fields,2977,200,1410,116
+pace before,fr-31556-298816,5,fields,4058,200,1221,79
+pace before,fr-31835-192707,1,sort,705,200,894,20
+pace before,fr-31835-192707,2,fields,2136,200,1003,119
+pace before,fr-31835-192707,3,fields,987,200,979,102
+pace before,fr-31835-192707,4,fields,2269,200,1071,131
+pace before,fr-31835-192707,5,fields,2180,200,882,129
+pace before,fr-326866-907975,1,sort,782,200,562,34
+pace before,fr-326866-907975,2,fields,1259,200,638,155
+pace before,fr-326866-907975,3,fields,754,200,614,65
+pace before,fr-326866-907975,4,fields,3315,200,20391,173
+pace before,fr-326866-907975,5,fields,1683,200,20270,148
+pace before,fr-328369-868791,1,read,2165,200,1613,32
+pace before,fr-328369-868791,2,read,2166,200,1185,33
+pace before,fr-328369-868791,3,read,4867,200,3649,49
+pace before,fr-328369-868791,4,read,1755,200,1391,26
+pace before,fr-328369-868791,5,read,1157,200,1654,38
+pace before,fr-328369-868791,6,read,1920,200,1276,25
+pace before,fr-328369-868791,7,read,2093,200,1987,29
+pace before,fr-328369-868791,8,read,5539,200,2935,244
+pace before,fr-328369-868791,9,read,2079,200,1650,18
+pace before,fr-328369-868791,10,read,1814,200,2466,43
+pace before,fr-328369-868791,11,read,1673,200,896,20
+pace before,fr-328369-868791,12,read,2675,200,728,11
+pace before,fr-328369-868791,13,read,2526,200,1752,34
+pace before,fr-328369-868791,14,read,1975,200,483,21
+pace before,fr-328369-868791,15,read,4836,200,1906,202
+pace before,fr-328369-868791,16,read,2430,200,641,32
+pace before,fr-328369-868791,17,read,1953,200,1118,10
+pace before,fr-328369-868791,18,read,2940,200,536,23
+pace before,fr-328369-868791,19,read,660,200,441,6
+pace before,fr-328369-868791,20,sort,516,200,814,31
+pace before,fr-328369-868791,21,sort,1724,200,811,79
+pace before,fr-328369-868791,22,sort,384,200,789,11
+pace before,fr-328369-868791,23,fields,1207,200,989,47
+pace before,fr-328369-868791,24,fields,905,200,965,77
+pace before,fr-328369-868791,25,fields,615,200,865,17
+pace before,fr-328369-868791,26,fields,919,200,1057,69
+pace before,fr-328369-868791,27,fields,3083,200,868,381
+pace before,fr-328369-868791,28,fields,976,200,866,20
+pace before,fr-340437-926736,1,sort,612,200,769,32
+pace before,fr-340437-926736,2,sort,665,200,749,5
+pace before,fr-340437-926736,3,fields,3243,200,850,73
+pace before,fr-340437-926736,4,fields,670,200,826,64
+pace before,fr-340437-926736,5,fields,967,200,710,20
+pace before,fr-340437-926736,6,fields,3229,200,918,76
+pace before,fr-340437-926736,7,fields,1412,200,729,102
+pace before,fr-37923-301094,1,sort,634,200,911,30
+pace before,fr-37923-301094,2,sort,1330,200,910,29
+pace before,fr-37923-301094,3,fields,1434,200,1056,108
+pace before,fr-37923-301094,4,fields,1244,200,1081,80
+pace before,fr-37923-301094,5,fields,855,200,1544,67
+pace before,fr-37923-301094,6,fields,1403,200,1355,116
+pace before,fr-86323-319646,1,sort,445,200,898,11
+pace before,fr-86323-319646,2,fields,632,200,1015,50
+pace before,fr-86323-319646,3,fields,728,200,991,59
+pace before,fr-86323-319646,4,fields,1347,200,1083,51
+pace before,fr-86323-319646,5,fields,948,200,894,100
+pace before,fr-87718-275965,1,sort,499,200,1105,27
+pace before,fr-87718-275965,2,sort,487,200,1099,22
+pace before,fr-87718-275965,3,fields,2899,200,1230,89
+pace before,fr-87718-275965,4,fields,791,200,1255,78
+pace before,fr-87718-275965,5,fields,1567,200,1090,17
+pace before,fr-87718-275965,6,fields,1016,200,1411,62
+pace before,fr-87718-275965,7,fields,1741,200,1290,114
+pace before,fr-89308-589769,1,sort,372,200,934,6
+pace before,fr-89308-589769,2,fields,2012,200,1035,74
+pace before,fr-89308-589769,3,fields,1847,200,1011,50
+pace before,fr-89308-589769,4,fields,460,200,895,22
+pace before,fr-89308-589769,5,fields,2562,200,1103,180
+pace before,fr-89308-589769,6,fields,2813,200,914,129
+pace before,it-118195-18739,1,read,510,200,1070,17
+pace before,it-118195-18739,2,read,1178,200,3404,76
+pace before,it-118195-18739,3,read,2382,200,1908,100
+pace before,it-118195-18739,4,read,2035,200,1908,81
+pace before,it-118195-18739,5,read,1585,200,2303,125
+pace before,it-118195-18739,6,read,2381,200,1592,73
+pace before,it-118195-18739,7,read,1907,200,1513,47
+pace before,it-118195-18739,8,read,774,200,1568,33
+pace before,it-118195-18739,9,read,1880,200,905,21
+pace before,it-118195-18739,10,read,1038,200,878,69
+pace before,it-118195-18739,11,read,2877,200,1037,54
+pace before,it-118195-18739,12,read,2218,200,799,44
+pace before,it-118195-18739,13,read,1103,200,1037,67
+pace before,it-118195-18739,14,read,740,200,1355,36
+pace before,it-118195-18739,15,read,2263,200,2066,113
+pace before,it-118195-18739,16,read,2998,200,2066,118
+pace before,it-118195-18739,17,read,777,200,1355,41
+pace before,it-118195-18739,18,read,2624,200,2540,133
+pace before,it-118195-18739,19,read,2123,200,1750,57
+pace before,it-118195-18739,20,read,884,200,1592,46
+pace before,it-118195-18739,21,read,1850,200,1671,79
+pace before,it-118195-18739,22,read,1102,200,1472,28
+pace before,it-118195-18739,23,read,1024,200,1037,63
+pace before,it-118195-18739,24,read,2789,200,1037,72
+pace before,it-118195-18739,25,read,2371,200,1511,104
+pace before,it-118195-18739,26,read,730,200,799,37
+pace before,it-118195-18739,27,read,1335,200,872,13
+pace before,it-118195-18739,28,sort,509,200,792,24
+pace before,it-118195-18739,29,fields,761,200,887,37
+pace before,it-118195-18739,30,fields,715,200,863,51
+pace before,it-118195-18739,31,fields,600,200,783,16
+pace before,it-118195-18739,32,fields,1519,200,1653,73
+pace before,it-118195-18739,33,fields,1993,200,1464,153
+pace before,it-118360-78714,1,read,1996,200,2620,68
+pace before,it-118360-78714,2,read,1566,200,1829,74
+pace before,it-118360-78714,3,read,6924,200,4199,345
+pace before,it-118360-78714,4,read,619,200,723,20
+pace before,it-118360-78714,5,read,1891,200,1268,31
+pace before,it-118360-78714,6,read,904,200,720,39
+pace before,it-118360-78714,7,read,1391,200,674,21
+pace before,it-118360-78714,8,read,4205,200,3012,312
+pace before,it-118360-78714,9,read,1295,200,1908,92
+pace before,it-118360-78714,10,read,1837,200,1829,95
+pace before,it-118360-78714,11,read,894,200,2619,18
+pace before,it-118360-78714,12,read,2250,200,434,7
+pace before,it-118360-78714,13,read,1672,200,720,42
+pace before,it-118360-78714,14,read,912,200,720,40
+pace before,it-118360-78714,15,read,1157,200,720,53
+pace before,it-118360-78714,16,read,704,200,720,33
+pace before,it-118360-78714,17,sort,1848,200,814,20
+pace before,it-118360-78714,18,fields,1597,200,899,78
+pace before,it-118360-78714,19,fields,776,200,875,56
+pace before,it-118360-78714,20,fields,1020,200,759,12
+pace before,it-118360-78714,21,fields,629,200,1207,41
+pace before,it-118360-78714,22,fields,1957,200,1018,119
+pace before,it-173454-325515,1,sort,1119,200,1091,56
+pace before,it-173454-325515,2,sort,639,200,1068,7
+pace before,it-173454-325515,3,fields,2948,200,1224,84
+pace before,it-173454-325515,4,fields,1919,200,1200,60
+pace before,it-173454-325515,5,fields,762,200,1120,56
+pace before,it-173454-325515,6,fields,2091,200,2193,114
+pace before,it-173454-325515,7,fields,1174,200,2004,132
+pace before,it-174286-110491,1,sort,500,200,1284,11
+pace before,it-174286-110491,2,fields,929,200,1373,89
+pace before,it-174286-110491,3,fields,1612,200,1349,50
+pace before,it-174286-110491,4,fields,1728,200,2007,161
+pace before,it-174286-110491,5,fields,1292,200,1818,155
+pace before,it-174487-51010,1,sort,660,200,945,31
+pace before,it-174487-51010,2,fields,754,200,1056,58
+pace before,it-174487-51010,3,fields,1044,200,1032,42
+pace before,it-174487-51010,4,fields,754,200,1036,56
+pace before,it-174487-51010,5,fields,1955,200,3705,126
+pace before,it-174487-51010,6,fields,1884,200,3516,119
+pace before,it-174809-110384,1,sort,809,200,1214,18
+pace before,it-174809-110384,2,fields,1522,200,1314,95
+pace before,it-174809-110384,3,fields,905,200,1290,53
+pace before,it-174809-110384,4,fields,384,200,1184,10
+pace before,it-174809-110384,5,fields,3358,200,4370,297
+pace before,it-174809-110384,6,fields,1490,200,4181,121
+pace before,it-175541-50790,1,sort,504,200,1410,16
+pace before,it-175541-50790,2,fields,877,200,1492,75
+pace before,it-175541-50790,3,fields,666,200,1468,32
+pace before,it-175541-50790,4,fields,962,200,1362,10
+pace before,it-175541-50790,5,fields,1367,200,3833,113
+pace before,it-175541-50790,6,fields,1897,200,3644,169
+pace before,it-202255-912958,1,sort,491,200,1185,16
+pace before,it-202255-912958,2,fields,2222,200,1277,234
+pace before,it-202255-912958,3,fields,1806,200,1253,201
+pace before,it-202255-912958,4,fields,1637,200,1178,206
+pace before,it-202255-912958,5,fields,1810,200,1345,226
+pace before,it-202255-912958,6,fields,941,200,1224,99
+pace before,it-202255-912958,7,fields,1721,200,1189,43
+pace before,it-248229-531089,1,sort,515,200,1070,22
+pace before,it-248229-531089,2,fields,2130,200,1184,86
+pace before,it-248229-531089,3,fields,535,200,1160,35
+pace before,it-248229-531089,4,fields,1366,200,1612,43
+pace before,it-248229-531089,5,fields,959,200,1423,97
+pace before,it-254639-642818,1,sort,1589,200,987,13
+pace before,it-254639-642818,2,fields,1791,200,1069,47
+pace before,it-254639-642818,3,fields,651,200,1094,45
+pace before,it-254639-642818,4,fields,1437,200,929,18
+pace before,it-254639-642818,5,fields,1813,200,5523,199
+pace before,it-254639-642818,6,fields,1784,200,5334,133
+pace before,it-254701-644044,1,read,1242,200,1539,55
+pace before,it-254701-644044,2,read,1551,200,794,33
+pace before,it-254701-644044,3,read,1022,200,1331,37
+pace before,it-254701-644044,4,read,2202,200,2145,47
+pace before,it-254701-644044,5,read,3635,200,1987,125
+pace before,it-254701-644044,6,read,1836,200,1987,125
+pace before,it-254701-644044,7,read,1277,200,2145,69
+pace before,it-254701-644044,8,read,943,200,1262,19
+pace before,it-254701-644044,9,read,599,200,842,21
+pace before,it-254701-644044,10,read,713,200,449,17
+pace before,it-254701-644044,11,read,690,200,549,12
+pace before,it-254701-644044,12,read,819,200,548,31
+pace before,it-254701-644044,13,read,1152,200,878,71
+pace before,it-254701-644044,14,read,880,200,720,47
+pace before,it-254701-644044,15,read,1168,200,878,68
+pace before,it-254701-644044,16,read,1011,200,799,44
+pace before,it-254701-644044,17,read,426,200,441,14
+pace before,it-254701-644044,18,read,1089,200,720,49
+pace before,it-254701-644044,19,read,496,200,453,5
+pace before,it-254701-644044,20,read,776,200,789,7
+pace before,it-254701-644044,21,sort,544,200,807,31
+pace before,it-254701-644044,22,sort,468,200,797,16
+pace before,it-254701-644044,23,fields,821,200,944,73
+pace before,it-254701-644044,24,fields,769,200,920,62
+pace before,it-254701-644044,25,fields,451,200,804,12
+pace before,it-254701-644044,26,fields,692,200,1012,51
+pace before,it-254701-644044,27,fields,996,200,823,111
+pace before,it-255214-644501,1,sort,548,200,627,31
+pace before,it-255214-644501,2,sort,620,200,627,30
+pace before,it-255214-644501,3,sort,524,200,627,29
+pace before,it-255214-644501,4,sort,455,200,605,19
+pace before,it-255214-644501,5,fields,697,200,768,54
+pace before,it-255214-644501,6,fields,766,200,744,71
+pace before,it-255214-644501,7,fields,861,200,836,90
+pace before,it-255214-644501,8,fields,886,200,647,100
+pace before,it-27699-295640,1,sort,612,200,776,33
+pace before,it-27699-295640,2,sort,523,200,768,22
+pace before,it-27699-295640,3,fields,1308,200,880,157
+pace before,it-27699-295640,4,fields,787,200,856,79
+pace before,it-27699-295640,5,fields,1147,200,948,135
+pace before,it-27699-295640,6,fields,1302,200,759,168
+pace before,it-280397-616263,1,sort,719,200,861,31
+pace before,it-280397-616263,2,fields,612,200,965,45
+pace before,it-280397-616263,3,fields,704,200,941,50
+pace before,it-280397-616263,4,fields,398,200,845,12
+pace before,it-280397-616263,5,fields,636,200,1197,49
+pace before,it-280397-616263,6,fields,1100,200,1008,117
+pace before,it-5823-190096,1,read,565,200,854,21
+pace before,it-5823-190096,2,read,1030,200,1272,83
+pace before,it-5823-190096,3,read,806,200,1317,51
+pace before,it-5823-190096,4,read,500,200,521,24
+pace before,it-5823-190096,5,read,668,200,1185,22
+pace before,it-5823-190096,6,read,1281,200,1987,71
+pace before,it-5823-190096,7,read,2601,200,3014,218
+pace before,it-5823-190096,8,read,2110,200,2619,167
+pace before,it-5823-190096,9,read,1768,200,1823,134
+pace before,it-5823-190096,10,read,614,200,444,9
+pace before,it-5823-190096,11,read,957,200,738,60
+pace before,it-5823-190096,12,read,652,200,776,30
+pace before,it-5823-190096,13,read,651,200,768,18
+pace before,it-5823-190096,14,read,945,200,720,41
+pace before,it-5823-190096,15,read,1832,200,1669,162
+pace before,it-5823-190096,16,read,1147,200,878,40
+pace before,it-5823-190096,17,read,508,200,586,21
+pace before,it-5823-190096,18,read,1547,200,1274,112
+pace before,it-5823-190096,19,read,1081,200,720,59
+pace before,it-5823-190096,20,read,1739,200,1669,134
+pace before,it-5823-190096,21,read,4347,200,5305,299
+pace before,it-5823-190096,22,read,773,200,1370,28
+pace before,it-5823-190096,23,read,3287,200,2775,270
+pace before,it-5823-190096,24,read,1057,200,3017,39
+pace before,it-5823-190096,25,read,414,200,434,5
+pace before,it-5823-190096,26,read,551,200,819,16
+pace before,it-5823-190096,27,read,564,200,439,17
+pace before,it-5823-190096,28,read,847,200,1687,50
+pace before,it-5823-190096,29,read,807,200,1539,50
+pace before,it-5823-190096,30,read,1000,200,2058,54
+pace before,it-5823-190096,31,read,3500,200,3409,247
+pace before,it-5823-190096,32,read,1058,200,1592,67
+pace before,it-5823-190096,33,read,662,200,798,34
+pace before,it-5823-190096,34,read,563,200,798,21
+pace before,it-5823-190096,35,read,672,200,795,27
+pace before,it-5823-190096,36,read,1098,200,958,65
+pace before,it-5823-190096,37,read,1257,200,1195,83
+pace before,it-5823-190096,38,read,1317,200,1353,97
+pace before,it-5823-190096,39,read,986,200,958,61
+pace before,it-5823-190096,40,read,487,200,448,17
+pace before,it-5823-190096,41,read,1786,200,2619,136
+pace before,it-5823-190096,42,read,1493,200,2066,102
+pace before,it-5823-190096,43,read,1815,200,2461,134
+pace before,it-5823-190096,44,read,1112,200,3330,40
+pace before,it-5823-190096,45,read,451,200,444,7
+pace before,it-5823-190096,46,read,1540,200,1511,119
+pace before,it-5823-190096,47,read,1219,200,1116,91
+pace before,it-5823-190096,48,read,1389,200,1353,110
+pace before,it-5823-190096,49,read,737,200,1037,25
+pace before,it-5823-190096,50,sort,543,200,1119,30
+pace before,it-5823-190096,51,sort,461,200,1110,15
+pace before,it-5823-190096,52,fields,900,200,1251,73
+pace before,it-5823-190096,53,fields,869,200,1227,84
+pace before,it-5823-190096,54,fields,377,200,1131,11
+pace before,it-5823-190096,55,fields,1329,200,3419,133
+pace before,it-5823-190096,56,fields,1407,200,3230,164
+pace before,it-75994-103692,1,sort,553,200,855,30
+pace before,it-75994-103692,2,sort,564,200,853,33
+pace before,it-75994-103692,3,fields,843,200,984,83
+pace before,it-75994-103692,4,fields,586,200,960,37
+pace before,it-75994-103692,5,fields,432,200,849,14
+pace before,it-75994-103692,6,fields,958,200,1692,93
+pace before,it-75994-103692,7,fields,1169,200,1503,135
+pace before,it-84656-221236,1,read,586,200,449,17
+pace before,it-84656-221236,2,read,502,200,737,19
+pace before,it-84656-221236,3,read,607,200,953,30
+pace before,it-84656-221236,4,read,1130,200,1578,93
+pace before,it-84656-221236,5,read,1971,200,3172,150
+pace before,it-84656-221236,6,read,498,200,837,18
+pace before,it-84656-221236,7,read,1584,200,2066,131
+pace before,it-84656-221236,8,read,3714,200,3646,348
+pace before,it-84656-221236,9,read,682,200,918,23
+pace before,it-84656-221236,10,read,406,200,440,8
+pace before,it-84656-221236,11,read,467,200,421,12
+pace before,it-84656-221236,12,read,937,200,828,76
+pace before,it-84656-221236,13,read,543,200,498,11
+pace before,it-84656-221236,14,read,563,200,843,16
+pace before,it-84656-221236,15,read,1522,200,1748,125
+pace before,it-84656-221236,16,read,728,200,720,37
+pace before,it-84656-221236,17,read,1197,200,1037,92
+pace before,it-84656-221236,18,read,3535,200,2775,324
+pace before,it-84656-221236,19,read,1136,200,1925,31
+pace before,it-84656-221236,20,read,2271,200,2619,208
+pace before,it-84656-221236,21,read,746,200,2020,30
+pace before,it-84656-221236,22,read,2252,200,2698,212
+pace before,it-84656-221236,23,read,882,200,2354,42
+pace before,it-84656-221236,24,read,1815,200,2382,162
+pace before,it-84656-221236,25,read,1482,200,1987,112
+pace before,it-84656-221236,26,read,538,200,508,11
+pace before,it-84656-221236,27,read,1246,200,1037,86
+pace before,it-84656-221236,28,read,1593,200,1274,119
+pace before,it-84656-221236,29,read,1937,200,1748,173
+pace before,it-84656-221236,30,read,1254,200,1195,100
+pace before,it-84656-221236,31,read,823,200,720,44
+pace before,it-84656-221236,32,read,1141,200,1037,91
+pace before,it-84656-221236,33,read,1338,200,1908,98
+pace before,it-84656-221236,34,read,1050,200,1829,57
+pace before,it-84656-221236,35,read,1290,200,1908,94
+pace before,it-84656-221236,36,read,1854,200,2303,180
+pace before,it-84656-221236,37,read,4415,200,4515,415
+pace before,it-84656-221236,38,read,490,200,448,17
+pace before,it-84656-221236,39,read,534,200,521,18
+pace before,it-84656-221236,40,read,409,200,446,11
+pace before,it-84656-221236,41,read,1144,200,1037,86
+pace before,it-84656-221236,42,read,1131,200,1037,82
+pace before,it-84656-221236,43,read,1648,200,1353,155
+pace before,it-84656-221236,44,read,4183,200,3565,400
+pace before,it-84656-221236,45,read,972,200,1829,49
+pace before,it-84656-221236,46,read,1417,200,1987,115
+pace before,it-84656-221236,47,read,1439,200,1908,109
+pace before,it-84656-221236,48,read,2069,200,2224,170
+pace before,it-84656-221236,49,read,4113,200,4357,379
+pace before,it-84656-221236,50,read,1158,200,1987,68
+pace before,it-84656-221236,51,read,385,200,430,5
+pace before,it-84656-221236,52,read,1112,200,1037,85
+pace before,it-84656-221236,53,read,1152,200,1037,88
+pace before,it-84656-221236,54,read,2803,200,1353,159
+pace before,it-84656-221236,55,read,3882,200,3407,362
+pace before,it-84656-221236,56,read,785,200,720,55
+pace before,it-84656-221236,57,read,878,200,1513,46
+pace before,it-84656-221236,58,read,1132,200,3172,47
+pace before,it-84656-221236,59,read,1009,200,1457,21
+pace before,it-84656-221236,60,read,428,200,448,17
+pace before,it-84656-221236,61,read,627,200,1418,29
+pace before,it-84656-221236,62,read,598,200,646,17
+pace before,it-84656-221236,63,read,686,200,720,33
+pace before,it-84656-221236,64,read,693,200,789,11
+pace before,it-84656-221236,65,sort,628,200,1177,30
+pace before,it-84656-221236,66,fields,1071,200,1305,95
+pace before,it-84656-221236,67,fields,888,200,1281,65
+pace before,it-84656-221236,68,fields,1077,200,4751,78
+pace before,it-84656-221236,69,fields,1289,200,4562,136
+pace before,it-84656-221236,70,fields,1024,200,4722,71
+pace before,it-85780-50878,1,sort,498,200,747,16
+pace before,it-85780-50878,2,fields,859,200,828,85
+pace before,it-85780-50878,3,fields,685,200,804,57
+pace before,it-85780-50878,4,fields,436,200,714,19
+pace before,it-85780-50878,5,fields,926,200,896,99
+pace before,it-85780-50878,6,fields,967,200,707,100
+pace before,it-85889-221277,1,sort,609,200,1154,27
+pace before,it-85889-221277,2,fields,746,200,1253,57
+pace before,it-85889-221277,3,fields,714,200,1229,49
+pace before,it-85889-221277,4,fields,992,200,1233,69
+pace before,it-85889-221277,5,fields,1159,200,5800,93
+pace before,it-85889-221277,6,fields,1315,200,5611,140
+pace before,lugano-5192,1,sort,522,200,746,22
+pace before,lugano-5192,2,fields,623,200,825,46
+pace before,lugano-5192,3,fields,760,200,801,60
+pace before,lugano-5192,4,fields,427,200,685,16
+pace before,lugano-5192,5,fields,2223,200,1804,304
+pace before,lugano-5192,6,fields,1235,200,1615,150
+pace before,neuchatel-grand-conseil,1,sort,415,200,811,15
+pace before,neuchatel-grand-conseil,2,fields,809,200,901,82
+pace before,neuchatel-grand-conseil,3,fields,637,200,877,51
+pace before,neuchatel-grand-conseil,4,fields,659,200,969,34
+pace before,neuchatel-grand-conseil,5,fields,1073,200,780,107
+pace before,nidau-m185,1,sort,582,200,1007,33
+pace before,nidau-m185,2,fields,847,200,1096,75
+pace before,nidau-m185,3,fields,776,200,1101,59
+pace before,nidau-m185,4,fields,422,200,969,13
+pace before,nidau-m185,5,fields,1097,200,1715,121
+pace before,nidau-m185,6,fields,1067,200,1521,103
+pace before,wettingen-115631,1,sort,476,200,1094,15
+pace before,wettingen-115631,2,fields,951,200,1189,77
+pace before,wettingen-115631,3,fields,631,200,1165,50
+pace before,wettingen-115631,4,fields,1057,200,1617,113
+pace before,wettingen-115631,5,fields,1116,200,1423,118
+pace before,zuerich-219587,1,sort,472,200,1039,23
+pace before,zuerich-219587,2,fields,1066,200,1149,123
+pace before,zuerich-219587,3,fields,855,200,1154,81
+pace before,zuerich-219587,4,fields,459,200,1042,12
+pace before,zuerich-219587,5,fields,407,200,1022,14
+pace before,zuerich-219587,6,fields,853,200,1217,90
+pace before,zuerich-219587,7,fields,1124,200,1091,136
+pace as built,aargau-scan,1,read,992,200,1028,36
+pace as built,aargau-scan,2,read,1589,200,2066,94
+pace as built,aargau-scan,3,read,1365,200,1750,82
+pace as built,aargau-scan,4,read,4099,200,3014,244
+pace as built,aargau-scan,5,read,2876,200,2461,161
+pace as built,aargau-scan,6,read,771,200,795,29
+pace as built,aargau-scan,7,read,719,200,532,12
+pace as built,aargau-scan,8,read,1348,200,1116,77
+pace as built,aargau-scan,9,read,984,200,720,49
+pace as built,aargau-scan,10,read,958,200,720,42
+pace as built,aargau-scan,11,read,3938,200,1827,198
+pace as built,aargau-scan,12,read,1751,200,1274,101
+pace as built,aargau-scan,13,read,893,200,720,44
+pace as built,aargau-scan,14,sort,563,200,994,33
+pace as built,aargau-scan,15,fields,889,200,1099,82
+pace as built,aargau-scan,16,fields,708,200,1124,63
+pace as built,aargau-scan,17,fields,1341,200,1167,166
+pace as built,aargau-scan,18,fields,1029,200,1041,116
+pace as built,ayent-6082,1,sort,532,200,1117,12
+pace as built,ayent-6082,2,fields,1000,200,1232,109
+pace as built,ayent-6082,3,fields,634,200,1208,54
+pace as built,ayent-6082,4,fields,1313,200,3361,139
+pace as built,ayent-6082,5,fields,1150,200,3172,118
+pace as built,basel-137584,1,sort,428,200,1500,6
+pace as built,basel-137584,2,fields,1030,200,1575,112
+pace as built,basel-137584,3,fields,1003,200,1600,100
+pace as built,basel-137584,4,fields,943,200,1643,107
+pace as built,basel-137584,5,fields,763,200,1517,79
+pace as built,basel-137584,6,fields,414,200,1487,17
+pace as built,de-110125-290923,1,read,892,200,1650,38
+pace as built,de-110125-290923,2,read,905,200,1934,59
+pace as built,de-110125-290923,3,read,1830,200,2777,150
+pace as built,de-110125-290923,4,read,743,200,1592,36
+pace as built,de-110125-290923,5,read,1133,200,2303,76
+pace as built,de-110125-290923,6,read,587,200,1866,18
+pace as built,de-110125-290923,7,read,627,200,1847,27
+pace as built,de-110125-290923,8,read,444,200,445,17
+pace as built,de-110125-290923,9,read,385,200,444,5
+pace as built,de-110125-290923,10,read,496,200,768,21
+pace as built,de-110125-290923,11,read,583,200,824,36
+pace as built,de-110125-290923,12,read,1240,200,1274,97
+pace as built,de-110125-290923,13,read,814,200,958,44
+pace as built,de-110125-290923,14,read,747,200,799,36
+pace as built,de-110125-290923,15,read,752,200,878,35
+pace as built,de-110125-290923,16,read,433,200,568,10
+pace as built,de-110125-290923,17,sort,450,200,695,22
+pace as built,de-110125-290923,18,fields,790,200,803,78
+pace as built,de-110125-290923,19,fields,621,200,779,51
+pace as built,de-110125-290923,20,fields,420,200,663,16
+pace as built,de-110125-290923,21,fields,611,200,871,49
+pace as built,de-110125-290923,22,fields,919,200,677,100
+pace as built,de-131265-201856,1,sort,520,200,964,30
+pace as built,de-131265-201856,2,fields,1229,200,1054,150
+pace as built,de-131265-201856,3,fields,666,200,1079,59
+pace as built,de-131265-201856,4,fields,790,200,914,85
+pace as built,de-131265-201856,5,fields,1055,200,1122,122
+pace as built,de-131265-201856,6,fields,922,200,928,100
+pace as built,de-131744-91472,1,sort,626,200,730,49
+pace as built,de-131744-91472,2,fields,870,200,810,95
+pace as built,de-131744-91472,3,fields,695,200,786,48
+pace as built,de-131744-91472,4,fields,594,200,878,45
+pace as built,de-131744-91472,5,fields,939,200,684,105
+pace as built,de-14682-127632,1,sort,583,200,1072,44
+pace as built,de-14682-127632,2,fields,881,200,1159,86
+pace as built,de-14682-127632,3,fields,541,200,1135,35
+pace as built,de-14682-127632,4,fields,878,200,1950,78
+pace as built,de-14682-127632,5,fields,911,200,1824,83
+pace as built,de-14682-127632,6,fields,608,200,1794,42
+pace as built,de-166516-512909,1,sort,403,200,1000,11
+pace as built,de-166516-512909,2,fields,1203,200,1087,147
+pace as built,de-166516-512909,3,fields,645,200,1063,53
+pace as built,de-166516-512909,4,fields,1318,200,1155,160
+pace as built,de-166516-512909,5,fields,1274,200,961,161
+pace as built,de-172362-374214,1,sort,559,200,1188,30
+pace as built,de-172362-374214,2,sort,549,200,1177,20
+pace as built,de-172362-374214,3,fields,892,200,1298,93
+pace as built,de-172362-374214,4,fields,618,200,1274,50
+pace as built,de-172362-374214,5,fields,1568,200,3362,179
+pace as built,de-172362-374214,6,fields,1125,200,3168,120
+pace as built,de-199704-450858,1,sort,647,200,943,50
+pace as built,de-199704-450858,2,fields,939,200,1046,98
+pace as built,de-199704-450858,3,fields,701,200,1071,61
+pace as built,de-199704-450858,4,fields,1282,200,5247,115
+pace as built,de-199704-450858,5,fields,952,200,5121,84
+pace as built,de-199704-450858,6,fields,673,200,5091,41
+pace as built,de-2163-529377,1,sort,532,200,820,27
+pace as built,de-2163-529377,2,sort,491,200,820,29
+pace as built,de-2163-529377,3,sort,506,200,821,31
+pace as built,de-2163-529377,4,fields,1066,200,973,114
+pace as built,de-2163-529377,5,fields,639,200,949,54
+pace as built,de-2163-529377,6,fields,802,200,1745,79
+pace as built,de-2163-529377,7,fields,1208,200,1551,150
+pace as built,de-275893-373913,1,fields,1229,200,926,148
+pace as built,de-275893-373913,2,fields,690,200,902,58
+pace as built,de-275893-373913,3,fields,862,200,994,94
+pace as built,de-275893-373913,4,fields,903,200,868,101
+pace as built,de-275893-373913,5,fields,586,200,811,38
+pace as built,de-334368-898761,1,sort,567,200,708,37
+pace as built,de-334368-898761,2,sort,518,200,707,32
+pace as built,de-334368-898761,3,sort,557,200,707,36
+pace as built,de-334368-898761,4,sort,523,200,694,14
+pace as built,de-334368-898761,5,fields,1136,200,860,138
+pace as built,de-334368-898761,6,fields,624,200,836,50
+pace as built,de-334368-898761,7,fields,381,200,742,9
+pace as built,de-334368-898761,8,fields,1262,200,1483,157
+pace as built,de-334368-898761,9,fields,952,200,1289,108
+pace as built,de-4580-331243,1,sort,468,200,1067,21
+pace as built,de-4580-331243,2,fields,806,200,1198,69
+pace as built,de-4580-331243,3,fields,625,200,1174,50
+pace as built,de-4580-331243,4,fields,1575,200,3278,168
+pace as built,de-4580-331243,5,fields,1209,200,3152,133
+pace as built,de-62937-162381,1,sort,553,200,1202,26
+pace as built,de-62937-162381,2,fields,939,200,1300,85
+pace as built,de-62937-162381,3,fields,659,200,1276,53
+pace as built,de-62937-162381,4,fields,1189,200,2784,120
+pace as built,de-62937-162381,5,fields,1170,200,2658,125
+pace as built,de-78822-371819,1,sort,1257,200,1273,133
+pace as built,de-78822-371819,2,fields,967,200,1359,107
+pace as built,de-78822-371819,3,fields,662,200,1364,53
+pace as built,de-78822-371819,4,fields,420,200,1239,14
+pace as built,de-78822-371819,5,fields,1788,200,3563,216
+pace as built,de-78822-371819,6,fields,1984,200,3369,265
+pace as built,de-82138-108661,1,sort,463,200,880,14
+pace as built,de-82138-108661,2,fields,849,200,969,90
+pace as built,de-82138-108661,3,fields,736,200,945,66
+pace as built,de-82138-108661,4,fields,2017,200,7988,219
+pace as built,de-82138-108661,5,fields,1624,200,7794,191
+pace as built,de-95143-62994,1,sort,1548,200,984,23
+pace as built,de-95143-62994,2,fields,1976,200,1079,98
+pace as built,de-95143-62994,3,fields,1457,200,1084,62
+pace as built,de-95143-62994,4,fields,837,200,952,10
+pace as built,de-95143-62994,5,fields,1415,200,1147,81
+pace as built,de-95143-62994,6,fields,1414,200,953,96
+pace as built,fr-128335-248323,1,sort,726,200,992,30
+pace as built,fr-128335-248323,2,sort,555,200,993,31
+pace as built,fr-128335-248323,3,sort,678,200,981,49
+pace as built,fr-128335-248323,4,fields,1008,200,1141,106
+pace as built,fr-128335-248323,5,fields,809,200,1166,73
+pace as built,fr-128335-248323,6,fields,1182,200,2415,123
+pace as built,fr-128335-248323,7,fields,1507,200,2226,194
+pace as built,fr-179784-45379,1,sort,442,200,831,6
+pace as built,fr-179784-45379,2,fields,608,200,931,41
+pace as built,fr-179784-45379,3,fields,635,200,907,46
+pace as built,fr-179784-45379,4,fields,860,200,1598,83
+pace as built,fr-179784-45379,5,fields,956,200,1409,104
+pace as built,fr-224002-553774,1,sort,483,200,1166,18
+pace as built,fr-224002-553774,2,fields,1033,200,1276,101
+pace as built,fr-224002-553774,3,fields,665,200,1252,58
+pace as built,fr-224002-553774,4,fields,2861,200,3844,400
+pace as built,fr-224002-553774,5,fields,1157,200,3655,125
+pace as built,fr-224002-553774,6,fields,961,200,3705,89
+pace as built,fr-225722-478813,1,sort,484,200,1028,16
+pace as built,fr-225722-478813,2,fields,933,200,1122,96
+pace as built,fr-225722-478813,3,fields,674,200,1098,53
+pace as built,fr-225722-478813,4,fields,1682,200,3328,188
+pace as built,fr-225722-478813,5,fields,1720,200,3139,207
+pace as built,fr-236892-502080,1,sort,484,200,1132,21
+pace as built,fr-236892-502080,2,fields,790,200,1216,73
+pace as built,fr-236892-502080,3,fields,645,200,1192,55
+pace as built,fr-236892-502080,4,fields,588,200,1166,43
+pace as built,fr-236892-502080,5,fields,1061,200,4618,82
+pace as built,fr-236892-502080,6,fields,1380,200,4429,153
+pace as built,fr-237543-503547,1,sort,431,200,1045,12
+pace as built,fr-237543-503547,2,fields,957,200,1136,102
+pace as built,fr-237543-503547,3,fields,653,200,1112,56
+pace as built,fr-237543-503547,4,fields,1226,200,4419,106
+pace as built,fr-237543-503547,5,fields,1144,200,4230,116
+pace as built,fr-253931-575744,1,read,840,200,2145,23
+pace as built,fr-253931-575744,2,read,911,200,2303,36
+pace as built,fr-253931-575744,3,sort,452,200,868,14
+pace as built,fr-253931-575744,4,fields,666,200,966,50
+pace as built,fr-253931-575744,5,fields,682,200,942,51
+pace as built,fr-253931-575744,6,fields,1067,200,1129,124
+pace as built,fr-253931-575744,7,fields,2765,200,940,400
+pace as built,fr-282668-655129,1,sort,434,200,509,20
+pace as built,fr-282668-655129,2,fields,557,200,604,41
+pace as built,fr-282668-655129,3,fields,645,200,580,52
+pace as built,fr-282668-655129,4,fields,465,200,464,26
+pace as built,fr-282668-655129,5,fields,767,200,672,71
+pace as built,fr-282668-655129,6,fields,903,200,483,98
+pace as built,fr-30121-397925,1,sort,399,200,745,6
+pace as built,fr-30121-397925,2,fields,1161,200,827,139
+pace as built,fr-30121-397925,3,fields,650,200,803,57
+pace as built,fr-30121-397925,4,fields,831,200,2750,55
+pace as built,fr-30121-397925,5,fields,899,200,2561,77
+pace as built,fr-31556-298816,1,sort,388,200,1000,5
+pace as built,fr-31556-298816,2,fields,1297,200,1104,163
+pace as built,fr-31556-298816,3,fields,962,200,1080,108
+pace as built,fr-31556-298816,4,fields,1043,200,1410,116
+pace as built,fr-31556-298816,5,fields,794,200,1221,79
+pace as built,fr-31835-192707,1,sort,466,200,894,20
+pace as built,fr-31835-192707,2,fields,1058,200,1003,119
+pace as built,fr-31835-192707,3,fields,923,200,979,102
+pace as built,fr-31835-192707,4,fields,1124,200,1071,131
+pace as built,fr-31835-192707,5,fields,1057,200,882,129
+pace as built,fr-326866-907975,1,sort,666,200,562,34
+pace as built,fr-326866-907975,2,fields,1276,200,638,155
+pace as built,fr-326866-907975,3,fields,706,200,614,65
+pace as built,fr-326866-907975,4,fields,2736,200,20391,173
+pace as built,fr-326866-907975,5,fields,1681,200,20270,148
+pace as built,fr-328369-868791,1,read,1309,200,1613,32
+pace as built,fr-328369-868791,2,read,909,200,1185,33
+pace as built,fr-328369-868791,3,read,2726,200,3649,49
+pace as built,fr-328369-868791,4,read,917,200,1391,26
+pace as built,fr-328369-868791,5,read,999,200,1654,38
+pace as built,fr-328369-868791,6,read,820,200,1276,25
+pace as built,fr-328369-868791,7,read,1086,200,1987,29
+pace as built,fr-328369-868791,8,read,4508,200,2935,244
+pace as built,fr-328369-868791,9,read,890,200,1650,18
+pace as built,fr-328369-868791,10,read,1530,200,2466,43
+pace as built,fr-328369-868791,11,read,830,200,896,20
+pace as built,fr-328369-868791,12,read,752,200,728,11
+pace as built,fr-328369-868791,13,read,1831,200,1752,34
+pace as built,fr-328369-868791,14,read,670,200,483,21
+pace as built,fr-328369-868791,15,read,3543,200,1906,202
+pace as built,fr-328369-868791,16,read,841,200,641,32
+pace as built,fr-328369-868791,17,read,808,200,1118,10
+pace as built,fr-328369-868791,18,read,721,200,536,23
+pace as built,fr-328369-868791,19,read,579,200,441,6
+pace as built,fr-328369-868791,20,sort,518,200,815,33
+pace as built,fr-328369-868791,21,sort,839,200,812,79
+pace as built,fr-328369-868791,22,sort,404,200,790,11
+pace as built,fr-328369-868791,23,fields,1036,200,990,109
+pace as built,fr-328369-868791,24,fields,766,200,966,77
+pace as built,fr-328369-868791,25,fields,448,200,904,24
+pace as built,fr-328369-868791,26,fields,727,200,1058,72
+pace as built,fr-328369-868791,27,fields,1044,200,869,123
+pace as built,fr-328369-868791,28,fields,425,200,867,20
+pace as built,fr-340437-926736,1,sort,499,200,769,32
+pace as built,fr-340437-926736,2,sort,350,200,749,5
+pace as built,fr-340437-926736,3,fields,781,200,850,73
+pace as built,fr-340437-926736,4,fields,876,200,826,64
+pace as built,fr-340437-926736,5,fields,510,200,710,20
+pace as built,fr-340437-926736,6,fields,813,200,918,76
+pace as built,fr-340437-926736,7,fields,968,200,729,102
+pace as built,fr-37923-301094,1,sort,525,200,911,30
+pace as built,fr-37923-301094,2,sort,562,200,910,29
+pace as built,fr-37923-301094,3,fields,990,200,1056,108
+pace as built,fr-37923-301094,4,fields,842,200,1081,80
+pace as built,fr-37923-301094,5,fields,860,200,1544,67
+pace as built,fr-37923-301094,6,fields,1087,200,1355,116
+pace as built,fr-86323-319646,1,sort,420,200,898,11
+pace as built,fr-86323-319646,2,fields,650,200,1015,50
+pace as built,fr-86323-319646,3,fields,680,200,991,59
+pace as built,fr-86323-319646,4,fields,727,200,1083,51
+pace as built,fr-86323-319646,5,fields,945,200,894,100
+pace as built,fr-87718-275965,1,sort,509,200,1105,27
+pace as built,fr-87718-275965,2,sort,465,200,1099,22
+pace as built,fr-87718-275965,3,fields,876,200,1230,89
+pace as built,fr-87718-275965,4,fields,792,200,1255,78
+pace as built,fr-87718-275965,5,fields,421,200,1090,17
+pace as built,fr-87718-275965,6,fields,710,200,1411,62
+pace as built,fr-87718-275965,7,fields,1020,200,1290,114
+pace as built,fr-89308-589769,1,sort,392,200,934,6
+pace as built,fr-89308-589769,2,fields,757,200,1035,74
+pace as built,fr-89308-589769,3,fields,606,200,1011,50
+pace as built,fr-89308-589769,4,fields,470,200,895,22
+pace as built,fr-89308-589769,5,fields,1433,200,1103,180
+pace as built,fr-89308-589769,6,fields,1089,200,914,129
+pace as built,it-118195-18739,1,read,517,200,1070,17
+pace as built,it-118195-18739,2,read,1163,200,3404,76
+pace as built,it-118195-18739,3,read,1416,200,1908,100
+pace as built,it-118195-18739,4,read,1158,200,1908,81
+pace as built,it-118195-18739,5,read,1532,200,2303,125
+pace as built,it-118195-18739,6,read,1073,200,1592,73
+pace as built,it-118195-18739,7,read,855,200,1513,47
+pace as built,it-118195-18739,8,read,707,200,1568,33
+pace as built,it-118195-18739,9,read,572,200,905,21
+pace as built,it-118195-18739,10,read,967,200,878,69
+pace as built,it-118195-18739,11,read,898,200,1037,54
+pace as built,it-118195-18739,12,read,813,200,799,44
+pace as built,it-118195-18739,13,read,989,200,1037,67
+pace as built,it-118195-18739,14,read,771,200,1355,36
+pace as built,it-118195-18739,15,read,1455,200,2066,113
+pace as built,it-118195-18739,16,read,1585,200,2066,118
+pace as built,it-118195-18739,17,read,825,200,1355,41
+pace as built,it-118195-18739,18,read,1648,200,2540,133
+pace as built,it-118195-18739,19,read,972,200,1750,57
+pace as built,it-118195-18739,20,read,843,200,1592,46
+pace as built,it-118195-18739,21,read,1160,200,1671,79
+pace as built,it-118195-18739,22,read,855,200,1472,28
+pace as built,it-118195-18739,23,read,932,200,1037,63
+pace as built,it-118195-18739,24,read,1029,200,1037,72
+pace as built,it-118195-18739,25,read,1327,200,1511,104
+pace as built,it-118195-18739,26,read,765,200,799,37
+pace as built,it-118195-18739,27,read,517,200,872,13
+pace as built,it-118195-18739,28,sort,505,200,792,24
+pace as built,it-118195-18739,29,fields,574,200,887,37
+pace as built,it-118195-18739,30,fields,610,200,863,51
+pace as built,it-118195-18739,31,fields,410,200,783,16
+pace as built,it-118195-18739,32,fields,856,200,1653,73
+pace as built,it-118195-18739,33,fields,1233,200,1464,153
+pace as built,it-118360-78714,1,read,1080,200,2620,68
+pace as built,it-118360-78714,2,read,1225,200,1829,74
+pace as built,it-118360-78714,3,read,3950,200,4199,345
+pace as built,it-118360-78714,4,read,511,200,723,20
+pace as built,it-118360-78714,5,read,700,200,1268,31
+pace as built,it-118360-78714,6,read,746,200,720,39
+pace as built,it-118360-78714,7,read,484,200,674,21
+pace as built,it-118360-78714,8,read,4024,200,3012,312
+pace as built,it-118360-78714,9,read,1243,200,1908,92
+pace as built,it-118360-78714,10,read,1240,200,1829,95
+pace as built,it-118360-78714,11,read,911,200,2619,18
+pace as built,it-118360-78714,12,read,373,200,434,7
+pace as built,it-118360-78714,13,read,722,200,720,42
+pace as built,it-118360-78714,14,read,837,200,720,40
+pace as built,it-118360-78714,15,read,855,200,720,53
+pace as built,it-118360-78714,16,read,650,200,720,33
+pace as built,it-118360-78714,17,sort,468,200,814,20
+pace as built,it-118360-78714,18,fields,835,200,899,78
+pace as built,it-118360-78714,19,fields,682,200,875,56
+pace as built,it-118360-78714,20,fields,404,200,759,12
+pace as built,it-118360-78714,21,fields,632,200,1207,41
+pace as built,it-118360-78714,22,fields,1314,200,1018,162
+pace as built,it-173454-325515,1,sort,661,200,1091,56
+pace as built,it-173454-325515,2,sort,388,200,1068,7
+pace as built,it-173454-325515,3,fields,823,200,1224,84
+pace as built,it-173454-325515,4,fields,754,200,1200,60
+pace as built,it-173454-325515,5,fields,666,200,1120,56
+pace as built,it-173454-325515,6,fields,1074,200,2193,114
+pace as built,it-173454-325515,7,fields,1086,200,2004,132
+pace as built,it-174286-110491,1,sort,405,200,1284,11
+pace as built,it-174286-110491,2,fields,875,200,1373,89
+pace as built,it-174286-110491,3,fields,670,200,1349,50
+pace as built,it-174286-110491,4,fields,1375,200,2007,161
+pace as built,it-174286-110491,5,fields,1101,200,1818,130
+pace as built,it-174487-51010,1,sort,541,200,945,31
+pace as built,it-174487-51010,2,fields,713,200,1056,58
+pace as built,it-174487-51010,3,fields,628,200,1032,42
+pace as built,it-174487-51010,4,fields,804,200,1036,56
+pace as built,it-174487-51010,5,fields,1271,200,3705,126
+pace as built,it-174487-51010,6,fields,1151,200,3516,119
+pace as built,it-174809-110384,1,sort,478,200,1214,18
+pace as built,it-174809-110384,2,fields,974,200,1314,95
+pace as built,it-174809-110384,3,fields,655,200,1290,53
+pace as built,it-174809-110384,4,fields,400,200,1184,10
+pace as built,it-174809-110384,5,fields,2280,200,4370,297
+pace as built,it-174809-110384,6,fields,1314,200,4181,121
+pace as built,it-175541-50790,1,sort,531,200,1410,16
+pace as built,it-175541-50790,2,fields,824,200,1492,75
+pace as built,it-175541-50790,3,fields,568,200,1468,32
+pace as built,it-175541-50790,4,fields,426,200,1362,10
+pace as built,it-175541-50790,5,fields,1363,200,3833,121
+pace as built,it-175541-50790,6,fields,1443,200,3644,169
+pace as built,it-202255-912958,1,sort,428,200,1185,16
+pace as built,it-202255-912958,2,fields,1730,200,1277,234
+pace as built,it-202255-912958,3,fields,1475,200,1253,201
+pace as built,it-202255-912958,4,fields,1534,200,1178,206
+pace as built,it-202255-912958,5,fields,1713,200,1345,226
+pace as built,it-202255-912958,6,fields,1518,200,1224,153
+pace as built,it-202255-912958,7,fields,623,200,1189,43
+pace as built,it-248229-531089,1,sort,576,200,1070,22
+pace as built,it-248229-531089,2,fields,948,200,1184,86
+pace as built,it-248229-531089,3,fields,617,200,1160,35
+pace as built,it-248229-531089,4,fields,666,200,1612,43
+pace as built,it-248229-531089,5,fields,956,200,1423,97
+pace as built,it-254639-642818,1,sort,427,200,987,13
+pace as built,it-254639-642818,2,fields,626,200,1069,47
+pace as built,it-254639-642818,3,fields,601,200,1094,45
+pace as built,it-254639-642818,4,fields,425,200,929,18
+pace as built,it-254639-642818,5,fields,1744,200,5523,199
+pace as built,it-254639-642818,6,fields,1223,200,5334,133
+pace as built,it-254701-644044,1,read,1266,200,1539,55
+pace as built,it-254701-644044,2,read,743,200,794,33
+pace as built,it-254701-644044,3,read,838,200,1331,37
+pace as built,it-254701-644044,4,read,1079,200,2145,47
+pace as built,it-254701-644044,5,read,1872,200,1987,125
+pace as built,it-254701-644044,6,read,1850,200,1987,125
+pace as built,it-254701-644044,7,read,1250,200,2145,69
+pace as built,it-254701-644044,8,read,820,200,1262,19
+pace as built,it-254701-644044,9,read,787,200,842,21
+pace as built,it-254701-644044,10,read,530,200,449,17
+pace as built,it-254701-644044,11,read,516,200,549,12
+pace as built,it-254701-644044,12,read,831,200,548,31
+pace as built,it-254701-644044,13,read,1162,200,878,71
+pace as built,it-254701-644044,14,read,816,200,720,47
+pace as built,it-254701-644044,15,read,1090,200,878,68
+pace as built,it-254701-644044,16,read,872,200,799,44
+pace as built,it-254701-644044,17,read,418,200,441,14
+pace as built,it-254701-644044,18,read,1095,200,720,49
+pace as built,it-254701-644044,19,read,361,200,453,5
+pace as built,it-254701-644044,20,read,692,200,789,7
+pace as built,it-254701-644044,21,sort,521,200,807,31
+pace as built,it-254701-644044,22,sort,454,200,797,16
+pace as built,it-254701-644044,23,fields,827,200,944,73
+pace as built,it-254701-644044,24,fields,676,200,920,62
+pace as built,it-254701-644044,25,fields,410,200,804,12
+pace as built,it-254701-644044,26,fields,637,200,1012,51
+pace as built,it-254701-644044,27,fields,989,200,823,111
+pace as built,it-255214-644501,1,sort,539,200,627,31
+pace as built,it-255214-644501,2,sort,678,200,627,30
+pace as built,it-255214-644501,3,sort,511,200,627,29
+pace as built,it-255214-644501,4,sort,508,200,605,19
+pace as built,it-255214-644501,5,fields,757,200,768,54
+pace as built,it-255214-644501,6,fields,751,200,744,71
+pace as built,it-255214-644501,7,fields,892,200,836,90
+pace as built,it-255214-644501,8,fields,959,200,647,100
+pace as built,it-27699-295640,1,sort,534,200,776,33
+pace as built,it-27699-295640,2,sort,470,200,768,22
+pace as built,it-27699-295640,3,fields,1405,200,880,157
+pace as built,it-27699-295640,4,fields,777,200,856,67
+pace as built,it-27699-295640,5,fields,1274,200,948,144
+pace as built,it-27699-295640,6,fields,1433,200,759,168
+pace as built,it-280397-616263,1,sort,1323,200,861,31
+pace as built,it-280397-616263,2,fields,1406,200,965,40
+pace as built,it-280397-616263,3,fields,2171,200,941,50
+pace as built,it-280397-616263,4,fields,1454,200,861,21
+pace as built,it-280397-616263,5,fields,1360,200,1197,49
+pace as built,it-280397-616263,6,fields,1770,200,1008,125
+pace as built,it-5823-190096,1,read,607,200,854,21
+pace as built,it-5823-190096,2,read,1012,200,1272,83
+pace as built,it-5823-190096,3,read,822,200,1317,51
+pace as built,it-5823-190096,4,read,505,200,521,24
+pace as built,it-5823-190096,5,read,624,200,1185,22
+pace as built,it-5823-190096,6,read,1226,200,1987,71
+pace as built,it-5823-190096,7,read,2718,200,3014,218
+pace as built,it-5823-190096,8,read,2193,200,2619,167
+pace as built,it-5823-190096,9,read,2015,200,1823,134
+pace as built,it-5823-190096,10,read,430,200,444,9
+pace as built,it-5823-190096,11,read,898,200,738,60
+pace as built,it-5823-190096,12,read,667,200,776,30
+pace as built,it-5823-190096,13,read,652,200,768,18
+pace as built,it-5823-190096,14,read,869,200,720,41
+pace as built,it-5823-190096,15,read,2473,200,1669,162
+pace as built,it-5823-190096,16,read,851,200,878,40
+pace as built,it-5823-190096,17,read,520,200,586,21
+pace as built,it-5823-190096,18,read,1563,200,1274,112
+pace as built,it-5823-190096,19,read,975,200,720,59
+pace as built,it-5823-190096,20,read,1867,200,1669,134
+pace as built,it-5823-190096,21,read,4425,200,5305,299
+pace as built,it-5823-190096,22,read,728,200,1370,28
+pace as built,it-5823-190096,23,read,3545,200,2775,270
+pace as built,it-5823-190096,24,read,1058,200,3017,38
+pace as built,it-5823-190096,25,read,410,200,434,5
+pace as built,it-5823-190096,26,read,605,200,819,16
+pace as built,it-5823-190096,27,read,472,200,439,17
+pace as built,it-5823-190096,28,read,860,200,1687,50
+pace as built,it-5823-190096,29,read,847,200,1539,50
+pace as built,it-5823-190096,30,read,1017,200,2058,54
+pace as built,it-5823-190096,31,read,3136,200,3409,247
+pace as built,it-5823-190096,32,read,1066,200,1592,67
+pace as built,it-5823-190096,33,read,679,200,798,34
+pace as built,it-5823-190096,34,read,698,200,798,21
+pace as built,it-5823-190096,35,read,699,200,795,27
+pace as built,it-5823-190096,36,read,1023,200,958,65
+pace as built,it-5823-190096,37,read,1668,200,1195,83
+pace as built,it-5823-190096,38,read,1360,200,1353,97
+pace as built,it-5823-190096,39,read,924,200,958,61
+pace as built,it-5823-190096,40,read,456,200,448,17
+pace as built,it-5823-190096,41,read,1960,200,2619,136
+pace as built,it-5823-190096,42,read,1705,200,2066,102
+pace as built,it-5823-190096,43,read,1873,200,2461,134
+pace as built,it-5823-190096,44,read,1154,200,3330,40
+pace as built,it-5823-190096,45,read,378,200,444,7
+pace as built,it-5823-190096,46,read,1660,200,1511,119
+pace as built,it-5823-190096,47,read,1269,200,1116,91
+pace as built,it-5823-190096,48,read,1398,200,1353,110
+pace as built,it-5823-190096,49,read,767,200,1037,25
+pace as built,it-5823-190096,50,sort,546,200,1119,30
+pace as built,it-5823-190096,51,sort,524,200,1110,15
+pace as built,it-5823-190096,52,fields,789,200,1251,73
+pace as built,it-5823-190096,53,fields,885,200,1227,84
+pace as built,it-5823-190096,54,fields,419,200,1131,11
+pace as built,it-5823-190096,55,fields,1402,200,3419,140
+pace as built,it-5823-190096,56,fields,1413,200,3230,164
+pace as built,it-75994-103692,1,sort,509,200,855,30
+pace as built,it-75994-103692,2,sort,533,200,853,33
+pace as built,it-75994-103692,3,fields,865,200,984,83
+pace as built,it-75994-103692,4,fields,552,200,960,37
+pace as built,it-75994-103692,5,fields,450,200,849,14
+pace as built,it-75994-103692,6,fields,917,200,1692,93
+pace as built,it-75994-103692,7,fields,1154,200,1503,135
+pace as built,it-84656-221236,1,read,490,200,449,17
+pace as built,it-84656-221236,2,read,501,200,737,19
+pace as built,it-84656-221236,3,read,577,200,953,30
+pace as built,it-84656-221236,4,read,1096,200,1578,93
+pace as built,it-84656-221236,5,read,1797,200,3172,150
+pace as built,it-84656-221236,6,read,547,200,837,18
+pace as built,it-84656-221236,7,read,1606,200,2066,131
+pace as built,it-84656-221236,8,read,3810,200,3646,348
+pace as built,it-84656-221236,9,read,647,200,918,23
+pace as built,it-84656-221236,10,read,416,200,440,8
+pace as built,it-84656-221236,11,read,448,200,421,12
+pace as built,it-84656-221236,12,read,977,200,828,76
+pace as built,it-84656-221236,13,read,407,200,498,11
+pace as built,it-84656-221236,14,read,473,200,843,16
+pace as built,it-84656-221236,15,read,1772,200,1748,125
+pace as built,it-84656-221236,16,read,737,200,720,37
+pace as built,it-84656-221236,17,read,1365,200,1037,92
+pace as built,it-84656-221236,18,read,3732,200,2775,324
+pace as built,it-84656-221236,19,read,707,200,1925,31
+pace as built,it-84656-221236,20,read,2164,200,2619,208
+pace as built,it-84656-221236,21,read,752,200,2020,30
+pace as built,it-84656-221236,22,read,2199,200,2698,212
+pace as built,it-84656-221236,23,read,903,200,2354,42
+pace as built,it-84656-221236,24,read,2060,200,2382,162
+pace as built,it-84656-221236,25,read,1379,200,1987,112
+pace as built,it-84656-221236,26,read,530,200,508,11
+pace as built,it-84656-221236,27,read,1159,200,1037,86
+pace as built,it-84656-221236,28,read,1402,200,1274,119
+pace as built,it-84656-221236,29,read,1832,200,1748,173
+pace as built,it-84656-221236,30,read,1232,200,1195,100
+pace as built,it-84656-221236,31,read,788,200,720,44
+pace as built,it-84656-221236,32,read,1187,200,1037,91
+pace as built,it-84656-221236,33,read,1270,200,1908,98
+pace as built,it-84656-221236,34,read,991,200,1829,57
+pace as built,it-84656-221236,35,read,1219,200,1908,94
+pace as built,it-84656-221236,36,read,1859,200,2303,180
+pace as built,it-84656-221236,37,read,4445,200,4515,415
+pace as built,it-84656-221236,38,read,484,200,448,17
+pace as built,it-84656-221236,39,read,534,200,521,18
+pace as built,it-84656-221236,40,read,442,200,446,11
+pace as built,it-84656-221236,41,read,1102,200,1037,86
+pace as built,it-84656-221236,42,read,1083,200,1037,82
+pace as built,it-84656-221236,43,read,1589,200,1353,155
+pace as built,it-84656-221236,44,read,4182,200,3565,400
+pace as built,it-84656-221236,45,read,970,200,1829,49
+pace as built,it-84656-221236,46,read,1371,200,1987,115
+pace as built,it-84656-221236,47,read,1344,200,1908,109
+pace as built,it-84656-221236,48,read,1827,200,2224,170
+pace as built,it-84656-221236,49,read,4164,200,4357,379
+pace as built,it-84656-221236,50,read,1109,200,1987,68
+pace as built,it-84656-221236,51,read,636,200,430,5
+pace as built,it-84656-221236,52,read,1093,200,1037,85
+pace as built,it-84656-221236,53,read,1082,200,1037,88
+pace as built,it-84656-221236,54,read,1626,200,1353,159
+pace as built,it-84656-221236,55,read,3874,200,3407,362
+pace as built,it-84656-221236,56,read,774,200,720,55
+pace as built,it-84656-221236,57,read,834,200,1513,46
+pace as built,it-84656-221236,58,read,1114,200,3172,47
+pace as built,it-84656-221236,59,read,997,200,1457,21
+pace as built,it-84656-221236,60,read,453,200,448,17
+pace as built,it-84656-221236,61,read,601,200,1418,29
+pace as built,it-84656-221236,62,read,552,200,646,17
+pace as built,it-84656-221236,63,read,682,200,720,33
+pace as built,it-84656-221236,64,read,678,200,789,11
+pace as built,it-84656-221236,65,sort,537,200,1177,30
+pace as built,it-84656-221236,66,fields,913,200,1305,95
+pace as built,it-84656-221236,67,fields,719,200,1281,65
+pace as built,it-84656-221236,68,fields,1038,200,4751,78
+pace as built,it-84656-221236,69,fields,1526,200,4562,143
+pace as built,it-84656-221236,70,fields,1127,200,4722,84
+pace as built,it-85780-50878,1,sort,438,200,747,16
+pace as built,it-85780-50878,2,fields,896,200,828,85
+pace as built,it-85780-50878,3,fields,714,200,804,57
+pace as built,it-85780-50878,4,fields,450,200,714,19
+pace as built,it-85780-50878,5,fields,922,200,896,99
+pace as built,it-85780-50878,6,fields,845,200,707,83
+pace as built,it-85889-221277,1,sort,534,200,1154,27
+pace as built,it-85889-221277,2,fields,792,200,1253,57
+pace as built,it-85889-221277,3,fields,735,200,1229,49
+pace as built,it-85889-221277,4,fields,762,200,1233,69
+pace as built,it-85889-221277,5,fields,1189,200,5800,93
+pace as built,it-85889-221277,6,fields,1297,200,5611,134
+pace as built,lugano-5192,1,sort,627,200,746,22
+pace as built,lugano-5192,2,fields,661,200,825,46
+pace as built,lugano-5192,3,fields,694,200,801,64
+pace as built,lugano-5192,4,fields,406,200,685,16
+pace as built,lugano-5192,5,fields,2206,200,1804,309
+pace as built,lugano-5192,6,fields,1207,200,1615,150
+pace as built,neuchatel-grand-conseil,1,sort,426,200,811,15
+pace as built,neuchatel-grand-conseil,2,fields,862,200,901,82
+pace as built,neuchatel-grand-conseil,3,fields,616,200,877,51
+pace as built,neuchatel-grand-conseil,4,fields,529,200,969,34
+pace as built,neuchatel-grand-conseil,5,fields,941,200,780,107
+pace as built,nidau-m185,1,sort,543,200,1007,33
+pace as built,nidau-m185,2,fields,786,200,1096,75
+pace as built,nidau-m185,3,fields,676,200,1101,59
+pace as built,nidau-m185,4,fields,391,200,969,13
+pace as built,nidau-m185,5,fields,1144,200,1715,121
+pace as built,nidau-m185,6,fields,943,200,1521,103
+pace as built,wettingen-115631,1,sort,446,200,1094,15
+pace as built,wettingen-115631,2,fields,832,200,1189,77
+pace as built,wettingen-115631,3,fields,612,200,1165,50
+pace as built,wettingen-115631,4,fields,1029,200,1617,113
+pace as built,wettingen-115631,5,fields,1039,200,1423,118
+pace as built,zuerich-219587,1,sort,473,200,1039,23
+pace as built,zuerich-219587,2,fields,1136,200,1149,123
+pace as built,zuerich-219587,3,fields,792,200,1154,81
+pace as built,zuerich-219587,4,fields,378,200,1042,12
+pace as built,zuerich-219587,5,fields,412,200,1022,14
+pace as built,zuerich-219587,6,fields,896,200,1217,90
+pace as built,zuerich-219587,7,fields,1102,200,1091,136

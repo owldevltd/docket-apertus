@@ -1,8 +1,15 @@
 """The one door to the model.
 
-Every call goes through one client, one after the other, with a pause between calls and a longer rest every
-STAGE calls; after a 403 or 429 nothing more is sent, so a run never looks like a load test. The raw exchange is
-written per call with prompt, model, duration and finish reason, so a run can be read back without the model.
+Every call goes through one client, one after the other. The client takes a breath of half a second after every
+BLOCK calls. When the service turns a call down with a 4xx, the client waits half a second and sends the same call
+once more; if that one comes back with a 403 or 429 as well, nothing more is sent, so a run never looks like a
+load test. The raw exchange is written per call with prompt, model, duration and finish reason, so a run can be
+read back without the model.
+
+Until 12 October 2026 the client paused two seconds before every call and twenty seconds before every fiftieth,
+and halted at the first 403 or 429. Measured that day on 60 documents, 583 calls: 13 minutes were the model's and
+about 20 minutes the client's own pauses. The pace below was set that day and is not measured against a limit:
+the service names no limit in the headers of its answers.
 """
 
 from __future__ import annotations
@@ -17,10 +24,15 @@ from pathlib import Path
 
 from docket.config import Config
 
-PAUSE = 2.0
-STAGE = 50
-STAGE_REST = 20.0
+BLOCK = 10
+PAUSE = 0.5
+REFUSED = 0.5
 TIMEOUT = 180
+
+
+def rest(calls: int) -> float:
+    """How long the client waits before its next call, after this many calls."""
+    return PAUSE if calls > 0 and calls % BLOCK == 0 else 0.0
 
 
 @dataclass
@@ -53,8 +65,28 @@ def ask(
     """Asks the model and returns the answer, or None after a halt, without a key or on an error."""
     if client.halted or not client.config.api_key:
         return None
-    if client.calls > 0:
-        time.sleep(STAGE_REST if client.calls % STAGE == 0 else PAUSE)
+    http, result = _once(client, prompt, image, room, log, tag, model)
+    if 400 <= http < 500:
+        time.sleep(REFUSED)
+        http, result = _once(client, prompt, image, room, log, tag, model)
+        if http in (403, 429):
+            client.halted = http
+    return result
+
+
+def _once(
+    client: Client,
+    prompt: str,
+    image: bytes | None,
+    room: int,
+    log: Path | None,
+    tag: str | None,
+    model: str | None,
+) -> tuple[int, Answer | None]:
+    """One call as it goes out: the status and the answer."""
+    wait = rest(client.calls)
+    if wait:
+        time.sleep(wait)
     client.calls += 1
 
     content: list[dict] = [{"type": "text", "text": prompt}]
@@ -86,8 +118,6 @@ def ask(
         answer = {"body": e.read().decode("utf-8", errors="replace")}
     except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as e:
         error = "timeout" if isinstance(e, TimeoutError) else str(e)
-    if http in (403, 429):
-        client.halted = http
 
     choices = answer.get("choices") or [{}]
     text = (choices[0].get("message") or {}).get("content") if choices else None
@@ -111,4 +141,4 @@ def ask(
         }
         target = log / f"{client.stamp}-{client.calls:04d}.json"
         target.write_text(json.dumps(record, ensure_ascii=False, indent=2), encoding="utf-8")
-    return result
+    return http, result

@@ -5,6 +5,10 @@
     "whole": "Unten steht ein Dokument aus einem Schweizer Parlament als Text, {von} von {seiten} Seiten, jede beginnt mit einer Zeile \"===== Seite n =====\", ungefähr so angeordnet wie auf dem Papier. [Bild] steht für ein Bild, einen Stempel oder eine Unterschrift.",
     "blocks": "Jeder Textblock beginnt mit seiner Kennung in eckigen Klammern, zum Beispiel [b12].",
     "task": "Lies daraus ab:",
+    "lead": {
+      "name": "language",
+      "question": "in welcher Sprache das Dokument geschrieben ist (de, fr, it, en)"
+    },
     "missing": "Steht etwas nicht auf der Seite, schreibe dafür einen Strich (-). Erfinde nichts.",
     "form": "Antworte mit genau einer Zeile je Angabe, in der Form \"name: wert [Kennung des Blocks, aus dem der Wert stammt]\", ohne weiteren Text.",
     "languages": {
@@ -66,7 +70,9 @@
           "role": "author",
           "id": "person_id",
           "question": "wer das Geschäft eingereicht hat (bei mehreren durch Strichpunkt getrennt)",
-          "form": "list"
+          "form": "list",
+          "pages": "all",
+          "together": "contributors"
         },
         "party": {
           "de": {
@@ -74,14 +80,18 @@
             "own-language": true,
             "entity": "group",
             "question": "Partei oder Fraktion der Einreichenden",
-            "form": "list"
+            "form": "list",
+            "pages": "all",
+            "together": "contributors"
           }
         },
         "on-behalf-of": {
           "name": "on-behalf-of",
           "entity": "group",
           "question": "in wessen Namen eingereicht wurde (Fraktion, Kommission), falls angegeben",
-          "dynamic": true
+          "dynamic": true,
+          "pages": "all",
+          "together": "contributors"
         }
       },
       {
@@ -98,7 +108,8 @@
           "id": "person_id",
           "question": "wer mitunterzeichnet hat (bei mehreren durch Strichpunkt getrennt)",
           "form": "list",
-          "pages": "all"
+          "pages": "all",
+          "together": "contributors"
         }
       }
     ]
@@ -109,7 +120,8 @@
       "meta-value": {
         "name": "addressee",
         "entity": "group",
-        "question": "an wen es gerichtet ist"
+        "question": "an wen es gerichtet ist",
+        "together": "bodies"
       }
     },
     {
@@ -117,7 +129,8 @@
       "meta-value": {
         "name": "place",
         "entity": "place",
-        "question": "Ort, an dem es eingereicht wurde"
+        "question": "Ort, an dem es eingereicht wurde",
+        "together": "bodies"
       }
     },
     {
@@ -127,7 +140,8 @@
         "entity": "body",
       "role": "parliament",
         "question": "Name des Parlaments oder Rats, so wie er auf der Seite steht",
-        "choice": true
+        "choice": true,
+        "together": "bodies"
       }
     },
     {
@@ -137,7 +151,8 @@
         "entity": "body",
       "role": "place",
         "question": "Gemeinde, Stadt oder Kanton, so wie es auf der Seite steht",
-        "choice": true
+        "choice": true,
+        "together": "bodies"
       }
     },
     {
@@ -146,6 +161,7 @@
         "name": "department",
         "entity": "group",
         "question": "zuständiges Departement, zuständige Direktion oder zuständiges Ressort",
+        "together": "bodies",
         "when": [
           "Departement",
           "Direktion",
@@ -185,7 +201,20 @@
     "question": "gedruckte Schlagwörter, falls welche angegeben sind (durch Strichpunkt getrennt)",
     "form": "list",
     "dynamic": true,
-    "pages": "all"
+    "pages": "all",
+    "when": [
+      "Schlagwort",
+      "Schlagwörter",
+      "Stichwort",
+      "Stichwörter",
+      "Mots-clés",
+      "Mots clés",
+      "Parole chiave",
+      "Keywords",
+      "Deskriptor",
+      "Descripteur",
+      "Descrittor"
+    ]
   },
   "events": {
     "data": [
@@ -234,7 +263,8 @@
             "own-language": true,
             "dynamic": true,
             "pages": "all",
-            "free": true
+            "free": true,
+            "together": "summary"
           }
         },
         "conference": {

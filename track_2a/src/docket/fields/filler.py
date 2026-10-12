@@ -89,8 +89,7 @@ def fill_document(record: dict, pages: list[dict], first: list[int], fields: Fie
             else:
                 remaining.append(name)
         run = _Run(text, which, len(pages), body, fields, contract, client, values, report, asked, log)
-        for k in range(0, len(remaining), BUNDLE):
-            bundle = remaining[k:k + BUNDLE]
+        for bundle in bundles(remaining, fields):
             # when the answer stays away (timeout, error of the service), once more; then on without the bundle
             if not run.round(bundle):
                 if client.halted:
@@ -110,6 +109,29 @@ def fill_document(record: dict, pages: list[dict], first: list[int], fields: Fie
                 for name in again:
                     report[name]["asked again"] = before[name]
     return _finish(record, values, report, asked, fields, contract, body, knowledge)
+
+
+def bundles(names: list[str], fields: Fields) -> list[list[str]]:
+    """The calls of one scope. Fields that name the same word under "together" get a call of their own, in the
+    place of the first of them: asked in separate calls the model answers each alone and gives the same names to
+    the authors and to the co-signers. The rest goes in the order of the file, BUNDLE per call."""
+    out: list[list[str]] = []
+    groups: dict[str, list[str]] = {}
+    rest: list[str] = []
+    for name in names:
+        word = fields.fields[name].together
+        if not word:
+            rest.append(name)
+        elif word in groups:
+            groups[word].append(name)
+        else:
+            # what was gathered so far goes out first, so that the calls keep the order of the file
+            out += [rest[k:k + BUNDLE] for k in range(0, len(rest), BUNDLE)]
+            rest = []
+            groups[word] = [name]
+            out.append(groups[word])
+    out += [rest[k:k + BUNDLE] for k in range(0, len(rest), BUNDLE)]
+    return [b[k:k + BUNDLE] for b in out for k in range(0, len(b), BUNDLE)]
 
 
 def _finish(record: dict, values: dict, report: dict, asked: list, fields: Fields, contract: Contract,
@@ -168,7 +190,10 @@ def _one(pages: list[dict], body: list[dict], n: int) -> str:
 def prompt(names: list[str], text: str, which: list[int], total: int, fields: Fields,
            contract: Contract, language: str = "") -> str:
     """The task for a few fields and the text image of the pages: per field its question and the contract's
-    rule for its place. A question that names the language of the answer ("{sprache}") gets the language of
+    rule for its place. Before the first field stands the line the task holds as "lead", a question every
+    document can answer and whose answer is not used: the model tends to give the first line of a call a
+    value whether the document has one or not (measured 12 October 2026 on 60 documents: the field put first
+    in a call was filled where nothing belongs far more often than the same field further down). A question that names the language of the answer ("{sprache}") gets the language of
     the document, in the words the task holds for it; the model answers in the language of the task
     otherwise."""
     task = fields.task
@@ -179,6 +204,9 @@ def prompt(names: list[str], text: str, which: list[int], total: int, fields: Fi
         excerpt = contract.part(f.path) or {"type": "string"}
         question = f.question.replace("{sprache}", spoken.get(language) or spoken.get("") or "")
         lines.append(f"- {name}: {question} — Vorgabe: " + json.dumps(excerpt, ensure_ascii=False))
+    lead = task.get("lead")
+    if lead:
+        lines.insert(0, f"- {lead['name']}: {lead['question']} — Vorgabe: " + json.dumps({"type": "string"}))
     if len(which) == 1:
         intro = task["intro"].replace("{seite}", str(which[0])).replace("{seiten}", str(total))
     else:
@@ -281,12 +309,14 @@ class _Run:
         """One call for a few fields: ask, read the lines, check the values and look for them on the page.
         False when no answer came."""
         text = prompt(names, self.text, self.which, self.total, self.fields, self.contract, self.language)
-        answer = ask(self.client, text, room=room(len(names)), log=self.log, tag="fields " + ",".join(names))
+        # the line before the first field is answered too and read past
+        lead = [self.fields.task["lead"]["name"]] if self.fields.task.get("lead") else []
+        answer = ask(self.client, text, room=room(len(lead + names)), log=self.log, tag="fields " + ",".join(names))
         tokens = (answer.usage or {}).get("prompt_tokens") if answer else None
         self.asked.append({"names": names, "tokens": tokens, "answer": answer.text if answer else None})
         if answer is None:
             return False
-        got, cited_all = parse(answer.text, names)
+        got, cited_all = parse(answer.text, lead + names)
         for name in names:
             f = self.fields.fields[name]
             value = got.get(name)

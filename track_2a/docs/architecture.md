@@ -24,7 +24,7 @@ PDF ──pdftoppm──▶ page images ──▶ geometry ──▶ elements �
 | Reading | `read/reader.py`, `fluffy.py` | reads the elements of a scan with the model, in strips of three with red ids, then long blocks singly; every reading is held against the shape of the ink and marked for a person where it does not match | yes |
 | Blocks | `document/bridge.py`, `fluffy.py` | elements become JATS blocks: sections by size and known names, paragraphs by joined lines, tables, lists, labelled lists, images, signature blocks; everything else is the rest | no |
 | Sorting | `document/sorter.py`, `document/picture.py` | the rest of the first pages goes to the model as a text image, six elements per call, to be named one of eight kinds | yes |
-| Fields | `fields/` (`fields`, `filler`, `placer`) | the fields file asks the model six questions per call over the first pages and over the whole document; code takes an answer only with a place: literal in a block, derived from the named block, or cited with a word in it; composed values and cited ones carry `approve` | yes |
+| Fields | `fields/` (`fields`, `filler`, `placer`) | the fields file asks the model up to six questions per call over the first pages and over the whole document; fields that belong together (who submitted, their party, in whose name, who co-signed) share a call of their own, and every call starts with one line that is no field, because the model tends to give the first line a value whatever the document holds; code takes an answer only with a place: literal in a block, derived from the named block, or cited with a word in it; composed values and cited ones carry `approve` | yes |
 | Kind | `document/kind.py` | the document's role in the affair from the words of its first page, by the list in `data/knowledge/kinds.json` | no |
 | Answer | `document/response.py` | where a heading announces the answer to a submission within the same document, what stands from there on becomes the `response` of the document beside its body, every block with its id and place; the words that announce an answer are prior knowledge for all parliaments alike, in German, French and Italian (`data/knowledge/sections.json`) | no |
 | Key | `affair/identity.py` | the parliament and the affair number: the part of the printed number that has one of the number forms of the parliament, searched on the page by form where the read one has none, or a weak key from place, date and title; the parliament as told with the document, else from the read names of polity and parliament, in any language | no |
@@ -257,14 +257,14 @@ by character, so that a change to the core cannot move a value unnoticed. The do
 and their stored runs are not in the repository, because they name people: `data/documents/README.md` says where
 each comes from; without them `make test` runs the tests that need no document. `make test-store` runs the store's
 operations over Postgres as well, inside the running container, in a schema of its own. `make bench` runs the whole chain with the model over the
-eight documents, about sixty calls, under five minutes, and keeps the raw exchange of every call.
+eight documents, about seventy calls, about three minutes, and keeps the raw exchange of every call.
 `docs/evidence.md` holds every number behind a decision, `results/` the committed runs.
 
 ## Running it
 
 `make run` starts Postgres and the server in Docker; the app is at port 8080. The server needs one CPU: the
-geometry takes about three seconds per page, the model is called over the network one call at a time with a
-pause, so a digital document of two pages takes about half a minute and a scanned page about one minute more
-for the reading. Memory peaked at 0.6 GB with one document in flight (the run of 8 October over the eight
+computing without the model takes about five seconds per page, the model is called over the network one call at a
+time, ten calls and then half a second of pause, so a digital document of three pages takes about twenty seconds
+and one without a text layer about fifty (measured 12 October 2026 on 60 documents, `results/runtime/`). Memory peaked at 0.6 GB with one document in flight (the run of 8 October over the eight
 documents). The model calls are the budget: four to six per document for the fields, one for the
 sorting of the first pages, thirteen for a scanned page.

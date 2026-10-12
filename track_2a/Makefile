@@ -33,6 +33,8 @@ DOCUMENTS := $(wildcard data/documents/*/*.pdf)
 test:
 ifeq ($(DOCUMENTS),)
 	@echo "No document under data/documents: only the tests that need none run. See data/documents/README.md."
+	python3 tests/client.py
+	python3 tests/bundles.py
 	python3 tests/rules.py
 	python3 tests/store.py
 	python3 tests/vocabulary.py
@@ -59,6 +61,8 @@ else
 	python3 tests/shipped.py --pages=storage/tests/pages
 	python3 tests/questions.py --pages=storage/tests/pages
 	python3 tests/server.py --store=storage/tests/store --pages=storage/tests/pages
+	python3 tests/client.py
+	python3 tests/bundles.py
 	python3 tests/rules.py
 	python3 tests/store.py
 	python3 tests/vocabulary.py
@@ -75,15 +79,15 @@ test-store:
 
 # With the model: the whole chain over the shipped documents, the scan page read, the leftover elements of the
 # first pages sorted, the fields asked and placed, every document keyed and the documents of one key merged
-# into one affair, every record validated. Needs LLM_API_KEY in .env (copy .env.example). About 60 calls, one
-# after the other, under five minutes. Results, the raw exchange and the control images land in storage/bench/;
+# into one affair, every record validated. Needs LLM_API_KEY in .env (copy .env.example). About 70 calls, one
+# after the other, about three minutes. Results, the raw exchange and the control images land in storage/bench/;
 # the committed run is in results/.
 bench:
 	@test -f .env || { echo "copy .env.example to .env and set LLM_API_KEY"; exit 1; }
 	python3 -m docket affairs --model --out storage/bench/documents data/documents/*/*.pdf
 
 # With the model: two digital first pages read as if they had no text layer, held against their text layer.
-# About 35 calls, under three minutes.
+# About 35 calls, about a minute.
 bench-read:
 	@test -f .env || { echo "copy .env.example to .env and set LLM_API_KEY"; exit 1; }
 	python3 tests/read.py --out=storage/bench/read.md data/documents/nidau-m185 data/documents/zuerich-219587

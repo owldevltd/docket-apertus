@@ -341,6 +341,79 @@ The long record of the measurements behind the decisions is `docs/evidence.md`.
   person (`src/docket/fields/filler.py`; decided on 11 October). Neither attempt on the year was built.
 - **Run:** not kept in the repository. Repeatable with the stored field reports and records of a run.
 
+### Can code decide where a value belongs that the run set in two fields?
+
+- **Question:** When the run sets one value in two fields of a document, can a rule in the code tell which of the two
+  it belongs to?
+- **Test:** The stored field reports of a run of 12 October over the 60 documents of the reference set, against the
+  draft reference; no call. Three rules: the value stays in the field asked earlier; the direction is set per pair of
+  fields on these same documents; nothing is removed and both places get a mark for a person.
+- **Result:** The same value stood in two fields 328 times, in 48 of 60 documents; by the reference 109 belong to the
+  earlier field only, 138 to the later one only, 19 to both, 62 to neither. Authors and co-signers share 155 values:
+  75 belong to the authors, 74 to the co-signers. Kept in the earlier field: 160 wrong and 120 right values go, 671
+  of 1 200 fields right before and 672 after (without the kind of document). The direction per pair, set on these
+  documents: 701. Marked: 274 wrong and 236 right values get a mark; of the 1 207 values without a mark 674 are
+  wrong.
+- **Finding:** None built: no rule in the code. The fields are asked differently instead, see the next entry.
+- **Run:** `results/asking/result.md`
+
+### Do the contributor fields come out right when they are asked in one call?
+
+- **Question:** Authors, party, in whose name and co-signers were asked in three calls, two on the first pages and one
+  on the whole document. Does the model keep a name to one of them when it sees the four together?
+- **Test:** The 60 documents of the reference set. First the answers alone: the four fields in one call over the whole
+  document, with the questions as they are and with questions worded so that a name can stand in one field only, 120
+  calls. Then the pipeline with such fields in a call of their own, 655 calls, against the run before with 583.
+- **Result:** Answers, fields right of 240 / the same entry in more than one of the four / filled where nothing
+  belongs: three calls 95 / 169 / 102; one call 153 / 43 / 45; one call with the other wording 159 / 16 / 30, with no
+  right value of "on behalf of" left. Through the pipeline: 730 of 1 260 fields right, 707 before; co-signers 44
+  against 15, on behalf of 45 against 25; authors 33 against 38, related affairs 35 against 45, addressee 19 against
+  25. 10.9 calls a document against 9.7, 17 946 tokens in against 14 627. In documents with one author and many
+  co-signers the model puts every name under the authors, with either wording. Between two runs of one build 8 of
+  the 1 260 fields changed that day.
+- **Finding:** A field names under `together` the group it is asked with (`data/schema/fields.json`); the fields of a
+  group share a call of their own (`bundles` in `src/docket/fields/filler.py`, `tests/bundles.py`). The questions
+  keep their wording. The three fields that got worse each stand first in their call since the change: next entry.
+- **Run:** `results/asking/`
+
+### Does the first field of a call draw a value?
+
+- **Question:** Is the field that stands first in a call filled more often than the document gives reason for, and
+  does a line before it that is no field take that away?
+- **Test:** Three calls of each of the 60 documents, answers alone: as built, with the order turned (the first field
+  last), and with one line in front that asks for the language of the document; 360 calls. Then the pipeline with
+  that line before the first field of every call and with the keywords asked on a condition (next entry), 646 calls.
+- **Result:** Order turned: the party, now first, right in 17 of 60 against 36 and filled where nothing belongs 38
+  times against 21; acts and references 2 against 11; place 25 against 31; the authors, no longer first, 42 against
+  33, related affairs 39 against 32. With the leading line: authors 41, addressee 25 against 21, related affairs 47,
+  dates of events 19 against 13; keywords 2 against 29, filled in 58 of 60 documents; all 13 fields 377 of 780
+  against 374. Through the pipeline with both changes: 793 of 1 260 fields right (62.9 %), against 707 (56.1 %)
+  before the three changes and 730 with the calls alone. Filled where nothing belongs 119 against 179, missing 163
+  against 189, partly or wrong 185 against 185. Co-signers 42 against 15, on behalf of 41 against 25, title 41
+  against 33, authors 42 against 38; place 30 against 33, acts and references 14 against 17, party 31 against 33,
+  version 56 against 58. Values without a mark 873 against 1 207, of these not in the reference 385 against 674.
+  10.8 calls a document. The reference is a draft, and each state was run once.
+- **Finding:** Every call starts with a line that is no field and whose answer is read past; it is kept in the fields
+  file (`$task.lead` in `data/schema/fields.json`, `prompt` in `src/docket/fields/filler.py`, `tests/bundles.py`).
+  Which question stands there was not varied: the language of the document, set by the assistant, open.
+- **Run:** `results/asking/`
+
+### Are keywords set where the document prints none?
+
+- **Question:** How often does the run set keywords for a document that prints none, and does asking only where a
+  word for keywords stands on the pages take them away?
+- **Test:** The 60 documents of the reference set, none of which prints keywords by the draft reference: two runs of
+  12 October counted, no call; the call for related affairs, references and events once more without the line for
+  the keywords, 120 calls; then the pipeline as in the entry before.
+- **Result:** The runs set keywords in 27 and in 24 of the 60 documents; on none of the 60 one of the words for
+  keywords stands. The call without the line for the keywords: 62 of 240 fields right against 59; with the leading
+  line as well 83. Through the pipeline: the keywords are asked in none of the 60 documents and are rightly empty in
+  60 of 60, against 33. A document that prints keywords, under a word of the list or under another one, is not in
+  the sample; that case was not measured.
+- **Finding:** The keywords are asked only where one of eleven words for them stands on the pages (`when` in
+  `data/schema/fields.json`; the list, in German, French, Italian and English, set by the assistant, open).
+- **Run:** `results/asking/`
+
 ### Does code find the place of every value the model names?
 
 - **Question:** For every value the model reads off a first page: does code find where it stands on the page,
@@ -739,6 +812,26 @@ The long record of the measurements behind the decisions is `docs/evidence.md`.
 - **Run:** not kept in the repository. Repeatable with `make learn` inside the running container.
 
 ## Operation
+
+### How long does a document take, and what would the whole stock take?
+
+- **Question:** How many seconds does a document take from the PDF to the record, how much of that is the model, the
+  pauses of the client and the computing, and what does that make for the documents OpenParlData holds?
+- **Test:** The 60 documents of the reference set through `python3 -m docket affairs --model` twice, with the client as
+  it was (two seconds before every call, twenty before every fiftieth) and with the pace as built; then once without
+  the model, to time the computing alone. 583 calls a run, all answered. One machine, one core, one stream.
+- **Result:** With the pace before: 13.0 s at the model and 19.4 s of pauses a document; 57.5 s of wall clock on the
+  27 documents measured on a free machine. With the pace as built: 24.8 s a document (26.4 s on the same 27), 9.8 s of
+  them at the model; a document with a text layer 20.6 s, one without 48.7 s. Without the model 14.8 s a document,
+  5.1 s a page; 44 % of that in one function that scales the page image, 32 % in writing the control image of every
+  page. The 9 documents without a text layer take 283 of the 583 calls. Calculated from the second run, one document
+  after the other: 93 days for 325 599 documents, 260 days for 907 472; with the pace before 167 and 465 days. The
+  documents measured have 2.9 pages on average; how the time at the model grows with longer documents was not
+  measured, nor whether the endpoint takes several streams at once.
+- **Finding:** The client sends ten calls one after the other and then waits half a second; a call turned down with a
+  4xx is sent once more after half a second, and a 403 or 429 on that one halts the client
+  (`src/docket/model/client.py`, `tests/client.py`). The pace is set, not measured against a limit.
+- **Run:** `results/runtime/`
 
 ### What does a run over the shipped documents cost?
 

@@ -4,7 +4,9 @@ An object with "name" and "question" is a field; everything above it is its path
 the template; what in it is not a field goes into every new entry as it is (the role, the meta-name). Every
 path is held against the contract: where the contract closes a place, the fields file may not provide
 anything else there. Beside its place a field says what its value is (the entity: a person, a date, an
-identifier), so that the same value is known as the same thing in whatever JSON it is placed.
+identifier), so that the same value is known as the same thing in whatever JSON it is placed. Fields that name
+the same word under "together" are asked in one call of their own: each of them needs to see what the others take
+(who submitted, who co-signed, in whose name), and asked apart the model gives the same names to each.
 """
 
 from __future__ import annotations
@@ -37,6 +39,8 @@ class Field:
     fixed: dict = field(default_factory=dict)
     template: str = ""
     pages: str = "first"
+    # fields with the same word here share a call of their own
+    together: str = ""
     when: list[str] = field(default_factory=list)
     free: bool = False
     block_text: bool = False
@@ -144,6 +148,7 @@ def _walk(node, path: list[str], fixed: dict, template: str, fields: dict[str, F
             fixed=fixed,
             template=template,
             pages="all" if node.get("pages") == "all" else "first",
+            together=str(node.get("together", "")),
             when=list(node.get("when", [])),
             free=bool(node.get("free", False)),
             block_text=bool(node.get("block-text", False)),
