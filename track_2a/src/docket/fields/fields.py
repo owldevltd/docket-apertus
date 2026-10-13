@@ -6,7 +6,9 @@ path is held against the contract: where the contract closes a place, the fields
 anything else there. Beside its place a field says what its value is (the entity: a person, a date, an
 identifier), so that the same value is known as the same thing in whatever JSON it is placed. Fields that name
 the same word under "together" are asked in one call of their own: each of them needs to see what the others take
-(who submitted, who co-signed, in whose name), and asked apart the model gives the same names to each.
+(who submitted, who co-signed, in whose name), and asked apart the model gives the same names to each. A list
+field that names another field under "paired" is asked for both in one line, entry by entry (an event: its day,
+then what happened); asked as two lists the model has to keep in step, the entries did not belong together.
 """
 
 from __future__ import annotations
@@ -41,6 +43,9 @@ class Field:
     pages: str = "first"
     # fields with the same word here share a call of their own
     together: str = ""
+    # the field whose value starts every entry of this one's answer (the day of an event); that field has no
+    # line of its own then
+    paired: str = ""
     when: list[str] = field(default_factory=list)
     free: bool = False
     block_text: bool = False
@@ -149,6 +154,7 @@ def _walk(node, path: list[str], fixed: dict, template: str, fields: dict[str, F
             template=template,
             pages="all" if node.get("pages") == "all" else "first",
             together=str(node.get("together", "")),
+            paired=str(node.get("paired", "")),
             when=list(node.get("when", [])),
             free=bool(node.get("free", False)),
             block_text=bool(node.get("block-text", False)),

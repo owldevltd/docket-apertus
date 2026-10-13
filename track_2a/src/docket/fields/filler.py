@@ -1,6 +1,6 @@
 """Asks the fields over the document and takes what stands on the page.
 
-The model gets the first pages as a text image, every block with its id in front, and six questions at once,
+The model gets the first pages as a text image, every block with its id in front, and up to six questions at once,
 each with the contract's rule for its place. Fields over the whole document get all pages while the text image
 fits the frame. What it answers goes through the placer: literal on the page, derived from the named block,
 cited with a word in the named block, or dropped. Fields without a line or with a refused value are asked once
@@ -21,7 +21,7 @@ from docket.document.language import language_of
 from docket.document.picture import text_image
 from docket.fields.fields import Field, Fields
 from docket.fields.placer import (
-    block_text, blocks_of, covers, day, fill, find_block, locate, overlap, plain, words,
+    DAY_MARK, MONTH_WORDS, block_text, blocks_of, covers, day, fill, find_block, locate, overlap, plain, words,
 )
 from docket.model.client import Client, ask
 
@@ -60,6 +60,12 @@ OVERLAP = 0.0
 # these states get one more question, at most one bundle per scope
 AGAIN = ("missing", "too short", "too long", "no date")
 
+# the day an entry of a paired field names: as asked for, as the record holds it, or written out
+PAIR_DAY = re.compile(
+    r"\d{4}-\d{2}-\d{2}|\d{1,2}\.\s*\d{1,2}\.\s*\d{4}|\d{1,2}" + DAY_MARK + r"\s*(?:" + MONTH_WORDS + r")\s*\d{4}",
+    re.I,
+)
+
 
 def fill_document(record: dict, pages: list[dict], first: list[int], fields: Fields, contract: Contract,
                   client: Client | None, knowledge: Knowledge, log: Path | None = None) -> tuple[dict, dict]:
@@ -73,8 +79,10 @@ def fill_document(record: dict, pages: list[dict], first: list[int], fields: Fie
     asked: list[dict] = []
     if client is None:
         return record, {"fields": report, "asked": asked}
+    # a field another one is paired with is answered in that one's line and has no line of its own
+    mates = {f.paired for f in fields.fields.values() if f.paired}
     for scope, which in (("first", first), ("all", whole_pages(pages, body))):
-        names = [n for n, f in fields.fields.items() if f.pages == scope]
+        names = [n for n, f in fields.fields.items() if f.pages == scope and n not in mates]
         if not names:
             continue
         text = picture(pages, body, which)
@@ -276,6 +284,16 @@ def check(f: Field, value: str) -> str:
     return ""
 
 
+def pair(item: str) -> tuple[str, str]:
+    """An entry of a paired field in its two parts: the day it names and the rest, what happened. A part that
+    is not there comes back empty."""
+    m = PAIR_DAY.search(item)
+    if not m:
+        return "", item.strip()
+    rest = (item[:m.start()] + " " + item[m.end():]).strip(" \t:,;–—-")
+    return m.group(0), re.sub(r"\s+", " ", rest)
+
+
 def items(f: Field, value: str) -> list[str]:
     """The values of a field: per entry one for a list, else the value itself. Asked for is the semicolon;
     without one the model mostly separates with a comma. A separator inside round brackets separates nothing:
@@ -321,15 +339,60 @@ class _Run:
             f = self.fields.fields[name]
             value = got.get(name)
             state = "missing" if value is None else check(f, value)
+            entries = [] if state else items(f, value)
+            if f.paired and value is not None:
+                # entry by entry: one that hands the pattern of the task back does not empty the others
+                entries = [i for i in items(f, value) if not NONE.search(i)]
+                state = "" if entries else "empty"
             self.report[name] = {"value": value, "state": state or "not on the page", "items": []}
+            if f.paired:
+                self.report[f.paired] = {"value": None, "state": state or "not on the page", "items": []}
+                self.values.pop(f.paired, None)
             if state:
                 continue
             self.values.pop(name, None)
             cited = [i for i in cited_all.get(name, []) if find_block(i, self.body, self.which) is not None]
             self.report[name]["cited"] = cited_all.get(name, [])
-            for item in items(f, value):
-                self._place(name, f, item, cited)
+            for item in entries:
+                if f.paired:
+                    self._pair(name, f, item, cited)
+                else:
+                    self._place(name, f, item, cited)
         return True
+
+    def _pair(self, name: str, f: Field, item: str, cited: list[str]) -> None:
+        """One entry of a paired field: the day goes to the field named as its pair, the rest stays here. The
+        entry stands only with both placed, so that the two fields keep as many values in the same order:
+        the record gives each entry of the list the day at the same place. Asked as two lists, an event
+        without a place moved every later day up by one, and several days in one answer came out as the
+        first of them for every event (found 12 October 2026 in 9 of 9 documents with several days)."""
+        mate = f.paired
+        first, rest = pair(item)
+        reports = {name: self.report[name], mate: self.report[mate]}
+        had = {key: len(self.values.get(key, [])) for key in reports}
+        seen = {key: len(reports[key]["items"]) for key in reports}
+        if first:
+            self._place(mate, self.fields.fields[mate], first, cited)
+            reports[mate]["value"] = "; ".join(filter(None, [reports[mate]["value"], first]))
+        if rest:
+            # what happened is mostly worded by the model: where it does not stand literally, the block of
+            # its day counts as the block named for it, under the same rule as any named block
+            at = [h["block"] for h in self.values.get(mate, [])[had[mate]:]]
+            self._place(name, f, rest, [*at, *cited])
+        if all(len(self.values.get(key, [])) > had[key] for key in reports):
+            return
+        for key, report in reports.items():
+            hits = self.values.get(key, [])[:had[key]]
+            for entry in report["items"][seen[key]:]:
+                if entry["block"] is not None:
+                    entry["block"], entry["how"] = None, "left out: its pair has no place"
+            if hits:
+                self.values[key] = hits
+                on_page = any(h["how"] in ("literal", "derived") for h in hits)
+                report["state"] = "on the page" if on_page else "block from the model"
+            else:
+                self.values.pop(key, None)
+                report["state"] = "not on the page"
 
     def _place(self, name: str, f: Field, item: str, cited: list[str]) -> None:
         """Literal on the page counts; else the block the model names, with the share of its words there. What

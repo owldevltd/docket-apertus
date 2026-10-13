@@ -366,7 +366,7 @@ The long record of the measurements behind the decisions is `docs/evidence.md`.
   calls. Then the pipeline with such fields in a call of their own, 655 calls, against the run before with 583.
 - **Result:** Answers, fields right of 240 / the same entry in more than one of the four / filled where nothing
   belongs: three calls 95 / 169 / 102; one call 153 / 43 / 45; one call with the other wording 159 / 16 / 30, with no
-  right value of "on behalf of" left. Through the pipeline: 730 of 1 260 fields right, 707 before; co-signers 44
+  right value of "on behalf of" left. Through the pipeline: 728 of 1 260 fields right, 704 before; co-signers 44
   against 15, on behalf of 45 against 25; authors 33 against 38, related affairs 35 against 45, addressee 19 against
   25. 10.9 calls a document against 9.7, 17 946 tokens in against 14 627. In documents with one author and many
   co-signers the model puts every name under the authors, with either wording. Between two runs of one build 8 of
@@ -387,12 +387,13 @@ The long record of the measurements behind the decisions is `docs/evidence.md`.
   times against 21; acts and references 2 against 11; place 25 against 31; the authors, no longer first, 42 against
   33, related affairs 39 against 32. With the leading line: authors 41, addressee 25 against 21, related affairs 47,
   dates of events 19 against 13; keywords 2 against 29, filled in 58 of 60 documents; all 13 fields 377 of 780
-  against 374. Through the pipeline with both changes: 793 of 1 260 fields right (62.9 %), against 707 (56.1 %)
-  before the three changes and 730 with the calls alone. Filled where nothing belongs 119 against 179, missing 163
-  against 189, partly or wrong 185 against 185. Co-signers 42 against 15, on behalf of 41 against 25, title 41
+  against 374. Through the pipeline with both changes: 788 of 1 260 fields right (62.5 %), against 704 (55.9 %)
+  before the three changes and 728 with the calls alone. Filled where nothing belongs 119 against 179, missing 173
+  against 198, partly or wrong 180 against 179. Co-signers 42 against 15, on behalf of 41 against 25, title 41
   against 33, authors 42 against 38; place 30 against 33, acts and references 14 against 17, party 31 against 33,
-  version 56 against 58. Values without a mark 873 against 1 207, of these not in the reference 385 against 674.
-  10.8 calls a document. The reference is a draft, and each state was run once.
+  version 56 against 58. Values without a mark 866 against 1 205, of these not in the reference 386 against 671.
+  10.8 calls a document. The days of events are counted as they stand in the record. The reference is a draft, and
+  each state was run once.
 - **Finding:** Every call starts with a line that is no field and whose answer is read past; it is kept in the fields
   file (`$task.lead` in `data/schema/fields.json`, `prompt` in `src/docket/fields/filler.py`, `tests/bundles.py`).
   Which question stands there was not varied: the language of the document, set by the assistant, open.
@@ -412,6 +413,44 @@ The long record of the measurements behind the decisions is `docs/evidence.md`.
   the sample; that case was not measured.
 - **Finding:** The keywords are asked only where one of eleven words for them stands on the pages (`when` in
   `data/schema/fields.json`; the list, in German, French, Italian and English, set by the assistant, open).
+- **Run:** `results/asking/`
+
+### Does the model tell the bodies of a document apart when each is asked by its role?
+
+- **Question:** Addressee, place, parliament and polity were asked in a few words each ("to whom it is addressed",
+  "place where it was submitted"). Does a question that says what the body is keep the values in their fields?
+- **Test:** The 60 documents of the reference set. First the answers alone: the stored call with the four questions
+  in two other wordings, one that says what is not meant and one that describes the role of each body with examples
+  in three languages, 120 calls. Then the pipeline with the second wording, in the run of the next entry.
+- **Result:** Answers, fields right of 240: as built 140, with exclusions 149, by role 163; addressee 26, 35 and 44;
+  place 30, 36 and 33; parliament 37, 38 and 42; polity 47, 40 and 44. Through the pipeline: addressee 47 of 60
+  against 24, parliament 50 against 42, place 34 against 30, polity 44 against 45. A place is still set in 22
+  documents where none belongs, 26 before. Each wording was run once.
+- **Finding:** The four questions describe the role of the body, with examples (`data/schema/fields.json`); the
+  wordings were set by the assistant, open.
+- **Run:** `results/asking/`
+
+### Does every event keep its own day?
+
+- **Question:** Events were asked as two lists, the names and the days, to be kept in the same order. Do name and
+  day stay together when they are asked in one line, entry by entry?
+- **Test:** The 60 documents of the reference set. The answers alone, with the two lists reworded and with one line
+  of pairs, 120 calls; the pipeline with the pairs, 656 calls; the stored answers of that run through the changed
+  code, no call; the pipeline once more, 643 calls.
+- **Result:** Answers: of the 106 days of events in the reference the model names 54 as built, 64 with the lists
+  reworded, 81 with pairs; names of more than four words 63 of 92, 37 of 108, 40 of 118. In the records of the run
+  before, every event of a document with several days carried the first of them, in 9 of 9 such documents. First
+  run with pairs: of 102 days 47 found no place on the page, 37 of them written out there with a French or Italian
+  name of the month; of 112 names 65 found no place. After the changes below: the days of events right in 20 of 60
+  documents against 10, the names in 9 against 3; 841 of 1 260 fields right (66.7 %) against 788 (62.5 %); fewer
+  fields to set right in 37 documents, more in 8. With French and Italian words in its condition the session was
+  asked in 23 documents instead of 11 and came out right in 38 instead of 41. The name of an event is the one of the
+  reference in 9 of 60 documents; the reference is a draft.
+- **Finding:** A list field names under `paired` the field whose value starts each of its entries; an entry stands
+  only with both placed (`src/docket/fields/filler.py`, `tests/bundles.py`). A day written out is read and found in
+  German, French, Italian and English (`src/docket/fields/placer.py`). What happened takes the block of its day as
+  the block named for it, marked for a person. The words for the session stay German; the department is asked also
+  where a French or Italian word for it stands (the lists set by the assistant, open).
 - **Run:** `results/asking/`
 
 ### Does code find the place of every value the model names?

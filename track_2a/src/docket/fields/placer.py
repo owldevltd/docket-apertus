@@ -11,15 +11,36 @@ from __future__ import annotations
 
 import json
 import re
+import unicodedata
 
 from docket.affair.validator import Contract
 from docket.fields.fields import Field, Fields, has_room
 from docket.fluffy import pick_block
 
-MONTHS = [
-    "januar", "februar", "märz", "april", "mai", "juni",
-    "juli", "august", "september", "oktober", "november", "dezember",
+# the names a month is written out with, in the languages of the documents; the place in a row is the month
+MONTH_NAMES = [
+    ["januar", "februar", "märz", "april", "mai", "juni",
+     "juli", "august", "september", "oktober", "november", "dezember"],
+    ["janvier", "février", "mars", "avril", "mai", "juin",
+     "juillet", "août", "septembre", "octobre", "novembre", "décembre"],
+    ["gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno",
+     "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"],
+    ["january", "february", "march", "april", "may", "june",
+     "july", "august", "september", "october", "november", "december"],
 ]
+
+
+def bare(t: str) -> str:
+    """Lower case and without the marks on letters: a page now and then prints "fevrier" for "février"."""
+    return "".join(c for c in unicodedata.normalize("NFD", t.lower()) if not unicodedata.combining(c))
+
+
+# every name with the number of its month, with and without the marks on its letters
+MONTH = {form: i + 1 for names in MONTH_NAMES for i, name in enumerate(names) for form in (name, bare(name))}
+# as a part of a pattern, the longer name first; after the number of the day a point, or what French and
+# Italian put there ("1er", "1°")
+MONTH_WORDS = "|".join(sorted(MONTH, key=len, reverse=True))
+DAY_MARK = r"(?:\.|er|°|º)?"
 
 
 def fill(record: dict, doc: int, values: dict[str, list[dict]], fields: Fields, contract: Contract,
@@ -202,7 +223,9 @@ def block_text(block: dict | None) -> str:
 
 
 def day(t: str) -> str:
-    """The day as YYYY-MM-DD from "22.11.2018", "22. November 2018" or "2018-11-22"; empty when none."""
+    """The day as YYYY-MM-DD from "22.11.2018", "2018-11-22" or written out with the name of the month in
+    German, French, Italian or English ("22. November 2018", "1er mars 2020", "3 marzo 2020"); empty when
+    none."""
     t = t.lower()
     m = re.search(r"(\d{4})-(\d{2})-(\d{2})", t)
     if m:
@@ -210,9 +233,9 @@ def day(t: str) -> str:
     m = re.search(r"(\d{1,2})\.\s*(\d{1,2})\.\s*(\d{4})", t)
     if m:
         return f"{int(m.group(3)):04d}-{int(m.group(2)):02d}-{int(m.group(1)):02d}"
-    m = re.search(r"(\d{1,2})\.?\s*(" + "|".join(MONTHS) + r")\s*(\d{4})", t)
+    m = re.search(r"(\d{1,2})" + DAY_MARK + r"\s*(" + MONTH_WORDS + r")\s*(\d{4})", t)
     if m:
-        return f"{int(m.group(3)):04d}-{MONTHS.index(m.group(2)) + 1:02d}-{int(m.group(1)):02d}"
+        return f"{int(m.group(3)):04d}-{MONTH[m.group(2)]:02d}-{int(m.group(1)):02d}"
     return ""
 
 
@@ -222,18 +245,17 @@ def plain(t: str) -> str:
 
 
 def within(value: str, text: str) -> bool:
-    """Whether the value stands literally in the text; a date in any usual spelling of the same day."""
+    """Whether the value stands literally in the text; a date in any usual spelling of the same day, the month
+    written out in any of the languages of the documents."""
     d = day(value)
     m = re.match(r"^(\d{4})-(\d{2})-(\d{2})$", d) if d else None
     if m:
-        flat = re.sub(r"\s+", "", text.lower())
+        flat = bare(re.sub(r"\s+", "", text))
         year, month, dd = m.group(1), m.group(2), m.group(3)
-        forms = [
-            f"{int(dd)}.{int(month)}.{year}",
-            f"{dd}.{month}.{year}",
-            f"{int(dd)}.{MONTHS[int(month) - 1]}{year}",
-            d,
-        ]
+        forms = [f"{int(dd)}.{int(month)}.{year}", f"{dd}.{month}.{year}", d]
+        # written out: the name of the month in each language, the day with a point, bare, or as "1er", "1°"
+        names = {bare(row[int(month) - 1]) for row in MONTH_NAMES}
+        forms += [f"{int(dd)}{mark}{name}{year}" for name in names for mark in (".", "", "er", "°", "º")]
         # no digit before it, else the 9th hides in the 19th
         return any(re.search(r"(?<!\d)" + re.escape(form), flat) for form in forms)
     return plain(value) != "" and plain(value) in plain(text)

@@ -1,7 +1,8 @@
 """Which fields share a call, without a model and without a document: every field of a scope is asked in exactly
 one call, no call asks more than BUNDLE fields, fields that name the same word under "together" share a call of
 their own, and the fields of the contributors (who submitted, their party, in whose name, who co-signed) are such
-a group over the whole document.
+a group over the whole document. An event and its day are asked in one line: every entry keeps its own day, on a
+made-up page with a played answer.
 
     python3 tests/bundles.py
 """
@@ -15,8 +16,11 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from docket.config import load_config  # noqa: E402
+from docket.fields import filler  # noqa: E402
 from docket.fields.fields import Field, Fields  # noqa: E402
-from docket.fields.filler import BUNDLE, bundles, parse, prompt  # noqa: E402
+from docket.fields.filler import BUNDLE, bundles, pair, parse, prompt  # noqa: E402
+from docket.fields.placer import day, fill, within  # noqa: E402
+from docket.model.client import Answer  # noqa: E402
 from docket.pipeline import load_contract, load_field_file  # noqa: E402
 
 
@@ -68,6 +72,47 @@ def main() -> int:
     ok(got.get("number") == "1" and got.get("title") == "A title",
        "the answer to that line is read past: the fields behind it keep their lines, also by their place")
     ok(bool(fields.fields["keywords"].when), "printed keywords are asked only where a word for them stands on the page")
+    # an event and its day in one line, entry by entry
+    ok(fields.fields["event"].paired == "event-date" and pair("03.03.2020 Eingereicht") == ("03.03.2020", "Eingereicht")
+       and pair("Beantwortung im Stadtrat, 12. Mai 2020") == ("12. Mai 2020", "Beantwortung im Stadtrat")
+       and pair("Vertagt") == ("", "Vertagt"),
+       "an entry of a paired field is cut into its day and what happened, wherever the day stands in it")
+    body = [{"id": "b1", "type": "p", "page": 1, "y": 10, "text": "Eingereicht am 3. März 2020"},
+            {"id": "b2", "type": "p", "page": 1, "y": 20, "text": "Beantwortung im Stadtrat: 12.05.2020"},
+            {"id": "b3", "type": "p", "page": 1, "y": 30, "text": "Le Conseil en prend acte le 1er juin 2020."}]
+    said = ("language: de\nevent: 03.03.2020 Eingereicht; 01.01.2021 Kenntnis genommen im Plenum; "
+            "12.05.2020 Beantwortung im Stadtrat; TT.MM.JJJJ Bezeichnung; Vertagt; 01.06.2020 Prise d'acte du Conseil")
+    sent: list[str] = []
+
+    def played(client, text, **_):
+        sent.append(text)
+        return Answer(said, 200, {"prompt_tokens": 0}, "stop")
+
+    values: dict = {}
+    report: dict = {}
+    asked_before = filler.ask
+    filler.ask = played
+    try:
+        filler._Run("", [1], 1, body, fields, contract, None, values, report, [], None).round(["event"])
+    finally:
+        filler.ask = asked_before
+    ok("- event: " in sent[0] and "- event-date: " not in sent[0], "the day has no line of its own in the call")
+    ok([h["value"] for h in values.get("event", [])][:2] == ["Eingereicht", "Beantwortung im Stadtrat"]
+       and [h["value"] for h in values.get("event-date", [])][:2] == ["03.03.2020", "12.05.2020"]
+       and len(values.get("event", [])) == len(values.get("event-date", [])) == 3,
+       "an entry without a place, without a day or with the pattern of the task is left out and moves no other")
+    last = values.get("event", [{}])[-1]
+    ok(last.get("value") == "Prise d'acte du Conseil" and last.get("block") == "b3" and last.get("how") == "cited",
+       "what happened, worded by the model, takes the block of its day when a word of it stands there, as cited")
+    record, _ = fill({"docs": {"data": [{"body": body}]}}, 1, values, fields, contract, body)
+    days = [(next(iter(e["title"].values())), e["date"]) for e in record["events"]["data"]]
+    ok(days == [("Eingereicht", "2020-03-03"), ("Beantwortung im Stadtrat", "2020-05-12"),
+                ("Prise d'acte du Conseil", "2020-06-01")],
+       "in the record every event stands with the day of its own entry")
+    ok(day("1er mars 2020") == "2020-03-01" and day("3 marzo 2020") == "2020-03-03" and day("12 fevrier 2019") == "2019-02-12"
+       and within("03.03.2020", "Lausanne, le 3 mars 2020") and within("01.08.2021", "Bellinzona, 1° agosto 2021")
+       and not within("03.03.2020", "le 13 mars 2020"),
+       "a day written out in French or Italian is read, and found on the page for the same day in figures")
     return 1 if failed else 0
 
 

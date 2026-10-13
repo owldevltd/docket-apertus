@@ -120,7 +120,7 @@
       "meta-value": {
         "name": "addressee",
         "entity": "group",
-        "question": "an wen es gerichtet ist",
+        "question": "Behörde, von der das Dokument eine Antwort oder einen Entscheid verlangt, mit ihrem Namen (zum Beispiel Regierungsrat, Gemeinderat, Conseil d'Etat, Municipio)",
         "together": "bodies"
       }
     },
@@ -129,7 +129,7 @@
       "meta-value": {
         "name": "place",
         "entity": "place",
-        "question": "Ort, an dem es eingereicht wurde",
+        "question": "Ort aus der Zeile mit Ort und Datum (zum Beispiel aus \"Liestal, 3. März 2020\" nur Liestal)",
         "together": "bodies"
       }
     },
@@ -139,7 +139,7 @@
         "name": "parliament",
         "entity": "body",
       "role": "parliament",
-        "question": "Name des Parlaments oder Rats, so wie er auf der Seite steht",
+        "question": "Name des Parlaments, also des gewählten Rats der Abgeordneten (zum Beispiel Kantonsrat, Einwohnerrat, Grand Conseil, Consiglio comunale), so wie er auf der Seite steht",
         "choice": true,
         "together": "bodies"
       }
@@ -150,7 +150,7 @@
         "name": "polity",
         "entity": "body",
       "role": "place",
-        "question": "Gemeinde, Stadt oder Kanton, so wie es auf der Seite steht",
+        "question": "Gemeinde, Stadt oder Kanton, zu dem das Parlament gehört, so wie es auf der Seite steht",
         "choice": true,
         "together": "bodies"
       }
@@ -167,7 +167,15 @@
           "Direktion",
           "Ressort",
           "Amt für",
-          "Staatskanzlei"
+          "Staatskanzlei",
+          "Département",
+          "Dipartimento",
+          "Direction",
+          "Direzione",
+          "Dicastère",
+          "Dicastero",
+          "Chancellerie",
+          "Cancelleria"
         ]
       }
     }
@@ -224,8 +232,9 @@
             "name": "event",
             "own-language": true,
             "entity": "event",
-            "question": "im Dokument genannte Ereignisse mit Datum, was geschah (zum Beispiel \"Beantwortung im Stadtrat\"; bei mehreren durch Strichpunkt getrennt, in derselben Reihenfolge wie ereignisdatum)",
+            "question": "im Dokument genannte Ereignisse mit Datum: je Ereignis zuerst das Datum als TT.MM.JJJJ, dann in wenigen Wörtern, was geschah, so wie das Dokument es nennt (zum Beispiel \"03.03.2020 Eingereicht; 12.05.2020 Beantwortung im Stadtrat\"); mehrere durch Strichpunkt getrennt",
             "form": "list",
+            "paired": "event-date",
             "pages": "all"
           }
         },
