@@ -62,7 +62,8 @@ def add_kind(record: dict, pages: list[dict], knowledge: Knowledge, printed_type
     if kind is None:
         found = {**found, "approve": True}
     elif found is None:
-        found = {"kind": kind["id"], "name": kind.get("name", {}), "why": "named by the model", "block": None, "approve": False}
+        found = {"kind": kind["id"], "name": kind.get("name", {}), "why": "named by the model", "block": None,
+                 "approve": False}
     elif found["kind"] != kind["id"]:
         other = f"; the words of the first page say {found['kind']} ({found['why']})"
         found = {"kind": kind["id"], "name": kind.get("name", {}), "why": "named by the model" + other,

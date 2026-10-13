@@ -447,7 +447,7 @@ The long record of the measurements behind the decisions is `docs/evidence.md`.
   asked in 23 documents instead of 11 and came out right in 38 instead of 41. The name of an event is the one of the
   reference in 9 of 60 documents; the reference is a draft.
 - **Finding:** A list field names under `paired` the field whose value starts each of its entries; an entry stands
-  only with both placed (`src/docket/fields/filler.py`, `tests/bundles.py`). A day written out is read and found in
+  only with both placed (`src/docket/fields/filler.py`, `tests/settle.py`). A day written out is read and found in
   German, French, Italian and English (`src/docket/fields/placer.py`). What happened takes the block of its day as
   the block named for it, marked for a person. The words for the session stay German; the department is asked also
   where a French or Italian word for it stands (the lists set by the assistant, open).
@@ -473,9 +473,9 @@ The long record of the measurements behind the decisions is `docs/evidence.md`.
   with at most one field not right, 17 against 10 with at most two. A person has fewer fields to set right in 38
   documents, more in 6. The reference is a draft.
 - **Finding:** A field with `reader` is read by code and not asked: the place is what stands before the day in a line
-  of a place and a day, with no list of places behind it (`before_day` in `src/docket/fields/filler.py`). A field with
+  of a place and a day, with no list of places behind it (`before_day` in `src/docket/fields/rules.py`). A field with
   `apart` leaves out a value that already stands under one of the fields named there (`keep_apart`). A bare no and a
-  lone bracket are no value (`tests/bundles.py`). The three lists were left aside by the assistant, open.
+  lone bracket are no value (`tests/settle.py`). The three lists were left aside by the assistant, open.
 - **Run:** `results/asking/`
 
 ### Does the model know what a document is where the words of the first page do not?
@@ -495,7 +495,7 @@ The long record of the measurements behind the decisions is `docs/evidence.md`.
   `data/schema/fields.json`): the answer is one word of a closed list, no value of the record, and stands on no page
   (`src/docket/fields/filler.py`). The same kind from the words and from the model stands without a mark; where
   they differ or only one says anything, a person looks, and the model's kind stands (`add_kind` in
-  `src/docket/pipeline.py`, `tests/bundles.py`).
+  `src/docket/pipeline.py`, `tests/settle.py`).
 - **Run:** `results/asking/`
 
 ### Does the model give the subject of an affair as its title when asked for it?
@@ -516,7 +516,7 @@ The long record of the measurements behind the decisions is `docs/evidence.md`.
 - **Finding:** The title is asked as the subject of the affair as printed, the line that says what it is about,
   without the kind, the number and the date (`data/schema/fields.json`; the wording set by the assistant, open). A day
   with slashes is read and found (`src/docket/fields/placer.py`). Names set apart by a dash with spaces are taken
-  one by one (`tests/bundles.py`). The date from the line the document is dated with, where the model gives none,
+  one by one (`tests/settle.py`). The date from the line the document is dated with, where the model gives none,
   was built with this step and taken out again the same day: on other documents the day of that line is not the
   date of submission (next entry).
 - **Run:** `results/asking/`
@@ -539,7 +539,7 @@ The long record of the measurements behind the decisions is `docs/evidence.md`.
   a file reference, the end of the sentence before); on the documents of the run, a day of the week.
 - **Finding:** The date from that line was taken out again. The place from it now asks for the form of a name
   (small letters, no digits) and for a line that stands by itself, and leaves the days of the week aside
-  (`src/docket/fields/filler.py`, `src/docket/fields/placer.py`, `tests/bundles.py`): 59 lines on the three sets
+  (`src/docket/fields/rules.py`, `src/docket/fields/placer.py`, `tests/settle.py`): 59 lines on the three sets
   after that, each a place. On the 60 documents of the reference set the two corrections give the place right in 57
   instead of 56 and the date in 41 instead of 45, counted on the stored run.
 - **Run:** `results/unseen/`
@@ -562,10 +562,10 @@ The long record of the measurements behind the decisions is `docs/evidence.md`.
   1 260 fields against 922.
 - **Finding:** A text the model worded is marked only where it leaves its document: less than 0.4 of its words
   stand there (set by the assistant, open), another language, or a number the document does not hold (`unsound` in
-  `src/docket/fields/filler.py`). The kind was marked where the words of the page say another kind, or stand alone
+  `src/docket/fields/rules.py`). The kind was marked where the words of the page say another kind, or stand alone
   (`add_kind` in `src/docket/pipeline.py`); the first of the two was dropped the same day, see the next
   entry. The date of submission gives the first event of the affair (`entry` in
-  `data/schema/fields.json`, `add_entries`; `tests/bundles.py`).
+  `data/schema/fields.json`, `add_entries`; `tests/settle.py`).
 - **Run:** `results/unattended/`
 
 ### Does a value inside a longer word count as found, and do the rules of code hold on other documents?
@@ -588,7 +588,7 @@ The long record of the measurements behind the decisions is `docs/evidence.md`.
 - **Finding:** A value stands on the page as whole words, a word may go on with an ending of its own (`whole` in
   `src/docket/fields/placer.py`). A value is left out where it is the value of a field named under `apart` or a part
   of it, not where it holds that value and more; a field with `needs` has no value without the field named
-  (`keep_apart` in `src/docket/fields/filler.py`, `data/schema/fields.json`). The model's kind stands without a mark;
+  (`keep_apart` in `src/docket/fields/rules.py`, `data/schema/fields.json`). The model's kind stands without a mark;
   a mark only where the model names none (`add_kind` in `src/docket/pipeline.py`).
 - **Run:** `results/unattended/result.md`
 
@@ -609,8 +609,8 @@ The long record of the measurements behind the decisions is `docs/evidence.md`.
   ("cofirmatari", "und Mit.") was an entry among the submitters in 3 and 5 documents.
 - **Finding:** A field with `kinds` is read from documents of these kinds only: the date of submission from the
   submission itself; where the model names no kind the value stays (`keep_kinds` in
-  `src/docket/fields/filler.py`, `data/schema/fields.json`). A word that stands for further co-signers is no entry
-  of a list of persons and is left off behind a name (`items`, `tests/bundles.py`).
+  `src/docket/fields/rules.py`, `data/schema/fields.json`). A word that stands for further co-signers is no entry
+  of a list of persons and is left off behind a name (`items` in `src/docket/fields/filler.py`, `tests/settle.py`).
 - **Run:** `results/unattended/result.md`
 
 ### Does code find the place of every value the model names?

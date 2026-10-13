@@ -1,21 +1,15 @@
 """Which fields share a call, without a model and without a document: every field of a scope is asked in exactly
 one call, no call asks more than BUNDLE fields, fields that name the same word under "together" share a call of
 their own, and the fields of the contributors (who submitted, their party, in whose name, who co-signed) are such
-a group over the whole document. An event and its day are asked in one line: every entry keeps its own day, on a
-made-up page with a played answer. The place is read by code from a line of a place and a day and is not asked; a
-party does not repeat what stands under the submitters or the bodies; a bare no is no value. What a document is
-in its affair is asked from the model out of a closed list and held against the words of the first page: the same
-from both stands without a mark; the model's kind stands, and only the words alone are for a person. A day written with slashes is read; names set
-apart by a dash with spaces are taken one by one. The day an affair was submitted is its first event. A summary
-is held against its document: it stands without a mark unless few of its words stand there, it is in another
-language, or it holds a number the document does not.
+a group over the whole document. Every call starts with a line that is no field. A field the code reads itself
+stands in no call. What the document is in its affair is a question of the task, no field: the answer is one word
+of a closed list.
 
     python3 tests/bundles.py
 """
 
 from __future__ import annotations
 
-import json
 import sys
 from pathlib import Path
 
@@ -24,13 +18,10 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from docket.config import load_config  # noqa: E402
 from docket.fields import filler  # noqa: E402
-from docket.fields.fields import Field, Fields  # noqa: E402
-from docket.fields.filler import (  # noqa: E402
-    BUNDLE, add_entries, before_day, bundles, check, items, keep_apart, keep_kinds, pair, parse, prompt, unsound,
-)
-from docket.fields.placer import day, fill, within  # noqa: E402
+from docket.fields.fields import Field, Fields, questions  # noqa: E402
+from docket.fields.filler import BUNDLE, bundles, parse, prompt  # noqa: E402
 from docket.model.client import Answer  # noqa: E402
-from docket.pipeline import add_kind, load_contract, load_field_file, load_knowledge  # noqa: E402
+from docket.pipeline import load_contract, load_field_file, load_knowledge  # noqa: E402
 
 
 def main() -> int:
@@ -42,20 +33,23 @@ def main() -> int:
         print(("ok   " if passed else "FAIL ") + text)
 
     config = load_config()
-    fields = load_field_file(config, load_contract(config))
+    contract = load_contract(config)
+    fields = load_field_file(config, contract)
     for scope in ("first", "all"):
         names = [n for n, f in fields.fields.items() if f.pages == scope]
         calls = bundles(names, fields)
         flat = [n for call in calls for n in call]
         ok(sorted(flat) == sorted(names) and len(flat) == len(set(flat)) and all(0 < len(c) <= BUNDLE for c in calls),
-           f"scope {scope}: every one of the {len(names)} fields in exactly one of {len(calls)} calls, none over {BUNDLE}")
+           f"scope {scope}: every one of the {len(names)} fields in exactly one of {len(calls)} calls, "
+           f"none over {BUNDLE}")
         words = {fields.fields[n].together for n in names} - {""}
         alone = all(
             len({fields.fields[n].together for n in call}) == 1
             for call in calls if any(fields.fields[n].together for n in call)
         )
         whole = all(sum(1 for call in calls if any(fields.fields[n].together == w for n in call)) == 1 for w in words)
-        ok(alone and whole, f"scope {scope}: fields that belong together share one call and nothing else is asked in it")
+        ok(alone and whole,
+           f"scope {scope}: fields that belong together share one call and nothing else is asked in it")
     people = ["authors", "party", "on-behalf-of", "cosigners"]
     ok(all(fields.fields[n].pages == "all" for n in people) and len({fields.fields[n].together for n in people}) == 1
        and fields.fields["authors"].together != "",
@@ -70,182 +64,46 @@ def main() -> int:
        "a group is asked where its first field stands; what stood before it goes first, the rest after it")
     many = Fields({}, {f.name: f for f in [made(f"g{i}", "x") for i in range(BUNDLE + 2)]}, {})
     ok([len(c) for c in bundles(list(many.fields), many)] == [BUNDLE, 2], "a group larger than a call is cut")
+
     # the line before the first field: asked in every call, its answer read past
-    contract = load_contract(config)
     lead = fields.task.get("lead") or {}
-    asked = [row for row in prompt(["number", "title"], "", [1], 1, fields, contract).split("\n") if row.startswith("- ")]
+    text = prompt(["number", "title"], "", [1], 1, fields, contract)
+    asked = [row for row in text.split("\n") if row.startswith("- ")]
     ok(bool(lead) and asked[0].startswith("- " + lead["name"] + ": ") and asked[1].startswith("- number: ")
        and lead["name"] not in fields.fields,
        "every call starts with a line that is no field, before the first field asked")
-    got, _ = parse("language: de [b1]\nGeschäftsnummer: 1 [b2]\ntitle: A title [b3]", [lead.get("name", ""), "number", "title"])
+    answer = "language: de [b1]\nGeschäftsnummer: 1 [b2]\ntitle: A title [b3]"
+    got, _ = parse(answer, [lead.get("name", ""), "number", "title"])
     ok(got.get("number") == "1" and got.get("title") == "A title",
        "the answer to that line is read past: the fields behind it keep their lines, also by their place")
-    ok(bool(fields.fields["keywords"].when), "printed keywords are asked only where a word for them stands on the page")
-    # an event and its day in one line, entry by entry
-    ok(fields.fields["event"].paired == "event-date" and pair("03.03.2020 Eingereicht") == ("03.03.2020", "Eingereicht")
-       and pair("Beantwortung im Stadtrat, 12. Mai 2020") == ("12. Mai 2020", "Beantwortung im Stadtrat")
-       and pair("Vertagt") == ("", "Vertagt"),
-       "an entry of a paired field is cut into its day and what happened, wherever the day stands in it")
-    body = [{"id": "b1", "type": "p", "page": 1, "y": 10, "text": "Eingereicht am 3. März 2020"},
-            {"id": "b2", "type": "p", "page": 1, "y": 20, "text": "Beantwortung im Stadtrat: 12.05.2020"},
-            {"id": "b3", "type": "p", "page": 1, "y": 30, "text": "Le Conseil en prend acte le 1er juin 2020."}]
-    said = ("language: de\nevent: 03.03.2020 Eingereicht; 01.01.2021 Kenntnis genommen im Plenum; "
-            "12.05.2020 Beantwortung im Stadtrat; TT.MM.JJJJ Bezeichnung; Vertagt; 01.06.2020 Prise d'acte du Conseil")
-    sent: list[str] = []
+    ok(bool(fields.fields["keywords"].when),
+       "printed keywords are asked only where a word for them stands on the page")
 
-    def played(client, text, **_):
-        sent.append(text)
-        return Answer(said, 200, {"prompt_tokens": 0}, "stop")
+    # a field the code reads itself is not asked
+    asked_fields = [n for n, f in fields.fields.items() if not f.reader]
+    calls = [n for scope in ("first", "all")
+             for call in bundles([n for n in asked_fields if fields.fields[n].pages == scope], fields) for n in call]
+    ok(fields.fields["place"].reader == "before-day" and "place" not in calls,
+       "the place is read by code and stands in no call")
 
-    values: dict = {}
-    report: dict = {}
-    asked_before = filler.ask
-    filler.ask = played
-    try:
-        filler._Run("", [1], 1, body, fields, contract, None, values, report, [], None).round(["event"])
-    finally:
-        filler.ask = asked_before
-    ok("- event: " in sent[0] and "- event-date: " not in sent[0], "the day has no line of its own in the call")
-    ok([h["value"] for h in values.get("event", [])][:2] == ["Eingereicht", "Beantwortung im Stadtrat"]
-       and [h["value"] for h in values.get("event-date", [])][:2] == ["03.03.2020", "12.05.2020"]
-       and len(values.get("event", [])) == len(values.get("event-date", [])) == 3,
-       "an entry without a place, without a day or with the pattern of the task is left out and moves no other")
-    last = values.get("event", [{}])[-1]
-    ok(last.get("value") == "Prise d'acte du Conseil" and last.get("block") == "b3" and last.get("how") == "cited",
-       "what happened, worded by the model, takes the block of its day when a word of it stands there, as cited")
-    record, _ = fill({"docs": {"data": [{"body": body}]}}, 1, values, fields, contract, body)
-    days = [(next(iter(e["title"].values())), e["date"]) for e in record["events"]["data"]]
-    ok(days == [("Eingereicht", "2020-03-03"), ("Beantwortung im Stadtrat", "2020-05-12"),
-                ("Prise d'acte du Conseil", "2020-06-01")],
-       "in the record every event stands with the day of its own entry")
-    ok(day("1er mars 2020") == "2020-03-01" and day("3 marzo 2020") == "2020-03-03" and day("12 fevrier 2019") == "2019-02-12"
-       and within("03.03.2020", "Lausanne, le 3 mars 2020") and within("01.08.2021", "Bellinzona, 1° agosto 2021")
-       and not within("03.03.2020", "le 13 mars 2020"),
-       "a day written out in French or Italian is read, and found on the page for the same day in figures")
-    # the place: read by code from the line a document is dated with, never asked, no list of places behind it
-    def line(text: str) -> list[dict]:
-        return [{"id": "b1", "type": "p", "page": 1, "y": 10, "text": text}]
-
-    found = [before_day(line(t)) for t in ("Herisau, 22. August 2017 / aje", "Lausanne, le 3 mars 2020", "Bellinzona, 05 marzo 2024",
-                                           "Zürich und Winterthur, 26. November 2018", "Neuhausen am Rheinfall, den 2. Mai 2019")]
-    ok([hit and hit[0] for hit in found] == ["Herisau", "Lausanne", "Bellinzona", "Zürich und Winterthur", "Neuhausen am Rheinfall"],
-       "the place is what stands before the day in a line of a place and a day, in German, French and Italian")
-    ok(before_day(line("Der Stadtrat hat am 3. März 2020 beschlossen")) is None and before_day(line("Frage vom 3.3.2020, eingereicht")) is None,
-       "a day in running text is no line of a place and a day: the place stays empty")
-    odd = [before_day(line(t)) for t in ("un référendum contre la LAT, le 18 septembre 2012, ainsi que", "en burn-out (RTS, le 11 août 2017)",
-                                         "selon le Conseil, le 3 mars 2020, la motion", "Sitzung vom Montag, 3. März 2020",
-                                         "Mardi, le 3 mars 2020", "ED/P255460 Basel, 27. Mai 2026",
-                                         "sur l'axe Chavornay-Vallorbe. Yverdon-les-Bains, le 26 février 2008.",
-                                         "adopté, en séance du Conseil d'Etat, à Lausanne, le 4 juillet 2018.", "St. Gallen, 12.05.2020")]
-    ok([hit and hit[0] for hit in odd] == [None, None, None, None, None, "Basel", "Yverdon-les-Bains", "Lausanne", "St. Gallen"],
-       "an abbreviation, a day of the week, a name in brackets or in running text before a day is no place; a file reference in front is left off")
-    calls = [n for scope in ("first", "all") for call in bundles([n for n, f in fields.fields.items() if f.pages == scope and not f.reader], fields) for n in call]
-    ok(fields.fields["place"].reader == "before-day" and "place" not in calls, "the place is read by code and stands in no call")
-    # a party is not the submitter once more and not a body of the document
-    hits = {"authors": [{"value": "FDP Fraktion", "block": "b4", "how": "literal"}],
-            "parliament": [{"value": "Kantonsrat", "block": "b1", "how": "literal"}],
-            "party": [{"value": "FDP-Fraktion", "block": "b4", "how": "literal"}, {"value": "SP", "block": "b5", "how": "literal"}],
-            "on-behalf-of": [{"value": "Kantonsrat", "block": "b1", "how": "literal"}]}
-    notes = {n: {"value": "", "state": "on the page", "items": [dict(h) for h in hits[n]]} for n in ("party", "on-behalf-of")}
-    keep_apart(hits, notes, fields)
-    ok([h["value"] for h in hits["party"]] == ["SP"] and "on-behalf-of" not in hits and notes["on-behalf-of"]["state"] == "empty"
-       and notes["party"]["items"][0]["block"] is None,
-       "a party or on-behalf-of that already stands under the submitters or as a body of the document is left out")
-    party = fields.fields["party"]
-    ok(all(check(party, v) == "empty" for v in ("—", "Non", "Nein", "No", "(porte-parole)")) and check(party, "Noé Dupont") == ""
-       and parse("party: — [block_1]", ["party"])[0]["party"] == "—",
-       "a bare no, a lone bracket and a dash with a block written out are no value")
-    # what the document is: one word of a closed list from the model, held against the words of the first page
+    # what the document is: a question of the task, the answer one word of a closed list
     knowledge = load_knowledge(config)
-    asked_kind = next((q for q in filler.questions(fields) if q.get("role") == "kind"), None)
+    asked_kind = next((q for q in questions(fields) if q.get("role") == "kind"), None)
     listed = [k["id"] for k in knowledge.kinds if k.get("rule") is not False]
-    ok(asked_kind is not None and sorted(asked_kind["one-of"]) == sorted(listed) and asked_kind["name"] not in fields.fields,
+    ok(asked_kind is not None and sorted(asked_kind["one-of"]) == sorted(listed)
+       and asked_kind["name"] not in fields.fields,
        "the kinds the model may name are the kinds of the knowledge file that a rule can set; the question is no field")
+    body = [{"id": "b1", "type": "p", "page": 1, "y": 10, "text": "Text"}]
+    said = "language: de\ndocument-kind: answer (die Antwort der Regierung) [b1]"
     values, report = {}, {}
-    filler.ask = lambda client, text, **_: Answer("language: de\ndocument-kind: answer (die Antwort der Regierung) [b1]", 200, {}, "stop")
+    asked_before = filler.ask
+    filler.ask = lambda client, text, **_: Answer(said, 200, {}, "stop")
     try:
         filler._Run("", [1], 1, body, fields, contract, None, values, report, [], None).round([asked_kind["name"]])
     finally:
         filler.ask = asked_before
     ok(report[asked_kind["name"]]["value"] == "answer" and asked_kind["name"] not in values,
        "of the answer the word of the list is kept; it is looked for on no page")
-    page = [{"elements": [{"type": "text", "content": "Interpellation", "fontSize": 16}]}]
-    blocks = [{"id": "b1", "type": "sec", "page": 1, "y": 10, "title": "Begründung"}, {"id": "b2", "type": "sig-block", "page": 1, "y": 90}]
-
-    def kind(named):
-        record = {"docs": {"data": [{"id": 1, "body": blocks}]}}
-        return add_kind(record, page, knowledge, "Interpellation", named), record
-
-    alone, _ = kind(None)
-    same, with_same = kind("submission")
-    other, with_other = kind("answer")
-    ok(alone is not None and alone["kind"] == "submission" and alone["approve"] is True,
-       "the words of the first page alone give a kind for a person to look at")
-    ok(same["kind"] == "submission" and same["approve"] is False and "approve" not in with_same["sources"][0],
-       "the same kind from the words and from the model stands without a mark")
-    ok(other["kind"] == "answer" and other["approve"] is False and "approve" not in with_other["sources"][0]
-       and with_other["docs"]["data"][0]["article-type"] == "answer" and "submission" in other["why"],
-       "where they differ, the model's kind stands without a mark, and what the words say is noted with it")
-    silent = add_kind({"docs": {"data": [{"id": 1, "body": [{"id": "b1", "type": "p", "page": 1, "y": 10, "text": "Text"}]}]}},
-                      [{"elements": [{"type": "text", "content": "Text", "fontSize": 10}]}], knowledge, None, "answer")
-    ok(silent is not None and silent["kind"] == "answer" and silent["approve"] is False,
-       "where the words of the page say nothing, the model's kind stands without a mark: nothing speaks against it")
-    ok(day("14/11/2023") == "2023-11-14" and within("14.11.2023", "Dépôt: 14/11/2023") and day("Geschäft 2023/24") == "",
-       "a day written with slashes is read and found on the page")
-    names = fields.fields["cosigners"]
-    ok(items(names, "Muster - Beispiel - Probe") == ["Muster", "Beispiel", "Probe"] and items(names, "Muster-Probe; Beispiel") == ["Muster-Probe", "Beispiel"],
-       "names set apart by a dash with spaces are taken one by one; the dash inside a name sets nothing apart")
-    # the day an affair was submitted is its first event, unless the events read from the document hold that day
-    read = {"date": [{"value": "03.03.2020", "block": "b1", "how": "literal"}],
-            "event": [{"value": "Beantwortung im Stadtrat", "block": "b2", "how": "literal"}],
-            "event-date": [{"value": "12.05.2020", "block": "b2", "how": "literal"}]}
-    add_entries(read, {}, fields, "fr")
-    held = {"date": [{"value": "03.03.2020", "block": "b1", "how": "literal"}],
-            "event": [{"value": "Motion eingereicht", "block": "b1", "how": "literal"}],
-            "event-date": [{"value": "3. März 2020", "block": "b1", "how": "literal"}]}
-    add_entries(held, {}, fields, "de")
-    label = fields.fields["date"].entry.get("label", {}).get("fr")
-    ok([h["value"] for h in read["event"]] == [label, "Beantwortung im Stadtrat"] and [h["value"] for h in read["event-date"]] == ["03.03.2020", "12.05.2020"]
-       and read["event"][0]["block"] == "b1" and len(held["event"]) == 1,
-       "the day an affair was submitted is its first event, named in the language of the document; not twice where the document names it")
-    # what the model worded is not looked over each time, only where it leaves its document
-    paper = ("Der Stadtrat wird gebeten zu prüfen, ob im Jahr 2024 die Öffnungszeiten der Bibliothek verlängert werden können. "
-             "Die Motion verlangt zusätzliche Stunden und Kosten von 12000 Franken.")
-    said = [unsound(t, paper, "de") for t in (
-        "Die Motion verlangt, die Öffnungszeiten der Bibliothek 2024 zu verlängern, mit Kosten von 12000 Franken.",
-        "Die Interpellation fragt nach dem Stand der Sanierung der Kantonsstrasse und den Folgen für den Verkehr.",
-        "Die Motion verlangt, die Öffnungszeiten der Bibliothek zu verlängern, mit Kosten von 45000 Franken.")]
-    ok(said[0] == "" and "words" in said[1] and "number" in said[2],
-       "a summary of its document is sound; one of another matter, or one with a number the document does not hold, is not")
-    sheet = [{"id": "b1", "type": "p", "page": 1, "y": 10, "text": paper}]
-    for text, marked in (("Die Motion verlangt, die Öffnungszeiten der Bibliothek zu verlängern.", False), ("Zzz qqq xxx yyyy.", True)):
-        values, report = {}, {"summary": {"value": text, "state": "not on the page", "items": []}}
-        filler._Run("", [1], 1, sheet, fields, contract, None, values, report, [], None)._place("summary", fields.fields["summary"], text, [])
-        record, _ = fill({"docs": {"data": [{"body": sheet}]}}, 1, values, fields, contract, sheet)
-        mark = json.dumps(record).count('"approve": true')
-        ok(values["summary"][0]["approve"] is marked and (mark == 1) is marked,
-           ("a summary that leaves its document is marked for a person" if marked else "a sound summary stands without a mark, in the record too"))
-    # the day an affair was submitted is read from the submission itself, not from an answer or a report
-    asked_name = asked_kind["name"]
-    for named, stays in (("submission", True), ("answer", False), (None, True)):
-        read = {"date": [{"value": "03.03.2020", "block": "b1", "how": "literal"}]}
-        told = {"date": {"value": "03.03.2020", "state": "on the page", "items": [dict(read["date"][0])]},
-                asked_name: {"value": named, "state": "named" if named else "empty", "items": []}}
-        keep_kinds(read, told, fields)
-        ok(("date" in read) is stays,
-           f"the date of submission {'stays' if stays else 'is left out'} where the model names the document {named or 'nothing'}")
-    # a word that stands for further co-signers is no person
-    people = fields.fields["authors"]
-    ok(items(people, "Hans Muster; fünf Mitunterzeichnende") == ["Hans Muster"] and items(people, "Carla Beispiel e cofirmatari") == ["Carla Beispiel"]
-       and items(people, "Hofer Ruedi und Mit.") == ["Hofer Ruedi"] and items(people, "Anna Muster; Beat Meier") == ["Anna Muster", "Beat Meier"],
-       "a word that stands for further co-signers is no entry of a list of persons and is left off behind a name")
-    session = {"session": [{"value": "Einwohnerrat", "block": "b1", "how": "literal"}], "parliament": [{"value": "Einwohnerrat", "block": "b1", "how": "literal"}],
-               "session-date": [{"value": "03.03.2020", "block": "b1", "how": "literal"}],
-               "party": [{"value": "CVP Glarus", "block": "b2", "how": "literal"}], "polity": [{"value": "Glarus", "block": "b3", "how": "literal"}]}
-    notes = {n: {"value": "", "state": "on the page", "items": [dict(h) for h in session[n]]} for n in ("session", "session-date", "party")}
-    keep_apart(session, notes, fields)
-    ok("session" not in session and "session-date" not in session and [h["value"] for h in session.get("party", [])] == ["CVP Glarus"],
-       "a session named like the parliament is none, and its day goes with it; a party named after its town stays")
     return 1 if failed else 0
 
 

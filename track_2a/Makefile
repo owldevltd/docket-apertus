@@ -35,6 +35,7 @@ ifeq ($(DOCUMENTS),)
 	@echo "No document under data/documents: only the tests that need none run. See data/documents/README.md."
 	python3 tests/client.py
 	python3 tests/bundles.py
+	python3 tests/settle.py
 	python3 tests/rules.py
 	python3 tests/store.py
 	python3 tests/vocabulary.py
@@ -63,6 +64,7 @@ else
 	python3 tests/server.py --store=storage/tests/store --pages=storage/tests/pages
 	python3 tests/client.py
 	python3 tests/bundles.py
+	python3 tests/settle.py
 	python3 tests/rules.py
 	python3 tests/store.py
 	python3 tests/vocabulary.py

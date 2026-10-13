@@ -214,3 +214,9 @@ def _plain_part(template) -> dict:
         elif not isinstance(v, list):
             out[key] = v
     return out
+
+
+def questions(fields: Fields) -> list[dict]:
+    """The questions about the document itself the task holds beside the fields ("ask"): what the document is,
+    one word out of a closed list. No value of the record; the answer goes into the report under its name."""
+    return list(fields.task.get("ask") or [])
