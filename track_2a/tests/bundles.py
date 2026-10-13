@@ -2,7 +2,8 @@
 one call, no call asks more than BUNDLE fields, fields that name the same word under "together" share a call of
 their own, and the fields of the contributors (who submitted, their party, in whose name, who co-signed) are such
 a group over the whole document. An event and its day are asked in one line: every entry keeps its own day, on a
-made-up page with a played answer.
+made-up page with a played answer. The place is read by code from a line of a place and a day and is not asked; a
+party does not repeat what stands under the submitters or the bodies; a bare no is no value.
 
     python3 tests/bundles.py
 """
@@ -18,7 +19,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from docket.config import load_config  # noqa: E402
 from docket.fields import filler  # noqa: E402
 from docket.fields.fields import Field, Fields  # noqa: E402
-from docket.fields.filler import BUNDLE, bundles, pair, parse, prompt  # noqa: E402
+from docket.fields.filler import BUNDLE, before_day, bundles, check, keep_apart, pair, parse, prompt  # noqa: E402
 from docket.fields.placer import day, fill, within  # noqa: E402
 from docket.model.client import Answer  # noqa: E402
 from docket.pipeline import load_contract, load_field_file  # noqa: E402
@@ -113,6 +114,32 @@ def main() -> int:
        and within("03.03.2020", "Lausanne, le 3 mars 2020") and within("01.08.2021", "Bellinzona, 1° agosto 2021")
        and not within("03.03.2020", "le 13 mars 2020"),
        "a day written out in French or Italian is read, and found on the page for the same day in figures")
+    # the place: read by code from the line a document is dated with, never asked, no list of places behind it
+    def line(text: str) -> list[dict]:
+        return [{"id": "b1", "type": "p", "page": 1, "y": 10, "text": text}]
+
+    found = [before_day(line(t)) for t in ("Herisau, 22. August 2017 / aje", "Lausanne, le 3 mars 2020", "Bellinzona, 05 marzo 2024",
+                                           "Zürich und Winterthur, 26. November 2018", "Neuhausen am Rheinfall, den 2. Mai 2019")]
+    ok([hit and hit[0] for hit in found] == ["Herisau", "Lausanne", "Bellinzona", "Zürich und Winterthur", "Neuhausen am Rheinfall"],
+       "the place is what stands before the day in a line of a place and a day, in German, French and Italian")
+    ok(before_day(line("Der Stadtrat hat am 3. März 2020 beschlossen")) is None and before_day(line("Frage vom 3.3.2020, eingereicht")) is None,
+       "a day in running text is no line of a place and a day: the place stays empty")
+    calls = [n for scope in ("first", "all") for call in bundles([n for n, f in fields.fields.items() if f.pages == scope and not f.reader], fields) for n in call]
+    ok(fields.fields["place"].reader == "before-day" and "place" not in calls, "the place is read by code and stands in no call")
+    # a party is not the submitter once more and not a body of the document
+    hits = {"authors": [{"value": "FDP Fraktion", "block": "b4", "how": "literal"}],
+            "parliament": [{"value": "Kantonsrat", "block": "b1", "how": "literal"}],
+            "party": [{"value": "FDP-Fraktion", "block": "b4", "how": "literal"}, {"value": "SP", "block": "b5", "how": "literal"}],
+            "on-behalf-of": [{"value": "Kantonsrat", "block": "b1", "how": "literal"}]}
+    notes = {n: {"value": "", "state": "on the page", "items": [dict(h) for h in hits[n]]} for n in ("party", "on-behalf-of")}
+    keep_apart(hits, notes, fields)
+    ok([h["value"] for h in hits["party"]] == ["SP"] and "on-behalf-of" not in hits and notes["on-behalf-of"]["state"] == "empty"
+       and notes["party"]["items"][0]["block"] is None,
+       "a party or on-behalf-of that already stands under the submitters or as a body of the document is left out")
+    party = fields.fields["party"]
+    ok(all(check(party, v) == "empty" for v in ("—", "Non", "Nein", "No", "(porte-parole)")) and check(party, "Noé Dupont") == ""
+       and parse("party: — [block_1]", ["party"])[0]["party"] == "—",
+       "a bare no, a lone bracket and a dash with a block written out are no value")
     return 1 if failed else 0
 
 

@@ -453,6 +453,31 @@ The long record of the measurements behind the decisions is `docs/evidence.md`.
   where a French or Italian word for it stands (the lists set by the assistant, open).
 - **Run:** `results/asking/`
 
+### Does a document come through with every field right?
+
+- **Question:** How many documents have every field right, so that nobody has to set anything right in them, and
+  what keeps the others back?
+- **Test:** The 60 documents of the reference set, counted per document instead of per field, no call. Three ways
+  for the pipeline to tell by itself which fields are right: the mark it sets for a person, the same value in a
+  second run, and the model asked to check the values set, 60 calls. The place read by code from a line of a place
+  and a day, no call. Then the pipeline with that and with a party kept apart from the submitters and the bodies,
+  643 calls.
+- **Result:** Before: no document with all 21 fields right; 3 to 14 fields a document are not, 7 in the middle. The
+  model sets a value where the document prints nothing in 111 fields of 49 documents (party 24, place 22, on behalf
+  of 14); the names of events, their days and the acts and references differ from the reference in 51, 40 and 46
+  documents. Fields without a mark are right in 69 %, the same value in a second run in 70 %, a value the model
+  confirms in 64 %: none of the three separates. The place by code is the one of the reference in 56 of 60 documents,
+  the model's in 34. Through the pipeline: 883 of 1 260 fields right (70.1 %) against 841; the place 56 against 34,
+  the party 41 against 31; filled where nothing belongs 75 against 111. All 21 fields right: still no document.
+  Leaving aside the three lists from the running text: 2 documents with every field right against none, 9 against 4
+  with at most one field not right, 17 against 10 with at most two. A person has fewer fields to set right in 38
+  documents, more in 6. The reference is a draft.
+- **Finding:** A field with `reader` is read by code and not asked: the place is what stands before the day in a line
+  of a place and a day, with no list of places behind it (`before_day` in `src/docket/fields/filler.py`). A field with
+  `apart` leaves out a value that already stands under one of the fields named there (`keep_apart`). A bare no and a
+  lone bracket are no value (`tests/bundles.py`). The three lists were left aside by the assistant, open.
+- **Run:** `results/asking/`
+
 ### Does code find the place of every value the model names?
 
 - **Question:** For every value the model reads off a first page: does code find where it stands on the page,

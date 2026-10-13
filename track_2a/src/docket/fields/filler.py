@@ -34,7 +34,9 @@ ROOM = (50, 400)
 # instead of the dash the model sometimes writes out that nothing is there, or returns the pattern of the task
 NONE = re.compile(
     r"^[\-–—\s]*$|nicht angegeben|keine angabe|nicht vorhanden|nicht genannt|nicht ersichtlich|unbekannt"
-    r"|TT\.MM\.JJJJ",
+    r"|TT\.MM\.JJJJ"
+    # a bare no in the languages of the documents, and a value that is nothing but a bracket ("(porte-parole)")
+    r"|^\W*(?:nein|non|no|none|keine?r?|aucune?|nessun[oa]?)\W*$|^\s*\([^()]*\)\s*$",
     re.I,
 )
 
@@ -67,6 +69,31 @@ PAIR_DAY = re.compile(
 )
 
 
+# a place and a day in one line, the way a document is dated ("Liestal, 3. März 2020", "Lausanne, le 3 mars
+# 2020"): up to four capitalised words before the day. No list of places stands behind it.
+_NAME = r"[A-ZÄÖÜÉÈÀ][\w.'’\-]+"
+PLACE_DAY = re.compile(
+    r"(?<![\w.])(" + _NAME + r"(?:[ \-/](?:[a-zäöüéèà]{1,3} )?" + _NAME + r"){0,3})\s*,\s*(?:den |le |il |li |lì |am )?"
+    r"(?i:\d{1,2}\.\s*\d{1,2}\.\s*\d{2,4}|\d{1,2}" + DAY_MARK + r"\s*(?:" + MONTH_WORDS + r")\s*\d{4})"
+)
+
+
+def before_day(body: list[dict]) -> tuple[str, str] | None:
+    """The place a document is dated at: the words before the day in the first line of a place and a day, with
+    the id of their block; None when the pages hold no such line."""
+    for block in blocks_of(body):
+        m = PLACE_DAY.search(block_text(block)) if block["type"] != "graphic" else None
+        if m:
+            return m.group(1).strip(), block["id"]
+    return None
+
+
+# the ways code reads a field itself, by the name a field gives under "reader". Asked for the place, the model
+# named one in 22 of 60 documents that print none, mostly the polity (measured 13 October 2026); read from
+# the line of place and day, the place came out as in the reference in 56 of the 60 instead of 34.
+READERS = {"before-day": before_day}
+
+
 def fill_document(record: dict, pages: list[dict], first: list[int], fields: Fields, contract: Contract,
                   client: Client | None, knowledge: Knowledge, log: Path | None = None) -> tuple[dict, dict]:
     """The whole way for one document: fields over the first pages with their text image, fields over the
@@ -79,10 +106,21 @@ def fill_document(record: dict, pages: list[dict], first: list[int], fields: Fie
     asked: list[dict] = []
     if client is None:
         return record, {"fields": report, "asked": asked}
+    # fields the code reads itself: found, the value stands literally in its block; not found, the field is empty
+    for name, f in fields.fields.items():
+        if f.reader:
+            hit = READERS[f.reader](body)
+            if hit:
+                entry = {"value": hit[0], "block": hit[1], "how": "literal"}
+                values[name] = [dict(entry)]
+                report[name] = {"value": hit[0], "state": "on the page", "items": [entry]}
+            else:
+                note = f"not asked: read by code ({f.reader}), nothing of the kind on the pages"
+                report[name] = {"value": None, "state": "empty", "items": [], "note": note}
     # a field another one is paired with is answered in that one's line and has no line of its own
     mates = {f.paired for f in fields.fields.values() if f.paired}
     for scope, which in (("first", first), ("all", whole_pages(pages, body))):
-        names = [n for n, f in fields.fields.items() if f.pages == scope and n not in mates]
+        names = [n for n, f in fields.fields.items() if f.pages == scope and n not in mates and not f.reader]
         if not names:
             continue
         text = picture(pages, body, which)
@@ -142,8 +180,31 @@ def bundles(names: list[str], fields: Fields) -> list[list[str]]:
     return [b[k:k + BUNDLE] for b in out for k in range(0, len(b), BUNDLE)]
 
 
+def keep_apart(values: dict, report: dict, fields: Fields) -> None:
+    """A value that already stands under a field named in "apart" is left out of this field: asked for the
+    party, the model repeats the group that submitted, or names the parliament (measured 13 October 2026: 14 of
+    the 24 parties set in documents that print none were such values)."""
+    for name, f in fields.fields.items():
+        if not f.apart or name not in values:
+            continue
+        taken = {plain(hit["value"]): other for other in f.apart for hit in values.get(other, [])}
+        kept = [hit for hit in values[name] if plain(hit["value"]) not in taken]
+        if len(kept) == len(values[name]):
+            continue
+        for entry in report.get(name, {}).get("items", []):
+            other = taken.get(plain(entry["value"]))
+            if other and entry.get("block") is not None:
+                entry["block"], entry["how"] = None, f"left out: stands under {other}"
+        if kept:
+            values[name] = kept
+        else:
+            del values[name]
+            report[name]["state"] = "empty"
+
+
 def _finish(record: dict, values: dict, report: dict, asked: list, fields: Fields, contract: Contract,
             body: list[dict], knowledge: Knowledge) -> tuple[dict, dict]:
+    keep_apart(values, report, fields)
     out, notes = fill(record, 1, values, fields, contract, body)
     for name, note in notes.items():
         report.setdefault(name, {})["note"] = note
@@ -231,9 +292,12 @@ def room(count: int) -> int:
     return max(ROOM[1], ROOM[0] * count)
 
 
-# block ids named with a value: one per bracket as asked, or several in one ("[b8, b12]", "[b1-b10]"); a list
-# the room for the answer cut off stays open at the end of the line ("[b1, b2, b")
-CITED = re.compile(r"\s*\[\s*b\d+(?:\s*[,;/\-–]\s*b\d+)*\s*\]|\s*\[\s*b\d*(?:\s*[,;/\-–]\s*b\d*)*\s*$")
+# block ids named with a value: one per bracket as asked, or several in one ("[b8, b12]", "[b1-b10]"), now and
+# then written out ("[block_1]"); a list the room for the answer cut off stays open at the end of the line
+# ("[b1, b2, b")
+CITED = re.compile(
+    r"\s*\[\s*b(?:lock[_ ]?)?\d+(?:\s*[,;/\-–]\s*b(?:lock[_ ]?)?\d+)*\s*\]|\s*\[\s*b\d*(?:\s*[,;/\-–]\s*b\d*)*\s*$"
+)
 
 
 def parse(answer: str, names: list[str]) -> tuple[dict[str, str], dict[str, list[str]]]:
@@ -249,7 +313,7 @@ def parse(answer: str, names: list[str]) -> tuple[dict[str, str], dict[str, list
     taken: dict[int, str] = {}
 
     def take(i: int, name: str) -> None:
-        ids = [m for group in CITED.findall(lines[i][1]) for m in re.findall(r"b\d+", group)]
+        ids = ["b" + m for group in CITED.findall(lines[i][1]) for m in re.findall(r"b(?:lock[_ ]?)?(\d+)", group)]
         cited[name] = list(dict.fromkeys(ids))
         out[name] = CITED.sub("", lines[i][1]).strip(" \t\"'`")
         taken[i] = name

@@ -82,7 +82,8 @@
             "question": "Partei oder Fraktion der Einreichenden",
             "form": "list",
             "pages": "all",
-            "together": "contributors"
+            "together": "contributors",
+            "apart": ["authors", "parliament", "polity", "addressee"]
           }
         },
         "on-behalf-of": {
@@ -91,7 +92,8 @@
           "question": "in wessen Namen eingereicht wurde (Fraktion, Kommission), falls angegeben",
           "dynamic": true,
           "pages": "all",
-          "together": "contributors"
+          "together": "contributors",
+          "apart": ["authors", "parliament", "polity", "addressee"]
         }
       },
       {
@@ -130,7 +132,8 @@
         "name": "place",
         "entity": "place",
         "question": "Ort aus der Zeile mit Ort und Datum (zum Beispiel aus \"Liestal, 3. März 2020\" nur Liestal)",
-        "together": "bodies"
+        "together": "bodies",
+        "reader": "before-day"
       }
     },
     {

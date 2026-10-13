@@ -6,7 +6,7 @@ Between two runs of the same build 8 of the 1 260 fields changed between right a
 
 The days of events are counted as they stand in the record. An earlier state of this file counted them from the report of the run, where one answer with several days stood as one entry, and gave 707, 730 and 793 fields right for the first three runs; in the record every event of such a document carried the first of the days (9 of 9 documents with several days in the third run).
 
-## Four runs through the whole pipeline
+## Five runs through the whole pipeline
 
 | | calls | tokens in a document | fields right | filled where nothing belongs | missing | partly or wrong |
 |---|---:|---:|---:|---:|---:|---:|
@@ -14,32 +14,33 @@ The days of events are counted as they stand in the record. An earlier state of 
 | contributors together | 655 | 17946 | 728 (57.8 %) | 143 | 203 | 186 |
 | together, leading line, keywords on condition | 646 | 17406 | 788 (62.5 %) | 119 | 173 | 180 |
 | bodies by their role, events as pairs | 643 | 17441 | 841 (66.7 %) | 111 | 147 | 161 |
+| place read by code, party kept apart | 643 | 17395 | 883 (70.1 %) | 75 | 140 | 162 |
 
-| field | before | contributors together | together, leading line, keywords on condition | bodies by their role, events as pairs | filled where nothing belongs: before | contributors together | together, leading line, keywords on condition | bodies by their role, events as pairs |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| number | 40 | 38 | 43 | 43 | 2 | 2 | 3 | 3 |
-| title | 33 | 36 | 41 | 41 | 0 | 1 | 1 | 1 |
-| type as printed | 47 | 47 | 50 | 50 | 0 | 1 | 2 | 2 |
-| date of submission | 37 | 37 | 40 | 39 | 5 | 5 | 5 | 6 |
-| authors | 38 | 33 | 42 | 42 | 0 | 1 | 1 | 1 |
-| party | 33 | 36 | 31 | 31 | 21 | 21 | 24 | 24 |
-| on behalf of | 25 | 45 | 41 | 41 | 33 | 11 | 14 | 14 |
-| co-signers | 15 | 44 | 42 | 42 | 37 | 6 | 8 | 8 |
-| addressee | 25 | 19 | 24 | 47 | 5 | 6 | 7 | 5 |
-| place | 33 | 34 | 30 | 34 | 22 | 22 | 26 | 22 |
-| parliament | 41 | 39 | 42 | 50 | 9 | 9 | 8 | 4 |
-| polity | 43 | 42 | 45 | 44 | 2 | 2 | 2 | 2 |
-| department | 51 | 50 | 50 | 52 | 2 | 3 | 3 | 6 |
-| related affairs | 45 | 35 | 47 | 49 | 6 | 17 | 3 | 1 |
-| acts and references | 17 | 12 | 14 | 14 | 2 | 5 | 4 | 4 |
-| keywords | 33 | 36 | 60 | 60 | 27 | 24 | 0 | 0 |
-| events (name) | 1 | 2 | 3 | 9 | 1 | 0 | 0 | 0 |
-| events (date) | 11 | 9 | 10 | 20 | 0 | 0 | 0 | 0 |
-| version | 58 | 57 | 56 | 56 | 0 | 1 | 2 | 2 |
-| session | 42 | 41 | 41 | 41 | 5 | 6 | 6 | 6 |
-| kind of document | 36 | 36 | 36 | 36 | 0 | 0 | 0 | 0 |
+| field | before | contributors together | together, leading line, keywords on condition | bodies by their role, events as pairs | place read by code, party kept apart | filled where nothing belongs: before | contributors together | together, leading line, keywords on condition | bodies by their role, events as pairs | place read by code, party kept apart |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| number | 40 | 38 | 43 | 43 | 43 | 2 | 2 | 3 | 3 | 3 |
+| title | 33 | 36 | 41 | 41 | 39 | 0 | 1 | 1 | 1 | 2 |
+| type as printed | 47 | 47 | 50 | 50 | 50 | 0 | 1 | 2 | 2 | 2 |
+| date of submission | 37 | 37 | 40 | 39 | 40 | 5 | 5 | 5 | 6 | 6 |
+| authors | 38 | 33 | 42 | 42 | 43 | 0 | 1 | 1 | 1 | 1 |
+| party | 33 | 36 | 31 | 31 | 41 | 21 | 21 | 24 | 24 | 14 |
+| on behalf of | 25 | 45 | 41 | 41 | 46 | 33 | 11 | 14 | 14 | 9 |
+| co-signers | 15 | 44 | 42 | 42 | 43 | 37 | 6 | 8 | 8 | 8 |
+| addressee | 25 | 19 | 24 | 47 | 47 | 5 | 6 | 7 | 5 | 5 |
+| place | 33 | 34 | 30 | 34 | 56 | 22 | 22 | 26 | 22 | 1 |
+| parliament | 41 | 39 | 42 | 50 | 49 | 9 | 9 | 8 | 4 | 4 |
+| polity | 43 | 42 | 45 | 44 | 48 | 2 | 2 | 2 | 2 | 2 |
+| department | 51 | 50 | 50 | 52 | 54 | 2 | 3 | 3 | 6 | 5 |
+| related affairs | 45 | 35 | 47 | 49 | 49 | 6 | 17 | 3 | 1 | 1 |
+| acts and references | 17 | 12 | 14 | 14 | 14 | 2 | 5 | 4 | 4 | 4 |
+| keywords | 33 | 36 | 60 | 60 | 60 | 27 | 24 | 0 | 0 | 0 |
+| events (name) | 1 | 2 | 3 | 9 | 7 | 1 | 0 | 0 | 0 | 0 |
+| events (date) | 11 | 9 | 10 | 20 | 21 | 0 | 0 | 0 | 0 | 0 |
+| version | 58 | 57 | 56 | 56 | 56 | 0 | 1 | 2 | 2 | 2 |
+| session | 42 | 41 | 41 | 41 | 41 | 5 | 6 | 6 | 6 | 6 |
+| kind of document | 36 | 36 | 36 | 36 | 36 | 0 | 0 | 0 | 0 | 0 |
 
-Before: authors and party were asked in the first call over the first pages, in whose name in the second, the co-signers in the third over the whole document. Contributors together: the four in one call over the whole document (`together` in `data/schema/fields.json`); the other fields keep the calls they had. The third run adds the line before the first field of every call (`$task.lead`) and asks for printed keywords only where a word for them stands on the pages (`when`). The fourth, of the night to 13 October, asks addressee, place, parliament and polity by the role of each, asks an event with its day in one line (`paired`), reads a day written out in French, Italian or English, lets what happened take the block of its day, and asks for the department also where a French or Italian word for it stands.
+Before: authors and party were asked in the first call over the first pages, in whose name in the second, the co-signers in the third over the whole document. Contributors together: the four in one call over the whole document (`together` in `data/schema/fields.json`); the other fields keep the calls they had. The third run adds the line before the first field of every call (`$task.lead`) and asks for printed keywords only where a word for them stands on the pages (`when`). The fourth, of the night to 13 October, asks addressee, place, parliament and polity by the role of each, asks an event with its day in one line (`paired`), reads a day written out in French, Italian or English, lets what happened take the block of its day, and asks for the department also where a French or Italian word for it stands. The fifth, of 13 October, reads the place by code from a line of a place and a day instead of asking for it, leaves out a party or on-behalf-of that already stands under the submitters or as a body of the document, and takes a bare no as no value.
 
 ## What led there, on the answers of the model
 
@@ -144,3 +145,24 @@ The first run with the questions by role, the events as pairs and French and Ita
 - Of 112 names of events 65 found no place: the model words what happened. Built: where the name does not stand literally, the block of its day counts as the block named for it, under the rule of every named block (a word of the value must stand there), marked for a person.
 - The stored answers of that run put through the changed code, no call: the days of events right in 20 of 60 documents against 10, the names in 9 against 7; 67 entries in the records against 31; 53 of the 106 days of the reference in the records against 28, 14 days there that the reference does not hold against 3.
 - With the French and Italian words the session was asked in 23 documents instead of 11 and came out right in 38 instead of 41; these words were taken out again. The department was asked in 13 instead of 4 and came out right in 52 instead of 50; its words stay.
+
+## Documents that come through with every field right
+
+Counted on 13 October 2026 per document instead of per field. In the fourth run no document has every one of its 21 fields right: 3 to 14 fields a document are not, 7 in the middle. The fields are not right in different documents: with any three fields set right throughout, one document would come through, with any five three, with any eight seven.
+
+Two patterns reach most documents. The model sets a value in a field for which the document prints nothing: 111 fields in 49 of the 60 documents (party 24, place 22, on behalf of 14, co-signers 8). And three lists taken from the running text differ from the reference in most documents: the names of events in 51, acts and references in 46, the days of events in 40.
+
+- The place without the model, no call: where a line of a place and a day stands on the pages ("Liestal, 3. März 2020", "Lausanne, le 3 mars 2020"), the place is what stands before the day, else the field stays empty. As in the reference in 56 of 60 documents; the model: 34, with a place set in 22 documents that print none, mostly the polity. No list of places stands behind it.
+- Of the 24 parties set where the reference has none, 9 are the group the reference holds under on behalf of, 9 a body of the document or its polity ("Kantonsrat", "Gran Consiglio"), 4 the submitter once more.
+- Three ways to tell without a person which fields are right, none of which separates: fields without a mark are right in 69 % (822 of 1 186); the same value in a second run in 70 %, the model answers the same question alike; the model asked to check the values set, one call a document, 60 calls: of 402 values it confirms, 257 are right (64 %).
+
+Fifth run, the place read by code, a party or on-behalf-of left out where it already stands under the submitters or as a body, a bare no taken as no value; 643 calls: 883 of 1 260 fields right (70.1 %) against 841. The place 56 against 34, the party 41 against 31, on behalf of 46 against 41, the polity 48 against 44; the title 39 against 41. Filled where nothing belongs 75 against 111. A person has fewer fields to set right in 38 documents, more in 6.
+
+| | fourth run | fifth run |
+|---|---:|---:|
+| documents with all 21 fields right | 0 | 0 |
+| the same, leaving aside acts and references and the names and days of events | 0 | 2 |
+| at most one of these 18 fields not right | 4 | 9 |
+| at most two | 10 | 17 |
+
+What keeps the documents back after that, by the number of documents: the kind of document 24, title 21, date of submission 20, session 19, party 19, authors 17, number 17, co-signers 17. The reference is a draft; the three lists were left aside by the assistant, open.
