@@ -22,7 +22,7 @@ from docket.document.picture import text_image
 from docket.fields.fields import Field, Fields
 from docket.fields.placer import (
     DAY_MARK, MONTH_WORDS, WEEKDAYS, bare, block_text, blocks_of, covers, day, fill, find_block, locate, overlap,
-    plain, words,
+    plain, whole, words,
 )
 from docket.model.client import Client, ask
 
@@ -264,23 +264,36 @@ def add_entries(values: dict, report: dict, fields: Fields, language: str) -> No
 def keep_apart(values: dict, report: dict, fields: Fields) -> None:
     """A value that already stands under a field named in "apart" is left out of this field: asked for the
     party, the model repeats the group that submitted, or names the parliament (measured 13 October 2026: 14 of
-    the 24 parties set in documents that print none were such values)."""
-    for name, f in fields.fields.items():
-        if not f.apart or name not in values:
-            continue
-        taken = {plain(hit["value"]): other for other in f.apart for hit in values.get(other, [])}
-        kept = [hit for hit in values[name] if plain(hit["value"]) not in taken]
-        if len(kept) == len(values[name]):
-            continue
+    the 24 parties set in documents that print none were such values). A part of the other value counts as
+    well ("Luzern" as the place of a session where the polity is "Stadt Luzern"), not a value that holds the
+    other one and more: "CVP Glarus" is a party though the polity is Glarus, "Sitzung des Einwohnerrats" a
+    session though the parliament is the Einwohnerrat (seen on documents the rule was not made on). Then a field that
+    "needs" another has no value where that one has none: no day and no place of a session without the session."""
+
+    def leave(name: str, kept: list[dict], why: dict[str, str]) -> None:
         for entry in report.get(name, {}).get("items", []):
-            other = taken.get(plain(entry["value"]))
-            if other and entry.get("block") is not None:
-                entry["block"], entry["how"] = None, f"left out: stands under {other}"
+            if entry.get("block") is not None and plain(entry["value"]) in why:
+                entry["block"], entry["how"] = None, why[plain(entry["value"])]
         if kept:
             values[name] = kept
         else:
             del values[name]
             report[name]["state"] = "empty"
+
+    for name, f in fields.fields.items():
+        if not f.apart or name not in values:
+            continue
+        taken = [(hit["value"], other) for other in f.apart for hit in values.get(other, [])]
+        why = {}
+        for hit in values[name]:
+            other = next((o for v, o in taken if whole(hit["value"], v)), None)
+            if other:
+                why[plain(hit["value"])] = f"left out: stands under {other}"
+        if why:
+            leave(name, [hit for hit in values[name] if plain(hit["value"]) not in why], why)
+    for name, f in fields.fields.items():
+        if f.needs and name in values and f.needs not in values:
+            leave(name, [], {plain(hit["value"]): f"left out: no {f.needs}" for hit in values[name]})
 
 
 def _finish(record: dict, values: dict, report: dict, asked: list, fields: Fields, contract: Contract,

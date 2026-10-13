@@ -57,6 +57,9 @@ class Field:
     reader: str = ""
     # fields whose values are not this field's: what already stands under one of them is left out here
     apart: list[str] = field(default_factory=list)
+    # the field this one belongs to: without a value there, this one has none (the day of a session without the
+    # session)
+    needs: str = ""
     # the day of this field is an entry of a list as well: {"of": the list field, "label": its name per language}
     entry: dict = field(default_factory=dict)
     when: list[str] = field(default_factory=list)
@@ -170,6 +173,7 @@ def _walk(node, path: list[str], fixed: dict, template: str, fields: dict[str, F
             paired=str(node.get("paired", "")),
             reader=str(node.get("reader", "")),
             apart=list(node.get("apart", [])),
+            needs=str(node.get("needs", "")),
             entry=dict(node.get("entry", {})),
             when=list(node.get("when", [])),
             free=bool(node.get("free", False)),

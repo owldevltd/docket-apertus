@@ -562,10 +562,35 @@ The long record of the measurements behind the decisions is `docs/evidence.md`.
   1 260 fields against 922.
 - **Finding:** A text the model worded is marked only where it leaves its document: less than 0.4 of its words
   stand there (set by the assistant, open), another language, or a number the document does not hold (`unsound` in
-  `src/docket/fields/filler.py`). The kind is marked where the words of the page say another kind, or stand alone
-  (`add_kind` in `src/docket/pipeline.py`). The date of submission gives the first event of the affair (`entry` in
+  `src/docket/fields/filler.py`). The kind was marked where the words of the page say another kind, or stand alone
+  (`add_kind` in `src/docket/pipeline.py`); the first of the two was dropped the same day, see the next
+  entry. The date of submission gives the first event of the affair (`entry` in
   `data/schema/fields.json`, `add_entries`; `tests/bundles.py`).
 - **Run:** `results/unattended/`
+
+### Does a value inside a longer word count as found, and do the rules of code hold on other documents?
+
+- **Question:** Is a value placed as literal that only stands inside a longer word of the page? Do the rules that
+  leave a value out where it stands under another field hold on documents they were not made on? And is a mark on
+  the kind worth what it holds back?
+- **Test:** The stored runs of the reference set and of the 60 other documents put through the code again with the
+  answers as stored, no call; the replay gives a stored run back in 1 440 of 1 440 fields where the code is unchanged.
+- **Result:** 58 of 1 451 values placed as literal on the 120 documents stood inside a longer word or across the
+  ends of words ("Parlament" in "Parlamentarischer Vorstoss", "1" in "12"). On the other documents the rules leave
+  out 9 places of a session that are the polity or the place again, 5 names of a session that are the parliament or
+  the addressee, 4 days and places without a session, 5 parties and 8 values under on behalf of that are the
+  submitter or a body of the document; a first form of the rule took "CVP Glarus" for the polity Glarus. The mark on
+  the kind against the words of the page held 14 documents of the reference set to find 2 wrong kinds. Documents
+  without a mark after all of it: 38 of 60 on the reference set, 30 of 60 on the other documents (30 and 19 before).
+  On the reference set 266 fields not as in the reference against 273; of the 38 documents, 5 hold no value the
+  reference does not hold. On the other documents, 17 of the 30 hold none of the four fields of OpenParlData in
+  another value.
+- **Finding:** A value stands on the page as whole words, a word may go on with an ending of its own (`whole` in
+  `src/docket/fields/placer.py`). A value is left out where it is the value of a field named under `apart` or a part
+  of it, not where it holds that value and more; a field with `needs` has no value without the field named
+  (`keep_apart` in `src/docket/fields/filler.py`, `data/schema/fields.json`). The model's kind stands without a mark;
+  a mark only where the model names none (`add_kind` in `src/docket/pipeline.py`).
+- **Run:** `results/unattended/result.md`
 
 ### Does code find the place of every value the model names?
 

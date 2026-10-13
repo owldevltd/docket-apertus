@@ -5,7 +5,7 @@ a group over the whole document. An event and its day are asked in one line: eve
 made-up page with a played answer. The place is read by code from a line of a place and a day and is not asked; a
 party does not repeat what stands under the submitters or the bodies; a bare no is no value. What a document is
 in its affair is asked from the model out of a closed list and held against the words of the first page: the same
-from both stands without a mark, anything else is for a person. A day written with slashes is read; names set
+from both stands without a mark; the model's kind stands, and only the words alone are for a person. A day written with slashes is read; names set
 apart by a dash with spaces are taken one by one. The day an affair was submitted is its first event. A summary
 is held against its document: it stands without a mark unless few of its words stand there, it is in another
 language, or it holds a number the document does not.
@@ -183,9 +183,9 @@ def main() -> int:
        "the words of the first page alone give a kind for a person to look at")
     ok(same["kind"] == "submission" and same["approve"] is False and "approve" not in with_same["sources"][0],
        "the same kind from the words and from the model stands without a mark")
-    ok(other["kind"] == "answer" and other["approve"] is True and with_other["sources"][0].get("approve") is True
-       and with_other["docs"]["data"][0]["article-type"] == "answer",
-       "where they differ, the model's kind stands, for a person to look at")
+    ok(other["kind"] == "answer" and other["approve"] is False and "approve" not in with_other["sources"][0]
+       and with_other["docs"]["data"][0]["article-type"] == "answer" and "submission" in other["why"],
+       "where they differ, the model's kind stands without a mark, and what the words say is noted with it")
     silent = add_kind({"docs": {"data": [{"id": 1, "body": [{"id": "b1", "type": "p", "page": 1, "y": 10, "text": "Text"}]}]}},
                       [{"elements": [{"type": "text", "content": "Text", "fontSize": 10}]}], knowledge, None, "answer")
     ok(silent is not None and silent["kind"] == "answer" and silent["approve"] is False,

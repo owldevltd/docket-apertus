@@ -49,10 +49,11 @@ def add_kind(record: dict, pages: list[dict], knowledge: Knowledge, printed_type
              named: str | None = None) -> dict | None:
     """Sets the document's kind (article-type) on its entry with a place in the root sources. Two ways say
     what a document is: the model, asked for one kind of the list (`named`), and the words of a kind on the
-    first page. The model's kind stands. A person has to look (approve) only where something speaks against
-    it: the words of the page say another kind; or where the model names none and the words stand alone.
-    Measured 13 October 2026 on 60 documents: the model right in 56; with the words saying the same in 34 of
-    35, with the words silent in 10 of 11, against the words in 12 of 14. Returns what was found."""
+    first page. The model's kind stands, without a mark; what the words say goes with it as a note. A person
+    has to look (approve) only where the model names no kind and the words stand alone. Measured 13 October
+    2026 on 60 documents: the model right in 56; with the words saying the same in 34 of 35, with the words
+    silent in 10 of 11, against the words in 12 of 14: a mark there held 14 documents to find 2 wrong kinds.
+    Returns what was found."""
     entry = record["docs"]["data"][0]
     found = document_kind(pages, entry["body"], knowledge, printed_type)
     kind = next((k for k in knowledge.kinds if k["id"] == named and k.get("rule") is not False), None)
@@ -65,7 +66,7 @@ def add_kind(record: dict, pages: list[dict], knowledge: Knowledge, printed_type
     elif found["kind"] != kind["id"]:
         other = f"; the words of the first page say {found['kind']} ({found['why']})"
         found = {"kind": kind["id"], "name": kind.get("name", {}), "why": "named by the model" + other,
-                 "block": found["block"], "approve": True}
+                 "block": found["block"], "approve": False}
     else:
         found = {**found, "why": found["why"] + ", and named by the model", "approve": False}
     entry["article-type"] = found["kind"]

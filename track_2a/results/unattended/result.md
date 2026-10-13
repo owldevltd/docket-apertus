@@ -54,14 +54,44 @@ document put in its place is marked in 57 of 60 and 57 of 59.
 The kind of the document: the model right in 56 of the 60 documents of the reference set; with the words of the
 first page saying the same in 34 of 35, with the words silent in 10 of 11, against the words in 12 of 14.
 
+## Further rules, counted by replay
+
+The stored runs of both sets put through the code again with the answers of the model as stored, no call. The replay
+gives the stored run back field by field (1 440 of 1 440 fields) where the code is unchanged.
+
+| | reference set | other documents |
+|---|---:|---:|
+| as above | 30 of 60 | 19 of 60 |
+| a value has to stand on the page as whole words; a session without a place that is the polity again, a name that is the parliament, or a day without a session; a co-signer is no party | 29 | 19 |
+| the model's kind stands without a mark, also against the words of the page; a mark only where the model names none | 38 | 30 |
+
+A mark on the kind where the words of the page say another kind held 14 documents of the reference set to find 2
+wrong kinds: the model was right in 12 of the 14.
+
+A value inside a longer word had counted as found on the page: 58 of 1 451 values placed as literal on the 120
+documents ("Parlament" in "Parlamentarischer Vorstoss", "1" in "12", "Motion" in "Motionstext"). A word may go on
+with an ending of its own ("des Kantonsrates").
+
+What the rules for the session and the party leave out on the 60 other documents, which they were not made on: 9
+places of a session that are the polity or the place again, 5 names of a session that are the parliament or the
+addressee, 4 days and places without a session, 5 parties that are the submitter, the parliament or the polity, 8
+values under on behalf of that are a body of the document. A rule tried first, which also left out a value that
+holds the other one and more, took "CVP Glarus" for the polity Glarus and "Sitzung des Einwohnerrats" for the
+parliament; it was narrowed to a value that is the other one or a part of it.
+
+On the reference set after these rules: 266 fields not as in the reference against 273, 136 fields with a value the
+reference does not hold against 148. On the other documents: of the 30 without a mark, 17 hold none of the four
+fields OpenParlData knows in another value.
+
 What still holds a document after that, by documents (reference set / other documents): a printed header entry 14 /
 20, the kind against the words 14 / 17, the title 8 / 18, a contributor 8 / 18, the date 7 / 11, the type 6 / 8, the
 number 3 / 7. These are values that stand on the page in no literal form.
 
 ## What the documents that run through hold
 
-On the reference set, against the draft reference: of the 30 documents without a mark, 3 hold no value that is not in
-the reference under its field; 11 hold one such field, 16 more than one. By documents: party 10, co-signers 6,
+On the reference set, against the draft reference, before the further rules: of the 30 documents without a mark, 3
+hold no value that is not in the reference under its field; 11 hold one such field, 16 more than one. After them: 5
+of 38. By documents: party 10, co-signers 6,
 parliament 5, on behalf of 5, session 5, authors 5, days of events 5. No document of the 30 has every field as in the
 reference and complete. The reference is a draft; whether a value that is not in it is wrong or only read
 differently was not told apart.

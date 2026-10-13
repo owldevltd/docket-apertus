@@ -253,8 +253,8 @@ def plain(t: str) -> str:
 
 
 def within(value: str, text: str) -> bool:
-    """Whether the value stands literally in the text; a date in any usual spelling of the same day, the month
-    written out in any of the languages of the documents."""
+    """Whether the value stands literally in the text, as whole words; a date in any usual spelling of the same
+    day, the month written out in any of the languages of the documents."""
     d = day(value)
     m = re.match(r"^(\d{4})-(\d{2})-(\d{2})$", d) if d else None
     if m:
@@ -267,7 +267,36 @@ def within(value: str, text: str) -> bool:
         forms += [f"{int(dd)}{mark}{name}{year}" for name in names for mark in (".", "", "er", "°", "º")]
         # no digit before it, else the 9th hides in the 19th
         return any(re.search(r"(?<!\d)" + re.escape(form), flat) for form in forms)
-    return plain(value) != "" and plain(value) in plain(text)
+    return whole(value, text)
+
+
+# what a word may end on after the value and still be the value ("des Kantonsrates", "Postulats", "Motionen")
+ENDINGS = {"s", "es", "e", "en", "n", "er", "x"}
+
+
+def whole(value: str, text: str) -> bool:
+    """Whether the letters and digits of the value stand in the text from the start of a word to the end of
+    one, whatever stands between the words (a space the page lacks, letters set apart). A value inside a longer
+    word is not on the page: "Parlament" in "Parlamentarischer Vorstoss", "1" in "12", "Motion" in "Motionstext"
+    were taken for it (found 13 October 2026: 58 of 1 451 values placed as literal on 120 documents). The word
+    may go on with an ending of its own only."""
+    needle = plain(value)
+    if not needle:
+        return False
+    hay, starts, ends = "", set(), []
+    for word in re.findall(r"[^\W_]+", text.lower()):
+        starts.add(len(hay))
+        hay += word
+        ends.append(len(hay))
+    at = hay.find(needle)
+    while at != -1:
+        end = at + len(needle)
+        if at in starts:
+            rest = next((hay[end:e] for e in ends if e >= end), None)
+            if rest == "" or (rest in ENDINGS and needle[-1].isalpha()):
+                return True
+        at = hay.find(needle, at + 1)
+    return False
 
 
 def same(form: str, a: str, b: str) -> bool:
