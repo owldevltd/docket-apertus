@@ -498,6 +498,29 @@ The long record of the measurements behind the decisions is `docs/evidence.md`.
   `src/docket/pipeline.py`, `tests/bundles.py`).
 - **Run:** `results/asking/`
 
+### Does the model give the subject of an affair as its title when asked for it?
+
+- **Question:** Asked for "the title of the affair", the model mostly gave the line that names the kind of affair.
+  Does it give the subject when the question says so, and is a date found that is written with slashes or stands
+  on a later page only?
+- **Test:** The 60 documents of the reference set. Three wordings of the title question on the stored first call of
+  each document, 180 calls, answers alone. Then the pipeline with the third wording, the day with slashes, the date
+  from the line of a place and a day where the model gives none, and names set apart by a dash with spaces, 696
+  calls.
+- **Result:** Answers: the title right in 37 of 60 as built, in 45, 51 and 49 with the three wordings; the four
+  fields of that call together 172 of 240 as built, 189, 185 and 190. Through the pipeline: the title right in 49
+  of 60 documents against 40, the date of submission in 45 against 40, the type as printed in 53 against 50; 922 of
+  1 260 fields right (73.2 %) against 903. Leaving aside the three lists from the running text: 3 documents with
+  every field right as before, 12 against 10 with at most one field not right, 21 as before with at most two. A
+  person has fewer fields to set right in 19 documents, more in 6. The reference is a draft, each state was run once.
+- **Finding:** The title is asked as the subject of the affair as printed, the line that says what it is about,
+  without the kind, the number and the date (`data/schema/fields.json`; the wording set by the assistant, open). A day
+  with slashes is read and found (`src/docket/fields/placer.py`). A field with `otherwise` takes what the code reads
+  where the model gave no value with a place: the date takes the day of the line the document is dated with
+  (`read_otherwise` in `src/docket/fields/filler.py`). Names set apart by a dash with spaces are taken one by one
+  (`tests/bundles.py`).
+- **Run:** `results/asking/`
+
 ### Does code find the place of every value the model names?
 
 - **Question:** For every value the model reads off a first page: does code find where it stands on the page,

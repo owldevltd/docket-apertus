@@ -47,7 +47,7 @@
       "own-language": true,
       "entity": "text",
       "role": "title",
-      "question": "Titel des Geschäfts",
+      "question": "Betreff oder Thema des Geschäfts, so wie es gedruckt ist: die Zeile, die sagt, worum es geht, ohne die Art des Geschäfts, ohne Nummer und ohne Datum",
       "min-words": 3,
       "block-text": true
     }
@@ -68,7 +68,8 @@
     "entity": "date",
     "role": "date",
     "question": "Datum, an dem das Geschäft eingereicht wurde, als TT.MM.JJJJ",
-    "form": "date"
+    "form": "date",
+    "otherwise": "day-in-line"
   },
   "contributors": {
     "data": [

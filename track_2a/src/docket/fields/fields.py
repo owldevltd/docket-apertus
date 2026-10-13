@@ -54,6 +54,8 @@ class Field:
     paired: str = ""
     # the way code reads this field from the pages itself; the model is not asked for it then
     reader: str = ""
+    # the way code reads this field where the model gave it no value with a place
+    otherwise: str = ""
     # fields whose values are not this field's: what already stands under one of them is left out here
     apart: list[str] = field(default_factory=list)
     when: list[str] = field(default_factory=list)
@@ -166,6 +168,7 @@ def _walk(node, path: list[str], fixed: dict, template: str, fields: dict[str, F
             together=str(node.get("together", "")),
             paired=str(node.get("paired", "")),
             reader=str(node.get("reader", "")),
+            otherwise=str(node.get("otherwise", "")),
             apart=list(node.get("apart", [])),
             when=list(node.get("when", [])),
             free=bool(node.get("free", False)),

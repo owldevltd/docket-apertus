@@ -223,14 +223,14 @@ def block_text(block: dict | None) -> str:
 
 
 def day(t: str) -> str:
-    """The day as YYYY-MM-DD from "22.11.2018", "2018-11-22" or written out with the name of the month in
+    """The day as YYYY-MM-DD from "22.11.2018", "22/11/2018", "2018-11-22" or written out with the name of the month in
     German, French, Italian or English ("22. November 2018", "1er mars 2020", "3 marzo 2020"); empty when
     none."""
     t = t.lower()
     m = re.search(r"(\d{4})-(\d{2})-(\d{2})", t)
     if m:
         return f"{m.group(1)}-{m.group(2)}-{m.group(3)}"
-    m = re.search(r"(\d{1,2})\.\s*(\d{1,2})\.\s*(\d{4})", t)
+    m = re.search(r"(\d{1,2})\.\s*(\d{1,2})\.\s*(\d{4})", t) or re.search(r"(?<![\d/])(\d{1,2})/(\d{1,2})/(\d{4})(?![\d/])", t)
     if m:
         return f"{int(m.group(3)):04d}-{int(m.group(2)):02d}-{int(m.group(1)):02d}"
     m = re.search(r"(\d{1,2})" + DAY_MARK + r"\s*(" + MONTH_WORDS + r")\s*(\d{4})", t)
@@ -253,6 +253,7 @@ def within(value: str, text: str) -> bool:
         flat = bare(re.sub(r"\s+", "", text))
         year, month, dd = m.group(1), m.group(2), m.group(3)
         forms = [f"{int(dd)}.{int(month)}.{year}", f"{dd}.{month}.{year}", d]
+        forms += [f"{int(dd)}/{int(month)}/{year}", f"{dd}/{month}/{year}"]
         # written out: the name of the month in each language, the day with a point, bare, or as "1er", "1°"
         names = {bare(row[int(month) - 1]) for row in MONTH_NAMES}
         forms += [f"{int(dd)}{mark}{name}{year}" for name in names for mark in (".", "", "er", "°", "º")]

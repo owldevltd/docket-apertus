@@ -64,7 +64,7 @@ AGAIN = ("missing", "too short", "too long", "no date")
 
 # the day an entry of a paired field names: as asked for, as the record holds it, or written out
 PAIR_DAY = re.compile(
-    r"\d{4}-\d{2}-\d{2}|\d{1,2}\.\s*\d{1,2}\.\s*\d{4}|\d{1,2}" + DAY_MARK + r"\s*(?:" + MONTH_WORDS + r")\s*\d{4}",
+    r"\d{4}-\d{2}-\d{2}|\d{1,2}\.\s*\d{1,2}\.\s*\d{4}|\d{1,2}/\d{1,2}/\d{4}|\d{1,2}" + DAY_MARK + r"\s*(?:" + MONTH_WORDS + r")\s*\d{4}",
     re.I,
 )
 
@@ -74,24 +74,35 @@ PAIR_DAY = re.compile(
 _NAME = r"[A-ZÄÖÜÉÈÀ][\w.'’\-]+"
 PLACE_DAY = re.compile(
     r"(?<![\w.])(" + _NAME + r"(?:[ \-/](?:[a-zäöüéèà]{1,3} )?" + _NAME + r"){0,3})\s*,\s*(?:den |le |il |li |lì |am )?"
-    r"(?i:\d{1,2}\.\s*\d{1,2}\.\s*\d{2,4}|\d{1,2}" + DAY_MARK + r"\s*(?:" + MONTH_WORDS + r")\s*\d{4})"
+    r"((?i:\d{1,2}\.\s*\d{1,2}\.\s*\d{2,4}|\d{1,2}/\d{1,2}/\d{4}|\d{1,2}" + DAY_MARK + r"\s*(?:" + MONTH_WORDS + r")\s*\d{4}))"
 )
+
+
+def _dated(body: list[dict], part: int) -> tuple[str, str] | None:
+    for block in blocks_of(body):
+        m = PLACE_DAY.search(block_text(block)) if block["type"] != "graphic" else None
+        if m:
+            return m.group(part).strip(), block["id"]
+    return None
 
 
 def before_day(body: list[dict]) -> tuple[str, str] | None:
     """The place a document is dated at: the words before the day in the first line of a place and a day, with
     the id of their block; None when the pages hold no such line."""
-    for block in blocks_of(body):
-        m = PLACE_DAY.search(block_text(block)) if block["type"] != "graphic" else None
-        if m:
-            return m.group(1).strip(), block["id"]
-    return None
+    return _dated(body, 1)
+
+
+def day_in_line(body: list[dict]) -> tuple[str, str] | None:
+    """The day a document is dated with: the day of that same line, with the id of its block; None when the
+    pages hold no such line, or the day is no full date."""
+    hit = _dated(body, 2)
+    return hit if hit and day(hit[0]) else None
 
 
 # the ways code reads a field itself, by the name a field gives under "reader". Asked for the place, the model
 # named one in 22 of 60 documents that print none, mostly the polity (measured 13 October 2026); read from
 # the line of place and day, the place came out as in the reference in 56 of the 60 instead of 34.
-READERS = {"before-day": before_day}
+READERS = {"before-day": before_day, "day-in-line": day_in_line}
 
 
 def fill_document(record: dict, pages: list[dict], first: list[int], fields: Fields, contract: Contract,
@@ -191,6 +202,22 @@ def bundles(names: list[str], fields: Fields) -> list[list[str]]:
     return [b[k:k + BUNDLE] for b in out for k in range(0, len(b), BUNDLE)]
 
 
+def read_otherwise(values: dict, report: dict, fields: Fields, body: list[dict]) -> None:
+    """A field that names a reader under "otherwise" takes what the code reads where the model gave it no value
+    with a place: the date is asked over the first pages, and a document dated on a later page had none
+    (measured 13 October 2026: the date as in the reference in 43 of 60 documents instead of 39)."""
+    for name, f in fields.fields.items():
+        if not f.otherwise or name in values or name not in report:
+            continue
+        hit = READERS[f.otherwise](body)
+        if hit:
+            entry = {"value": hit[0], "block": hit[1], "how": "literal"}
+            values[name] = [dict(entry)]
+            report[name]["items"] = [*report[name].get("items", []), entry]
+            report[name]["state"] = "on the page"
+            report[name]["read"] = f"by code ({f.otherwise}): the model named no value with a place"
+
+
 def keep_apart(values: dict, report: dict, fields: Fields) -> None:
     """A value that already stands under a field named in "apart" is left out of this field: asked for the
     party, the model repeats the group that submitted, or names the parliament (measured 13 October 2026: 14 of
@@ -215,6 +242,7 @@ def keep_apart(values: dict, report: dict, fields: Fields) -> None:
 
 def _finish(record: dict, values: dict, report: dict, asked: list, fields: Fields, contract: Contract,
             body: list[dict], knowledge: Knowledge) -> tuple[dict, dict]:
+    read_otherwise(values, report, fields, body)
     keep_apart(values, report, fields)
     out, notes = fill(record, 1, values, fields, contract, body)
     for name, note in notes.items():
@@ -379,6 +407,10 @@ def items(f: Field, value: str) -> list[str]:
     "Muster (Bern, PS)" is one name with what the document prints behind it."""
     if f.form != "list":
         return [value.strip()]
+    # without semicolon or comma, a dash with a space on both sides sets names apart ("Muster - Beispiel - Probe");
+    # the dash inside a name has none ("Muster-Probe")
+    if ";" not in value and "," not in value and re.search(r"\s[\-–]\s", value):
+        return [v.strip() for v in re.split(r"\s[\-–]\s", value) if v.strip()]
     separator = ";" if ";" in value else ","
     out, depth, one = [], 0, ""
     for char in value:
