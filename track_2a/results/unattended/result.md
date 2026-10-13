@@ -64,6 +64,7 @@ gives the stored run back field by field (1 440 of 1 440 fields) where the code 
 | as above | 30 of 60 | 19 of 60 |
 | a value has to stand on the page as whole words; a session without a place that is the polity again, a name that is the parliament, or a day without a session; a co-signer is no party | 29 | 19 |
 | the model's kind stands without a mark, also against the words of the page; a mark only where the model names none | 38 | 30 |
+| the date of submission read from the submission itself only; a word for further co-signers is no person | 40 | 30 |
 
 A mark on the kind where the words of the page say another kind held 14 documents of the reference set to find 2
 wrong kinds: the model was right in 12 of the 14.
@@ -82,6 +83,16 @@ parliament; it was narrowed to a value that is the other one or a part of it.
 On the reference set after these rules: 266 fields not as in the reference against 273, 136 fields with a value the
 reference does not hold against 148. On the other documents: of the 30 without a mark, 17 hold none of the four
 fields OpenParlData knows in another value.
+
+The date of submission by the kind of the document, before the last row. Reference set: in documents the model
+names a submission the date is right in 31 of 33 where one is set; in documents of another kind in 10 of 19, and
+in 6 of these the reference holds no date of submission at all. Other documents, against the date of OpenParlData:
+26 of 32 in submissions, 7 of 18 in documents of another kind. Asked for the day an affair was submitted, the model
+gives the day the document at hand carries. With the date read from the submission only: on the other documents 32
+values set that differ from OpenParlData against 42, 131 as OpenParlData against 138; of the 30 documents without a
+mark, 19 hold none of the four fields in another value against 17. On the reference set 124 fields with a value the
+reference does not hold against 136, and 270 fields not as in the reference against 266: the dates that were right
+in an answer or a report are no longer set.
 
 What still holds a document after that, by documents (reference set / other documents): a printed header entry 14 /
 20, the kind against the words 14 / 17, the title 8 / 18, a contributor 8 / 18, the date 7 / 11, the type 6 / 8, the

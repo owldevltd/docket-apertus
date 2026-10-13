@@ -592,6 +592,27 @@ The long record of the measurements behind the decisions is `docs/evidence.md`.
   a mark only where the model names none (`add_kind` in `src/docket/pipeline.py`).
 - **Run:** `results/unattended/result.md`
 
+### Is the date of submission read rightly from a document that is no submission?
+
+- **Question:** Asked for the day an affair was submitted, which day does the model give in an answer, a report or
+  minutes?
+- **Test:** The stored runs of the reference set and of the 60 other documents, the date by the kind the model
+  names for the document, against the draft reference and against the date OpenParlData holds; then the replay
+  with the date read from submissions only. No call.
+- **Result:** Reference set: the date right in 31 of 33 submissions where one is set, in 10 of 19 documents of
+  another kind; in 6 of these the reference holds no date of submission. Other documents: as OpenParlData in 26 of
+  32 submissions, in 7 of 18 documents of another kind. With the date read from the submission only: on the other
+  documents 32 values that differ from OpenParlData against 42, 131 as OpenParlData against 138; 30 documents
+  without a mark as before, 19 of them with none of the four fields in another value against 17. On the reference
+  set 40 documents without a mark against 38, 124 fields with a value the reference does not hold against 136, 270
+  fields not as in the reference against 266. In the same replay a word that stands for further co-signers
+  ("cofirmatari", "und Mit.") was an entry among the submitters in 3 and 5 documents.
+- **Finding:** A field with `kinds` is read from documents of these kinds only: the date of submission from the
+  submission itself; where the model names no kind the value stays (`keep_kinds` in
+  `src/docket/fields/filler.py`, `data/schema/fields.json`). A word that stands for further co-signers is no entry
+  of a list of persons and is left off behind a name (`items`, `tests/bundles.py`).
+- **Run:** `results/unattended/result.md`
+
 ### Does code find the place of every value the model names?
 
 - **Question:** For every value the model reads off a first page: does code find where it stands on the page,

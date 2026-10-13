@@ -235,6 +235,26 @@ def bundles(names: list[str], fields: Fields) -> list[list[str]]:
     return [b[k:k + BUNDLE] for b in out for k in range(0, len(b), BUNDLE)]
 
 
+def keep_kinds(values: dict, report: dict, fields: Fields) -> None:
+    """A field that names kinds of documents under "kinds" is read from documents of these kinds only: the day
+    an affair was submitted from the submission itself. Asked for it, the model gives the day the document at
+    hand carries; in an answer or a report that is another day about as often as not (measured 13 October 2026:
+    right in 31 of 33 submissions and in 10 of 19 other documents of the reference set; on 60 documents the rule
+    was not made on, as OpenParlData in 26 of 32 and in 7 of 18). The kind is the one the model named; where it
+    named none, the value stays."""
+    asked = next((q["name"] for q in questions(fields) if q.get("role") == "kind"), "")
+    named = (report.get(asked) or {}).get("value")
+    if not named:
+        return
+    for name, f in fields.fields.items():
+        if f.kinds and named not in f.kinds and name in values:
+            for entry in report[name].get("items", []):
+                if entry.get("block") is not None:
+                    entry["block"], entry["how"] = None, f"left out: the document is a {named}"
+            del values[name]
+            report[name]["state"] = "empty"
+
+
 def add_entries(values: dict, report: dict, fields: Fields, language: str) -> None:
     """The value of a field with "entry" becomes an entry of the list named there as well, under the label of
     the field in the language of the document, and stands first: the day an affair was submitted is its first
@@ -299,6 +319,7 @@ def keep_apart(values: dict, report: dict, fields: Fields) -> None:
 def _finish(record: dict, values: dict, report: dict, asked: list, fields: Fields, contract: Contract,
             body: list[dict], knowledge: Knowledge) -> tuple[dict, dict]:
     keep_apart(values, report, fields)
+    keep_kinds(values, report, fields)
     add_entries(values, report, fields, language_of(body))
     out, notes = fill(record, 1, values, fields, contract, body)
     for name, note in notes.items():
@@ -457,7 +478,25 @@ def pair(item: str) -> tuple[str, str]:
     return m.group(0), re.sub(r"\s+", " ", rest)
 
 
+# words that stand for the co-signers of a submission instead of naming them, in the languages of the documents:
+# alone they are no entry of a list of persons ("cofirmatari", "fünf Mitunterzeichnende"), behind a name they
+# are left off ("Hofer Ruedi und Mit.", "… et consorts")
+_OTHERS = r"(?:mitunterzeichnende[rn]?|mitunterzeichner(?:innen)?|mit\.|cofirmatar[io]|cosignataires?|consorts)"
+OTHERS_ALONE = re.compile(r"^\W*(?:\w+\s+)?" + _OTHERS + r"\W*$", re.I)
+OTHERS_BEHIND = re.compile(r"\s+(?:und|et|e|ed)\s+" + _OTHERS + r"\W*$", re.I)
+
+
 def items(f: Field, value: str) -> list[str]:
+    """The entries of a field, see `_entries`; of a list of persons without what only stands for further
+    persons."""
+    out = _entries(f, value)
+    if f.form == "list" and f.entity == "person":
+        out = [OTHERS_BEHIND.sub("", v).strip() for v in out]
+        out = [v for v in out if v and not OTHERS_ALONE.match(v)]
+    return out
+
+
+def _entries(f: Field, value: str) -> list[str]:
     """The values of a field: per entry one for a list, else the value itself. Asked for is the semicolon;
     without one the model mostly separates with a comma. A separator inside round brackets separates nothing:
     "Muster (Bern, PS)" is one name with what the document prints behind it."""

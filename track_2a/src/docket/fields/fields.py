@@ -60,6 +60,8 @@ class Field:
     # the field this one belongs to: without a value there, this one has none (the day of a session without the
     # session)
     needs: str = ""
+    # the kinds of documents this field is read from; from a document of another kind its value is left out
+    kinds: list[str] = field(default_factory=list)
     # the day of this field is an entry of a list as well: {"of": the list field, "label": its name per language}
     entry: dict = field(default_factory=dict)
     when: list[str] = field(default_factory=list)
@@ -174,6 +176,7 @@ def _walk(node, path: list[str], fixed: dict, template: str, fields: dict[str, F
             reader=str(node.get("reader", "")),
             apart=list(node.get("apart", [])),
             needs=str(node.get("needs", "")),
+            kinds=list(node.get("kinds", [])),
             entry=dict(node.get("entry", {})),
             when=list(node.get("when", [])),
             free=bool(node.get("free", False)),

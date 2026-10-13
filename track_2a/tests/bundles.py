@@ -26,7 +26,7 @@ from docket.config import load_config  # noqa: E402
 from docket.fields import filler  # noqa: E402
 from docket.fields.fields import Field, Fields  # noqa: E402
 from docket.fields.filler import (  # noqa: E402
-    BUNDLE, add_entries, before_day, bundles, check, items, keep_apart, pair, parse, prompt, unsound,
+    BUNDLE, add_entries, before_day, bundles, check, items, keep_apart, keep_kinds, pair, parse, prompt, unsound,
 )
 from docket.fields.placer import day, fill, within  # noqa: E402
 from docket.model.client import Answer  # noqa: E402
@@ -225,6 +225,27 @@ def main() -> int:
         mark = json.dumps(record).count('"approve": true')
         ok(values["summary"][0]["approve"] is marked and (mark == 1) is marked,
            ("a summary that leaves its document is marked for a person" if marked else "a sound summary stands without a mark, in the record too"))
+    # the day an affair was submitted is read from the submission itself, not from an answer or a report
+    asked_name = asked_kind["name"]
+    for named, stays in (("submission", True), ("answer", False), (None, True)):
+        read = {"date": [{"value": "03.03.2020", "block": "b1", "how": "literal"}]}
+        told = {"date": {"value": "03.03.2020", "state": "on the page", "items": [dict(read["date"][0])]},
+                asked_name: {"value": named, "state": "named" if named else "empty", "items": []}}
+        keep_kinds(read, told, fields)
+        ok(("date" in read) is stays,
+           f"the date of submission {'stays' if stays else 'is left out'} where the model names the document {named or 'nothing'}")
+    # a word that stands for further co-signers is no person
+    people = fields.fields["authors"]
+    ok(items(people, "Hans Muster; fünf Mitunterzeichnende") == ["Hans Muster"] and items(people, "Carla Beispiel e cofirmatari") == ["Carla Beispiel"]
+       and items(people, "Hofer Ruedi und Mit.") == ["Hofer Ruedi"] and items(people, "Anna Muster; Beat Meier") == ["Anna Muster", "Beat Meier"],
+       "a word that stands for further co-signers is no entry of a list of persons and is left off behind a name")
+    session = {"session": [{"value": "Einwohnerrat", "block": "b1", "how": "literal"}], "parliament": [{"value": "Einwohnerrat", "block": "b1", "how": "literal"}],
+               "session-date": [{"value": "03.03.2020", "block": "b1", "how": "literal"}],
+               "party": [{"value": "CVP Glarus", "block": "b2", "how": "literal"}], "polity": [{"value": "Glarus", "block": "b3", "how": "literal"}]}
+    notes = {n: {"value": "", "state": "on the page", "items": [dict(h) for h in session[n]]} for n in ("session", "session-date", "party")}
+    keep_apart(session, notes, fields)
+    ok("session" not in session and "session-date" not in session and [h["value"] for h in session.get("party", [])] == ["CVP Glarus"],
+       "a session named like the parliament is none, and its day goes with it; a party named after its town stays")
     return 1 if failed else 0
 
 

@@ -69,6 +69,7 @@
     "role": "date",
     "question": "Datum, an dem das Geschäft eingereicht wurde, als TT.MM.JJJJ",
     "form": "date",
+    "kinds": ["submission"],
     "entry": {"of": "event", "label": {"de": "Eingereicht", "fr": "Déposé", "it": "Presentato", "en": "Submitted"}}
   },
   "contributors": {
