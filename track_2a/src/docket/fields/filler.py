@@ -17,7 +17,7 @@ from pathlib import Path
 
 from docket.affair.validator import Contract
 from docket.document.bridge import Knowledge
-from docket.document.language import language_of
+from docket.document.language import language_of, language_of_text
 from docket.document.picture import text_image
 from docket.fields.fields import Field, Fields
 from docket.fields.placer import (
@@ -62,6 +62,12 @@ OVERLAP = 0.0
 
 # these states get one more question, at most one bundle per scope
 AGAIN = ("missing", "too short", "too long", "no date")
+
+# a text the model worded itself (the summary) stands without a mark while at least this share of its words
+# stands in the document. Measured 13 October 2026 on 120 documents, 60 of them never used before: the summary
+# of a document shares 0.39 to 0.93 of its words with it, 0.71 in the middle; the summary of another document of
+# the same language 0.18 in the middle and 0.31 at nine in ten. Set by the assistant, open.
+COMPOSED_SHARE = 0.4
 
 # the day an entry of a paired field names: as asked for, as the record holds it, or written out
 PAIR_DAY = re.compile(
@@ -185,6 +191,21 @@ def fill_document(record: dict, pages: list[dict], first: list[int], fields: Fie
     return _finish(record, values, report, asked, fields, contract, body, knowledge)
 
 
+def unsound(worded: str, source: str, language: str) -> str:
+    """Why a text the model worded itself needs a person, or '' when nothing speaks against it. The model is not
+    looked over each time, only where it leaves its document: too few of the words stand in the document, the
+    text is in another language than the document, or it holds a number the document does not."""
+    if overlap(worded, source) < COMPOSED_SHARE:
+        return "few of its words stand in the document"
+    spoken = language_of_text(worded)
+    if spoken and language and spoken != language:
+        return "in another language than the document"
+    held = {int(n) for n in re.findall(r"\d+", source)}
+    if any(int(n) not in held for n in re.findall(r"\d{2,}", worded)):
+        return "a number the document does not hold"
+    return ""
+
+
 def questions(fields: Fields) -> list[dict]:
     """The questions about the document itself the task holds beside the fields ("ask"): what the document is,
     one word out of a closed list. No value of the record; the answer goes into the report under its name."""
@@ -214,6 +235,32 @@ def bundles(names: list[str], fields: Fields) -> list[list[str]]:
     return [b[k:k + BUNDLE] for b in out for k in range(0, len(b), BUNDLE)]
 
 
+def add_entries(values: dict, report: dict, fields: Fields, language: str) -> None:
+    """The value of a field with "entry" becomes an entry of the list named there as well, under the label of
+    the field in the language of the document, and stands first: the day an affair was submitted is its first
+    event. OpenParlData lists the submission among the events of an affair, on the day the affair began; read
+    from the document alone, that event was missing in 19 of 60 documents and its day stood under the date
+    only (measured 13 October 2026). Not added where the list holds that day already."""
+    for name, f in fields.fields.items():
+        # not where a single field is asked later on and the list is not among the fields at hand
+        if not f.entry or name not in values or f.entry.get("of") not in fields.fields:
+            continue
+        lead = fields.fields[f.entry["of"]]
+        mate = lead.paired
+        hit = values[name][0]
+        if not day(hit["value"]) or any(day(h["value"]) == day(hit["value"]) for h in values.get(mate, [])):
+            continue
+        labels = f.entry.get("label", {})
+        label = labels.get(language) or labels.get("de") or name
+        pair = {lead.name: {"value": label, "block": hit["block"], "how": "derived"},
+                mate: {"value": hit["value"], "block": hit["block"], "how": hit["how"]}}
+        for key, entry in pair.items():
+            values[key] = [dict(entry), *values.get(key, [])]
+            held = report.setdefault(key, {"value": None, "state": "empty", "items": []})
+            held["items"] = [dict(entry), *held.get("items", [])]
+            held["state"] = "on the page"
+
+
 def keep_apart(values: dict, report: dict, fields: Fields) -> None:
     """A value that already stands under a field named in "apart" is left out of this field: asked for the
     party, the model repeats the group that submitted, or names the parliament (measured 13 October 2026: 14 of
@@ -239,6 +286,7 @@ def keep_apart(values: dict, report: dict, fields: Fields) -> None:
 def _finish(record: dict, values: dict, report: dict, asked: list, fields: Fields, contract: Contract,
             body: list[dict], knowledge: Knowledge) -> tuple[dict, dict]:
     keep_apart(values, report, fields)
+    add_entries(values, report, fields, language_of(body))
     out, notes = fill(record, 1, values, fields, contract, body)
     for name, note in notes.items():
         report.setdefault(name, {})["note"] = note
@@ -527,6 +575,12 @@ class _Run:
             asked = [c for c in blocks_of(self.body) if c["page"] in self.which and c["type"] != "graphic"]
             block = asked[0]["id"] if asked else None
             how = "composed"
+        doubt = None
+        if f.free or (f.paired and how == "cited"):
+            # what the model worded (a summary, the name of an event that stands at its day) is held against
+            # the document it worded it from
+            pages = " ".join(block_text(c) for c in blocks_of(self.body) if c["page"] in self.which)
+            doubt = unsound(item, pages, self.language)
         text = block_text(find_block(block, self.body, self.which)).strip() if how == "cited" else ""
         # for the title the text of the named block counts when every word of the answer stands in it and
         # the block is no paragraph
@@ -540,9 +594,16 @@ class _Run:
         entry = {"value": item, "block": block, "how": how}
         if share is not None:
             entry["overlap"] = share
+        if doubt is not None:
+            entry["approve"] = bool(doubt)
+            if doubt:
+                entry["doubt"] = doubt
         self.report[name]["items"].append(entry)
         if block is not None:
-            self.values.setdefault(name, []).append({"value": item, "block": block, "how": how})
+            hit = {"value": item, "block": block, "how": how}
+            if doubt is not None:
+                hit["approve"] = bool(doubt)
+            self.values.setdefault(name, []).append(hit)
             on_page = self.report[name]["state"] == "on the page" or how in ("literal", "derived")
             away = "at the head of the document" if how == "composed" else "block from the model"
             self.report[name]["state"] = "on the page" if on_page else away

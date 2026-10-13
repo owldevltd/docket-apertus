@@ -84,6 +84,9 @@ def rows_of(doc: str, report: dict[str, dict], fields: Fields, body: list[dict],
                 "page": block.get("page") if block else None,
                 "box": [block.get(k) for k in ("x", "y", "width", "height")] if block else None,
             })
+            # what the run found out about the look a worded text needs goes with its row
+            if "approve" in item:
+                rows[-1]["approve"] = item["approve"]
     if kind and kind.get("kind"):
         block = find_block(kind.get("block") or "b1", body)
         rows.append({

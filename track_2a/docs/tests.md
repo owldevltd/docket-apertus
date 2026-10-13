@@ -544,6 +544,29 @@ The long record of the measurements behind the decisions is `docs/evidence.md`.
   instead of 56 and the date in 41 instead of 45, counted on the stored run.
 - **Run:** `results/unseen/`
 
+### How many documents run through without a mark for a person?
+
+- **Question:** A value carries a mark where a person should look. How many documents carry none, what do the
+  marks hang on, and can a text the model worded be held against its document instead of being marked every time?
+- **Test:** The 60 documents of the reference set and the 60 other documents of the entry before, counted per
+  document. The check of a worded text on the stored summaries of both sets, with the summary of another document
+  put in its place, no call. Then the pipeline, 697 calls.
+- **Result:** Before: no document without a mark; the summary marked in 60 of 60, an event in 28, the kind in 25. A
+  summary shares 0.39 to 0.93 of its words with its document, 0.71 in the middle; the summary of another document
+  0.18 in the middle. Held against its document, no summary of the reference set is marked and 1 of the other 60; a
+  summary put in the place of another is marked in 114 of 119. Through the pipeline: 13 of 60 documents without a
+  mark. With the kind marked only where the words of the page say another kind, and the name of an event held
+  against the document, counted on the stored runs: 30 of 60, and 19 of the 60 other documents. Of the 30, 3 hold no
+  value that the draft reference does not hold under its field; 11 hold one such field. In the same run the day an
+  affair was submitted became its first event: the days of events right in 33 of 60 documents against 20, 939 of
+  1 260 fields against 922.
+- **Finding:** A text the model worded is marked only where it leaves its document: less than 0.4 of its words
+  stand there (set by the assistant, open), another language, or a number the document does not hold (`unsound` in
+  `src/docket/fields/filler.py`). The kind is marked where the words of the page say another kind, or stand alone
+  (`add_kind` in `src/docket/pipeline.py`). The date of submission gives the first event of the affair (`entry` in
+  `data/schema/fields.json`, `add_entries`; `tests/bundles.py`).
+- **Run:** `results/unattended/`
+
 ### Does code find the place of every value the model names?
 
 - **Question:** For every value the model reads off a first page: does code find where it stands on the page,

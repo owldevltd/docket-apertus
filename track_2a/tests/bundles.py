@@ -6,13 +6,16 @@ made-up page with a played answer. The place is read by code from a line of a pl
 party does not repeat what stands under the submitters or the bodies; a bare no is no value. What a document is
 in its affair is asked from the model out of a closed list and held against the words of the first page: the same
 from both stands without a mark, anything else is for a person. A day written with slashes is read; names set
-apart by a dash with spaces are taken one by one.
+apart by a dash with spaces are taken one by one. The day an affair was submitted is its first event. A summary
+is held against its document: it stands without a mark unless few of its words stand there, it is in another
+language, or it holds a number the document does not.
 
     python3 tests/bundles.py
 """
 
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -22,7 +25,9 @@ sys.path.insert(0, str(ROOT / "src"))
 from docket.config import load_config  # noqa: E402
 from docket.fields import filler  # noqa: E402
 from docket.fields.fields import Field, Fields  # noqa: E402
-from docket.fields.filler import BUNDLE, before_day, bundles, check, items, keep_apart, pair, parse, prompt  # noqa: E402
+from docket.fields.filler import (  # noqa: E402
+    BUNDLE, add_entries, before_day, bundles, check, items, keep_apart, pair, parse, prompt, unsound,
+)
 from docket.fields.placer import day, fill, within  # noqa: E402
 from docket.model.client import Answer  # noqa: E402
 from docket.pipeline import add_kind, load_contract, load_field_file, load_knowledge  # noqa: E402
@@ -181,11 +186,45 @@ def main() -> int:
     ok(other["kind"] == "answer" and other["approve"] is True and with_other["sources"][0].get("approve") is True
        and with_other["docs"]["data"][0]["article-type"] == "answer",
        "where they differ, the model's kind stands, for a person to look at")
+    silent = add_kind({"docs": {"data": [{"id": 1, "body": [{"id": "b1", "type": "p", "page": 1, "y": 10, "text": "Text"}]}]}},
+                      [{"elements": [{"type": "text", "content": "Text", "fontSize": 10}]}], knowledge, None, "answer")
+    ok(silent is not None and silent["kind"] == "answer" and silent["approve"] is False,
+       "where the words of the page say nothing, the model's kind stands without a mark: nothing speaks against it")
     ok(day("14/11/2023") == "2023-11-14" and within("14.11.2023", "Dépôt: 14/11/2023") and day("Geschäft 2023/24") == "",
        "a day written with slashes is read and found on the page")
     names = fields.fields["cosigners"]
     ok(items(names, "Muster - Beispiel - Probe") == ["Muster", "Beispiel", "Probe"] and items(names, "Muster-Probe; Beispiel") == ["Muster-Probe", "Beispiel"],
        "names set apart by a dash with spaces are taken one by one; the dash inside a name sets nothing apart")
+    # the day an affair was submitted is its first event, unless the events read from the document hold that day
+    read = {"date": [{"value": "03.03.2020", "block": "b1", "how": "literal"}],
+            "event": [{"value": "Beantwortung im Stadtrat", "block": "b2", "how": "literal"}],
+            "event-date": [{"value": "12.05.2020", "block": "b2", "how": "literal"}]}
+    add_entries(read, {}, fields, "fr")
+    held = {"date": [{"value": "03.03.2020", "block": "b1", "how": "literal"}],
+            "event": [{"value": "Motion eingereicht", "block": "b1", "how": "literal"}],
+            "event-date": [{"value": "3. März 2020", "block": "b1", "how": "literal"}]}
+    add_entries(held, {}, fields, "de")
+    label = fields.fields["date"].entry.get("label", {}).get("fr")
+    ok([h["value"] for h in read["event"]] == [label, "Beantwortung im Stadtrat"] and [h["value"] for h in read["event-date"]] == ["03.03.2020", "12.05.2020"]
+       and read["event"][0]["block"] == "b1" and len(held["event"]) == 1,
+       "the day an affair was submitted is its first event, named in the language of the document; not twice where the document names it")
+    # what the model worded is not looked over each time, only where it leaves its document
+    paper = ("Der Stadtrat wird gebeten zu prüfen, ob im Jahr 2024 die Öffnungszeiten der Bibliothek verlängert werden können. "
+             "Die Motion verlangt zusätzliche Stunden und Kosten von 12000 Franken.")
+    said = [unsound(t, paper, "de") for t in (
+        "Die Motion verlangt, die Öffnungszeiten der Bibliothek 2024 zu verlängern, mit Kosten von 12000 Franken.",
+        "Die Interpellation fragt nach dem Stand der Sanierung der Kantonsstrasse und den Folgen für den Verkehr.",
+        "Die Motion verlangt, die Öffnungszeiten der Bibliothek zu verlängern, mit Kosten von 45000 Franken.")]
+    ok(said[0] == "" and "words" in said[1] and "number" in said[2],
+       "a summary of its document is sound; one of another matter, or one with a number the document does not hold, is not")
+    sheet = [{"id": "b1", "type": "p", "page": 1, "y": 10, "text": paper}]
+    for text, marked in (("Die Motion verlangt, die Öffnungszeiten der Bibliothek zu verlängern.", False), ("Zzz qqq xxx yyyy.", True)):
+        values, report = {}, {"summary": {"value": text, "state": "not on the page", "items": []}}
+        filler._Run("", [1], 1, sheet, fields, contract, None, values, report, [], None)._place("summary", fields.fields["summary"], text, [])
+        record, _ = fill({"docs": {"data": [{"body": sheet}]}}, 1, values, fields, contract, sheet)
+        mark = json.dumps(record).count('"approve": true')
+        ok(values["summary"][0]["approve"] is marked and (mark == 1) is marked,
+           ("a summary that leaves its document is marked for a person" if marked else "a sound summary stands without a mark, in the record too"))
     return 1 if failed else 0
 
 

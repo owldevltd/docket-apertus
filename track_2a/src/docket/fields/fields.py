@@ -11,7 +11,8 @@ field that names another field under "paired" is asked for both in one line, ent
 then what happened); asked as two lists the model has to keep in step, the entries did not belong together. A
 field with "reader" is read by code and not asked: asked for the place, the model named one in documents that
 print none. A field with "apart" leaves out a value that already stands under one of the fields named there: a
-party is not the body the document is addressed to, and not the group that submitted it once more. Beside the
+party is not the body the document is addressed to, and not the group that submitted it once more. A field with
+"entry" gives its value to a list as well: the day an affair was submitted is its first event. Beside the
 fields the task holds questions about the document itself ("ask"): what the document is in its affair, one word
 out of a closed list. Such an answer is no value of the record and stands on no page; it is held against what
 the code finds by itself.
@@ -56,6 +57,8 @@ class Field:
     reader: str = ""
     # fields whose values are not this field's: what already stands under one of them is left out here
     apart: list[str] = field(default_factory=list)
+    # the day of this field is an entry of a list as well: {"of": the list field, "label": its name per language}
+    entry: dict = field(default_factory=dict)
     when: list[str] = field(default_factory=list)
     free: bool = False
     block_text: bool = False
@@ -167,6 +170,7 @@ def _walk(node, path: list[str], fixed: dict, template: str, fields: dict[str, F
             paired=str(node.get("paired", "")),
             reader=str(node.get("reader", "")),
             apart=list(node.get("apart", [])),
+            entry=dict(node.get("entry", {})),
             when=list(node.get("when", [])),
             free=bool(node.get("free", False)),
             block_text=bool(node.get("block-text", False)),
