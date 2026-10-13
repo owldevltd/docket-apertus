@@ -135,6 +135,13 @@ def main() -> int:
        and [h["value"] for h in session.get("party", [])] == ["CVP Glarus"],
        "a session named like the parliament is none, and its day goes with it; a party named after its town stays")
 
+    signed = {"authors": [placed("Hans Muster", "b1")],
+              "cosigners": [placed("Hans Muster", "b1"), placed("Carla Beispiel", "b2")]}
+    notes = {"cosigners": {"value": "", "state": "on the page", "items": [dict(h) for h in signed["cosigners"]]}}
+    keep_apart(signed, notes, fields)
+    ok([h["value"] for h in signed["cosigners"]] == ["Carla Beispiel"],
+       "who submitted is not a co-signer once more")
+
     # what is no value, and what is no person
     party = fields.fields["party"]
     ok(all(check(party, v) == "empty" for v in ("—", "Non", "Nein", "No", "(porte-parole)"))
@@ -150,6 +157,12 @@ def main() -> int:
        and items(people, "Hofer Ruedi und Mit.") == ["Hofer Ruedi"]
        and items(people, "Anna Muster; Beat Meier") == ["Anna Muster", "Beat Meier"],
        "a word that stands for further co-signers is no entry of a list of persons and is left off behind a name")
+
+    related = fields.fields["related"]
+    ok(items(related, "1; 2; 3") == [] and items(related, "21.337; P 7") == ["21.337", "P 7"]
+       and items(fields.fields["number"], "N/ref") == [] and items(fields.fields["number"], "M 185") == ["M 185"],
+       "the number of an affair holds a digit and is more than one digit by itself: the numbers of the points "
+       "of a text are none")
 
     # the day an affair was submitted is its first event, unless the events read from the document hold that day
     read = {"date": [placed("03.03.2020", "b1")], "event": [placed("Beantwortung im Stadtrat", "b2")],
@@ -175,6 +188,14 @@ def main() -> int:
         ok(("date" in read) is stays,
            f"the date of submission {'stays' if stays else 'is left out'} "
            f"where the model names the document {named or 'nothing'}")
+
+    for name in ("cosigners", "on-behalf-of"):
+        read = {name: [placed("Carla Beispiel", "b2")]}
+        told = {name: {"value": "Carla Beispiel", "state": "on the page", "items": [dict(read[name][0])]},
+                asked_name: {"value": "answer", "state": "named", "items": []}}
+        keep_kinds(read, told, fields)
+        ok(name not in read,
+           f"{name} is read from the submission only: who signs an answer did not co-sign the affair")
 
     # what the model worded is not looked over each time, only where it leaves its document
     paper = ("Der Stadtrat wird gebeten zu prüfen, ob im Jahr 2024 die Öffnungszeiten der Bibliothek verlängert "

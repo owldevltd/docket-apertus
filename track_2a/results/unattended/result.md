@@ -65,6 +65,7 @@ gives the stored run back field by field (1 440 of 1 440 fields) where the code 
 | a value has to stand on the page as whole words; a session without a place that is the polity again, a name that is the parliament, or a day without a session; a co-signer is no party | 29 | 19 |
 | the model's kind stands without a mark, also against the words of the page; a mark only where the model names none | 38 | 30 |
 | the date of submission read from the submission itself only; a word for further co-signers is no person | 40 | 30 |
+| co-signers and on behalf of read from the submission only; who submitted is no co-signer again; the number of an affair holds a digit and is more than one digit | 40 | 31 |
 
 A mark on the kind where the words of the page say another kind held 14 documents of the reference set to find 2
 wrong kinds: the model was right in 12 of the 14.
@@ -109,3 +110,19 @@ differently was not told apart.
 
 In the same run the day an affair was submitted became its first event, as OpenParlData lists it: the days of
 events right in 33 of 60 documents against 20, 939 of 1 260 fields right (74.5 %) against 922.
+
+Co-signers and on behalf of by the kind of the document, before the last row, on the reference set: in documents
+of another kind than a submission, co-signers are set in 4 and hold in none, on behalf of is set in 9 and holds in
+2; the reference holds neither for any such document. In an answer the model names who signed the answer. Who
+submitted stood among the co-signers once more in 3 documents. On the 60 other documents the two rules leave out
+22 co-signers that stand under the submitters, 5 co-signers and 6 values under on behalf of in answers and reports.
+Asked for the affairs a text refers to, the model lists the numbers of its points: 9 single digits in one document
+of the reference set and 9 in two of the others; two numbers of affairs on the other documents hold no digit.
+
+With these: on the reference set co-signers as in the reference in 51 of 60 documents against 45, on behalf of in
+49 against 46; fields with a value the reference does not hold 101 against 116; of the 40 documents without a mark,
+8 hold no such value against 6. On the other documents 31 without a mark against 30, 21 of them with none of the
+four fields in another value against 19. No field as in the reference in fewer documents than before.
+
+A rule that a submitter is not the polity itself left out two values on the reference set and none on the other
+documents; it was not built.

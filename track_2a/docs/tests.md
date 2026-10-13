@@ -613,6 +613,30 @@ The long record of the measurements behind the decisions is `docs/evidence.md`.
   of a list of persons and is left off behind a name (`items` in `src/docket/fields/filler.py`, `tests/settle.py`).
 - **Run:** `results/unattended/result.md`
 
+### Who signs an answer: are co-signers and "on behalf of" read rightly from a document that is no submission?
+
+- **Question:** Do the co-signers and the group in whose name an affair was submitted hold when they are read from
+  an answer, a report or minutes? Does the model keep the submitters out of the co-signers, and what does it give
+  for the affairs a text refers to?
+- **Test:** The stored runs of the reference set and of the 60 other documents, by the kind the model names for
+  the document; then the replay with the two fields read from submissions only, the submitters kept out of the
+  co-signers, and a number of an affair that holds a digit and is more than one digit. No call.
+- **Result:** Reference set, documents of another kind than a submission: co-signers set in 4, none holds; on
+  behalf of set in 9, 2 hold; the reference holds neither for any such document. The submitters stood among the
+  co-signers once more in 3 documents. One document lists the numbers 1 to 9 of its points as affairs referred to.
+  On the other documents the rules leave out 22 co-signers that stand under the submitters, 5 co-signers and 6
+  values under on behalf of in answers and reports, 9 single digits, and 2 numbers of affairs without a digit.
+  After that, reference set: co-signers as in the reference in 51 of 60 documents against 45, on behalf of in 49
+  against 46, 101 fields with a value the reference does not hold against 116, 8 of the 40 documents without a
+  mark with no such value against 6; no field right in fewer documents than before. Other documents: 31 without a
+  mark against 30, 21 of them with none of the four fields in another value against 19. A rule that a submitter is
+  not the polity itself left out 2 values on the reference set and none on the other documents.
+- **Finding:** Co-signers and on behalf of are read from the submission only (`kinds`), and who submitted is no
+  co-signer again (`apart`), both in `data/schema/fields.json`. The number of an affair holds a digit and is more
+  than one digit by itself (`items` in `src/docket/fields/filler.py`, `tests/settle.py`). The rule on the polity
+  was not built.
+- **Run:** `results/unattended/result.md`
+
 ### Does code find the place of every value the model names?
 
 - **Question:** For every value the model reads off a first page: does code find where it stands on the page,

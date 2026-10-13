@@ -110,7 +110,8 @@
           "dynamic": true,
           "pages": "all",
           "together": "contributors",
-          "apart": ["authors", "parliament", "polity", "addressee"]
+          "apart": ["authors", "parliament", "polity", "addressee"],
+          "kinds": ["submission"]
         }
       },
       {
@@ -128,7 +129,9 @@
           "question": "wer mitunterzeichnet hat (bei mehreren durch Strichpunkt getrennt)",
           "form": "list",
           "pages": "all",
-          "together": "contributors"
+          "together": "contributors",
+          "apart": ["authors"],
+          "kinds": ["submission"]
         }
       }
     ]

@@ -323,11 +323,15 @@ OTHERS_BEHIND = re.compile(r"\s+(?:und|et|e|ed)\s+" + _OTHERS + r"\W*$", re.I)
 
 def items(f: Field, value: str) -> list[str]:
     """The entries of a field, see `_entries`; of a list of persons without what only stands for further
-    persons."""
+    persons, of numbers of affairs without what is no number."""
     out = _entries(f, value)
     if f.form == "list" and f.entity == "person":
         out = [OTHERS_BEHIND.sub("", v).strip() for v in out]
         out = [v for v in out if v and not OTHERS_ALONE.match(v)]
+    if f.entity == "identifier":
+        # the number of an affair holds a digit, and is more than one digit by itself: asked for the affairs a
+        # text refers to, the model lists the numbers of its points ("1; 2; 3")
+        out = [v for v in out if re.search(r"\d", v) and not re.fullmatch(r"\W*\d\W*", v)]
     return out
 
 
@@ -389,6 +393,9 @@ class _Run:
             value = got.get(name)
             state = "missing" if value is None else check(f, value)
             entries = [] if state else items(f, value)
+            if not state and not entries:
+                # nothing of the answer is an entry of this field
+                state = "empty"
             if f.paired and value is not None:
                 # entry by entry: one that hands the pattern of the task back does not empty the others
                 entries = [i for i in items(f, value) if not NONE.search(i)]
