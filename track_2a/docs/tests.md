@@ -515,11 +515,34 @@ The long record of the measurements behind the decisions is `docs/evidence.md`.
   person has fewer fields to set right in 19 documents, more in 6. The reference is a draft, each state was run once.
 - **Finding:** The title is asked as the subject of the affair as printed, the line that says what it is about,
   without the kind, the number and the date (`data/schema/fields.json`; the wording set by the assistant, open). A day
-  with slashes is read and found (`src/docket/fields/placer.py`). A field with `otherwise` takes what the code reads
-  where the model gave no value with a place: the date takes the day of the line the document is dated with
-  (`read_otherwise` in `src/docket/fields/filler.py`). Names set apart by a dash with spaces are taken one by one
-  (`tests/bundles.py`).
+  with slashes is read and found (`src/docket/fields/placer.py`). Names set apart by a dash with spaces are taken
+  one by one (`tests/bundles.py`). The date from the line the document is dated with, where the model gives none,
+  was built with this step and taken out again the same day: on other documents the day of that line is not the
+  date of submission (next entry).
 - **Run:** `results/asking/`
+
+### Do the changes hold on documents they were not made on?
+
+- **Question:** Every change of 12 and 13 October was made and measured on the same 60 documents. Do they help on
+  documents they never saw, and does a rule of code made on the 60 read other documents rightly?
+- **Test:** 60 other documents, 20 each in German, French and Italian, from 40 parliaments, 26 of them from 23
+  parliaments of which the reference set holds no document, chosen by a rule fixed before any result. Through the
+  pipeline as it was before the changes and as it is after them, 1 642 and 1 755 calls. The reference is what
+  OpenParlData holds for the affair: number, title, type and date. Before the second run, the rules that need no
+  model on the stored blocks of 151 further documents of three parliaments, no call.
+- **Result:** As OpenParlData, of 240 values: 107 before, 138 after; the title 27 and 41, the type 35 and 43, the
+  date 26 and 33, the number 19 and 21. On the 26 documents of parliaments the reference set does not hold: 60 and
+  68 of 104. More of the four fields right in 23 documents, fewer in 2. All four as OpenParlData in 7 documents
+  before and after: the number OpenParlData holds stands in the text of 21 of the 60 documents (the pipeline has it
+  in 17 of these), its date in 36 (30). On the 151 documents the date taken from the line of a place and a day is
+  the date of OpenParlData in 2 of 26 lines, and 5 of the 26 places read from that line were none (an abbreviation,
+  a file reference, the end of the sentence before); on the documents of the run, a day of the week.
+- **Finding:** The date from that line was taken out again. The place from it now asks for the form of a name
+  (small letters, no digits) and for a line that stands by itself, and leaves the days of the week aside
+  (`src/docket/fields/filler.py`, `src/docket/fields/placer.py`, `tests/bundles.py`): 59 lines on the three sets
+  after that, each a place. On the 60 documents of the reference set the two corrections give the place right in 57
+  instead of 56 and the date in 41 instead of 45, counted on the stored run.
+- **Run:** `results/unseen/`
 
 ### Does code find the place of every value the model names?
 

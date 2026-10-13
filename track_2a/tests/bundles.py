@@ -5,9 +5,8 @@ a group over the whole document. An event and its day are asked in one line: eve
 made-up page with a played answer. The place is read by code from a line of a place and a day and is not asked; a
 party does not repeat what stands under the submitters or the bodies; a bare no is no value. What a document is
 in its affair is asked from the model out of a closed list and held against the words of the first page: the same
-from both stands without a mark, anything else is for a person. A date the model does not give is read from the
-line the document is dated with; a day written with slashes is read; names set apart by a dash with spaces are
-taken one by one.
+from both stands without a mark, anything else is for a person. A day written with slashes is read; names set
+apart by a dash with spaces are taken one by one.
 
     python3 tests/bundles.py
 """
@@ -23,9 +22,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from docket.config import load_config  # noqa: E402
 from docket.fields import filler  # noqa: E402
 from docket.fields.fields import Field, Fields  # noqa: E402
-from docket.fields.filler import (  # noqa: E402
-    BUNDLE, before_day, bundles, check, day_in_line, items, keep_apart, pair, parse, prompt, read_otherwise,
-)
+from docket.fields.filler import BUNDLE, before_day, bundles, check, items, keep_apart, pair, parse, prompt  # noqa: E402
 from docket.fields.placer import day, fill, within  # noqa: E402
 from docket.model.client import Answer  # noqa: E402
 from docket.pipeline import add_kind, load_contract, load_field_file, load_knowledge  # noqa: E402
@@ -130,6 +127,13 @@ def main() -> int:
        "the place is what stands before the day in a line of a place and a day, in German, French and Italian")
     ok(before_day(line("Der Stadtrat hat am 3. März 2020 beschlossen")) is None and before_day(line("Frage vom 3.3.2020, eingereicht")) is None,
        "a day in running text is no line of a place and a day: the place stays empty")
+    odd = [before_day(line(t)) for t in ("un référendum contre la LAT, le 18 septembre 2012, ainsi que", "en burn-out (RTS, le 11 août 2017)",
+                                         "selon le Conseil, le 3 mars 2020, la motion", "Sitzung vom Montag, 3. März 2020",
+                                         "Mardi, le 3 mars 2020", "ED/P255460 Basel, 27. Mai 2026",
+                                         "sur l'axe Chavornay-Vallorbe. Yverdon-les-Bains, le 26 février 2008.",
+                                         "adopté, en séance du Conseil d'Etat, à Lausanne, le 4 juillet 2018.", "St. Gallen, 12.05.2020")]
+    ok([hit and hit[0] for hit in odd] == [None, None, None, None, None, "Basel", "Yverdon-les-Bains", "Lausanne", "St. Gallen"],
+       "an abbreviation, a day of the week, a name in brackets or in running text before a day is no place; a file reference in front is left off")
     calls = [n for scope in ("first", "all") for call in bundles([n for n, f in fields.fields.items() if f.pages == scope and not f.reader], fields) for n in call]
     ok(fields.fields["place"].reader == "before-day" and "place" not in calls, "the place is read by code and stands in no call")
     # a party is not the submitter once more and not a body of the document
@@ -177,16 +181,6 @@ def main() -> int:
     ok(other["kind"] == "answer" and other["approve"] is True and with_other["sources"][0].get("approve") is True
        and with_other["docs"]["data"][0]["article-type"] == "answer",
        "where they differ, the model's kind stands, for a person to look at")
-    # the date: where the model gave none with a place, the day of the line the document is dated with
-    dated = [{"id": "b7", "type": "p", "page": 2, "y": 10, "text": "Delémont, le 27 février 2020"}]
-    hits, notes = {}, {"date": {"value": "-", "state": "empty", "items": []}}
-    read_otherwise(hits, notes, fields, dated)
-    kept = {"date": [{"value": "03.03.2020", "block": "b1", "how": "literal"}]}
-    read_otherwise(kept, {"date": {"value": "03.03.2020", "state": "on the page", "items": []}}, fields, dated)
-    ok(fields.fields["date"].otherwise == "day-in-line" and day_in_line(dated) == ("27 février 2020", "b7")
-       and hits.get("date", [{}])[0].get("block") == "b7" and notes["date"]["state"] == "on the page"
-       and kept["date"][0]["value"] == "03.03.2020",
-       "a date the model does not give is read from the line of a place and a day; the model's own date stays")
     ok(day("14/11/2023") == "2023-11-14" and within("14.11.2023", "Dépôt: 14/11/2023") and day("Geschäft 2023/24") == "",
        "a day written with slashes is read and found on the page")
     names = fields.fields["cosigners"]

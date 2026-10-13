@@ -35,6 +35,14 @@ def bare(t: str) -> str:
     return "".join(c for c in unicodedata.normalize("NFD", t.lower()) if not unicodedata.combining(c))
 
 
+# the days of the week in the same languages, without the marks on their letters: before a date they are no place
+WEEKDAYS = {
+    "montag", "dienstag", "mittwoch", "donnerstag", "freitag", "samstag", "sonnabend", "sonntag",
+    "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche",
+    "lunedi", "martedi", "mercoledi", "giovedi", "venerdi", "sabato", "domenica",
+    "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday",
+}
+
 # every name with the number of its month, with and without the marks on its letters
 MONTH = {form: i + 1 for names in MONTH_NAMES for i, name in enumerate(names) for form in (name, bare(name))}
 # as a part of a pattern, the longer name first; after the number of the day a point, or what French and

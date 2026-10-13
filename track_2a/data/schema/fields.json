@@ -68,8 +68,7 @@
     "entity": "date",
     "role": "date",
     "question": "Datum, an dem das Geschäft eingereicht wurde, als TT.MM.JJJJ",
-    "form": "date",
-    "otherwise": "day-in-line"
+    "form": "date"
   },
   "contributors": {
     "data": [

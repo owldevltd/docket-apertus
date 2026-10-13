@@ -21,7 +21,8 @@ from docket.document.language import language_of
 from docket.document.picture import text_image
 from docket.fields.fields import Field, Fields
 from docket.fields.placer import (
-    DAY_MARK, MONTH_WORDS, block_text, blocks_of, covers, day, fill, find_block, locate, overlap, plain, words,
+    DAY_MARK, MONTH_WORDS, WEEKDAYS, bare, block_text, blocks_of, covers, day, fill, find_block, locate, overlap,
+    plain, words,
 )
 from docket.model.client import Client, ask
 
@@ -70,39 +71,50 @@ PAIR_DAY = re.compile(
 
 
 # a place and a day in one line, the way a document is dated ("Liestal, 3. März 2020", "Lausanne, le 3 mars
-# 2020"): up to four capitalised words before the day. No list of places stands behind it.
-_NAME = r"[A-ZÄÖÜÉÈÀ][\w.'’\-]+"
+# 2020"). No list of places stands behind it; what tells a place is its form and where it stands. A word of a
+# place name starts with a capital and has small letters, no digits: an abbreviation or a file reference before
+# a day is none ("LAT, le 18 septembre 2012", "ED/P255460 Basel, 27. Mai 2026" gives Basel). Up to four such
+# words, a short one with a point in front ("St. Gallen"), small words between them ("Neuhausen am Rheinfall").
+_NAME = r"[A-ZÄÖÜÉÈÀ][A-Za-zÀ-ÿ'’\-]*[a-zà-ÿ][A-Za-zÀ-ÿ'’\-]*"
 PLACE_DAY = re.compile(
-    r"(?<![\w.])(" + _NAME + r"(?:[ \-/](?:[a-zäöüéèà]{1,3} )?" + _NAME + r"){0,3})\s*,\s*(?:den |le |il |li |lì |am )?"
-    r"((?i:\d{1,2}\.\s*\d{1,2}\.\s*\d{2,4}|\d{1,2}/\d{1,2}/\d{4}|\d{1,2}" + DAY_MARK + r"\s*(?:" + MONTH_WORDS + r")\s*\d{4}))"
+    r"((?:[A-Z][a-z]{0,2}\.\s?)?" + _NAME + r"(?:[ \-/](?:[a-zäöüéèà]{1,3} )?" + _NAME + r"){0,3})\s*,\s*(?:den |le |il |li |lì |am )?"
+    r"(?i:\d{1,2}\.\s*\d{1,2}\.\s*\d{2,4}|\d{1,2}/\d{1,2}/\d{4}|\d{1,2}" + DAY_MARK + r"\s*(?:" + MONTH_WORDS + r")\s*\d{4})"
 )
+# the line stands by itself: at the start of a block or a line, after the end of a sentence, after a number, or
+# after a word that leads to a place ("adopté à Lausanne, le …"); in running text a name before a day is
+# something else ("selon le Conseil, le 3 mars 2020, …"), and so is one in brackets
+_LEADS = re.compile(r"(?:^|[\s,;])(?:à|a|in|zu)$", re.I)
 
 
-def _dated(body: list[dict], part: int) -> tuple[str, str] | None:
-    for block in blocks_of(body):
-        m = PLACE_DAY.search(block_text(block)) if block["type"] != "graphic" else None
-        if m:
-            return m.group(part).strip(), block["id"]
-    return None
+def _stands_alone(text: str, m: re.Match) -> bool:
+    # the day of the week before a date is no place ("Sitzung vom Montag, 3. März 2020")
+    if bare(re.split(r"[ \-/]", m.group(1))[-1]) in WEEKDAYS:
+        return False
+    before = text[:m.start(1)].rstrip(" \t")
+    led = not before or before[-1] in "\n.:;" or before[-1].isdigit() or _LEADS.search(before) is not None
+    goes_on = re.match(r"\s*,\s*[a-zà-ÿ]", text[m.end():]) is not None
+    return led and not goes_on
 
 
 def before_day(body: list[dict]) -> tuple[str, str] | None:
     """The place a document is dated at: the words before the day in the first line of a place and a day, with
     the id of their block; None when the pages hold no such line."""
-    return _dated(body, 1)
-
-
-def day_in_line(body: list[dict]) -> tuple[str, str] | None:
-    """The day a document is dated with: the day of that same line, with the id of its block; None when the
-    pages hold no such line, or the day is no full date."""
-    hit = _dated(body, 2)
-    return hit if hit and day(hit[0]) else None
+    for block in blocks_of(body):
+        if block["type"] == "graphic":
+            continue
+        text = block_text(block)
+        for m in PLACE_DAY.finditer(text):
+            if _stands_alone(text, m):
+                return m.group(1).strip(), block["id"]
+    return None
 
 
 # the ways code reads a field itself, by the name a field gives under "reader". Asked for the place, the model
 # named one in 22 of 60 documents that print none, mostly the polity (measured 13 October 2026); read from
-# the line of place and day, the place came out as in the reference in 56 of the 60 instead of 34.
-READERS = {"before-day": before_day, "day-in-line": day_in_line}
+# the line of place and day, the place came out as in the reference in 56 of the 60 instead of 34. On 151
+# documents the rule was not made on, 5 of 26 lines found were none (an abbreviation, a file reference, the end
+# of the sentence before): hence the form of a name and the place of the line above.
+READERS = {"before-day": before_day}
 
 
 def fill_document(record: dict, pages: list[dict], first: list[int], fields: Fields, contract: Contract,
@@ -202,22 +214,6 @@ def bundles(names: list[str], fields: Fields) -> list[list[str]]:
     return [b[k:k + BUNDLE] for b in out for k in range(0, len(b), BUNDLE)]
 
 
-def read_otherwise(values: dict, report: dict, fields: Fields, body: list[dict]) -> None:
-    """A field that names a reader under "otherwise" takes what the code reads where the model gave it no value
-    with a place: the date is asked over the first pages, and a document dated on a later page had none
-    (measured 13 October 2026: the date as in the reference in 43 of 60 documents instead of 39)."""
-    for name, f in fields.fields.items():
-        if not f.otherwise or name in values or name not in report:
-            continue
-        hit = READERS[f.otherwise](body)
-        if hit:
-            entry = {"value": hit[0], "block": hit[1], "how": "literal"}
-            values[name] = [dict(entry)]
-            report[name]["items"] = [*report[name].get("items", []), entry]
-            report[name]["state"] = "on the page"
-            report[name]["read"] = f"by code ({f.otherwise}): the model named no value with a place"
-
-
 def keep_apart(values: dict, report: dict, fields: Fields) -> None:
     """A value that already stands under a field named in "apart" is left out of this field: asked for the
     party, the model repeats the group that submitted, or names the parliament (measured 13 October 2026: 14 of
@@ -242,7 +238,6 @@ def keep_apart(values: dict, report: dict, fields: Fields) -> None:
 
 def _finish(record: dict, values: dict, report: dict, asked: list, fields: Fields, contract: Contract,
             body: list[dict], knowledge: Knowledge) -> tuple[dict, dict]:
-    read_otherwise(values, report, fields, body)
     keep_apart(values, report, fields)
     out, notes = fill(record, 1, values, fields, contract, body)
     for name, note in notes.items():
