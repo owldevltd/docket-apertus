@@ -259,6 +259,11 @@ def parse(answer: str, names: list[str]) -> tuple[dict[str, str], dict[str, list
     """The answer lines "name: value" for the fields asked, and per field the block ids named with the value
     ("[b12]"), taken off the value. A field without a line is missing."""
     lines: list[tuple[str, str]] = []
+    # the model now and then sets several fields in one line, each with its block ("a: x [b3] b: y [b4]"): a
+    # field asked that follows a named block starts a line of its own
+    asked = "|".join(re.escape(n) for n in sorted(filter(None, names), key=len, reverse=True))
+    if asked:
+        answer = re.sub(r"\][ \t]+(?=(?:" + asked + r")\s*:)", "]\n", answer)
     for line in answer.splitlines():
         m = re.match(r"^[\s\-\*]*([\w _-]{2,40}?)\s*:\s*(.*)$", line)
         if m:
@@ -455,6 +460,10 @@ class _Run:
         the model words itself (a free field, the summary) stands nowhere on the page: it keeps the block the
         model names, else the head of the pages asked, and a person looks at it in any case."""
         block = locate(item, self.body, self.which)
+        # a day stands on the page or it has no place: the block the model names for it mostly holds a month
+        # and a year only, and the day is made up (the heading says "(November 2019)", the answer 14.11.2019)
+        if f.form == "date":
+            cited = []
         how = "literal" if block is not None else ("cited" if cited else None)
         block = block or (cited[0] if cited else None)
         share = None

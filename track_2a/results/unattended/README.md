@@ -4,7 +4,8 @@ The run behind the entry "How many documents run through without a mark for a pe
 
 - `result.md` – what holds a document for a person, the check of a worded text against its document, and how many
   documents carry no mark before and after, on the 60 documents of the reference set and on the 60 documents of
-  `results/unseen/`.
+  `results/unseen/`; the rules that followed, counted by replay, the last of them also on 151 stored documents of
+  three parliaments and with the register of persons filled.
 
 The documents, the values and the calls are not kept here: the documents are not in the repository
 (`data/documents/README.md`).

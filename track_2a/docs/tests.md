@@ -48,6 +48,24 @@ The long record of the measurements behind the decisions is `docs/evidence.md`.
 - **Run:** not kept in the repository. Repeatable with 20 first pages of parliamentary documents and ten pages of forms
   at 620 pixels in width and the one closed question named above.
 
+### Is there a threshold that lets right readings through and still finds the wrong ones?
+
+- **Question:** Every document without a text layer is held for a person, because the check of a reading against
+  the image marks most read blocks. Does another threshold of that check separate right readings from wrong ones
+  better?
+- **Test:** 12 first pages with a text layer, of documents no threshold was set on, four each in German, French and
+  Italian, read as if they had none: 203 elements, 269 calls; per element the deviation the check measures and the
+  state against the text of the PDF. Then, on the stored runs, the values placed in blocks with and without the mark,
+  no call.
+- **Result:** 92 readings identical, 102 near or other, 9 empty; 5.4 % character errors. At 0.01, as built, 98 of
+  the 102 not identical are marked and 56 of the 92 identical; at 0.02, 86 and 49; at 0.05, 40 and 30; at 0.10, 20
+  and 13. Values from a block with the mark are in the reference under their field in 39 of 58 cases, from a block
+  without it in 20 of 21, in documents with a text layer in 480 of 607; on the documents of `results/unseen/`, as
+  OpenParlData in 24 of 31, 10 of 10 and 93 of 112.
+- **Finding:** None taken: no threshold lets the identical readings through and keeps the others marked. The
+  threshold stays at 0.01, and a document without a text layer stays held where the reading does not fit the image.
+- **Run:** `results/reading-threshold/`
+
 ## Geometry
 
 ### What does a first cut of a page into objects find on form pages?
@@ -637,6 +655,32 @@ The long record of the measurements behind the decisions is `docs/evidence.md`.
   was not built.
 - **Run:** `results/unattended/result.md`
 
+### Is a value that stands in no single block a case for a person?
+
+- **Question:** After the rules before, what still holds a document is mostly a value that stands literally in no
+  block and lies at the block the model named. Which of these values are on the page after all, which are made up,
+  and do rules found on the 120 documents hold on documents they were not made on?
+- **Test:** The stored runs of the reference set and of the 60 other documents, every such value beside the text
+  of its pages; five rules, each tried alone by replay; then all five on 151 stored documents of three parliaments
+  that none of them was made on. No call.
+- **Result:** 40 such values in 31 of the 120 documents: 6 run over several blocks in a row, 10 have every word on
+  the pages in another order, 24 hold a word that stands nowhere. Ten are days: four stand on the page in a form
+  the reading did not know, for six the named block holds a year or a month and a year and the day is made up. On
+  the 151 documents 19 days lose their place, 18 of them named at a block with a month and a year only; 11 values
+  lose their mark and one gets a place: titles set in several lines, a day with a year of two digits, words one
+  character off the page. A first form of the rule on blocks in a row made a co-signer out of the first name in one
+  row of a table and the last name in the next. Documents without a mark: reference set 41 of 60 against 40, other
+  documents 37 against 31, the 151 documents 130 against 108. Fields with a value the reference does not hold 97
+  against 98; on the other documents 23 of the 37 with none of the four fields in another value against 21 of 31.
+- **Finding:** A day is read with a zero before it, with the month cut short and with a year of two digits, and has
+  a place only where it stands (`within`, `day` in `src/docket/fields/placer.py`, `_place` in
+  `src/docket/fields/filler.py`). A value that runs over two or three blocks in a row from the start of the first
+  stands literally (`across`); held against the named block a word of five letters or more may differ in one
+  character (`covers`); both numbers set by the assistant, open. An answer with several fields in one line is cut
+  at the fields asked (`parse`). A share of words that a value needs in the named block was not built: it drops
+  right values with the wrong ones. Checks in `tests/settle.py`.
+- **Run:** `results/unattended/result.md`
+
 ### Does code find the place of every value the model names?
 
 - **Question:** For every value the model reads off a first page: does code find where it stands on the page,
@@ -700,6 +744,27 @@ The long record of the measurements behind the decisions is `docs/evidence.md`.
 - **Finding:** None taken.
 - **Run:** not kept in the repository. Repeatable with the stored field reports of a run and the persons of the
   parliaments.
+
+### Is a person found by the last name alone the right one?
+
+- **Question:** A contributor found in the register by the last name alone, or one character off, carried a mark.
+  How many documents does that mark hold when the register is filled, and is the person found the right one? And
+  does a name written with ae for ä find its person?
+- **Test:** The three sets of the entry "Is a value that stands in no single block a case for a person?" by replay,
+  the register loaded for the test from OpenParlData's export of persons, the parliament of each document as its
+  run found it. The person found held against the persons OpenParlData holds for the same affair, where it holds
+  one of that last name. No call.
+- **Result:** Documents without a mark, without a register / with the mark / with the mark on one character off
+  only: reference set 41 / 35 / 38 of 60, other documents 37 / 31 / 37 of 60, the 151 documents 130 / 117 / 129. The
+  same person as OpenParlData holds: by the full name 299 of 299, by the last name alone 147 of 148, one character
+  off 6 of 6. With ae for ä and letters without their accents taken as the same: no lookup changes among the 1 120
+  names of the 151 documents; among the 567 names of the 120 documents, looked up over all parliaments at once, two
+  more are found and two fit a second person.
+- **Finding:** The id of a person found by the last name alone, of which the parliament has one person, stands
+  without a mark; one character off keeps it, because six names are few and one character can make another first
+  name (`link_persons` in `src/docket/affair/persons.py`). A name is compared with ä as ae and without the marks
+  on its letters (`key_of` in `src/docket/store/register.py`). Checks in `tests/register.py`.
+- **Run:** `results/unattended/result.md`
 
 ### Are the persons of a document found again in its stored blocks?
 

@@ -126,3 +126,90 @@ four fields in another value against 19. No field as in the reference in fewer d
 
 A rule that a submitter is not the polity itself left out two values on the reference set and none on the other
 documents; it was not built.
+
+## Values no single block holds
+
+After the rules above a document was held mostly by a value that stands literally in no block and lies at the block
+the model named. On the 120 documents these were 40 values in 31 documents (reference set 19 in 14, other documents
+21 in 17). What keeps them from standing literally:
+
+| | reference set | other documents |
+|---|---:|---:|
+| the value runs over several blocks in a row | 2 | 4 |
+| every word stands on the pages, in another order | 6 | 4 |
+| a word stands nowhere on the pages | 11 | 13 |
+
+Ten of the 40 are days. Four stand on the page in a form the reading did not know (a zero before the day with the
+month written out, a month cut short). For the other six the named block holds a year, or a month and a year, and
+the day is made up.
+
+Five rules followed, each tried alone on both sets by replay. Because both sets had been looked at for them, they
+were then held against a third: 151 stored documents of three parliaments (the answers of the run of 10 October put
+through the code again under today's field names; events and the summary are not replayed).
+
+- A day is read with a zero before it, with the month cut short and with a year of two digits.
+- A day has a place only where it stands; the block the model names for it is none.
+- A value that runs over two or three blocks in a row of one page, from the start of the first, stands literally.
+- Held against the named block, a word of five letters or more may differ in one character.
+- An answer that sets several fields in one line is cut where a field asked follows a named block.
+
+On the 151 documents 33 values in 30 documents change. 19 days lose their place: for 18 the named block holds a
+month and a year only, one is an unreadable line. 11 values lose their mark: three titles set in several lines, one
+day with a year of two digits, one title that is the text of its block but for a letter, and six values one
+character off the page (a canton named in the nominative where the page has the genitive, a word without its
+accent, a name with one letter less). One day gets a place it had not, in a form now read. One value without a
+place, a line of several fields taken for one, is gone. Values at a named block only: 35 against 65.
+
+A first form of the third rule took a value wherever it ran over blocks. On the 151 documents it made a co-signer
+out of the first name in one row of a table and the last name in the next. The rule now asks that the value starts
+where a block starts.
+
+Documents without a mark:
+
+| | before | after |
+|---|---:|---:|
+| reference set, of 60 | 40 | 41 |
+| other documents, of 60 | 31 | 37 |
+| the 151 documents (events and summary not replayed) | 108 | 130 |
+
+On the reference set fields with a value the reference does not hold: 97 against 98; no field as in the reference
+in fewer documents. On the other documents 23 of the 37 hold none of the four fields in another value than
+OpenParlData, against 21 of 31; values as OpenParlData 131 of 240 as before, 30 set differently as before: one
+made-up day is gone, and one day read from a year of two digits is not the date OpenParlData holds for the affair.
+
+Since this run the count takes a person written in another spelling for the same person (ä as ae, a letter
+without its accent, a form of address before the name): fields with a value the reference does not hold 98 against
+101, all of them under the submitters.
+
+Tried and not built: a share of its words that a value needs in the named block. At more than a third, 13 values on
+the 151 documents lose their place: 7 are not on the page (three titles put into German among them), 4 are right. At
+more than half, six fields of the reference set that were right are empty.
+
+## A person found by the last name alone
+
+A contributor found in the register of the parliament by the last name alone, or with one character off, carried a
+mark. The count above runs without a register and does not see these marks. With the register filled for the test
+from OpenParlData's export of persons, the parliament of each document as its run found it, documents without a
+mark:
+
+| | no register | mark on both | mark on one character off only |
+|---|---:|---:|---:|
+| reference set, of 60 | 41 | 35 | 38 |
+| other documents, of 60 | 37 | 31 | 37 |
+| the 151 documents | 130 | 117 | 129 |
+
+Whether the person found is the right one, against the persons OpenParlData holds for the same affair, counted
+where it holds a person of that last name (third set / other documents / reference set):
+
+| found | the same person |
+|---|---|
+| by the full name | 188 of 188 / 35 of 35 / 76 of 76 |
+| by the last name alone | 72 of 73 / 69 of 69 / 6 of 6 |
+| one character off | none to compare / 3 of 3 / 3 of 3 |
+
+The mark on the last name alone was taken off. The mark on one character off stays: six names are few, and one
+character can make another first name.
+
+A name written with ae for ä, or without its accents, is the same name in the register since this run. On the 1 120
+names of the 151 documents no lookup changes. On the 567 names of the other 120 documents, looked up among the
+persons of all parliaments at once, two more are found and two now fit a second person.

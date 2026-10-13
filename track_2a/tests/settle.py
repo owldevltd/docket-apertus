@@ -2,7 +2,8 @@
 a document: an event and its day in one line, each entry with its own day; days written out or with slashes; the
 place read from the line a document is dated with; a value left out where it stands under another field, where the
 field it belongs to has none, or where the document is of another kind; the day of submission as the first event;
-what the model worded held against its document; the kind the model names held against the words of the page.
+what the model worded held against its document; the kind the model names held against the words of the page;
+a value no single block holds: over lines of a heading, one letter off, and a day only where it stands.
 
     python3 tests/settle.py
 """
@@ -20,7 +21,7 @@ from docket.config import load_config  # noqa: E402
 from docket.fields import filler  # noqa: E402
 from docket.fields.fields import questions  # noqa: E402
 from docket.fields.filler import check, items, pair, parse  # noqa: E402
-from docket.fields.placer import day, fill, within  # noqa: E402
+from docket.fields.placer import covers, day, fill, locate, within  # noqa: E402
 from docket.fields.rules import add_entries, before_day, keep_apart, keep_kinds, unsound  # noqa: E402
 from docket.model.client import Answer  # noqa: E402
 from docket.pipeline import add_kind, load_contract, load_field_file, load_knowledge  # noqa: E402
@@ -94,6 +95,47 @@ def main() -> int:
     ok(day("14/11/2023") == "2023-11-14" and within("14.11.2023", "Dépôt: 14/11/2023")
        and day("Geschäft 2023/24") == "",
        "a day written with slashes is read and found on the page")
+    ok(within("05.03.2021", "Bellinzona, 05 marzo 2021") and day("14 DEC. 2018") == "2018-12-14"
+       and within("14.12.2018", "Déposé le 14 DEC. 2018") and day("3 sett. 2020") == "2020-09-03"
+       and day("5 jui 2020") == "" and within("09.03.2021", "Sitzung vom 9.3.21 um 14 Uhr")
+       and not within("09.03.2021", "Sitzung vom 19.3.21") and within("12.03.2020", "12.03.2020 14 Uhr"),
+       "a zero before the day, a month cut short and a year of two digits are the same day; the start of a name "
+       "that two months share is no month")
+
+    # a value no single block holds
+    page = [{"id": "b1", "type": "p", "page": 1, "y": 10, "text": "INTERPELLANZA"},
+            {"id": "b2", "type": "p", "page": 1, "y": 20, "text": "Accesso alla sala del consiglio"},
+            {"id": "b3", "type": "p", "page": 1, "y": 30, "text": "Hofer Ruedi Muster Hans"},
+            {"id": "b4", "type": "p", "page": 1, "y": 40, "text": "Beispiel Carla"},
+            {"id": "b5", "type": "p", "page": 1, "y": 50, "text": "An den Grossen Gemeinderat (November 2019)"},
+            {"id": "b6", "type": "p", "page": 2, "y": 10, "text": "Probe Erwin"}]
+    ok(locate("Interpellanza Accesso alla sala del consiglio", page, [1, 2]) == "b1"
+       and locate("Hans Beispiel", page, [1, 2]) is None and locate("Beispiel Carla An den", page, [1, 2]) == "b4"
+       and locate("An den Grossen Gemeinderat (November 2019) Probe", page, [1, 2]) is None,
+       "a heading set in two lines stands on the page, at its first line; the end of one row of names and the "
+       "start of the next is no name, and nothing runs from one page to the next")
+    ok(covers("Grosser Gemeinderat", page[4]["text"]) and not covers("Kleiner Gemeinderat", page[4]["text"])
+       and not covers("Hofer Rudi", page[2]["text"]) and not covers("November 2018", page[4]["text"]),
+       "held against the block the model names, a word may differ in one letter from five letters on; another "
+       "word, a short word or a number may not")
+    reply = "language: de\naddressee: Grosser Gemeinderat [b5]\ndate: 14.11.2019 [b5]"
+    there: dict = {}
+    noted: dict = {}
+    filler.ask = lambda client, text, **_: Answer(reply, 200, {"prompt_tokens": 0}, "stop")
+    try:
+        filler._Run("", [1], 2, page, fields, contract, None, there, noted, [], None).round(["addressee", "date"])
+    finally:
+        filler.ask = asked_before
+    ok(there.get("addressee", [{}])[0].get("how") == "derived" and "date" not in there
+       and noted["date"]["items"][0]["block"] is None,
+       "a day the page does not hold has no place, though the block named holds its month and year; the body "
+       "named one letter off stands as derived")
+    one_line = "title: Eine Frage [b2] number: 12 [b1] date: 03.03.2020 [b3]"
+    ok(parse(one_line, ["number", "title", "date"])
+       == ({"title": "Eine Frage", "number": "12", "date": "03.03.2020"},
+           {"title": ["b2"], "number": ["b1"], "date": ["b3"]})
+       and parse("title: Antwort auf [b2] number: 5", ["title"])[0]["title"] == "Antwort auf number: 5",
+       "an answer that sets several fields in one line is cut where a field asked follows a named block")
 
     # the place: read by code from the line a document is dated with, no list of places behind it
     dated = ("Herisau, 22. August 2017 / aje", "Lausanne, le 3 mars 2020", "Bellinzona, 05 marzo 2024",

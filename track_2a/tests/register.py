@@ -27,7 +27,7 @@ from docket.jobs import Jobs  # noqa: E402
 from docket.pipeline import load_contract  # noqa: E402
 from docket.server import serve  # noqa: E402
 from docket.store.files import FileStore  # noqa: E402
-from docket.store.register import LEARN_AT, Register, clean_name, near, stop_words, sync  # noqa: E402
+from docket.store.register import LEARN_AT, Persons, Register, clean_name, near, stop_words, sync  # noqa: E402
 
 PERSONS = [
     {"id": 1, "body": "X", "first": "Ignaz", "last": "Pellaton", "party": "Les Verts"},
@@ -82,6 +82,11 @@ def main() -> int:
         check(got == want, f"a printed name without what follows it: {printed!r} -> {got!r}")
     check(near("graf", "gras") and near("graf", "graaf") and near("graf", "raf") and not near("graf", "gross"),
           "one character apart: replaced, one too many, one missing; two are too far")
+    written = Persons([{"body": "X", "first": "Bärbel", "last": "Müller", "label": "Bärbel Müller", "ids": [1]},
+                       {"body": "X", "first": "André", "last": "Rochat", "label": "André Rochat", "ids": [2]}])
+    check(written.find("Baerbel Mueller").how == "exact" and written.find("Andre Rochat").how == "exact"
+          and written.find("Karl Mueller").how == "none",
+          "a name written with ae for ä or without its accents is the same person; another first name is not")
 
     with tempfile.TemporaryDirectory() as tmp:
         store = FileStore(Path(tmp) / "store")
@@ -173,10 +178,11 @@ def main() -> int:
         places = {s["path"]: s for s in record["sources"]}
         check(set(places) == {f"contributors.data.{i}.person_id" for i in (0, 1, 2)}
               and "approve" not in places["contributors.data.0.person_id"]
-              and places["contributors.data.1.person_id"].get("approve") is True
+              and "approve" not in places["contributors.data.1.person_id"]
               and places["contributors.data.2.person_id"].get("approve") is True
               and places["contributors.data.0.person_id"]["how"] == "derived",
-              "the id has a place of its own, for a person to look at where the name was not found exactly")
+              "the id has a place of its own, for a person to look at where the name was found one character off; "
+              "the last name alone, of which the parliament has one person, stands without a mark")
         check(data[2]["fullname"] == "M. lgnaz PELLATON", "the printed name stays as it stands")
         hows = [(line["value"], line["how"]) for line in report["doc-a"]]
         wanted = [("Ignaz Pellaton", "exact"), ("Pellaton", "surname"), ("M. lgnaz PELLATON", "near"),

@@ -1,9 +1,11 @@
 """Tells who the persons of an affair are. Every person a document names (which values are persons, the fields
 file says) is looked up in the register of that document's parliament (docket.store.register). Found as
 exactly one person, the entry gets the id OpenParlData gives that person, with a place of its own in the root
-sources: derived from the name, and for a person to look at when the name was found by its last name alone or
-with one character off. A name no known person carries, standing literally in the document, is given to the
-register to learn.
+sources: derived from the name, and for a person to look at when the name was found with one character off:
+that may be another person. Found by the last name alone, of which the parliament has one person, it stands
+without a mark: measured 13 October 2026 on 268 documents, 147 of 148 such names were the person OpenParlData
+holds for the affair, where it holds one of that last name. A name no known person carries, standing literally
+in the document, is given to the register to learn.
 
 The name itself is never changed here: what stands in the document stays, the id says who is meant.
 """
@@ -66,7 +68,7 @@ def link_persons(record: dict, parliaments: dict[int, str], names: dict[int, str
                     entry[id_key] = line["id"] = ids[0]
                     place = {"path": ".".join([*into, str(i), id_key]), "doc": doc, "block": source.get("block"),
                              "how": "derived"}
-                    if match.how != "exact":
+                    if match.how == "near":
                         place["approve"] = True
                     record.setdefault("sources", []).append(place)
             elif match.how == "none" and source.get("how") == "literal":

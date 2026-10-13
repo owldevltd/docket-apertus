@@ -21,8 +21,10 @@ in small letters as "first last"; `origin` is stem, learned or candidate.
 from __future__ import annotations
 
 import re
+import unicodedata
 from dataclasses import dataclass, field
 
+from docket.fields.placer import near
 from docket.store.base import Store, stamp
 
 # a name is taken into the register when it was seen in this many documents
@@ -53,23 +55,17 @@ def clean_name(text: str) -> str:
     return " ".join(words)
 
 
+# German writes "ae" for "ä" where the type lacks the letter: the same name either way
+FOLD = str.maketrans({"ä": "ae", "ö": "oe", "ü": "ue", "ß": "ss"})
+
+
 def key_of(name: str) -> str:
-    """A name as it is compared: small letters, letters and hyphens only, single spaces."""
-    return re.sub(r"\s+", " ", re.sub(r"[^\w\s'-]", " ", str(name or "").lower())).strip()
-
-
-def near(a: str, b: str) -> bool:
-    """At most one character apart: replaced, missing or one too many."""
-    if a == b:
-        return True
-    if abs(len(a) - len(b)) > 1:
-        return False
-    if len(a) > len(b):
-        a, b = b, a
-    i = 0
-    while i < len(a) and a[i] == b[i]:
-        i += 1
-    return a[i + 1:] == b[i + 1:] if len(a) == len(b) else a[i:] == b[i + 1:]
+    """A name as it is compared: small letters, letters and hyphens only, single spaces, "ä" as "ae" and the
+    other letters without their marks: "Bärbel Müller" and "Baerbel Mueller", "André" and "Andre" are one
+    name. Another first name stays another person: "Karl Müller" is not "Bärbel Müller"."""
+    text = str(name or "").lower().translate(FOLD)
+    text = "".join(c for c in unicodedata.normalize("NFD", text) if not unicodedata.combining(c))
+    return re.sub(r"\s+", " ", re.sub(r"[^\w\s'-]", " ", text)).strip()
 
 
 def _cuts(key: str) -> set[str]:

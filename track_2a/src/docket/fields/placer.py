@@ -1,10 +1,12 @@
 """Where a value stands and where it goes: the block on the page that holds it, and its place in the record.
 
-A value counts only with a place. Literal: it stands in a block, a date in any spelling of the same day. Derived:
-every word of it stands in the block the model named, only put together differently. Cited: the model named
-the block and at least a word of the value stands there; a person has to look. Composed: the model wrote it
-(a summary); a person has to look. What the record already holds stays; a different printed value goes beside
-it as custom-meta, where the contract has such a place.
+A value counts only with a place. Literal: it stands in a block, or over two or three blocks in a row from the
+start of the first; a date in any spelling of the same day. Derived: every word of it stands in the block the
+model named, one character off at most, only put together differently. Cited: the model named the block and at
+least a word of the value stands there; a person has to look. A date is never cited: its day stands on the page
+or it has no place. Composed: the model wrote it (a summary); a person looks where it leaves its document. What
+the record already holds stays; a different printed value goes beside it as custom-meta, where the contract has
+such a place.
 """
 
 from __future__ import annotations
@@ -45,9 +47,27 @@ WEEKDAYS = {
 
 # every name with the number of its month, with and without the marks on its letters
 MONTH = {form: i + 1 for names in MONTH_NAMES for i, name in enumerate(names) for form in (name, bare(name))}
-# as a part of a pattern, the longer name first; after the number of the day a point, or what French and
-# Italian put there ("1er", "1°")
-MONTH_WORDS = "|".join(sorted(MONTH, key=len, reverse=True))
+
+
+def _short_forms() -> dict[str, int]:
+    """The starts of the names from three letters that only one month has: a stamp prints "14 DEC. 2018", a
+    letter "3 sett. 2020". "jui" is none: "juin" and "juillet" share it."""
+    starts: dict[str, set[int]] = {}
+    for name, month in MONTH.items():
+        for cut in range(3, len(name)):
+            starts.setdefault(name[:cut], set()).add(month)
+    return {start: next(iter(months)) for start, months in starts.items() if len(months) == 1}
+
+
+MONTH = {**_short_forms(), **MONTH}
+# as a part of a pattern, the longer name first, a point behind a short form; after the number of the day a
+# point, or what French and Italian put there ("1er", "1°")
+MONTH_WORDS = "(?:" + "|".join(sorted(MONTH, key=len, reverse=True)) + r")\.?"
+# the same per month, without the marks on the letters: to look for one day on a page
+MONTH_FORMS = {
+    month: "(?:" + "|".join(sorted({bare(f) for f, m in MONTH.items() if m == month}, key=len, reverse=True)) + r")\.?"
+    for month in range(1, 13)
+}
 DAY_MARK = r"(?:\.|er|°|º)?"
 
 
@@ -195,9 +215,37 @@ def source(doc: int, hit: dict, f: Field, body: list[dict]) -> dict:
 
 def locate(value: str, body: list[dict], which: list[int]) -> str | None:
     """The id of the block on the pages in which the value stands literally; None when none. A date in any
-    spelling of the same day. Of several blocks the header entry before the running text."""
-    found = {c["id"]: c for c in blocks_of(body) if c["page"] in which and within(value, block_text(c))}
-    return pick_block(value, found) if found else None
+    spelling of the same day. Of several blocks the header entry before the running text. A value no single
+    block holds may run over blocks in a row (across)."""
+    asked = [c for c in blocks_of(body) if c["page"] in which]
+    found = {c["id"]: c for c in asked if within(value, block_text(c))}
+    return pick_block(value, found) if found else across(value, asked)
+
+
+# over how many blocks in a row a value may run. Set by the assistant, open.
+RUN = 3
+
+
+def across(value: str, blocks: list[dict]) -> str | None:
+    """The id of the first of two or three blocks in a row on one page over which the value runs literally,
+    from the start of the first into the last: a heading set in several lines is read as several blocks. A
+    value that starts inside a block is none: in a table of names the first name of one row and the surname
+    of the next made a person who signed nothing (found 13 October 2026 on documents the rule was not made
+    on). No date and no single word: those stand in one block."""
+    needle = plain(value)
+    if day(value) or words(value) < 2:
+        return None
+    texts = [(c, block_text(c)) for c in blocks if c["type"] != "graphic"]
+    for at in range(len(texts)):
+        for span in range(2, RUN + 1):
+            run = texts[at:at + span]
+            if len(run) < span or len({c["page"] for c, _ in run}) > 1:
+                break
+            before = plain(" ".join(t for _, t in run[:-1]))
+            if before and needle.startswith(before) and len(needle) > len(before) \
+                    and whole(value, " ".join(t for _, t in run)):
+                return run[0][0]["id"]
+    return None
 
 
 def blocks_of(body: list[dict]) -> list[dict]:
@@ -244,7 +292,7 @@ def day(t: str) -> str:
         return f"{int(m.group(3)):04d}-{int(m.group(2)):02d}-{int(m.group(1)):02d}"
     m = re.search(r"(\d{1,2})" + DAY_MARK + r"\s*(" + MONTH_WORDS + r")\s*(\d{4})", t)
     if m:
-        return f"{int(m.group(3)):04d}-{MONTH[m.group(2)]:02d}-{int(m.group(1)):02d}"
+        return f"{int(m.group(3)):04d}-{MONTH[m.group(2).rstrip('.')]:02d}-{int(m.group(1)):02d}"
     return ""
 
 
@@ -255,19 +303,18 @@ def plain(t: str) -> str:
 
 def within(value: str, text: str) -> bool:
     """Whether the value stands literally in the text, as whole words; a date in any usual spelling of the same
-    day, the month written out in any of the languages of the documents."""
+    day: day and month with or without a zero in front, the year in four digits or two ("9.3.21"), the month
+    written out in any of the languages of the documents or cut short ("05 marzo 2021", "14 DEC. 2018")."""
     d = day(value)
     m = re.match(r"^(\d{4})-(\d{2})-(\d{2})$", d) if d else None
-    if m:
+    if m and int(m.group(2)) in MONTH_FORMS:
         flat = bare(re.sub(r"\s+", "", text))
-        year, month, dd = m.group(1), m.group(2), m.group(3)
-        forms = [f"{int(dd)}.{int(month)}.{year}", f"{dd}.{month}.{year}", d]
-        forms += [f"{int(dd)}/{int(month)}/{year}", f"{dd}/{month}/{year}"]
-        # written out: the name of the month in each language, the day with a point, bare, or as "1er", "1°"
-        names = {bare(row[int(month) - 1]) for row in MONTH_NAMES}
-        forms += [f"{int(dd)}{mark}{name}{year}" for name in names for mark in (".", "", "er", "°", "º")]
-        # no digit before it, else the 9th hides in the 19th
-        return any(re.search(r"(?<!\d)" + re.escape(form), flat) for form in forms)
+        year, month, dd = m.group(1), int(m.group(2)), int(m.group(3))
+        forms = [rf"0?{dd}\.0?{month}\.{year}", rf"0?{dd}/0?{month}/{year}", re.escape(d),
+                 rf"0?{dd}{DAY_MARK}{MONTH_FORMS[month]}{year}"]
+        # no digit before it, else the 9th hides in the 19th; none behind a year of two digits either
+        two = rf"(?<!\d)0?{dd}\.\s*0?{month}\.\s*{year[2:]}(?!\d)"
+        return any(re.search(r"(?<!\d)" + form, flat) for form in forms) or bool(re.search(two, text))
     return whole(value, text)
 
 
@@ -326,11 +373,34 @@ def overlap(value: str, text: str) -> float:
     return round(sum(1 for w in ws if " " + w + " " in haystack) / len(ws), 2)
 
 
+# from how many letters a word may differ in one character and still be the word of the page. Set by the
+# assistant, open.
+NEAR_FROM = 5
+
+
+def near(a: str, b: str) -> bool:
+    """At most one character apart: replaced, missing or one too many."""
+    if a == b:
+        return True
+    if abs(len(a) - len(b)) > 1:
+        return False
+    if len(a) > len(b):
+        a, b = b, a
+    i = 0
+    while i < len(a) and a[i] == b[i]:
+        i += 1
+    return a[i + 1:] == b[i + 1:] if len(a) == len(b) else a[i:] == b[i + 1:]
+
+
 def covers(value: str, text: str) -> bool:
-    """Whether every word of the value, short ones and numbers too, stands in the text."""
+    """Whether every word of the value, short ones and numbers too, stands in the text. A word of letters, from
+    NEAR_FROM of them, may differ in one character: the page prints "An den Grossen Gemeinderat" where the
+    answer says "Grosser Gemeinderat", and a letter is now and then read as another."""
     ws = _plain_words(value).split()
-    haystack = " " + _plain_words(text) + " "
-    return bool(ws) and all(" " + w + " " in haystack for w in ws)
+    have = set(_plain_words(text).split())
+    return bool(ws) and all(
+        w in have or (len(w) >= NEAR_FROM and w.isalpha() and any(near(w, h) for h in have)) for w in ws
+    )
 
 
 def words(text: str) -> int:
