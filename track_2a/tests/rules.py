@@ -29,14 +29,15 @@ from docket.store.rules import apply, labels, pattern, patterns  # noqa: E402
 PLACES = ["Kanton Zürich", "Kanton Bern", "Kanton Aargau", "Kanton Luzern", "Stadt Bern"]
 
 
-def record_with(place: str) -> dict:
+def record_with(place: str, marked: bool = True) -> dict:
     block = {"id": "b1", "page": 1, "type": "p", "x": 0, "y": 0, "width": 10, "height": 10, "text": place}
+    source = {"doc": 1, "block": "b1", "how": "cited", "approve": True}
     return {
         "schema": "0.8",
         "docs": {"data": [{"id": 1, "name": "doc-" + place.lower().replace(" ", "-"), "page-count": 1,
                            "body": [block]}]},
         "custom-meta": [{"meta-name": "polity", "meta-value": place,
-                         "source": {"doc": 1, "block": "b1", "how": "cited", "approve": True}}],
+                         "source": source if marked else {"doc": 1, "block": "b1", "how": "literal"}}],
     }
 
 
@@ -68,10 +69,10 @@ def main() -> int:
     contract = load_contract(config)
     source = "custom-meta.0.source"
 
-    def fresh(tmp: str, name: str, places: list[str]) -> tuple[FileStore, App, Jobs]:
+    def fresh(tmp: str, name: str, places: list[str], marked: bool = True) -> tuple[FileStore, App, Jobs]:
         store = FileStore(Path(tmp) / name)
         for i, place in enumerate(places):
-            store.put_affair(f"nr-{i}", record_with(place), [{"name": f"doc-{i}", "id": 1, "pages": 1}])
+            store.put_affair(f"nr-{i}", record_with(place, marked), [{"name": f"doc-{i}", "id": 1, "pages": 1}])
         jobs = Jobs(type(config)(**{**config.__dict__, "storage_dir": Path(tmp) / (name + "-runs")}))
         return store, App(store, contract, config, jobs), jobs
 
@@ -132,6 +133,16 @@ def main() -> int:
         status, switched = app.switch_rule(rule["id"], True, "test")
         check(status == 200 and value(store, 5)["value"] == "Glarus",
               "switching the rule on applies it to the new value")
+        jobs.stop()
+
+        # values without a mark: the rule hangs on the field and the form of the value, not on the mark
+        store, app, jobs = fresh(tmp, "unmarked", PLACES, marked=False)
+        change(app, 0, "Zürich")
+        rule = change(app, 1, "Bern")[1]["proposals"][0]
+        status, rule = app.answer_rule(rule["id"], True, "test")
+        check(not value(store, 4)["approve"] and rule["applied"] == 2
+              and [value(store, i)["value"] for i in (2, 3, 4)] == ["Aargau", "Luzern", "Stadt Bern"],
+              "a change by hand is taken over to the values that carry no mark as well")
         jobs.stop()
 
         # a no
