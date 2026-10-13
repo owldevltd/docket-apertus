@@ -91,7 +91,7 @@ def rows_of(doc: str, report: dict[str, dict], fields: Fields, body: list[dict],
             "value": kind["kind"], "state": PLACED, "how": "derived", "block": kind.get("block") or "b1",
             "page": block.get("page") if block else None,
             "box": [block.get(k) for k in ("x", "y", "width", "height")] if block else None,
-            "about": "document", "approve": True,
+            "about": "document", "approve": kind.get("approve", True),
         })
     return rows
 
@@ -104,10 +104,12 @@ def blocks_of_document(store: Store, name: str, entry: dict | None = None) -> li
 
 
 def kind_of(rows: list[dict]) -> dict | None:
-    """What the rows of a document say it is, as the merging takes it: {kind, block, n}; None when they do
-    not say."""
+    """What the rows of a document say it is, as the merging takes it: {kind, block, n, approve}; None when
+    they do not say."""
     row = next((r for r in rows if r.get("about") == "document" and r["state"] == PLACED), None)
-    return {"kind": row["value"], "block": row["block"], "n": row["n"]} if row else None
+    if row is None:
+        return None
+    return {"kind": row["value"], "block": row["block"], "n": row["n"], "approve": row.get("approve", True)}
 
 
 def values_from(rows: list[dict], numbered: bool = False) -> dict[str, list[dict]]:

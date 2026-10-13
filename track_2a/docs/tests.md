@@ -478,6 +478,26 @@ The long record of the measurements behind the decisions is `docs/evidence.md`.
   lone bracket are no value (`tests/bundles.py`). The three lists were left aside by the assistant, open.
 - **Run:** `results/asking/`
 
+### Does the model know what a document is where the words of the first page do not?
+
+- **Question:** The kind of a document, its role in the affair, was set by code from the words of the first page.
+  Does the model name it more often as in the reference, and does it help to hold the two against each other?
+- **Test:** The 60 documents of the reference set. First the answers alone: the model asked over the first pages
+  for one kind out of the list of the knowledge file, with a sentence for each, 60 calls. Then the pipeline with
+  that question and the words held against it, 703 calls.
+- **Result:** Answers: the model right in 51 of 60 documents, the words in 36; both the same in 33, right in 31 of
+  these. The words mostly take an answer for the submission it answers. Through the pipeline: the kind right in 56
+  of 60 documents against 36; it stands without a mark in 35, right in 34 of them, and with a mark in 25, right in
+  22. 903 of 1 260 fields right (71.7 %) against 883. Leaving aside the three lists from the running text: 3
+  documents with every field right against 2, 10 against 9 with at most one field not right, 21 against 17 with at
+  most two. One call more a document. The reference is a draft, each state was run once.
+- **Finding:** The task holds questions about the document itself beside the fields (`$task.ask` in
+  `data/schema/fields.json`): the answer is one word of a closed list, no value of the record, and stands on no page
+  (`src/docket/fields/filler.py`). The same kind from the words and from the model stands without a mark; where
+  they differ or only one says anything, a person looks, and the model's kind stands (`add_kind` in
+  `src/docket/pipeline.py`, `tests/bundles.py`).
+- **Run:** `results/asking/`
+
 ### Does code find the place of every value the model names?
 
 - **Question:** For every value the model reads off a first page: does code find where it stands on the page,

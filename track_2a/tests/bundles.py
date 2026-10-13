@@ -3,7 +3,9 @@ one call, no call asks more than BUNDLE fields, fields that name the same word u
 their own, and the fields of the contributors (who submitted, their party, in whose name, who co-signed) are such
 a group over the whole document. An event and its day are asked in one line: every entry keeps its own day, on a
 made-up page with a played answer. The place is read by code from a line of a place and a day and is not asked; a
-party does not repeat what stands under the submitters or the bodies; a bare no is no value.
+party does not repeat what stands under the submitters or the bodies; a bare no is no value. What a document is
+in its affair is asked from the model out of a closed list and held against the words of the first page: the same
+from both stands without a mark, anything else is for a person.
 
     python3 tests/bundles.py
 """
@@ -22,7 +24,7 @@ from docket.fields.fields import Field, Fields  # noqa: E402
 from docket.fields.filler import BUNDLE, before_day, bundles, check, keep_apart, pair, parse, prompt  # noqa: E402
 from docket.fields.placer import day, fill, within  # noqa: E402
 from docket.model.client import Answer  # noqa: E402
-from docket.pipeline import load_contract, load_field_file  # noqa: E402
+from docket.pipeline import add_kind, load_contract, load_field_file, load_knowledge  # noqa: E402
 
 
 def main() -> int:
@@ -140,6 +142,37 @@ def main() -> int:
     ok(all(check(party, v) == "empty" for v in ("—", "Non", "Nein", "No", "(porte-parole)")) and check(party, "Noé Dupont") == ""
        and parse("party: — [block_1]", ["party"])[0]["party"] == "—",
        "a bare no, a lone bracket and a dash with a block written out are no value")
+    # what the document is: one word of a closed list from the model, held against the words of the first page
+    knowledge = load_knowledge(config)
+    asked_kind = next((q for q in filler.questions(fields) if q.get("role") == "kind"), None)
+    listed = [k["id"] for k in knowledge.kinds if k.get("rule") is not False]
+    ok(asked_kind is not None and sorted(asked_kind["one-of"]) == sorted(listed) and asked_kind["name"] not in fields.fields,
+       "the kinds the model may name are the kinds of the knowledge file that a rule can set; the question is no field")
+    values, report = {}, {}
+    filler.ask = lambda client, text, **_: Answer("language: de\ndocument-kind: answer (die Antwort der Regierung) [b1]", 200, {}, "stop")
+    try:
+        filler._Run("", [1], 1, body, fields, contract, None, values, report, [], None).round([asked_kind["name"]])
+    finally:
+        filler.ask = asked_before
+    ok(report[asked_kind["name"]]["value"] == "answer" and asked_kind["name"] not in values,
+       "of the answer the word of the list is kept; it is looked for on no page")
+    page = [{"elements": [{"type": "text", "content": "Interpellation", "fontSize": 16}]}]
+    blocks = [{"id": "b1", "type": "sec", "page": 1, "y": 10, "title": "Begründung"}, {"id": "b2", "type": "sig-block", "page": 1, "y": 90}]
+
+    def kind(named):
+        record = {"docs": {"data": [{"id": 1, "body": blocks}]}}
+        return add_kind(record, page, knowledge, "Interpellation", named), record
+
+    alone, _ = kind(None)
+    same, with_same = kind("submission")
+    other, with_other = kind("answer")
+    ok(alone is not None and alone["kind"] == "submission" and alone["approve"] is True,
+       "the words of the first page alone give a kind for a person to look at")
+    ok(same["kind"] == "submission" and same["approve"] is False and "approve" not in with_same["sources"][0],
+       "the same kind from the words and from the model stands without a mark")
+    ok(other["kind"] == "answer" and other["approve"] is True and with_other["sources"][0].get("approve") is True
+       and with_other["docs"]["data"][0]["article-type"] == "answer",
+       "where they differ, the model's kind stands, for a person to look at")
     return 1 if failed else 0
 
 

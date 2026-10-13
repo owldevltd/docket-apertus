@@ -5,6 +5,21 @@
     "whole": "Unten steht ein Dokument aus einem Schweizer Parlament als Text, {von} von {seiten} Seiten, jede beginnt mit einer Zeile \"===== Seite n =====\", ungefähr so angeordnet wie auf dem Papier. [Bild] steht für ein Bild, einen Stempel oder eine Unterschrift.",
     "blocks": "Jeder Textblock beginnt mit seiner Kennung in eckigen Klammern, zum Beispiel [b12].",
     "task": "Lies daraus ab:",
+    "ask": [
+      {
+        "name": "document-kind",
+        "role": "kind",
+        "question": "welche Rolle dieses Dokument im Geschäft hat, genau eines dieser Wörter: submission (der eingereichte Vorstoss selbst, zum Beispiel der Text einer Motion oder Interpellation), answer (die Antwort oder Stellungnahme der Regierung auf einen Vorstoss), bill (Vorlage, Botschaft oder Bericht und Antrag der Regierung an das Parlament), minutes (Protokoll, Beschluss oder Auszug aus einer Sitzung), committee-report (Bericht einer Kommission), act (Erlass, Gesetz oder Reglement)",
+        "one-of": [
+          "committee-report",
+          "answer",
+          "bill",
+          "minutes",
+          "act",
+          "submission"
+        ]
+      }
+    ],
     "lead": {
       "name": "language",
       "question": "in welcher Sprache das Dokument geschrieben ist (de, fr, it, en)"

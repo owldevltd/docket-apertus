@@ -147,6 +147,11 @@ def fill_document(record: dict, pages: list[dict], first: list[int], fields: Fie
                     for name in bundle:
                         note = "no answer from the service"
                         report[name] = {"value": None, "state": "missing", "items": [], "note": note}
+        # the questions about the document itself, in a call of their own over the first pages
+        about = [q["name"] for q in questions(fields)] if scope == "first" else []
+        if about and not client.halted and not run.round(about):
+            for name in about:
+                report[name] = {"value": None, "state": "missing", "items": [], "note": "no answer from the service"}
         # the follow-up: what had no line or was refused, once more, at most one bundle
         again = [n for n in remaining if report.get(n, {}).get("state") in AGAIN][:BUNDLE]
         if again and not client.halted:
@@ -155,6 +160,12 @@ def fill_document(record: dict, pages: list[dict], first: list[int], fields: Fie
                 for name in again:
                     report[name]["asked again"] = before[name]
     return _finish(record, values, report, asked, fields, contract, body, knowledge)
+
+
+def questions(fields: Fields) -> list[dict]:
+    """The questions about the document itself the task holds beside the fields ("ask"): what the document is,
+    one word out of a closed list. No value of the record; the answer goes into the report under its name."""
+    return list(fields.task.get("ask") or [])
 
 
 def bundles(names: list[str], fields: Fields) -> list[list[str]]:
@@ -268,7 +279,11 @@ def prompt(names: list[str], text: str, which: list[int], total: int, fields: Fi
     task = fields.task
     spoken = task.get("languages") or {}
     lines = []
+    about = {q["name"]: q for q in questions(fields)}
     for name in names:
+        if name in about:
+            lines.append(f"- {name}: {about[name]['question']} — Vorgabe: " + json.dumps({"type": "string"}))
+            continue
         f = fields.fields[name]
         excerpt = contract.part(f.path) or {"type": "string"}
         question = f.question.replace("{sprache}", spoken.get(language) or spoken.get("") or "")
@@ -400,6 +415,14 @@ class _Run:
             return False
         got, cited_all = parse(answer.text, lead + names)
         for name in names:
+            if name not in self.fields.fields:
+                # a question about the document itself: the word of its list the answer holds; no place on a page
+                listed = next(q for q in questions(self.fields) if q["name"] == name).get("one-of", [])
+                said = (got.get(name) or "").lower()
+                word = next((w for w in listed if re.search(r"(?<![\w-])" + re.escape(w) + r"(?![\w-])", said)), None)
+                state = "missing" if name not in got else ("named" if word else "empty")
+                self.report[name] = {"value": word, "state": state, "items": [], "cited": cited_all.get(name, [])}
+                continue
             f = self.fields.fields[name]
             value = got.get(name)
             state = "missing" if value is None else check(f, value)

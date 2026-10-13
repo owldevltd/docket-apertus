@@ -11,7 +11,10 @@ field that names another field under "paired" is asked for both in one line, ent
 then what happened); asked as two lists the model has to keep in step, the entries did not belong together. A
 field with "reader" is read by code and not asked: asked for the place, the model named one in documents that
 print none. A field with "apart" leaves out a value that already stands under one of the fields named there: a
-party is not the body the document is addressed to, and not the group that submitted it once more.
+party is not the body the document is addressed to, and not the group that submitted it once more. Beside the
+fields the task holds questions about the document itself ("ask"): what the document is in its affair, one word
+out of a closed list. Such an answer is no value of the record and stands on no page; it is held against what
+the code finds by itself.
 """
 
 from __future__ import annotations

@@ -198,7 +198,9 @@ def ask_missing(config: Config, names: list[str] | None = None, limit: int | Non
                     if len(pages) < count:
                         say(f"{name}: the store did not keep its pages, not asked")
                     else:
-                        part = Fields(fields.task, {n: fields.fields[n] for n in missing}, fields.entities)
+                        # the fields the document lacks, not the questions about the document itself once more
+                        task = {k: v for k, v in fields.task.items() if k != "ask"}
+                        part = Fields(task, {n: fields.fields[n] for n in missing}, fields.entities)
                         before = client.calls
                         stub = {"docs": {"data": [{"id": 1, "body": blocks_of_document(store, name, entry)}]}}
                         _, filled = fill_document(stub, pages, first_pages(pages), part, contract, client, knowledge)
@@ -241,9 +243,12 @@ def _process(pdf: Path, out: Path, client: Client | None, contract: Contract, kn
     pages = process_pages(pdf, pages_dir, client, keep)
     record, report = build_document(pdf.stem, pages, knowledge, client, log=pages_dir / "sort.read")
     record, filled = fill_fields(record, pages, fields, contract, client, knowledge, log=pages_dir / "fields.read")
-    # the kind of the document from the words of its first page, with the printed type the model read
+    # the kind of the document from the words of its first page, with the printed type the model read, held
+    # against the kind the model names (the question of the task with the role "kind")
     printed = _printed_type(filled["fields"], fields)
-    found = add_kind(record, pages, knowledge, printed)
+    asked = next((q["name"] for q in fields.task.get("ask") or [] if q.get("role") == "kind"), "")
+    named = filled["fields"].get(asked, {}).get("value")
+    found = add_kind(record, pages, knowledge, printed, named)
     report["kind"] = found
     errors = contract.check(record)
     (out / f"{pdf.stem}.json").write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

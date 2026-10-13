@@ -87,11 +87,13 @@ def merge(documents: list[Document], fields: Fields, contract: Contract, types: 
 
 
 def _place_kind(record: dict, at: int, d: Document, placed: list[dict] | None) -> None:
-    """Sets the kind of a document on its entry, with a place in the root sources: found from the words of its
-    first page, so a person has to look."""
+    """Sets the kind of a document on its entry, with a place in the root sources. A person has to look unless
+    the words of the first page and the model said the same."""
     record["docs"]["data"][at]["article-type"] = d.kind["kind"]
     path = f"docs.data.{at}.article-type"
-    place = {"path": path, "doc": d.id, "block": d.kind.get("block") or "b1", "how": "derived", "approve": True}
+    place = {"path": path, "doc": d.id, "block": d.kind.get("block") or "b1", "how": "derived"}
+    if d.kind.get("approve", True):
+        place["approve"] = True
     record.setdefault("sources", []).append(place)
     if placed is not None and d.kind.get("n") is not None:
         placed.append({"doc": d.id, "n": d.kind["n"], "of": None, "source": f"sources.{len(record['sources']) - 1}",
