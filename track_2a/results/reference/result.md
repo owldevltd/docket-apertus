@@ -10,16 +10,17 @@ without a text layer. Eight are the shipped documents of `data/documents/`, 52 w
 with seed 20261010, five kinds of affair in turn. The federal level is not in it: 16 of 16 federal submissions drawn
 had no document, their text is held as text.
 
-The AI assistant read every document field by field, each value with its page and the place it stands: 1 087 values,
-562 empty fields. Code found 718 of 762 quoted pieces on the named page; the other 44 were looked at (text in columns,
+The AI assistant read every document field by field, each value with its page and the place it stands: 1 087 values, 562
+empty fields. Code found 718 of 762 quoted pieces on the named page; the other 44 were looked at (text in columns,
 headers, descriptions of stamps and logos, text layers from an earlier OCR), and two wrong page numbers were corrected.
-A team member checked the tables of this reading. Where Docket's values and the reading disagreed, 609 places, each was
-judged: 151 by evidence from the material (OpenParlData's affair, the persons and parties of the body), 139 by one of
-eight rules (two spellings of one value, the field a value belongs to, the place only from the line of place and date,
-the party only beside a name, on behalf of only where it is said, the addressee of the affair, a reference only with a
-title or number, co-signers as printed), 134 by reading the place in the document again; 185 rest on the reading alone.
-The rules were set by the assistant and are open to the team's correction. The reference names people and is not in
-the repository.
+A team member checked the tables of this reading and, on 14 October, 60 values of the reference drawn at random (seed
+20261014, one per document) against the documents: all 60 hold. Where Docket's values and the reading disagreed, 609
+places, each was judged: 151 by evidence from the material (OpenParlData's affair, the persons and parties of the body),
+139 by one of eight rules (two spellings of one value, the field a value belongs to, the place only from the line of
+place and date, the party only beside a name, on behalf of only where it is said, the addressee of the affair, a
+reference only with a title or number, co-signers as printed), 134 by reading the place in the document again; 185 rest
+on the reading alone. The rules were set by the assistant and are open to the team's correction. The reference names
+people and is not in the repository.
 
 ## Fields as in the reference
 
@@ -71,3 +72,51 @@ reference.
 
 The reference and the stored answers stay local, beside the documents. The count puts every stored answer through the
 code without the model, as `results/three-hundred/` does, and compares each of the 20 fields with the reference.
+
+## The other 239 documents of the 300
+
+The 240 drawn documents of `results/three-hundred/`, without the one scan that hit the time limit: 179 that were run
+for the first time on 13 October and never used to set or try a rule, and 60 that were run before and served during
+development as a check against the four fields OpenParlData holds. The AI assistant read them by the same fields and
+the same eight rules as the reference above, without the judgement round: the reading itself is the reference. Code
+found 2 681 of 2 807 quoted pieces on the named page (the others: lines joined in one quote, a logo described). Counted
+the same way, on the stored answers of the 300-document run, without the model, without the register's mark. The 95 %
+interval comes from drawing whole documents 10 000 times, because the fields of one document are not independent.
+
+| | documents | fields right | 95 % interval | without a mark |
+|---|---:|---:|---|---:|
+| the 60 reference documents above, developed on | 60 | 940 of 1 200 (78.3 %) | 75.6–80.9 % | 41 |
+| never seen during development | 179 | 2 625 of 3 580 (73.3 %) | 71.7–74.9 % | 136 |
+| checked against during development | 60 | 887 of 1 200 (73.9 %) | 71.2–76.7 % | 37 |
+| all 239 | 239 | 3 512 of 4 780 (73.5 %) | 72.1–74.8 % | 173 |
+| German | 80 | 1 165 of 1 600 (72.8 %) | | 60 |
+| French | 79 | 1 154 of 1 580 (73.0 %) | | 60 |
+| Italian | 80 | 1 193 of 1 600 (74.6 %) | | 53 |
+| cantons | 139 | 2 044 of 2 780 (73.5 %) | | 113 |
+| municipalities | 100 | 1 468 of 2 000 (73.4 %) | | 60 |
+
+Per field over the 239: right, and in the 173 documents without a mark how often Docket set a value and how often
+none of its values contradicts the reference.
+
+| Field | right of 239 | without a mark: set | of them without a wrong value |
+|---|---:|---:|---:|
+| place | 219 | 59 | 58 |
+| title | 211 | 160 | 155 |
+| type as printed | 201 | 153 | 147 |
+| kind of document | 203 | 173 | 146 |
+| related affairs | 202 | 16 | 7 |
+| department | 187 | 37 | 17 |
+| on behalf of | 183 | 30 | 6 |
+| meeting | 174 | 26 | 7 |
+| parliament | 169 | 109 | 97 |
+| addressee | 168 | 155 | 117 |
+| body | 167 | 127 | 109 |
+| co-signers | 167 | 40 | 26 |
+| number | 162 | 106 | 83 |
+| submitted on | 154 | 103 | 96 |
+| submitted by | 146 | 168 | 118 |
+| party | 144 | 70 | 28 |
+| events (dates) | 115 | 140 | 110 |
+| acts and references | 69 | 35 | 19 |
+| keywords | 239 | 0 | 0 |
+| version | 232 | 0 | 0 |

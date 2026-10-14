@@ -17,7 +17,9 @@ Measured on 300 documents of 62 parliaments, in a shuffled order (`results/three
 - **209 of 299 documents run through without a single mark for a person** (69.9 %, 95 % interval 64.5–74.8 %), steady
   from 50 documents on, similar in German (71.6 %), French (71.1 %) and Italian (66.7 %).
 - Against a reference of 60 documents (20 per language, cantons and municipalities, read value by value with page and
-  place): 940 of 1 200 fields as in the reference (78 %), German 81 %, French 80 %, Italian 74 % (`results/reference/`).
+  place; 60 values drawn at random checked by hand, all hold): 940 of 1 200 fields as in the reference (78 %). On the
+  other 239 of the 300, read the same way, 3 512 of 4 780 (73.5 %, 95 % interval 72.1–74.8 %), on the 179 never seen
+  during development 73.3 % (`results/reference/`).
 - The model answered 5 144 fields with 6 500 values: 4 650 stand on the page literally or derived from the block it
   named, 211 only at the named block (marked for a person), 185 are worded by the model, and 1 454 have no place on the
   page and are not taken.

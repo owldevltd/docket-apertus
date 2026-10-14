@@ -40,6 +40,7 @@ place (`data/documents/README.md`) all of them run; without them, the checks tha
 | Is a person found by the last name alone the right one? | 147 of 148, where the same last name is held for the same affair | no mark on a unique last name; one character off keeps it (`results/unattended/`) |
 | Does a field added later reach the documents already read? | the stored documents are asked only that field, one call each, over the stored pages; a decision taken before stays; a second asking sends nothing | the store is asked by the definition, not read again (`tests/ask.py`) |
 | How many of 300 documents need no person? | 209 of 299 (69.9 %, 95 % interval 64.5–74.8 %), steady from 50 documents on in a shuffled order; similar in German, French and Italian | – (`results/three-hundred/`) |
+| Do the fields hold on documents never used in development? | the 60 reference documents we developed on: 940 of 1 200 fields as in the reference (78.3 %, 95 % interval 75.6–80.9 %); 179 documents never seen, read by the same rules: 2 625 of 3 580 (73.3 %, 71.7–74.9 %) | – (`results/reference/`) |
 | What does a document cost? | with a text layer 6 calls in the median, 7 507 tokens in and 436 out; without one 28 calls; 24.8 s a document on one stream; 179 documents in 133 minutes with about 5 000 calls | one stream with a set pace; more streams for the corpus (`docs/evidence.md` 10, `results/runtime/`) |
 
 ## 3 How to repeat them
