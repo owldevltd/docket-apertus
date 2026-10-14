@@ -210,9 +210,9 @@ pieces on the named page, and a team member checked the tables of the reading an
 documents (all 60 hold). Where Docket and the reading disagreed (609 values), each was judged by evidence from the
 material (151), by one of eight rules (139) or by reading the place again (134); 185 rest on the reading alone. The
 rules were set by the assistant and are open. The 60 are the documents we developed on; the other 239 of the 300 were
-read the same way, without the judgement round, and give 73.5 % of the fields (95 % interval 72.1–74.8 %, drawing whole
-documents), 73.3 % on the 179 never seen during development, against 78.3 % (75.6–80.9 %) on the 60
-(`results/reference/`). The reference names people and is not in the repository.
+read the same way, without the judgement round (60 values drawn at random checked by hand, all hold), and give 73.5 % of
+the fields (95 % interval 72.1–74.8 %, drawing whole documents), 73.3 % on the 179 never seen during development,
+against 78.3 % (75.6–80.9 %) on the 60 (`results/reference/`). The reference names people and is not in the repository.
 
 ### 5.2 Results
 

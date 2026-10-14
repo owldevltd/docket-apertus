@@ -75,13 +75,15 @@ code without the model, as `results/three-hundred/` does, and compares each of t
 
 ## The other 239 documents of the 300
 
-The 240 drawn documents of `results/three-hundred/`, without the one scan that hit the time limit: 179 that were run
-for the first time on 13 October and never used to set or try a rule, and 60 that were run before and served during
-development as a check against the four fields OpenParlData holds. The AI assistant read them by the same fields and
-the same eight rules as the reference above, without the judgement round: the reading itself is the reference. Code
-found 2 681 of 2 807 quoted pieces on the named page (the others: lines joined in one quote, a logo described). Counted
-the same way, on the stored answers of the 300-document run, without the model, without the register's mark. The 95 %
-interval comes from drawing whole documents 10 000 times, because the fields of one document are not independent.
+The 240 drawn documents of `results/three-hundred/`, without the one scan that hit the time limit: 179 that were run for
+the first time on 13 October and never used to set or try a rule, and 60 that were run before and served during
+development as a check against the four fields OpenParlData holds. The AI assistant read them by the same fields and the
+same eight rules as the reference above, without the judgement round: the reading itself is the reference. A team member
+checked 60 values drawn at random (seed 20261015, one each from 60 of the 239 documents) against the documents: all 60
+hold. Code found 2 681 of 2 807 quoted pieces on the named page (the others: lines joined in one quote, a logo
+described). Counted the same way, on the stored answers of the 300-document run, without the model, without the
+register's mark. The 95 % interval comes from drawing whole documents 10 000 times, because the fields of one document
+are not independent.
 
 | | documents | fields right | 95 % interval | without a mark |
 |---|---:|---:|---|---:|
