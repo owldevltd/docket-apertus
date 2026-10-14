@@ -665,8 +665,9 @@ The long record of the measurements behind the decisions is `docs/evidence.md`.
   through were counted by the code of the same commit from their stored answers, with the register of persons loaded.
 - **Result:** 209 of 299 without a mark (69.9 %, 95 % interval 64.5–74.8 %), 214 without the register; German 71.6 %,
   French 71.1 %, Italian 66.7 %. In the shuffled order 72 % after 50 documents and 70 % from 200 on. A text layer on
-  215; the kind named for 298; the parliament found for 222; the key from the number for 204. Of 5 144 answers 4 650
-  stand literally or derived, 211 only at the named block, 1 454 have no place and are not taken. The 90 with a mark:
+  215; the kind named for 298; the parliament found for 222; the key from the number for 204. 5 144 fields answered with
+  6 500 values: 4 650 stand literally or derived, 211 only at the named block, 185 worded, 1 454 have no place and are
+  not taken. The 90 with a mark:
   the image check 47, a value only at the named block 42, a person one character off 12.
 - **Finding:** None taken; the figure of the technical report.
 - **Run:** `results/three-hundred/`

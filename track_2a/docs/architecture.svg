@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 455" font-family="Liberation Sans, DejaVu Sans, sans-serif" font-size="13">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#444"/>
+    </marker>
+    <marker id="o" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#b5651d"/>
+    </marker>
+    <marker id="p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6a4c9c"/>
+    </marker>
+    <style>
+      .code { fill: #eef0f2; stroke: #6b7280; }
+      .model { fill: #dbe8fb; stroke: #2f5fa8; }
+      .human { fill: #ddf1e2; stroke: #2f7d4a; }
+      .learn { fill: #fbe9d6; stroke: #b5651d; }
+      .def { fill: #ece4f7; stroke: #6a4c9c; }
+      .t { font-weight: bold; }
+      .s { font-size: 11.5px; fill: #333; }
+      .k { font-size: 11px; font-style: italic; }
+      .l { stroke: #444; stroke-width: 1.4; fill: none; marker-end: url(#a); }
+      .d { stroke: #b5651d; stroke-width: 1.4; fill: none; stroke-dasharray: 5 4; marker-end: url(#o); }
+      .v { stroke: #6a4c9c; stroke-width: 1.6; fill: none; stroke-dasharray: 7 4; marker-end: url(#p); }
+    </style>
+  </defs>
+
+  <!-- Reihe 1: vom PDF zu den Blöcken -->
+  <rect class="code" x="15" y="15" width="220" height="80" rx="6"/>
+  <text x="27" y="38" class="t">1 Pages</text>
+  <text x="27" y="58" class="s">PDF, each page as image (300 dpi),</text>
+  <text x="27" y="74" class="s">born-digital and scans alike</text>
+
+  <rect class="code" x="265" y="15" width="220" height="80" rx="6"/>
+  <text x="277" y="38" class="t">2 Geometry, without a model</text>
+  <text x="277" y="58" class="s">lines, areas, ticks, cells,</text>
+  <text x="277" y="74" class="s">text lines → elements, place, kind</text>
+
+  <rect class="model" x="515" y="15" width="220" height="80" rx="6"/>
+  <text x="527" y="38" class="t">3 Text</text>
+  <text x="527" y="58" class="s">text layer, else Apertus reads;</text>
+  <text x="527" y="74" class="s">each reading checked on the image</text>
+
+  <rect class="code" x="765" y="15" width="220" height="80" rx="6"/>
+  <text x="777" y="38" class="t">4 Blocks</text>
+  <text x="777" y="58" class="s">sections, paragraphs, tables,</text>
+  <text x="777" y="74" class="s">lists, labelled values (JATS)</text>
+
+  <!-- Reihe 2: vom Feld zum Bestand -->
+  <rect class="model" x="15" y="160" width="220" height="80" rx="6"/>
+  <text x="27" y="183" class="t">5 Fields</text>
+  <text x="27" y="203" class="s">Apertus answers what the</text>
+  <text x="27" y="219" class="s">definition asks, six per call</text>
+
+  <rect class="code" x="265" y="160" width="220" height="80" rx="6"/>
+  <text x="277" y="183" class="t">6 Place and rules</text>
+  <text x="277" y="203" class="s">a value counts only on the page;</text>
+  <text x="277" y="219" class="s">what is unsure gets a mark</text>
+
+  <rect class="code" x="515" y="160" width="220" height="80" rx="6"/>
+  <text x="527" y="183" class="t">7 Affair</text>
+  <text x="527" y="203" class="s">key from parliament and number,</text>
+  <text x="527" y="219" class="s">type by vocabulary, persons</text>
+
+  <rect class="code" x="765" y="160" width="220" height="80" rx="6"/>
+  <text x="777" y="183" class="t">8 Store</text>
+  <text x="777" y="203" class="s">one row per value with its place;</text>
+  <text x="777" y="219" class="s">the record is laid from the rows</text>
+
+  <!-- Reihe 3: Lernen, Mensch, Definition -->
+  <rect class="learn" x="15" y="305" width="470" height="80" rx="6"/>
+  <text x="27" y="328" class="t">10 Learning</text>
+  <text x="27" y="348" class="s">rules from corrections (adaptive approval) · a second opinion on the place</text>
+  <text x="27" y="364" class="s">of a field (per parliament, small network) · names learnt · vocabulary grows</text>
+
+  <rect class="human" x="515" y="305" width="220" height="80" rx="6"/>
+  <text x="527" y="328" class="t">9 Review</text>
+  <text x="527" y="348" class="s">a person confirms, changes or</text>
+  <text x="527" y="364" class="s">rejects – at its place on the page</text>
+
+  <rect class="def" x="765" y="305" width="220" height="80" rx="6"/>
+  <text x="777" y="328" class="t">11 Definition</text>
+  <text x="777" y="348" class="s">fields file + JSON Schema contract,</text>
+  <text x="777" y="364" class="s">grows when a document needs it</text>
+
+  <!-- Pfeile der Kette -->
+  <path class="l" d="M235,55 L263,55"/>
+  <path class="l" d="M485,55 L513,55"/>
+  <path class="l" d="M735,55 L763,55"/>
+  <path class="l" d="M875,95 L875,128 L125,128 L125,158"/>
+  <path class="l" d="M235,200 L263,200"/>
+  <path class="l" d="M485,200 L513,200"/>
+  <path class="l" d="M735,200 L763,200"/>
+  <path class="l" d="M805,240 L805,262 L660,262 L660,303"/>
+  <path class="l" d="M515,345 L487,345"/>
+
+  <!-- Gelerntes wirkt zurück -->
+  <path class="d" d="M250,305 L250,272 L375,272 L375,242"/>
+  <path class="d" d="M420,305 L420,286 L600,286 L600,242"/>
+
+  <!-- Definition: fragt, prüft, legt über das Gelesene -->
+  <path class="v" d="M940,305 L940,242"/>
+  <text x="946" y="276" class="k" fill="#6a4c9c">checks,</text>
+  <text x="946" y="290" class="k" fill="#6a4c9c">lays anew</text>
+  <path class="v" d="M875,385 L875,402 L6,402 L6,200 L13,200"/>
+  <text x="14" y="398" class="k" fill="#6a4c9c">asks – stored documents only for what is new</text>
+
+  <!-- Legende -->
+  <rect class="code" x="15" y="425" width="14" height="12"/><text x="35" y="436" class="s">code, without a model</text>
+  <rect class="model" x="175" y="425" width="14" height="12"/><text x="195" y="436" class="s">Apertus</text>
+  <rect class="human" x="285" y="425" width="14" height="12"/><text x="305" y="436" class="s">person</text>
+  <rect class="learn" x="390" y="425" width="14" height="12"/><text x="410" y="436" class="s">learnt, feeds back</text>
+  <rect class="def" x="575" y="425" width="14" height="12"/><text x="595" y="436" class="s">definition of the model, extendable</text>
+</svg>

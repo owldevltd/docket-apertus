@@ -16,8 +16,9 @@ Measured on 300 documents of 62 parliaments, in a shuffled order (`results/three
 
 - **209 of 299 documents run through without a single mark for a person** (69.9 %, 95 % interval 64.5–74.8 %),
   steady from 50 documents on, similar in German (71.6 %), French (71.1 %) and Italian (66.7 %).
-- Of 5 144 answers of the model, 4 650 stand on the page literally or derived from the block it named, 211 only at
-  the named block (marked for a person), and 1 454 have no place on the page and are not taken.
+- The model answered 5 144 fields with 6 500 values: 4 650 stand on the page literally or derived from the block it
+  named, 211 only at the named block (marked for a person), 185 are worded by the model, and 1 454 have no place on
+  the page and are not taken.
 - A question across the parliaments: how many members back an affair? The documents name more than one person in
   153 of 299; per parliament the backing differs in kind, from one person in most municipalities to 33 in the median
   in Graubünden.
@@ -28,9 +29,9 @@ design rests on.
 ## What you need
 
 - **Runtime:** Docker with Compose 2.24 or newer (Docker Desktop, or Docker Engine with the compose plugin). Nothing
-  else: the image brings Python, poppler and Postgres. The first build needs the network.
-- **Hardware:** no GPU. Tested on a laptop with four cores (eight threads) and 8 GB of memory; the pipeline computes
-  on one core. Port 8080 must be free.
+  else: the image brings Python and poppler, and Postgres runs as a second container. The first build needs the network.
+- **Hardware:** no GPU. Tested on a laptop with four cores (eight threads) and 8 GB of memory (6.9 GB usable); the
+  pipeline computes on one core. Port 8080 must be free.
 - **API key:** a key for an OpenAI-compatible endpoint that serves Apertus v1.5 8B. The defaults point at the CSCS
   endpoint of Hack Apertus; `LLM_BASE_URL` and `LLM_NAME` point it at another one.
 - **Model weights:** none to download; the model is reached over the endpoint.
@@ -124,16 +125,17 @@ More in `docs/architecture.md` (the chain, the record, the store and the review,
 
 ## Where data goes
 
-Docket sends page text and, for pages without a text layer, image cuts of the page to the model endpoint, and
-nothing anywhere else. It fetches nothing from OpenParlData or any other source; its only input is the PDF it is
-given. The app loads no fonts or scripts from outside.
+Docket sends page text and, for pages without a text layer, image cuts of the page to the model endpoint, and nothing
+anywhere else. In operation it fetches nothing from OpenParlData or any other source; its only input is the PDF it is
+given. Only the register of persons is loaded once, by hand, when an installation is set up (`tools/register.py`);
+without it Docket runs as well. The app loads no fonts or scripts from outside.
 
 ## If something does not work
 
-- **Runs end without values:** the key is missing or wrong. http://localhost:8080/api/health says `"model": true`
-  once a key is set; after changing `.env`, stop and start `make run` again.
-- **The model refuses or limits the calls (403, 429):** the client stops at these instead of retrying; wait and
-  upload again. It sends ten calls one after the other, then pauses half a second.
+- **Runs end without values:** the key is missing or wrong. http://localhost:8080/api/health says `"model": true` once a
+  key is set; after changing `.env`, stop and start `make run` again.
+- **The model refuses or limits the calls (403, 429):** after a 4xx the client sends the call once more, and a second
+  403 or 429 stops the run; wait and upload again. It sends ten calls one after the other, then pauses half a second.
 - **Compose rejects `env_file`:** it is older than 2.24; update Docker.
 - **Port 8080 is taken:** stop what uses it, or change the left side of `"8080:8080"` in `compose.yaml`.
 - **The administration asks for no password:** `ADMIN_PASSWORD` is not set in `.env`; this is meant for a local run

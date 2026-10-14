@@ -1,0 +1,2390 @@
+{
+ "about": "The 300 documents of results/three-hundred/: the 60 of the reference set (8 of them shipped in data/documents/, the others named by language, affair id and document id of the OpenParlData API) and 240 drawn with seed 20261011; order is the shuffled order of the run (seed 20261013). One document hit the time limit and is not measured. The documents themselves are not in the repository.",
+ "documents": [
+  {
+   "order": 1,
+   "name": "it-255187-645035",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 255187,
+   "document": 645035
+  },
+  {
+   "order": 2,
+   "name": "de-86099-452228",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 86099,
+   "document": 452228
+  },
+  {
+   "order": 3,
+   "name": "it-26056-17987",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 26056,
+   "document": 17987
+  },
+  {
+   "order": 4,
+   "name": "it-166019-915994",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 166019,
+   "document": 915994
+  },
+  {
+   "order": 5,
+   "name": "fr-248507-539579",
+   "set": "drawn, run before",
+   "language": "fr",
+   "affair": 248507,
+   "document": 539579
+  },
+  {
+   "order": 6,
+   "name": "de-45413-154478",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 45413,
+   "document": 154478
+  },
+  {
+   "order": 7,
+   "name": "fr-282668-655129",
+   "set": "reference",
+   "language": "fr",
+   "affair": 282668,
+   "document": 655129
+  },
+  {
+   "order": 8,
+   "name": "de-1003-128536",
+   "set": "drawn, run before",
+   "language": "de",
+   "affair": 1003,
+   "document": 128536
+  },
+  {
+   "order": 9,
+   "name": "fr-242950-44917",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 242950,
+   "document": 44917
+  },
+  {
+   "order": 10,
+   "name": "it-255261-642505",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 255261,
+   "document": 642505
+  },
+  {
+   "order": 11,
+   "name": "fr-328507-869260",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 328507,
+   "document": 869260
+  },
+  {
+   "order": 12,
+   "name": "de-330492-882612",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 330492,
+   "document": 882612
+  },
+  {
+   "order": 13,
+   "name": "it-174809-110384",
+   "set": "reference",
+   "language": "it",
+   "affair": 174809,
+   "document": 110384
+  },
+  {
+   "order": 14,
+   "name": "it-118596-346470",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 118596,
+   "document": 346470
+  },
+  {
+   "order": 15,
+   "name": "it-84656-221236",
+   "set": "reference",
+   "language": "it",
+   "affair": 84656,
+   "document": 221236
+  },
+  {
+   "order": 16,
+   "name": "de-247271-556812",
+   "set": "drawn, run before",
+   "language": "de",
+   "affair": 247271,
+   "document": 556812
+  },
+  {
+   "order": 17,
+   "name": "it-116963-295425",
+   "set": "drawn, run before",
+   "language": "it",
+   "affair": 116963,
+   "document": 295425
+  },
+  {
+   "order": 18,
+   "name": "de-258458-570973",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 258458,
+   "document": 570973
+  },
+  {
+   "order": 19,
+   "name": "fr-240089-509290",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 240089,
+   "document": 509290
+  },
+  {
+   "order": 20,
+   "name": "de-199983-451338",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 199983,
+   "document": 451338
+  },
+  {
+   "order": 21,
+   "name": "it-85780-50878",
+   "set": "reference",
+   "language": "it",
+   "affair": 85780,
+   "document": 50878
+  },
+  {
+   "order": 22,
+   "name": "it-295324-678119",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 295324,
+   "document": 678119
+  },
+  {
+   "order": 23,
+   "name": "de-169872-372279",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 169872,
+   "document": 372279
+  },
+  {
+   "order": 24,
+   "name": "it-85828-221306",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 85828,
+   "document": 221306
+  },
+  {
+   "order": 25,
+   "name": "it-175541-50790",
+   "set": "reference",
+   "language": "it",
+   "affair": 175541,
+   "document": 50790
+  },
+  {
+   "order": 26,
+   "name": "de-167428-461029",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 167428,
+   "document": 461029
+  },
+  {
+   "order": 27,
+   "name": "fr-326866-907975",
+   "set": "reference",
+   "language": "fr",
+   "affair": 326866,
+   "document": 907975
+  },
+  {
+   "order": 28,
+   "name": "de-152621-321128",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 152621,
+   "document": 321128
+  },
+  {
+   "order": 29,
+   "name": "it-75376-43908",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 75376,
+   "document": 43908
+  },
+  {
+   "order": 30,
+   "name": "de-17695-13099",
+   "set": "drawn, run before",
+   "language": "de",
+   "affair": 17695,
+   "document": 13099
+  },
+  {
+   "order": 31,
+   "name": "de-167181-519802",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 167181,
+   "document": 519802
+  },
+  {
+   "order": 32,
+   "name": "it-296632-904733",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 296632,
+   "document": 904733
+  },
+  {
+   "order": 33,
+   "name": "it-165572-909750",
+   "set": "drawn, run before",
+   "language": "it",
+   "affair": 165572,
+   "document": 909750
+  },
+  {
+   "order": 34,
+   "name": "it-254525-642671",
+   "set": "drawn, run before",
+   "language": "it",
+   "affair": 254525,
+   "document": 642671
+  },
+  {
+   "order": 35,
+   "name": "de-50922-105960",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 50922,
+   "document": 105960
+  },
+  {
+   "order": 36,
+   "name": "it-175899-274095",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 175899,
+   "document": 274095
+  },
+  {
+   "order": 37,
+   "name": "de-92266-278595",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 92266,
+   "document": 278595
+  },
+  {
+   "order": 38,
+   "name": "de-265680-597351",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 265680,
+   "document": 597351
+  },
+  {
+   "order": 39,
+   "name": "it-294654-675221",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 294654,
+   "document": 675221
+  },
+  {
+   "order": 40,
+   "name": "de-46032-203163",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 46032,
+   "document": 203163
+  },
+  {
+   "order": 41,
+   "name": "it-174295-274130",
+   "set": "drawn, run before",
+   "language": "it",
+   "affair": 174295,
+   "document": 274130
+  },
+  {
+   "order": 42,
+   "name": "de-220572-114368",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 220572,
+   "document": 114368
+  },
+  {
+   "order": 43,
+   "name": "it-75959-911507",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 75959,
+   "document": 911507
+  },
+  {
+   "order": 44,
+   "name": "fr-237681-503896",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 237681,
+   "document": 503896
+  },
+  {
+   "order": 45,
+   "name": "fr-328233-868803",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 328233,
+   "document": 868803
+  },
+  {
+   "order": 46,
+   "name": "de-131265-201856",
+   "set": "reference",
+   "language": "de",
+   "affair": 131265,
+   "document": 201856
+  },
+  {
+   "order": 47,
+   "name": "de-256403-575399",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 256403,
+   "document": 575399
+  },
+  {
+   "order": 48,
+   "name": "de-95143-62994",
+   "set": "reference",
+   "language": "de",
+   "affair": 95143,
+   "document": 62994
+  },
+  {
+   "order": 49,
+   "name": "de-273106-219210",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 273106,
+   "document": 219210
+  },
+  {
+   "order": 50,
+   "name": "fr-239576-508169",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 239576,
+   "document": 508169
+  },
+  {
+   "order": 51,
+   "name": "it-174846-49864",
+   "set": "drawn, run before",
+   "language": "it",
+   "affair": 174846,
+   "document": 49864
+  },
+  {
+   "order": 52,
+   "name": "fr-338005-922116",
+   "set": "drawn, run before",
+   "language": "fr",
+   "affair": 338005,
+   "document": 922116
+  },
+  {
+   "order": 53,
+   "name": "de-78665-216918",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 78665,
+   "document": 216918
+  },
+  {
+   "order": 54,
+   "name": "fr-226391-479229",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 226391,
+   "document": 479229
+  },
+  {
+   "order": 55,
+   "name": "fr-329981-879088",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 329981,
+   "document": 879088
+  },
+  {
+   "order": 56,
+   "name": "fr-328444-869312",
+   "set": "drawn, run before",
+   "language": "fr",
+   "affair": 328444,
+   "document": 869312
+  },
+  {
+   "order": 57,
+   "name": "fr-37923-301094",
+   "set": "reference",
+   "language": "fr",
+   "affair": 37923,
+   "document": 301094
+  },
+  {
+   "order": 58,
+   "name": "de-95599-175381",
+   "set": "drawn, run before",
+   "language": "de",
+   "affair": 95599,
+   "document": 175381
+  },
+  {
+   "order": 59,
+   "name": "fr-123639-348103",
+   "set": "drawn, run before",
+   "language": "fr",
+   "affair": 123639,
+   "document": 348103
+  },
+  {
+   "order": 60,
+   "name": "it-83921-424843",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 83921,
+   "document": 424843
+  },
+  {
+   "order": 61,
+   "name": "fr-244310-45169",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 244310,
+   "document": 45169
+  },
+  {
+   "order": 62,
+   "name": "it-118619-190496",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 118619,
+   "document": 190496
+  },
+  {
+   "order": 63,
+   "name": "de-276366-606094",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 276366,
+   "document": 606094
+  },
+  {
+   "order": 64,
+   "name": "it-75994-103692",
+   "set": "reference",
+   "language": "it",
+   "affair": 75994,
+   "document": 103692
+  },
+  {
+   "order": 65,
+   "name": "it-202255-912958",
+   "set": "reference",
+   "language": "it",
+   "affair": 202255,
+   "document": 912958
+  },
+  {
+   "order": 66,
+   "name": "de-115297-105521",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 115297,
+   "document": 105521
+  },
+  {
+   "order": 67,
+   "name": "de-281479-630531",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 281479,
+   "document": 630531
+  },
+  {
+   "order": 68,
+   "name": "it-84271-221365",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 84271,
+   "document": 221365
+  },
+  {
+   "order": 69,
+   "name": "de-105575-338571",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 105575,
+   "document": 338571
+  },
+  {
+   "order": 70,
+   "name": "it-83532-50525",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 83532,
+   "document": 50525
+  },
+  {
+   "order": 71,
+   "name": "fr-301805-694960",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 301805,
+   "document": 694960
+  },
+  {
+   "order": 72,
+   "name": "de-252099-556308",
+   "set": "drawn, run before",
+   "language": "de",
+   "affair": 252099,
+   "document": 556308
+  },
+  {
+   "order": 73,
+   "name": "it-254639-642818",
+   "set": "reference",
+   "language": "it",
+   "affair": 254639,
+   "document": 642818
+  },
+  {
+   "order": 74,
+   "name": "it-75583-913115",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 75583,
+   "document": 913115
+  },
+  {
+   "order": 75,
+   "name": "fr-328418-869327",
+   "set": "drawn, run before",
+   "language": "fr",
+   "affair": 328418,
+   "document": 869327
+  },
+  {
+   "order": 76,
+   "name": "de-6481-900871",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 6481,
+   "document": 900871
+  },
+  {
+   "order": 77,
+   "name": "fr-329452-877116",
+   "set": "drawn, run before",
+   "language": "fr",
+   "affair": 329452,
+   "document": 877116
+  },
+  {
+   "order": 78,
+   "name": "it-252361-555477",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 252361,
+   "document": 555477
+  },
+  {
+   "order": 79,
+   "name": "de-280527-631155",
+   "set": "drawn, run before",
+   "language": "de",
+   "affair": 280527,
+   "document": 631155
+  },
+  {
+   "order": 80,
+   "name": "fr-329541-879156",
+   "set": "drawn, run before",
+   "language": "fr",
+   "affair": 329541,
+   "document": 879156
+  },
+  {
+   "order": 81,
+   "name": "de-25080-242701",
+   "set": "drawn, run before",
+   "language": "de",
+   "affair": 25080,
+   "document": 242701
+  },
+  {
+   "order": 82,
+   "name": "de-268620-599823",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 268620,
+   "document": 599823
+  },
+  {
+   "order": 83,
+   "name": "de-296618-889242",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 296618,
+   "document": 889242
+  },
+  {
+   "order": 84,
+   "name": "lugano-5192",
+   "set": "reference",
+   "shipped": "data/documents/lugano-5192/document.json"
+  },
+  {
+   "order": 85,
+   "name": "de-6383-281178",
+   "set": "drawn, run before",
+   "language": "de",
+   "affair": 6383,
+   "document": 281178
+  },
+  {
+   "order": 86,
+   "name": "it-174487-51010",
+   "set": "reference",
+   "language": "it",
+   "affair": 174487,
+   "document": 51010
+  },
+  {
+   "order": 87,
+   "name": "de-172362-374214",
+   "set": "reference",
+   "language": "de",
+   "affair": 172362,
+   "document": 374214
+  },
+  {
+   "order": 88,
+   "name": "de-165212-317806",
+   "set": "drawn, run before",
+   "language": "de",
+   "affair": 165212,
+   "document": 317806
+  },
+  {
+   "order": 89,
+   "name": "it-83692-325421",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 83692,
+   "document": 325421
+  },
+  {
+   "order": 90,
+   "name": "it-248183-531024",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 248183,
+   "document": 531024
+  },
+  {
+   "order": 91,
+   "name": "de-327098-889191",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 327098,
+   "document": 889191
+  },
+  {
+   "order": 92,
+   "name": "fr-128335-248323",
+   "set": "reference",
+   "language": "fr",
+   "affair": 128335,
+   "document": 248323
+  },
+  {
+   "order": 93,
+   "name": "de-220252-277247",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 220252,
+   "document": 277247
+  },
+  {
+   "order": 94,
+   "name": "it-117039-346011",
+   "set": "drawn, run before",
+   "language": "it",
+   "affair": 117039,
+   "document": 346011
+  },
+  {
+   "order": 95,
+   "name": "de-80024-322089",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 80024,
+   "document": 322089
+  },
+  {
+   "order": 96,
+   "name": "de-14682-127632",
+   "set": "reference",
+   "language": "de",
+   "affair": 14682,
+   "document": 127632
+  },
+  {
+   "order": 97,
+   "name": "fr-216333-697538",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 216333,
+   "document": 697538
+  },
+  {
+   "order": 98,
+   "name": "it-116947-134937",
+   "set": "drawn, run before",
+   "language": "it",
+   "affair": 116947,
+   "document": 134937
+  },
+  {
+   "order": 99,
+   "name": "de-275893-373913",
+   "set": "reference",
+   "language": "de",
+   "affair": 275893,
+   "document": 373913
+  },
+  {
+   "order": 100,
+   "name": "fr-36972-248629",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 36972,
+   "document": 248629,
+   "measured": false
+  },
+  {
+   "order": 101,
+   "name": "de-99303-382119",
+   "set": "drawn, run before",
+   "language": "de",
+   "affair": 99303,
+   "document": 382119
+  },
+  {
+   "order": 102,
+   "name": "fr-30121-397925",
+   "set": "reference",
+   "language": "fr",
+   "affair": 30121,
+   "document": 397925
+  },
+  {
+   "order": 103,
+   "name": "fr-224520-550900",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 224520,
+   "document": 550900
+  },
+  {
+   "order": 104,
+   "name": "it-75553-911911",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 75553,
+   "document": 911911
+  },
+  {
+   "order": 105,
+   "name": "de-124260-96852",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 124260,
+   "document": 96852
+  },
+  {
+   "order": 106,
+   "name": "fr-203083-464776",
+   "set": "drawn, run before",
+   "language": "fr",
+   "affair": 203083,
+   "document": 464776
+  },
+  {
+   "order": 107,
+   "name": "de-285369-647155",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 285369,
+   "document": 647155
+  },
+  {
+   "order": 108,
+   "name": "fr-253931-575744",
+   "set": "reference",
+   "language": "fr",
+   "affair": 253931,
+   "document": 575744
+  },
+  {
+   "order": 109,
+   "name": "it-26252-295468",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 26252,
+   "document": 295468
+  },
+  {
+   "order": 110,
+   "name": "fr-302301-696402",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 302301,
+   "document": 696402
+  },
+  {
+   "order": 111,
+   "name": "fr-233906-268955",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 233906,
+   "document": 268955
+  },
+  {
+   "order": 112,
+   "name": "fr-125353-349328",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 125353,
+   "document": 349328
+  },
+  {
+   "order": 113,
+   "name": "de-172259-49017",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 172259,
+   "document": 49017
+  },
+  {
+   "order": 114,
+   "name": "fr-329178-920199",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 329178,
+   "document": 920199
+  },
+  {
+   "order": 115,
+   "name": "it-174945-221138",
+   "set": "drawn, run before",
+   "language": "it",
+   "affair": 174945,
+   "document": 221138
+  },
+  {
+   "order": 116,
+   "name": "de-200687-453739",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 200687,
+   "document": 453739
+  },
+  {
+   "order": 117,
+   "name": "it-118299-396162",
+   "set": "drawn, run before",
+   "language": "it",
+   "affair": 118299,
+   "document": 396162
+  },
+  {
+   "order": 118,
+   "name": "fr-328298-868933",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 328298,
+   "document": 868933
+  },
+  {
+   "order": 119,
+   "name": "fr-231572-320458",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 231572,
+   "document": 320458
+  },
+  {
+   "order": 120,
+   "name": "fr-29307-136162",
+   "set": "drawn, run before",
+   "language": "fr",
+   "affair": 29307,
+   "document": 136162
+  },
+  {
+   "order": 121,
+   "name": "fr-89308-589769",
+   "set": "reference",
+   "language": "fr",
+   "affair": 89308,
+   "document": 589769
+  },
+  {
+   "order": 122,
+   "name": "de-131541-30064",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 131541,
+   "document": 30064
+  },
+  {
+   "order": 123,
+   "name": "it-118332-18777",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 118332,
+   "document": 18777
+  },
+  {
+   "order": 124,
+   "name": "fr-31556-298816",
+   "set": "reference",
+   "language": "fr",
+   "affair": 31556,
+   "document": 298816
+  },
+  {
+   "order": 125,
+   "name": "fr-224002-553774",
+   "set": "reference",
+   "language": "fr",
+   "affair": 224002,
+   "document": 553774
+  },
+  {
+   "order": 126,
+   "name": "fr-328353-868766",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 328353,
+   "document": 868766
+  },
+  {
+   "order": 127,
+   "name": "fr-208051-696125",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 208051,
+   "document": 696125
+  },
+  {
+   "order": 128,
+   "name": "fr-224653-551126",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 224653,
+   "document": 551126
+  },
+  {
+   "order": 129,
+   "name": "fr-227593-480008",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 227593,
+   "document": 480008
+  },
+  {
+   "order": 130,
+   "name": "de-172748-374674",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 172748,
+   "document": 374674
+  },
+  {
+   "order": 131,
+   "name": "fr-86590-589040",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 86590,
+   "document": 589040
+  },
+  {
+   "order": 132,
+   "name": "fr-179144-586602",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 179144,
+   "document": 586602
+  },
+  {
+   "order": 133,
+   "name": "de-112963-14026",
+   "set": "drawn, run before",
+   "language": "de",
+   "affair": 112963,
+   "document": 14026
+  },
+  {
+   "order": 134,
+   "name": "fr-237429-503304",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 237429,
+   "document": 503304
+  },
+  {
+   "order": 135,
+   "name": "fr-178979-223398",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 178979,
+   "document": 223398
+  },
+  {
+   "order": 136,
+   "name": "fr-177963-426810",
+   "set": "drawn, run before",
+   "language": "fr",
+   "affair": 177963,
+   "document": 426810
+  },
+  {
+   "order": 137,
+   "name": "de-82138-108661",
+   "set": "reference",
+   "language": "de",
+   "affair": 82138,
+   "document": 108661
+  },
+  {
+   "order": 138,
+   "name": "it-254923-642562",
+   "set": "drawn, run before",
+   "language": "it",
+   "affair": 254923,
+   "document": 642562
+  },
+  {
+   "order": 139,
+   "name": "fr-217502-467571",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 217502,
+   "document": 467571
+  },
+  {
+   "order": 140,
+   "name": "de-4489-279871",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 4489,
+   "document": 279871
+  },
+  {
+   "order": 141,
+   "name": "it-118158-243585",
+   "set": "drawn, run before",
+   "language": "it",
+   "affair": 118158,
+   "document": 243585
+  },
+  {
+   "order": 142,
+   "name": "it-27699-295640",
+   "set": "reference",
+   "language": "it",
+   "affair": 27699,
+   "document": 295640
+  },
+  {
+   "order": 143,
+   "name": "neuchatel-grand-conseil",
+   "set": "reference",
+   "shipped": "data/documents/neuchatel-grand-conseil/document.json"
+  },
+  {
+   "order": 144,
+   "name": "de-78822-371819",
+   "set": "reference",
+   "language": "de",
+   "affair": 78822,
+   "document": 371819
+  },
+  {
+   "order": 145,
+   "name": "wettingen-115631",
+   "set": "reference",
+   "shipped": "data/documents/wettingen-115631/document.json"
+  },
+  {
+   "order": 146,
+   "name": "de-62937-162381",
+   "set": "reference",
+   "language": "de",
+   "affair": 62937,
+   "document": 162381
+  },
+  {
+   "order": 147,
+   "name": "fr-87718-275965",
+   "set": "reference",
+   "language": "fr",
+   "affair": 87718,
+   "document": 275965
+  },
+  {
+   "order": 148,
+   "name": "de-172871-219858",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 172871,
+   "document": 219858
+  },
+  {
+   "order": 149,
+   "name": "fr-329389-876988",
+   "set": "drawn, run before",
+   "language": "fr",
+   "affair": 329389,
+   "document": 876988
+  },
+  {
+   "order": 150,
+   "name": "fr-37835-401692",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 37835,
+   "document": 401692
+  },
+  {
+   "order": 151,
+   "name": "de-240598-520112",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 240598,
+   "document": 520112
+  },
+  {
+   "order": 152,
+   "name": "fr-237543-503547",
+   "set": "reference",
+   "language": "fr",
+   "affair": 237543,
+   "document": 503547
+  },
+  {
+   "order": 153,
+   "name": "de-3987-331081",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 3987,
+   "document": 331081
+  },
+  {
+   "order": 154,
+   "name": "it-254701-644044",
+   "set": "reference",
+   "language": "it",
+   "affair": 254701,
+   "document": 644044
+  },
+  {
+   "order": 155,
+   "name": "fr-88795-54858",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 88795,
+   "document": 54858
+  },
+  {
+   "order": 156,
+   "name": "it-75870-916678",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 75870,
+   "document": 916678
+  },
+  {
+   "order": 157,
+   "name": "fr-225722-478813",
+   "set": "reference",
+   "language": "fr",
+   "affair": 225722,
+   "document": 478813
+  },
+  {
+   "order": 158,
+   "name": "fr-37795-351117",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 37795,
+   "document": 351117
+  },
+  {
+   "order": 159,
+   "name": "it-84824-375900",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 84824,
+   "document": 375900
+  },
+  {
+   "order": 160,
+   "name": "fr-340437-926736",
+   "set": "reference",
+   "language": "fr",
+   "affair": 340437,
+   "document": 926736
+  },
+  {
+   "order": 161,
+   "name": "de-79939-421571",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 79939,
+   "document": 421571
+  },
+  {
+   "order": 162,
+   "name": "fr-329458-876921",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 329458,
+   "document": 876921
+  },
+  {
+   "order": 163,
+   "name": "it-202319-43958",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 202319,
+   "document": 43958
+  },
+  {
+   "order": 164,
+   "name": "fr-221677-51431",
+   "set": "drawn, run before",
+   "language": "fr",
+   "affair": 221677,
+   "document": 51431
+  },
+  {
+   "order": 165,
+   "name": "fr-329454-877123",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 329454,
+   "document": 877123
+  },
+  {
+   "order": 166,
+   "name": "de-273091-605858",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 273091,
+   "document": 605858
+  },
+  {
+   "order": 167,
+   "name": "it-255214-644501",
+   "set": "reference",
+   "language": "it",
+   "affair": 255214,
+   "document": 644501
+  },
+  {
+   "order": 168,
+   "name": "de-131744-91472",
+   "set": "reference",
+   "language": "de",
+   "affair": 131744,
+   "document": 91472
+  },
+  {
+   "order": 169,
+   "name": "de-8025-121069",
+   "set": "drawn, run before",
+   "language": "de",
+   "affair": 8025,
+   "document": 121069
+  },
+  {
+   "order": 170,
+   "name": "fr-37704-401295",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 37704,
+   "document": 401295
+  },
+  {
+   "order": 171,
+   "name": "de-86092-451986",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 86092,
+   "document": 451986
+  },
+  {
+   "order": 172,
+   "name": "it-75413-916125",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 75413,
+   "document": 916125
+  },
+  {
+   "order": 173,
+   "name": "de-330483-883040",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 330483,
+   "document": 883040
+  },
+  {
+   "order": 174,
+   "name": "it-83775-109914",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 83775,
+   "document": 109914
+  },
+  {
+   "order": 175,
+   "name": "it-173454-325515",
+   "set": "reference",
+   "language": "it",
+   "affair": 173454,
+   "document": 325515
+  },
+  {
+   "order": 176,
+   "name": "it-85703-425067",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 85703,
+   "document": 425067
+  },
+  {
+   "order": 177,
+   "name": "it-202103-214552",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 202103,
+   "document": 214552
+  },
+  {
+   "order": 178,
+   "name": "de-14958-339223",
+   "set": "drawn, run before",
+   "language": "de",
+   "affair": 14958,
+   "document": 339223
+  },
+  {
+   "order": 179,
+   "name": "fr-227642-480050",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 227642,
+   "document": 480050
+  },
+  {
+   "order": 180,
+   "name": "fr-297784-690539",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 297784,
+   "document": 690539
+  },
+  {
+   "order": 181,
+   "name": "fr-286837-655020",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 286837,
+   "document": 655020
+  },
+  {
+   "order": 182,
+   "name": "fr-216326-697530",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 216326,
+   "document": 697530
+  },
+  {
+   "order": 183,
+   "name": "fr-329531-894305",
+   "set": "drawn, run before",
+   "language": "fr",
+   "affair": 329531,
+   "document": 894305
+  },
+  {
+   "order": 184,
+   "name": "fr-328226-868773",
+   "set": "drawn, run before",
+   "language": "fr",
+   "affair": 328226,
+   "document": 868773
+  },
+  {
+   "order": 185,
+   "name": "it-27593-18804",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 27593,
+   "document": 18804
+  },
+  {
+   "order": 186,
+   "name": "de-8482-281308",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 8482,
+   "document": 281308
+  },
+  {
+   "order": 187,
+   "name": "fr-178482-113113",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 178482,
+   "document": 113113
+  },
+  {
+   "order": 188,
+   "name": "it-255269-643800",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 255269,
+   "document": 643800
+  },
+  {
+   "order": 189,
+   "name": "it-117077-396045",
+   "set": "drawn, run before",
+   "language": "it",
+   "affair": 117077,
+   "document": 396045
+  },
+  {
+   "order": 190,
+   "name": "it-26162-346009",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 26162,
+   "document": 346009
+  },
+  {
+   "order": 191,
+   "name": "de-22956-133328",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 22956,
+   "document": 133328
+  },
+  {
+   "order": 192,
+   "name": "fr-231460-268208",
+   "set": "drawn, run before",
+   "language": "fr",
+   "affair": 231460,
+   "document": 268208
+  },
+  {
+   "order": 193,
+   "name": "fr-34606-247163",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 34606,
+   "document": 247163
+  },
+  {
+   "order": 194,
+   "name": "it-202352-909296",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 202352,
+   "document": 909296
+  },
+  {
+   "order": 195,
+   "name": "fr-328553-869206",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 328553,
+   "document": 869206
+  },
+  {
+   "order": 196,
+   "name": "de-170115-421515",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 170115,
+   "document": 421515
+  },
+  {
+   "order": 197,
+   "name": "it-255162-643605",
+   "set": "drawn, run before",
+   "language": "it",
+   "affair": 255162,
+   "document": 643605
+  },
+  {
+   "order": 198,
+   "name": "it-75873-214213",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 75873,
+   "document": 214213
+  },
+  {
+   "order": 199,
+   "name": "fr-339204-924493",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 339204,
+   "document": 924493
+  },
+  {
+   "order": 200,
+   "name": "nidau-m185",
+   "set": "reference",
+   "shipped": "data/documents/nidau-m185/document.json"
+  },
+  {
+   "order": 201,
+   "name": "it-118360-78714",
+   "set": "reference",
+   "language": "it",
+   "affair": 118360,
+   "document": 78714
+  },
+  {
+   "order": 202,
+   "name": "it-175809-375983",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 175809,
+   "document": 375983
+  },
+  {
+   "order": 203,
+   "name": "de-109711-341501",
+   "set": "drawn, run before",
+   "language": "de",
+   "affair": 109711,
+   "document": 341501
+  },
+  {
+   "order": 204,
+   "name": "it-165614-911500",
+   "set": "drawn, run before",
+   "language": "it",
+   "affair": 165614,
+   "document": 911500
+  },
+  {
+   "order": 205,
+   "name": "it-85798-375994",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 85798,
+   "document": 375994
+  },
+  {
+   "order": 206,
+   "name": "fr-87882-589640",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 87882,
+   "document": 589640
+  },
+  {
+   "order": 207,
+   "name": "de-4580-331243",
+   "set": "reference",
+   "language": "de",
+   "affair": 4580,
+   "document": 331243
+  },
+  {
+   "order": 208,
+   "name": "it-165632-417713",
+   "set": "drawn, run before",
+   "language": "it",
+   "affair": 165632,
+   "document": 417713
+  },
+  {
+   "order": 209,
+   "name": "fr-328810-895410",
+   "set": "drawn, run before",
+   "language": "fr",
+   "affair": 328810,
+   "document": 895410
+  },
+  {
+   "order": 210,
+   "name": "it-165805-909779",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 165805,
+   "document": 909779
+  },
+  {
+   "order": 211,
+   "name": "de-173082-423924",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 173082,
+   "document": 423924
+  },
+  {
+   "order": 212,
+   "name": "it-117121-134983",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 117121,
+   "document": 134983
+  },
+  {
+   "order": 213,
+   "name": "it-85928-167014",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 85928,
+   "document": 167014
+  },
+  {
+   "order": 214,
+   "name": "it-254580-645191",
+   "set": "drawn, run before",
+   "language": "it",
+   "affair": 254580,
+   "document": 645191
+  },
+  {
+   "order": 215,
+   "name": "it-75953-915002",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 75953,
+   "document": 915002
+  },
+  {
+   "order": 216,
+   "name": "it-27021-346726",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 27021,
+   "document": 346726
+  },
+  {
+   "order": 217,
+   "name": "fr-233846-45550",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 233846,
+   "document": 45550
+  },
+  {
+   "order": 218,
+   "name": "it-118195-18739",
+   "set": "reference",
+   "language": "it",
+   "affair": 118195,
+   "document": 18739
+  },
+  {
+   "order": 219,
+   "name": "fr-329194-920215",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 329194,
+   "document": 920215
+  },
+  {
+   "order": 220,
+   "name": "it-272737-656175",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 272737,
+   "document": 656175
+  },
+  {
+   "order": 221,
+   "name": "it-5823-190096",
+   "set": "reference",
+   "language": "it",
+   "affair": 5823,
+   "document": 190096
+  },
+  {
+   "order": 222,
+   "name": "it-202211-911039",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 202211,
+   "document": 911039
+  },
+  {
+   "order": 223,
+   "name": "fr-253932-691456",
+   "set": "drawn, run before",
+   "language": "fr",
+   "affair": 253932,
+   "document": 691456
+  },
+  {
+   "order": 224,
+   "name": "fr-86323-319646",
+   "set": "reference",
+   "language": "fr",
+   "affair": 86323,
+   "document": 319646
+  },
+  {
+   "order": 225,
+   "name": "fr-328178-868856",
+   "set": "drawn, run before",
+   "language": "fr",
+   "affair": 328178,
+   "document": 868856
+  },
+  {
+   "order": 226,
+   "name": "de-257213-564768",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 257213,
+   "document": 564768
+  },
+  {
+   "order": 227,
+   "name": "de-166516-512909",
+   "set": "reference",
+   "language": "de",
+   "affair": 166516,
+   "document": 512909
+  },
+  {
+   "order": 228,
+   "name": "de-329322-874362",
+   "set": "drawn, run before",
+   "language": "de",
+   "affair": 329322,
+   "document": 874362
+  },
+  {
+   "order": 229,
+   "name": "de-146959-371696",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 146959,
+   "document": 371696
+  },
+  {
+   "order": 230,
+   "name": "it-202109-912629",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 202109,
+   "document": 912629
+  },
+  {
+   "order": 231,
+   "name": "fr-236892-502080",
+   "set": "reference",
+   "language": "fr",
+   "affair": 236892,
+   "document": 502080
+  },
+  {
+   "order": 232,
+   "name": "de-172235-219415",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 172235,
+   "document": 219415
+  },
+  {
+   "order": 233,
+   "name": "fr-29710-347517",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 29710,
+   "document": 347517
+  },
+  {
+   "order": 234,
+   "name": "it-174614-375793",
+   "set": "drawn, run before",
+   "language": "it",
+   "affair": 174614,
+   "document": 375793
+  },
+  {
+   "order": 235,
+   "name": "it-280397-616263",
+   "set": "reference",
+   "language": "it",
+   "affair": 280397,
+   "document": 616263
+  },
+  {
+   "order": 236,
+   "name": "de-40643-201384",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 40643,
+   "document": 201384
+  },
+  {
+   "order": 237,
+   "name": "it-75361-913373",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 75361,
+   "document": 913373
+  },
+  {
+   "order": 238,
+   "name": "it-326743-835984",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 326743,
+   "document": 835984
+  },
+  {
+   "order": 239,
+   "name": "it-84313-376053",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 84313,
+   "document": 376053
+  },
+  {
+   "order": 240,
+   "name": "fr-31835-192707",
+   "set": "reference",
+   "language": "fr",
+   "affair": 31835,
+   "document": 192707
+  },
+  {
+   "order": 241,
+   "name": "de-295614-680848",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 295614,
+   "document": 680848
+  },
+  {
+   "order": 242,
+   "name": "fr-224874-551410",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 224874,
+   "document": 551410
+  },
+  {
+   "order": 243,
+   "name": "fr-179784-45379",
+   "set": "reference",
+   "language": "fr",
+   "affair": 179784,
+   "document": 45379
+  },
+  {
+   "order": 244,
+   "name": "fr-237877-504309",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 237877,
+   "document": 504309
+  },
+  {
+   "order": 245,
+   "name": "de-199704-450858",
+   "set": "reference",
+   "language": "de",
+   "affair": 199704,
+   "document": 450858
+  },
+  {
+   "order": 246,
+   "name": "it-27585-295575",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 27585,
+   "document": 295575
+  },
+  {
+   "order": 247,
+   "name": "it-255234-644006",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 255234,
+   "document": 644006
+  },
+  {
+   "order": 248,
+   "name": "it-84035-166624",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 84035,
+   "document": 166624
+  },
+  {
+   "order": 249,
+   "name": "fr-239656-508314",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 239656,
+   "document": 508314
+  },
+  {
+   "order": 250,
+   "name": "de-120849-80464",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 120849,
+   "document": 80464
+  },
+  {
+   "order": 251,
+   "name": "fr-328487-869277",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 328487,
+   "document": 869277
+  },
+  {
+   "order": 252,
+   "name": "de-253237-559233",
+   "set": "drawn, run before",
+   "language": "de",
+   "affair": 253237,
+   "document": 559233
+  },
+  {
+   "order": 253,
+   "name": "fr-247508-537142",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 247508,
+   "document": 537142
+  },
+  {
+   "order": 254,
+   "name": "fr-329016-879716",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 329016,
+   "document": 879716
+  },
+  {
+   "order": 255,
+   "name": "de-334368-898761",
+   "set": "reference",
+   "language": "de",
+   "affair": 334368,
+   "document": 898761
+  },
+  {
+   "order": 256,
+   "name": "ayent-6082",
+   "set": "reference",
+   "shipped": "data/documents/ayent-6082/document.json"
+  },
+  {
+   "order": 257,
+   "name": "de-252639-559694",
+   "set": "drawn, run before",
+   "language": "de",
+   "affair": 252639,
+   "document": 559694
+  },
+  {
+   "order": 258,
+   "name": "it-84006-325582",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 84006,
+   "document": 325582
+  },
+  {
+   "order": 259,
+   "name": "it-174286-110491",
+   "set": "reference",
+   "language": "it",
+   "affair": 174286,
+   "document": 110491
+  },
+  {
+   "order": 260,
+   "name": "de-297099-688367",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 297099,
+   "document": 688367
+  },
+  {
+   "order": 261,
+   "name": "fr-29678-191571",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 29678,
+   "document": 191571
+  },
+  {
+   "order": 262,
+   "name": "it-339302-924806",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 339302,
+   "document": 924806
+  },
+  {
+   "order": 263,
+   "name": "de-90258-57914",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 90258,
+   "document": 57914
+  },
+  {
+   "order": 264,
+   "name": "de-120792-397879",
+   "set": "drawn, run before",
+   "language": "de",
+   "affair": 120792,
+   "document": 397879
+  },
+  {
+   "order": 265,
+   "name": "fr-76890-695878",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 76890,
+   "document": 695878
+  },
+  {
+   "order": 266,
+   "name": "fr-30146-549014",
+   "set": "drawn, run before",
+   "language": "fr",
+   "affair": 30146,
+   "document": 549014
+  },
+  {
+   "order": 267,
+   "name": "it-26281-189919",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 26281,
+   "document": 189919
+  },
+  {
+   "order": 268,
+   "name": "zuerich-219587",
+   "set": "reference",
+   "shipped": "data/documents/zuerich-219587/document.json"
+  },
+  {
+   "order": 269,
+   "name": "it-75598-915397",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 75598,
+   "document": 915397
+  },
+  {
+   "order": 270,
+   "name": "fr-328369-868791",
+   "set": "reference",
+   "language": "fr",
+   "affair": 328369,
+   "document": 868791
+  },
+  {
+   "order": 271,
+   "name": "de-110125-290923",
+   "set": "reference",
+   "language": "de",
+   "affair": 110125,
+   "document": 290923
+  },
+  {
+   "order": 272,
+   "name": "aargau-scan",
+   "set": "reference",
+   "shipped": "data/documents/aargau-scan/document.json"
+  },
+  {
+   "order": 273,
+   "name": "it-165583-267140",
+   "set": "drawn, run before",
+   "language": "it",
+   "affair": 165583,
+   "document": 267140
+  },
+  {
+   "order": 274,
+   "name": "it-338566-923487",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 338566,
+   "document": 923487
+  },
+  {
+   "order": 275,
+   "name": "it-26860-295797",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 26860,
+   "document": 295797
+  },
+  {
+   "order": 276,
+   "name": "it-118204-396138",
+   "set": "drawn, run before",
+   "language": "it",
+   "affair": 118204,
+   "document": 396138
+  },
+  {
+   "order": 277,
+   "name": "fr-223349-548830",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 223349,
+   "document": 548830
+  },
+  {
+   "order": 278,
+   "name": "fr-245753-215259",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 245753,
+   "document": 215259
+  },
+  {
+   "order": 279,
+   "name": "de-82408-374393",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 82408,
+   "document": 374393
+  },
+  {
+   "order": 280,
+   "name": "de-176172-451400",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 176172,
+   "document": 451400
+  },
+  {
+   "order": 281,
+   "name": "de-96043-677477",
+   "set": "drawn, run before",
+   "language": "de",
+   "affair": 96043,
+   "document": 677477
+  },
+  {
+   "order": 282,
+   "name": "de-2163-529377",
+   "set": "reference",
+   "language": "de",
+   "affair": 2163,
+   "document": 529377
+  },
+  {
+   "order": 283,
+   "name": "it-84264-274176",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 84264,
+   "document": 274176
+  },
+  {
+   "order": 284,
+   "name": "fr-233689-500946",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 233689,
+   "document": 500946
+  },
+  {
+   "order": 285,
+   "name": "de-76716-517848",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 76716,
+   "document": 517848
+  },
+  {
+   "order": 286,
+   "name": "fr-32135-399483",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 32135,
+   "document": 399483
+  },
+  {
+   "order": 287,
+   "name": "de-312753-751771",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 312753,
+   "document": 751771
+  },
+  {
+   "order": 288,
+   "name": "it-248229-531089",
+   "set": "reference",
+   "language": "it",
+   "affair": 248229,
+   "document": 531089
+  },
+  {
+   "order": 289,
+   "name": "fr-244365-320206",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 244365,
+   "document": 320206
+  },
+  {
+   "order": 290,
+   "name": "de-131908-306187",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 131908,
+   "document": 306187
+  },
+  {
+   "order": 291,
+   "name": "de-253431-905387",
+   "set": "drawn, run before",
+   "language": "de",
+   "affair": 253431,
+   "document": 905387
+  },
+  {
+   "order": 292,
+   "name": "fr-29684-347505",
+   "set": "drawn, run new",
+   "language": "fr",
+   "affair": 29684,
+   "document": 347505
+  },
+  {
+   "order": 293,
+   "name": "de-220228-277261",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 220228,
+   "document": 277261
+  },
+  {
+   "order": 294,
+   "name": "it-327685-865502",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 327685,
+   "document": 865502
+  },
+  {
+   "order": 295,
+   "name": "de-285621-651210",
+   "set": "drawn, run new",
+   "language": "de",
+   "affair": 285621,
+   "document": 651210
+  },
+  {
+   "order": 296,
+   "name": "basel-137584",
+   "set": "reference",
+   "shipped": "data/documents/basel-137584/document.json"
+  },
+  {
+   "order": 297,
+   "name": "it-118225-333841",
+   "set": "drawn, run before",
+   "language": "it",
+   "affair": 118225,
+   "document": 333841
+  },
+  {
+   "order": 298,
+   "name": "it-85889-221277",
+   "set": "reference",
+   "language": "it",
+   "affair": 85889,
+   "document": 221277
+  },
+  {
+   "order": 299,
+   "name": "fr-230516-498892",
+   "set": "drawn, run before",
+   "language": "fr",
+   "affair": 230516,
+   "document": 498892
+  },
+  {
+   "order": 300,
+   "name": "it-84513-166852",
+   "set": "drawn, run new",
+   "language": "it",
+   "affair": 84513,
+   "document": 166852
+  }
+ ]
+}

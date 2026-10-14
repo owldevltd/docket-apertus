@@ -1,6 +1,6 @@
 # Result: how long a document takes, and what the whole stock would take
 
-Measured on 12 October 2026 on the 60 documents of the reference set (52 drawn in German, French and Italian and the eight listed in `data/documents/README.md`), `python3 -m docket affairs --model`, the PDFs as the only input, with Apertus 8B at the CSCS endpoint, one call after the other. Machine: 8 cores (Intel i5-1135G7), 6.9 GB of memory; the pipeline computes on one core.
+Measured on 12 October 2026 on the 60 documents of the reference set (52 drawn in German, French and Italian and the eight listed in `data/documents/README.md`), `python3 -m docket affairs --model`, the PDFs as the only input, with Apertus 8B at the CSCS endpoint, one call after the other. Machine: 4 cores, 8 threads (Intel i5-1135G7), 6.9 GB of memory; the pipeline computes on one core.
 
 Run 1, the pace of the client as it was (two seconds before every call, twenty before every fiftieth): 583 calls, 583 × 200. Run 2, the pace as built (ten calls one after the other, then half a second): 583 calls, 583 × 200. A third run without the model timed the computing alone. During the first 33 documents of run 1 other measurements ran on the machine; its seconds per document are therefore given for the 27 documents after that only.
 
