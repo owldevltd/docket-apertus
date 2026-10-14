@@ -32,13 +32,9 @@ What Docket does differently:
   over everything already read, without reading again.
 - **It learns:** what a person corrects becomes a rule for every value of the same kind.
 
-| Criterion | shown in |
-|---|---|
-| Insight – is a common schema feasible? | 5.5, 2.3 |
-| Breadth & applicability | 4, 5.2 (62 parliaments, three languages, scans) |
-| Technical rigour | 5, appendix `docs/appendix.md` |
-| Sovereign deployability | 3.1 |
-| Implementation feasibility | 1 (maturity), 3.1, 7 |
+The criteria: insight, whether a common schema is feasible, in 5.5 and 2.3; breadth and applicability in 4 and 5.2;
+technical rigour in 5 and the appendix `docs/appendix.md`; sovereign deployability in 3.1; implementation feasibility
+in 1 (maturity), 3.1 and 7.
 
 **Maturity: between proof of concept and deployable prototype.** The pipeline is a prototype: `make run` starts it in
 Docker, it runs on real PDFs from beginning to end, it is measured on 300 documents from 62 parliaments and secured by
@@ -48,7 +44,10 @@ whole corpus needs parallel streams), better reading of scans and a measurement 
 
 ## 2. Architecture
 
-A document goes through ten stations; an eleventh defines the model (Figure 1). Four ideas carry them.
+A document goes through ten stations; an eleventh defines the model (Figure 1). Four ideas carry them. Work began on 2
+October 2026. The geometry and reading module was written on 3 and 4 October and ported on 6 October to both of our
+submissions, Python for Docket (Track 2A) and Node for Trace (Track 2B); each port was checked against the original and
+gives the same blocks (docs/evidence.md).
 
 ### 2.1 First recognise, then read
 
@@ -282,7 +281,6 @@ document needs it, and lays it over everything already read.
   (`results/reading-threshold/`).
 - **Weak fields** run through without a mark (5.2); adaptive approval repairs errors of form, not a value in the wrong
   field.
-- **Reference:** read by the AI assistant, its rules open (5.1).
 - **Key:** without a readable number a document gets a weaker key from place, date and title.
 - **Throughput:** one stream to the model; parallel streams and own model weights are not measured.
 
