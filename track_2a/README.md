@@ -67,7 +67,8 @@ empties it.
 
 ### From the command line
 
-While `make run` is up, a PDF laid into `track_2a/storage/` goes through the same chain in the container:
+While `make run` is up, a PDF laid into `track_2a/storage/` goes through the same chain in the container. On Linux,
+Docker creates `storage/` as root: lay the PDF in with `sudo cp`, and run the command with `sudo` as `make run`.
 
 ```
 docker compose exec docket python3 -m docket affairs --model --out storage/out storage/motion.pdf
