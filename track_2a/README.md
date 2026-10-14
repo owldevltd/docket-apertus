@@ -14,14 +14,16 @@ becomes a rule for every value of the same kind.
 
 Measured on 300 documents of 62 parliaments, in a shuffled order (`results/three-hundred/`):
 
-- **209 of 299 documents run through without a single mark for a person** (69.9 %, 95 % interval 64.5–74.8 %),
-  steady from 50 documents on, similar in German (71.6 %), French (71.1 %) and Italian (66.7 %).
+- **209 of 299 documents run through without a single mark for a person** (69.9 %, 95 % interval 64.5–74.8 %), steady
+  from 50 documents on, similar in German (71.6 %), French (71.1 %) and Italian (66.7 %).
+- Against a reference of 60 documents (20 per language, cantons and municipalities, read value by value with page and
+  place): 940 of 1 200 fields as in the reference (78 %), German 81 %, French 80 %, Italian 74 % (`results/reference/`).
 - The model answered 5 144 fields with 6 500 values: 4 650 stand on the page literally or derived from the block it
-  named, 211 only at the named block (marked for a person), 185 are worded by the model, and 1 454 have no place on
-  the page and are not taken.
-- A question across the parliaments: how many members back an affair? The documents name more than one person in
-  153 of 299; per parliament the backing differs in kind, from one person in most municipalities to 33 in the median
-  in Graubünden.
+  named, 211 only at the named block (marked for a person), 185 are worded by the model, and 1 454 have no place on the
+  page and are not taken.
+- A question across the parliaments: how many members back an affair? The documents name more than one person in 153 of
+  299; per parliament the backing differs in kind, from one person in most municipalities to 33 in the median in
+  Graubünden.
 
 The technical report (`technical_report.md`) gives the design and the evaluation; `docs/appendix.md` the tests the
 design rests on.
@@ -143,12 +145,12 @@ without it Docket runs as well. The app loads no fonts or scripts from outside.
 
 ## Limits
 
-About three documents in ten still carry at least one mark for a person – mostly a scanned block whose reading the
-image check doubts, or a value the model put at a block where it does not stand. Without a mark does not mean without
-error: a value can stand on the page and still be in the wrong field; the technical report gives the accuracy per
-field. A document without a readable number gets a weaker key, from place, date and title. The documents of the tests
-are not in this repository, because they name people; `data/documents/README.md` says where each comes from and how
-to put it back.
+About three documents in ten still carry at least one mark for a person – mostly a scanned block whose reading the image
+check doubts, or a value the model put at a block where it does not stand. Without a mark does not mean without error: a
+value can stand on the page and still be in the wrong field; the technical report and `results/reference/` give the
+accuracy per field. A document without a readable number gets a weaker key, from place, date and title. The documents of
+the tests are not in this repository, because they name people; `data/documents/README.md` says where each comes from
+and how to put it back.
 
 ## Tests
 

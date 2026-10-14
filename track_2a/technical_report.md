@@ -48,8 +48,6 @@ whole corpus needs parallel streams), better reading of scans and a measurement 
 
 ## 2. Architecture
 
-![Figure 1: Docket from the page to what it learns](docs/architecture.svg)
-
 A document goes through ten stations; an eleventh defines the model (Figure 1). Four ideas carry them.
 
 ### 2.1 First recognise, then read
@@ -62,6 +60,8 @@ sections, paragraphs, tables, lists, labelled values, signatures. The model neve
 never what a page is; it reads what it is shown and answers questions about a page it sees as text. Measured at the
 start: without this guidance the model named, as the source of a value, a block that held not one word of the value
 in 142 of 204 cases.
+
+![Figure 1: Docket from the page to what it learns](docs/architecture.svg)
 
 ### 2.2 A value counts only with its place
 
@@ -188,8 +188,8 @@ bodies, all published by the parliaments themselves. Drawn with a fixed seed:
 The federal level is not included: its submissions are held as text (2 of 100 federal documents sampled were PDFs). The
 documents name persons and are therefore **not in the repository**; `data/documents/README.md` says where the shipped
 ones come from, `results/three-hundred/draw.json` lists the 300 by their OpenParlData ids. The register of persons is
-loaded once from OpenParlData's export when an installation is set up (`tools/register.py`); in operation Docket fetches
-nothing, and nothing of the register goes into the repository.
+loaded once at setup from OpenParlData's export (`tools/register.py`) and stays out of the repository; in operation
+Docket fetches nothing.
 
 ## 5. Evaluation
 
@@ -198,14 +198,19 @@ person**; and whether their values are right.
 
 | Setup | Metric | Result |
 |---|---|---|
-| The model alone: take every answer | values without a place on the page | 1 454 of 6 500 (22 %) |
-| Docket: taken only with a place | values literal or derived / marked | 4 650 / 211 |
+| Model alone, every answer taken | values without a place | 1 454 of 6 500 (22 %) |
+| Docket, only with a place | values literal or derived / marked | 4 650 / 211 |
 | Docket, 300 documents | documents without a mark | 209 of 299 (70 %) |
+| Docket, 60 reference documents | fields as in the reference | 940 of 1 200 (78 %); de 81, fr 80, it 74 % |
 
 ### 5.1 Reference
 
-The reference for the 60 reference documents is a draft, read field by field from the documents; it has not been
-checked a second time by hand.
+60 documents, 20 each in German, French and Italian, 35 cantonal and 25 municipal, from 34 bodies (8 without a text
+layer). The AI assistant read them field by field, every value with its page and its place; code found 718 of 762 quoted
+pieces on the named page, and a team member checked the tables of the reading. Where Docket and the reading disagreed
+(609 values), each was judged by evidence from the material (151), by one of eight rules (139) or by reading the place
+again (134); 185 rest on the reading alone. The rules were set by the assistant and are open (`results/reference/`). The
+reference names people and is not in the repository.
 
 ### 5.2 Results
 
@@ -216,22 +221,23 @@ station: `results/three-hundred/`).
 
 What holds the other 90: the image check (47, 34 of them only this), a value that stands only at the named block (42, of
 them 35), a person found in the register one character off (12, of them 5). Without a mark does not mean without error:
-against the reference the values without a mark hold per field at 93–100 % (place, body, title, type, submitted on),
-80–89 % (parliament, submitted by, event date, number, addressee), 60–75 % (meeting, party, co-signers, department, on
-behalf of) and 40–53 % (acts and references, related affairs). A mark on the weak fields would have stopped 14 to 33 of
-the 41 reference documents that run through without the register's mark, and would have hit more right values than wrong
-ones (on the seven fields 57 values set, 22 wrong); it is not built. Adaptive approval comes in there (2.4).
+in the reference documents without a mark, the values Docket set hold per field at 90–100 % (place, meeting, body,
+title, type, kind of document, submitted on), 81–88 % (submitted by, parliament, event dates, addressee), 64–77 %
+(number, co-signers, department) and 33–57 % (party, acts and references, related affairs, on behalf of; few values)
+(`results/reference/`). A mark on the seven weak fields of 13 October (party, on behalf of, co-signers, department,
+related affairs, acts and references, meeting) would have stopped 14 to 33 of the 41 reference documents that run
+through without the register's mark, and would have hit more right values than wrong ones (on the seven fields 57 values
+set, 22 wrong); it is not built. Adaptive approval comes in there (2.4).
 
 ### 5.3 How we tested
 
 Every decision in the code rests on an experiment with numbers. The **appendix in the repository (`docs/appendix.md`)**
-puts together the experiments behind the design – from the geometry without a model through the reading of scans, the
-choice of the schema, the place of every value and the rules after the model to the learning – each with its number,
-decision and run; `docs/tests.md` records all 76 experiments, `docs/evidence.md` the series of measurements. Every rule
-after the model was tried, before it was kept, on documents it had not come from; a third set of 151 documents caught a
-rule that way that would have built one person out of two rows of a table of names. Played through today's code without
-the model, the stored answers give the same values in 1 440 of 1 440 fields; `make test` checks 509 cases without a
-model and without the network (with the documents in place).
+puts together the experiments behind the design, each with its number, decision and run; `docs/tests.md` records all 76
+experiments, `docs/evidence.md` the series of measurements. Every rule after the model was tried, before it was kept, on
+documents it had not come from; a third set of 151 documents caught a rule that way that would have built one person out
+of two rows of a table of names. Played through today's code without the model, the stored answers give the same values
+in 1 440 of 1 440 fields; `make test` checks 509 cases without a model and without the network (with the documents in
+place).
 
 ### 5.4 A question across the parliaments
 
@@ -239,8 +245,7 @@ model and without the network (with the documents in place).
 submitters or co-signers; the structured data hold at most one for 185 of 296 affairs. Per parliament this differs in
 kind: a document from Graubünden names 33 members in the median, one from Neuchâtel 10, from Valais 2.5, from Ticino 2,
 from most municipalities one. The question can be answered only from the documents; `make questions` answers it without
-a model from the store (the numbers for the 300 in `results/three-hundred/`), and also which kinds of documents hang on
-the affairs and which entries a parliament prints.
+a model from the store (the numbers for the 300 in `results/three-hundred/`).
 
 ### 5.5 Is a common schema feasible?
 
@@ -274,7 +279,7 @@ document needs it, and lays it over everything already read.
   (`results/reading-threshold/`).
 - **Weak fields** run through without a mark (5.2); adaptive approval repairs errors of form, not a value in the wrong
   field.
-- **Reference:** a draft (5.1).
+- **Reference:** read by the AI assistant, its rules open (5.1).
 - **Key:** without a readable number a document gets a weaker key from place, date and title.
 - **Throughput:** one stream to the model; parallel streams and own model weights are not measured.
 
@@ -284,15 +289,15 @@ The 300 documents were measured at commit `cc7a4da` (`results/three-hundred/resu
 and Postgres in Docker (the app on port 8080) with `LLM_NAME`, `LLM_BASE_URL`, `LLM_API_KEY` from the environment or
 `.env`. On a clean checkout the store is empty: a PDF uploaded in the administration goes through the whole chain with
 this key; the documents of the tests are put back as `data/documents/README.md` says. `make test` runs without a model
-and without the network (509 checks with the documents in place; without them, the checks that need none); `make
-questions` answers 5.4. The stored answers of a run (`run.json`, kept locally beside each document) form the records
-again without the model. The 240 drawn documents with seed 20261011, the order of the run shuffled with seed 20261013.
-Measured on an Intel Core i5-1135G7 (4 cores, 8 threads) with 8 GB of memory (6.9 GB usable), the model at CSCS.
+and without the network (509 checks with the documents in place; without them, the checks that need none); The 240 drawn
+documents with seed 20261011, the order of the run shuffled with seed 20261013. Measured on an Intel Core i5-1135G7 (4
+cores, 8 threads) with 8 GB of memory (6.9 GB usable), the model at CSCS.
 
 ## 8. Next steps
 
 Measure parallel streams and own weights; read scans better; check values against public registers (addresses,
-municipalities, companies); check the reference by hand; put Docket as a container into OpenParlData's workbench.
+municipalities, companies); have the reference checked by a second person; put Docket as a container into OpenParlData's
+workbench.
 
 ## License
 
