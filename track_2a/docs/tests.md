@@ -655,6 +655,22 @@ The long record of the measurements behind the decisions is `docs/evidence.md`.
   was not built.
 - **Run:** `results/unattended/result.md`
 
+### How many of 300 documents run through without a mark, at every station of the chain?
+
+- **Question:** Does the share of documents that need no person hold on a draw large and wide enough to stand for the
+  corpus, and where do the documents with a mark stop?
+- **Test:** 300 documents of 62 parliaments: the 60 of the reference set and 240 drawn at random (about 100 per
+  language, cantons and municipalities, five kinds of affair). The 180 never run before went through the chain with
+  the model in a shuffled order, one document at a time with a time limit, about 5 000 calls; all 299 that came
+  through were counted by the code of the same commit from their stored answers, with the register of persons loaded.
+- **Result:** 209 of 299 without a mark (69.9 %, 95 % interval 64.5–74.8 %), 214 without the register; German 71.6 %,
+  French 71.1 %, Italian 66.7 %. In the shuffled order 72 % after 50 documents and 70 % from 200 on. A text layer on
+  215; the kind named for 298; the parliament found for 222; the key from the number for 204. Of 5 144 answers 4 650
+  stand literally or derived, 211 only at the named block, 1 454 have no place and are not taken. The 90 with a mark:
+  the image check 47, a value only at the named block 42, a person one character off 12.
+- **Finding:** None taken; the figure of the technical report.
+- **Run:** `results/three-hundred/`
+
 ### Is a value that stands in no single block a case for a person?
 
 - **Question:** After the rules before, what still holds a document is mostly a value that stands literally in no
