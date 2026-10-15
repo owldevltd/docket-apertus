@@ -30,8 +30,8 @@ Measured on 300 documents of 62 parliaments, in a shuffled order (`results/three
   299; per parliament the backing differs in kind, from one person in most municipalities to 33 in the median in
   Graubünden.
 
-The technical report (`technical_report.md`) gives the design and the evaluation; `docs/appendix.md` the tests the
-design rests on.
+The technical report (`technical_report.md`, as PDF `Certuran_Report.pdf`) gives the design and the evaluation;
+`docs/appendix.md` the tests the design rests on.
 
 ## What you need
 
