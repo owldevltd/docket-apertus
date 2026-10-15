@@ -2,7 +2,7 @@
 
 - **Track:** Track 2A — OpenParlData: Extracting Parliamentary Affairs from PDFs into One Common Structure
 - **Event:** Online
-- **Team:** Marcus Selzer, Tim Bärisch
+- **Team:** Handover — Marcus Selzer, Tim Bärisch
 - **Demo:** no video required; `make run` starts the app with the review and the visitor's part
 - **Repository:** https://github.com/owldevltd/docket-apertus
 - **Maturity:** between proof of concept and deployable prototype (reasons in 1)
