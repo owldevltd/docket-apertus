@@ -65,6 +65,23 @@ From the folder `track_2a/`:
 `Ctrl+C` stops the app; `docker compose down` removes the containers and keeps the store, `docker compose down -v`
 empties it.
 
+### The administration
+
+At `/en/admin` (`/de/admin` in German), behind a sign-in once `ADMIN_PASSWORD` is set:
+
+- **Process** (Verarbeiten): upload a PDF; the run goes through the whole chain.
+- **Runs** (Läufe): every run with its calls and its last line.
+- **Review** (Prüfen): every affair with each value at its place on the page; **Confirm**, **Change** or **Reject**
+  (Bestätigen, Ändern, Verwerfen).
+- **Decisions** (Entscheidungen): every decision a person took.
+- **Rules** (Regeln): the same change twice on the same field proposes a rule; **Accept** (Annehmen) applies it to every
+  fitting value, and every application can be taken back.
+- **Vocabulary** (Vokabular): which name of a parliament stands for which type; every row can be changed by hand.
+- **Definition**: the fields of the fields file and in how many stored documents each was asked; for a field added
+  later, **Ask again** (Nachfragen) asks only the documents that lack it.
+- **Second opinion** (Zweite Meinung): where a field usually stands, learnt without the model and tried on documents
+  held back.
+
 ### From the command line
 
 While `make run` is up, a PDF laid into `track_2a/storage/` goes through the same chain in the container. On Linux,
