@@ -184,6 +184,8 @@ logged run; `docs/evidence.md` holds the series of measurements; the runs are un
 | Path | What it is |
 |---|---|
 | `src/docket/` | the pipeline, the store, the server (Python) |
+| `src/docket/read/reader.py`, `src/docket/document/sorter.py`, `src/docket/fields/filler.py` | the Apertus prompts: copy the text of marked blocks from the page image, tell what each marked place on a page is, read the fields; the question for each field is in `data/schema/fields.json`; every call is logged with its prompt and answer, e.g. `results/kickoff-example/calls/run-1/` |
+| `src/docket/affair/validator.py` | the validator: checks every record against the contract `data/schema/docket.json` |
 | `app/` | the browser app (Angular), built into `src/docket/app/` |
 | `data/schema/` | the contract, its definition, the fields file, the example record, a second contract |
 | `data/knowledge/` | prior knowledge as tables: number forms, names of parliaments, sections, types, vocabulary |
