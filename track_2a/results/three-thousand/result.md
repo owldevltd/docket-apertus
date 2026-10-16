@@ -1,7 +1,7 @@
 # Result: 3 000 documents through the chain
 
-State: **15 October 2026, 16:39**, the run is still going; 2 005 of 3 000 documents have run. The order is shuffled, so
-every state is a random sample of the 3 000.
+The run is complete: all 3 000 documents ran, the last on **16 October 2026, 03:14**; 32.2 hours for the documents with
+a record.
 
 Measured at commit `62e1fcb`; the code (`src/`, `data/`) has not changed since. The 3 000 documents were drawn from
 OpenParlData's affairs (seed 20261013) beside the 300 of `results/three-hundred/`, none of them again: 1 000 per
@@ -13,36 +13,36 @@ with the model in a shuffled order (seed 20261014), one document at a time in a 
 
 | | without a mark | 95 % interval |
 |---|---:|---|
-| all with a record | 1 413 of 2 001 (70.6 %) | 68.6–72.6 % |
-| German | 490 of 678 (72.3 %) | 68.8–75.5 % |
-| French | 469 of 651 (72.0 %) | 68.5–75.4 % |
-| Italian | 454 of 672 (67.6 %) | 63.9–71.0 % |
-| cantons | 930 of 1 185 (78.5 %) | 76.1–80.7 % |
-| municipalities | 483 of 816 (59.2 %) | 55.8–62.5 % |
-| motion | 449 of 600 (74.8 %) | 71.2–78.1 % |
-| postulate | 183 of 256 (71.5 %) | 65.7–76.7 % |
-| interpellation | 324 of 494 (65.6 %) | 61.3–69.6 % |
-| question | 351 of 519 (67.6 %) | 63.5–71.5 % |
-| parliamentary initiative | 106 of 132 (80.3 %) | 72.7–86.2 % |
+| all with a record | 2 088 of 2 996 (69.7 %) | 68.0–71.3 % |
+| German | 705 of 1 000 (70.5 %) | 67.6–73.2 % |
+| French | 718 of 996 (72.1 %) | 69.2–74.8 % |
+| Italian | 665 of 1 000 (66.5 %) | 63.5–69.4 % |
+| cantons | 1 353 of 1 750 (77.3 %) | 75.3–79.2 % |
+| municipalities | 735 of 1 246 (59.0 %) | 56.2–61.7 % |
+| motion | 656 of 897 (73.1 %) | 70.1–75.9 % |
+| postulate | 273 of 390 (70.0 %) | 65.3–74.3 % |
+| interpellation | 482 of 729 (66.1 %) | 62.6–69.5 % |
+| question | 520 of 780 (66.7 %) | 63.3–69.9 % |
+| parliamentary initiative | 157 of 200 (78.5 %) | 72.3–83.6 % |
 
-2 001 documents have a record, from 78 parliaments. In the shuffled order the share after 500, 1 000, 1 500 and 2 001
-documents: 69, 70, 70, 71 %.
+2 996 documents have a record, from 78 parliaments. In the shuffled order the share after 500, 1 000, 1 500, 2 000,
+2 500 and 2 996 documents: 69, 70, 70, 71, 70, 70 %.
 
 ## Language by level
 
 | | cantons | municipalities |
 |---|---:|---:|
-| German | 314 of 424 (74.1 %) | 176 of 254 (69.3 %) |
-| French | 293 of 401 (73.1 %) | 176 of 250 (70.4 %) |
-| Italian | 323 of 360 (89.7 %) | 131 of 312 (42.0 %) |
+| German | 433 of 600 (72.2 %) | 272 of 400 (68.0 %) |
+| French | 439 of 600 (73.2 %) | 279 of 396 (70.5 %) |
+| Italian | 481 of 550 (87.5 %) | 184 of 450 (40.9 %) |
 
 ## The run
 
-- **Calls to the model:** 47 279 for the 2 001 documents with a record, 8 in the median per document (from 6 to 2 383).
-- **Time:** 21.6 hours for these documents, 17 seconds in the median per document; the longest took 25 minutes. No
+- **Calls to the model:** 75 176 for the 2 996 documents with a record, 8 in the median per document (from 6 to 2 383).
+- **Time:** 32.2 hours for these documents, 16 seconds in the median per document; the longest took 25 minutes. No
   document hit the time limit.
-- **No record:** 4 of 2 005; they are not in the shares above, counted as documents with a mark the share of all is
-  70.5 %. Each has pages declared many times the size of an A4 page, and the laptop of the run (6.9 GB usable) could not
+- **No record:** 4 of 3 000; they are not in the shares above, counted as documents with a mark the share of all is
+  69.6 %. Each has pages declared many times the size of an A4 page, and the laptop of the run (6.9 GB usable) could not
   hold the image of such a page:
   - `fr-328297-868932` (French, municipalities, motion): 2 pages, the largest 3 816 × 5 256 points (40 times A4); the
     image of a page could not be allocated

@@ -16,9 +16,9 @@ Measured on 300 documents of 62 parliaments, in a shuffled order (`results/three
 
 - **209 of 299 documents run through without a single mark for a person** (69.9 %, 95 % interval 64.5–74.8 %), steady
   from 50 documents on, similar in German (71.6 %), French (71.1 %) and Italian (66.7 %).
-- On 3 000 further documents, none of them among the 300, the same measure in a run that is still going
-  (`results/three-thousand/`): as of 15 October 2026, 16:39, **1 413 of 2 001 without a mark** (70.6 %, 95 % interval
-  68.6–72.6 %), from 78 parliaments; cantons 78.5 %, municipalities 59.2 %.
+- On 3 000 further documents, none of them among the 300, the same measure (`results/three-thousand/`): **2 088 of
+  2 996 without a mark** (69.7 %, 95 % interval 68.0–71.3 %), from 78 parliaments; cantons 77.3 %, municipalities
+  59.0 %; four documents with pages many times the size of A4 gave no record.
 - Against a reference of 60 documents (20 per language, cantons and municipalities, read value by value with page and
   place; 60 values drawn at random checked by hand, all hold): 940 of 1 200 fields as in the reference (78 %). On the
   other 239 of the 300, read and checked the same way, 3 512 of 4 780 (73.5 %, 95 % interval 72.1–74.8 %), on the 179
@@ -97,6 +97,13 @@ docker compose exec docket python3 -m docket affairs --model --out storage/out s
 `storage/out/affairs/<key>.json` is the affair record; `storage/out/motion-fields.json` says per field what became of
 the model's answer; `storage/out/motion-s1-check.png` shows the first page with the blocks that hold a value (green:
 found by code, red: a person has to look). The affair goes into the store as well and shows in the app.
+
+For many documents, the command takes any number of PDFs (`storage/*.pdf`); `--body` names the parliament of all of
+them, `--drawn` gives it per file as a JSON list of `{name, body}`. Documents of one call that share a key become one
+affair, so all documents of an affair go into the same call. For a large set, one call per affair with a time limit
+keeps a single oversized page from stopping the rest; the runs over 300 and 3 000 documents ran one document per call
+with 30 minutes each. `python3 -m docket ask --field <name>` asks the stored documents a field added later, without
+reading them again.
 
 ## Input and output
 
